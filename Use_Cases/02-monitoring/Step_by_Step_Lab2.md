@@ -8,6 +8,7 @@
   - [Visão Geral](#visão-geral)
     - [Parte 1: Conectar Agente de Busca Google de Terceiros](#parte-1-conectar-agente-de-busca-google-de-terceiros)
     - [Parte 2: Criar Agente de Compra de Carros](#parte-2-criar-agente-de-compra-de-carros)
+    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Próximos Passos](#próximos-passos)
 
 ## Visão Geral
@@ -300,6 +301,10 @@ O deploy do seu agente agora está ativo!
 
 
 -----
+
+### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
+
+Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit), [clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais como criar agentes, tools, bases de conhecimentos e muito mais
 
 ## Próximos Passos
 
