@@ -14,6 +14,7 @@ Este guia de laboratório ensina como avaliar e depurar sistematicamente seus ag
   - [Índice](#índice)
   - [Passo 1](#passo-1)
     - [Revise os resultados da avaliação.](#revise-os-resultados-da-avaliação)
+    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Próximos Passos](#próximos-passos)
 
 ---
@@ -118,6 +119,10 @@ Abaixo está um detalhamento das métricas principais e o que elas significam:
 Você pode baixar os resultados para análise posterior.
 
 ---
+
+### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
+
+Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit), [clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais como criar agentes, tools, bases de conhecimentos e muito mais
 
 ## Próximos Passos
 
