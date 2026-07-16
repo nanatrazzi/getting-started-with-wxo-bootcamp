@@ -60,20 +60,20 @@ O ciclo de vida de agentes no watsonx Orchestrate segue um modelo de melhoria co
 
 ```mermaid
 graph TD
-    A["Avaliação Pré-Deployment"] --> B{"Padrões de<br/>Qualidade<br/>Atendidos?"}
+    A["Avaliação Pré-Deployment"] --> B{"Padrões de Qualidade Atendidos?"}
 
-    B -->|Não| C["Refinar Configuração<br/>do Agente"]
+    B -->|Não| C["Refinar Configuração do Agente"]
     C --> A
 
     B -->|Sim| D["Deploy do Agente"]
     D --> E["Ativar Monitoramento"]
-    E --> F["Monitoramento<br/>Pós-Deployment"]
+    E --> F["Monitoramento Pós-Deployment"]
 
-    F --> G["Analisar Métricas<br/>de Performance"]
-    G --> H{"Problemas ou<br/>Oportunidades de<br/>Melhoria?"}
+    F --> G["Analisar Métricas de Performance"]
+    G --> H{"Problemas ou Oportunidades de Melhoria?"}
 
-    H -->|Sim| I["Melhoria<br/>Contínua"]
-    I --> J["Atualizar Knowledge,<br/>Tools ou Config"]
+    H -->|Sim| I["Melhoria Contínua"]
+    I --> J["Atualizar Knowledge, Tools ou Config"]
     J --> A
 
     H -->|Não| F
