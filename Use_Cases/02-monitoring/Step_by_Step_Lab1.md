@@ -62,8 +62,6 @@ Um funcionário descontente fez upload de dados envenenados que incluem material
 
 **Ataques de data poisoning tipicamente utilizam uma combinação das diferentes técnicas cobertas, e esta lista não é exaustiva! Neste laboratório, usaremos uma tática única (e comum) de atores maliciosos; os dados envenenados parecem corretos ao olho humano, mas na realidade, foram envenenados com texto branco invisível!**
 
-![data poisoning picture](../../Assets_for_BuildBooks/monitoring_labs/lab01_monitoring/lab01_monitoring_01.png)
-
 > Uma visão lado a lado de um ataque de data poisoning. Os dados envenenados (lado esquerdo da imagem) parecem corretos ao olho humano, mas na realidade, foram envenenados com texto branco invisível. O lado direito da imagem mostra os dados reais, com a informação maliciosa em texto preto.
 
 ### Por que Sistemas RAG são Vulneráveis?
