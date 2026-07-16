@@ -22,6 +22,7 @@ Caso tenha seu próprio ambiente dedicado do watsonx Orchestrate, você poderá 
   - [Seção - Needs Attention (Atenção necessária)](#seção---needs-attention-atenção-necessária)
     - [Explorar alertas operacionais](#explorar-alertas-operacionais)
   - [Agent Analytics](#agent-analytics)
+    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Resumo](#resumo)
 
 
@@ -454,6 +455,10 @@ Escolha o agente que teve o controle aplicado
 Envie uma pergunta extremamente ofensiva e de baixo calão para ver o guardrail recém-criado operando no agente.
 
 ![Dashboard](../../Assets_for_BuildBooks/monitoring_labs/lab05_monitoring/lab05_monitoring_36.png)
+
+### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
+
+Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit), [clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais como criar agentes, tools, bases de conhecimentos e muito mais
 
 ## Resumo
 
