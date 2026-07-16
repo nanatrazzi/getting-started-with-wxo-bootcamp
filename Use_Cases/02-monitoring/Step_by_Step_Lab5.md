@@ -24,6 +24,7 @@ Caso tenha seu próprio ambiente dedicado do watsonx Orchestrate, você poderá 
   - [Agent Analytics](#agent-analytics)
     - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Resumo](#resumo)
+  - [Próximos passos](#próximos-passos)
 
 
 ## Explorando o Control Plane
@@ -470,3 +471,201 @@ Com o Control Plane, as equipes podem passar de sinais dispersos para um control
 
 ---
 
+## Próximos passos
+
+Coletânea de links oficiais, documentação, tutoriais e novidades da IBM watsonx Orchestrate e do Agent Development Kit (ADK).
+
+> Última atualização da coletânea: 15/07/2026.
+
+| Recurso | Link |
+|---|---|
+| Portal oficial da ADK (Welcome) | https://developer.watson-orchestrate.ibm.com/ |
+| O que é a ADK | https://developer.watson-orchestrate.ibm.com/getting_started/what_is |
+| Instalação / primeiros passos | https://developer.watson-orchestrate.ibm.com/getting_started/installing |
+| Comandos CLI úteis | https://developer.watson-orchestrate.ibm.com/getting_started/cli |
+| Exemplos | https://developer.watson-orchestrate.ibm.com/getting_started/examples |
+| Índice completo da doc (`llms.txt`) | https://developer.watson-orchestrate.ibm.com/llms.txt |
+
+
+---
+
+<b>Repositórios e pacotes</b>
+
+| Recurso | Link |
+|---|---|
+| GitHub — `IBM/ibm-watsonx-orchestrate-adk` | https://github.com/IBM/ibm-watsonx-orchestrate-adk |
+| PyPI — `ibm-watsonx-orchestrate` | https://pypi.org/project/ibm-watsonx-orchestrate/ |
+
+---
+
+<b>Agentes</b>
+
+| Tópico | Link |
+|---|---|
+| Visão geral de agentes | https://developer.watson-orchestrate.ibm.com/agents/overview |
+| Criando agentes nativos | https://developer.watson-orchestrate.ibm.com/agents/build_agent |
+| Escolhendo o estilo do agente (ReAct, Flows, etc.) | https://developer.watson-orchestrate.ibm.com/agents/agent_styles |
+| Conectar agentes externos (LangGraph, A2A) | https://developer.watson-orchestrate.ibm.com/agents/connect_agent |
+| Importar e implantar agentes | https://developer.watson-orchestrate.ibm.com/agents/import_agent |
+| Descrições e instruções de agentes | https://developer.watson-orchestrate.ibm.com/agents/descriptions |
+| Gerenciar agentes | https://developer.watson-orchestrate.ibm.com/agents/manage_agent |
+| Skills specifications (Public Preview) | https://developer.watson-orchestrate.ibm.com/agents/skills |
+
+---
+
+<b>Ferramentas (Tools) e Toolkits</b>
+
+| Tópico | Link |
+|---|---|
+| Visão geral de tools | https://developer.watson-orchestrate.ibm.com/tools/overview |
+| Tools em Python | https://developer.watson-orchestrate.ibm.com/tools/create_tool |
+| Tools baseadas em OpenAPI | https://developer.watson-orchestrate.ibm.com/tools/create_openapi_tool |
+| Gerenciamento de dependências Python | https://developer.watson-orchestrate.ibm.com/tools/python_dependency_management |
+| Estrutura de resposta e anotações de tools | https://developer.watson-orchestrate.ibm.com/tools/tool_response_structure |
+| Logs de tools Python | https://developer.watson-orchestrate.ibm.com/tools/log_behavior |
+| Toolkits — visão geral | https://developer.watson-orchestrate.ibm.com/tools/toolkits/overview |
+| Toolkits MCP remotos | https://developer.watson-orchestrate.ibm.com/tools/toolkits/remote_mcp_toolkits |
+| Toolkits MCP locais | https://developer.watson-orchestrate.ibm.com/tools/toolkits/local_mcp_toolkits |
+| Toolkits Python | https://developer.watson-orchestrate.ibm.com/tools/toolkits/python_toolkits |
+
+---
+
+<b>Agentic Workflows (Flows)</b>
+
+| Tópico | Link |
+|---|---|
+| Entendendo agentic workflows | https://developer.watson-orchestrate.ibm.com/tools/flows/overview |
+| Construindo um flow | https://developer.watson-orchestrate.ibm.com/tools/flows/building_flow |
+| Mapeamento de entrada/saída | https://developer.watson-orchestrate.ibm.com/tools/flows/data_map |
+| Nó de decisões (Public Preview) | https://developer.watson-orchestrate.ibm.com/tools/flows/decisions_node |
+| Tratamento de erros | https://developer.watson-orchestrate.ibm.com/tools/flows/error_handling |
+| Atividades multiusuário | https://developer.watson-orchestrate.ibm.com/tools/flows/multi_user |
+| Mascaramento de dados sensíveis | https://developer.watson-orchestrate.ibm.com/tools/flows/masking_sensitive_data |
+| Scheduler (Public Preview) | https://developer.watson-orchestrate.ibm.com/tools/flows/scheduler |
+| Rodar workflows via MCP (Public Preview) | https://developer.watson-orchestrate.ibm.com/tools/flows/mcp_workflows |
+| Testando um flow | https://developer.watson-orchestrate.ibm.com/tools/flows/testing_flow |
+
+---
+
+<b>MCP Server (Model Context Protocol)</b>
+
+| Tópico | Link |
+|---|---|
+| Instalando o ADK MCP Server | https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_installation |
+| Configurando o ADK MCP Server | https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_configuration |
+| Conectando clientes MCP | https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_integration |
+| Documentation MCP Server | https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_docs_server |
+
+---
+
+<b>Developer Edition (ambiente local)</b>
+
+| Tópico | Link |
+|---|---|
+| O que é a Developer Edition | https://developer.watson-orchestrate.ibm.com/developer_edition/wxOde_overview |
+| Instalando a Developer Edition | https://developer.watson-orchestrate.ibm.com/developer_edition/wxOde_setup |
+| Gerenciando o servidor local | https://developer.watson-orchestrate.ibm.com/developer_edition/manage_local_server |
+| Gerenciando a UI local | https://developer.watson-orchestrate.ibm.com/developer_edition/manage_ui |
+| Ambiente air-gapped | https://developer.watson-orchestrate.ibm.com/environment/air_gap_environment |
+| Boletins de segurança | https://developer.watson-orchestrate.ibm.com/developer_edition/security_bulletins |
+
+<b>Modelos (LLMs)</b>
+
+| Tópico | Link |
+|---|---|
+| Escolhendo o LLM | https://developer.watson-orchestrate.ibm.com/llm/getting_started_llm |
+| Gerenciando modelos virtuais | https://developer.watson-orchestrate.ibm.com/llm/managing_llm |
+| Políticas de modelo (Public Preview) | https://developer.watson-orchestrate.ibm.com/llm/model_policies |
+| Observabilidade com Langfuse | https://developer.watson-orchestrate.ibm.com/llm/observability |
+
+---
+
+<b>SDK (Python)</b>
+
+| Tópico | Link |
+|---|---|
+| Introdução ao SDK | https://developer.watson-orchestrate.ibm.com/sdk/sdk_intro |
+| Client | https://developer.watson-orchestrate.ibm.com/sdk/client |
+| Context | https://developer.watson-orchestrate.ibm.com/sdk/context |
+| Memory | https://developer.watson-orchestrate.ibm.com/sdk/memory |
+| Chat models | https://developer.watson-orchestrate.ibm.com/sdk/chat_wxo |
+| Embeddings | https://developer.watson-orchestrate.ibm.com/sdk/wxo_embeddings |
+
+---
+
+<b>Avaliação (Evaluation) e Observabilidade</b>
+
+| Tópico | Link |
+|---|---|
+| Visão geral de avaliação | https://developer.watson-orchestrate.ibm.com/evaluate/overview |
+| Avaliando agentes e tools | https://developer.watson-orchestrate.ibm.com/evaluate/evaluate |
+| Criando dataset de avaliação | https://developer.watson-orchestrate.ibm.com/evaluate/create_data |
+| Avaliação rápida | https://developer.watson-orchestrate.ibm.com/evaluate/quick_eval |
+| Rubric Evaluations | https://developer.watson-orchestrate.ibm.com/evaluate/rubric |
+| Teste de vulnerabilidade de LLM | https://developer.watson-orchestrate.ibm.com/evaluate/llm_vulnerability |
+| Traces — visão geral | https://developer.watson-orchestrate.ibm.com/traces/overview |
+| Traces via CLI | https://developer.watson-orchestrate.ibm.com/traces/traces_with_cli |
+| Traces via Python | https://developer.watson-orchestrate.ibm.com/traces/traces_with_python |
+
+---
+
+<b> Knowledge Bases, Conexões e Canais</b>
+
+| Tópico | Link |
+|---|---|
+| Knowledge bases — visão geral | https://developer.watson-orchestrate.ibm.com/knowledge_base/overview |
+| Criando knowledge bases | https://developer.watson-orchestrate.ibm.com/knowledge_base/build_kb |
+| Por que usar conexões | https://developer.watson-orchestrate.ibm.com/connections/overview |
+| Criando conexões | https://developer.watson-orchestrate.ibm.com/connections/build_connections |
+| Canais — visão geral (Teams, Slack, WhatsApp, SMS...) | https://developer.watson-orchestrate.ibm.com/channels/overview |
+| Adicionando voz a um agente | https://developer.watson-orchestrate.ibm.com/voice/adding_voice_to_agent |
+| Configuração de voz | https://developer.watson-orchestrate.ibm.com/voice/managing_voice |
+| Plug-ins | https://developer.watson-orchestrate.ibm.com/plugins/plugins |
+| Workspaces | https://developer.watson-orchestrate.ibm.com/workspaces/overview |
+
+---
+
+<b>Tutoriais e Guias</b>
+
+| Tutorial | Link |
+|---|---|
+| Seu primeiro agente (Hello World) | https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_1_hello_world |
+| Agente Empower | https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_2_arrows_internal_employees |
+| Suporte multilíngue | https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_3_multi_language_support |
+| Agente Healthcare Provider | https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_4_healthcare_provider |
+| Usando watsonx Orchestrate + BeeAI Framework | https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_beeai_framework |
+| Usando watsonx Orchestrate + Langflow | https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_langflow |
+| CI/CD — Parte 1 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-1 |
+| CI/CD — Parte 2 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-2 |
+| CI/CD — Parte 3 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-3 |
+| CI/CD — Parte 4 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-4 |
+| Guia de Performance (geral) | https://developer.watson-orchestrate.ibm.com/tutorials/performance/performance-guide-v2 |
+| Tutoriais avançados | https://developer.watson-orchestrate.ibm.com/tutorials/advanced_tutorials |
+| Getting Started (IBM Developer) | https://developer.ibm.com/tutorials/getting-started-with-watsonx-orchestrate/ |
+
+---
+
+<b>Documentação oficial do produto </b>
+
+| Recurso | Link |
+|---|---|
+| Página de desenvolvedores do watsonx Orchestrate | https://www.ibm.com/products/watsonx-orchestrate/developers |
+| Construindo agentes com a ADK | https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=agents-building-using-adk |
+| Release notes (SaaS) | https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=release-notes |
+| Release notes (On-premises) | https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=notes-release-premises |
+
+---
+
+<b>Novidades / "Coisas novas" (2026)</b>
+
+| Item | Link |
+|---|---|
+| Troubleshooting | https://developer.watson-orchestrate.ibm.com/release/troubleshooting |
+| **Agentic Control Plane** (anúncio, jun/2026) | https://www.ibm.com/new/announcements/introducing-the-agentic-control-plane |
+| What's new — comunidade (mar/2026) | https://community.ibm.com/community/user/blogs/daiane-camila-bizari2/2026/04/02/whats-new-in-ibm-watsonx-orchestrate |
+| "Orchestrate More, Worry Less" (mar/2026) | https://community.ibm.com/community/user/blogs/alan-francis-cheeramvelil/2026/04/12/orchestrate-more-worry-less-whats-new-in-ibm-watso |
+| Newsletter técnica (jun/2026) | https://community.ibm.com/community/user/blogs/gustavo-villegas/2026/05/28/watsonx-orchestrate-news-a-touchpoint-june2026 |
+
+> Dica: consulte sempre a página **What's new** para ver a versão mais recente, já que a ADK é atualizada com frequência.
+
+---
