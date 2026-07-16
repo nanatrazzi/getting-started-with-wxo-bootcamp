@@ -86,4 +86,4 @@ graph TD
 
 ----
 
-[Clique aqui para começar os laboratórios](./Step_by_Step_LabA.md)
+[Clique aqui para começar os laboratórios](./Step_by_Step_Lab1.md)
