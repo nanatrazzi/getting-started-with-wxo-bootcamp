@@ -12,6 +12,7 @@ Este guia de laboratório apresenta as capacidades de monitoramento em tempo rea
   - [Visão Geral](#visão-geral)
   - [Índice](#índice)
       - [Visualizar Resultados de Monitoramento](#visualizar-resultados-de-monitoramento)
+    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Próximos Passos](#próximos-passos)
 
 ---
@@ -79,6 +80,10 @@ Vamos alterar a visualização, clique na aba `Conversations`
 - **Output PII**: Pontuação indicando se informações pessoalmente identificáveis foram detectadas na resposta do agente (0.00 = nenhuma PII detectada).
   
 ----
+
+### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
+
+Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit), [clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais como criar agentes, tools, bases de conhecimentos e muito mais
 
 ## Próximos Passos
 
