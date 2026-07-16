@@ -247,9 +247,9 @@ Essa é a tela de Debug de um agente.
 - Workflow: Processo de várias etapas.
 - Answer: Nó de resposta final.
 
-2. Para retornar para conversa anterior
+2. Para retornar para o node anterior
 
-3. Para avançar para próxima conversa
+3. Para avançar para o próximo node
 
 4. ID único da conversa
 
