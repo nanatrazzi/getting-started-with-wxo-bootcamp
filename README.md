@@ -88,4 +88,4 @@ graph TD
     style I fill:#f8d7da
 ```
 
-[Clique aqui para começar](./Step_by_Step_LabA.md)
+[Clique aqui para começar](./Use_Cases/02-monitoring/Step_by_Step_Lab1.md)
