@@ -386,8 +386,7 @@ Agora aplique o seu aprendizado no dia a dia, seguindo as boas práticas aprendi
 
 <b>Observe que esta é apenas uma forma básica de proteger seus agentes. Quando falamos de guardrails, o IBM watsonx Orchestrate oferece um ecossistema muito mais completo para governança e proteção de agentes de IA. Entre os recursos disponíveis, estão os plug-ins de pré-invocação (pre-invoke) e pós-invocação (post-invoke), que permitem executar validações, aplicar políticas de segurança, mascarar dados sensíveis, filtrar conteúdo e implementar outros controles antes e depois do processamento da mensagem pelo agente.
 
-Quer saber mais? Consulte a documentação e os materiais oficiais:</b> [IBM Developer – Implement agent guardrails with watsonx Orchestrate plug-ins]
-(https://developer.ibm.com/tutorials/ai-agents-guardrails-watsonx-orchestrate-plugins/)
+Quer saber mais? Consulte a documentação e os materiais oficiais:</b> [IBM Developer – Implement agent guardrails with watsonx Orchestrate plug-ins](https://developer.ibm.com/tutorials/ai-agents-guardrails-watsonx-orchestrate-plugins/)
 
 **Lembre-se**: Data poisoning é uma ameaça séria, mas com validação adequada, diretrizes e monitoramento, você pode proteger seus sistemas de IA e manter a confiança dos usuários.
 
