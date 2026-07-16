@@ -63,29 +63,4 @@ Ao completar este laboratório, você ganhará confiança para colocar seus agen
 
 **Produtividade**: Economia de tempo fazendo avaliações manuais e verificações de qualidade, bem como monitorando manualmente os modelos e sistemas de IA de sua equipe.
 
-## Fluxo de Trabalho com o Orchestrate
-
-O ciclo de vida de agentes no watsonx Orchestrate segue um modelo de melhoria contínua:
-
-```mermaid
-graph TD
-    A[Avaliação Pré-Deployment] --> B{Padrões de<br/>Qualidade<br/>Atendidos?}
-    B -->|Não| C[🔧 Refinar Configuração<br/>do Agente]
-    C --> A
-    B -->|Sim| D Deploy do Agente]
-    D --> E[Ativar Monitoramento]
-    E --> F[Monitoramento<br/>Pós-Deployment]
-    F --> G[Analisar Métricas<br/>de Performance]
-    G --> H{Problemas ou<br/>Oportunidades de<br/>Melhoria?}
-    H -->|Sim| I[💡 Melhoria<br/>Contínua]
-    I --> J[Atualizar Knowledge,<br/>Tools ou Config]
-    J --> A
-    H -->|Não| F
-    
-    style A fill:#e1f5ff
-    style D fill:#d4edda
-    style F fill:#fff3cd
-    style I fill:#f8d7da
-```
-
 [Clique aqui para começar](./Use_Cases/02-monitoring/Step_by_Step_Lab1.md)
