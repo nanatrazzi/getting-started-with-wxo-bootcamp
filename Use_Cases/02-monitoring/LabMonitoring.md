@@ -60,23 +60,30 @@ O ciclo de vida de agentes no watsonx Orchestrate segue um modelo de melhoria co
 
 ```mermaid
 graph TD
-    A[Avaliação Pré-Deployment] --> B{Padrões de<br/>Qualidade<br/>Atendidos?}
-    B -->|Não| C[🔧 Refinar Configuração<br/>do Agente]
+    A["Avaliação Pré-Deployment"] --> B{"Padrões de<br/>Qualidade<br/>Atendidos?"}
+
+    B -->|Não| C["Refinar Configuração<br/>do Agente"]
     C --> A
-    B -->|Sim| D Deploy do Agente]
-    D --> E[Ativar Monitoramento]
-    E --> F[Monitoramento<br/>Pós-Deployment]
-    F --> G[Analisar Métricas<br/>de Performance]
-    G --> H{Problemas ou<br/>Oportunidades de<br/>Melhoria?}
-    H -->|Sim| I[💡 Melhoria<br/>Contínua]
-    I --> J[Atualizar Knowledge,<br/>Tools ou Config]
+
+    B -->|Sim| D["Deploy do Agente"]
+    D --> E["Ativar Monitoramento"]
+    E --> F["Monitoramento<br/>Pós-Deployment"]
+
+    F --> G["Analisar Métricas<br/>de Performance"]
+    G --> H{"Problemas ou<br/>Oportunidades de<br/>Melhoria?"}
+
+    H -->|Sim| I["Melhoria<br/>Contínua"]
+    I --> J["Atualizar Knowledge,<br/>Tools ou Config"]
     J --> A
+
     H -->|Não| F
-    
+
     style A fill:#e1f5ff
     style D fill:#d4edda
     style F fill:#fff3cd
     style I fill:#f8d7da
 ```
 
-[Clique aqui para começar](./Step_by_Step_LabA.md)
+----
+
+[Clique aqui para começar os laboratórios](./Step_by_Step_LabA.md)
