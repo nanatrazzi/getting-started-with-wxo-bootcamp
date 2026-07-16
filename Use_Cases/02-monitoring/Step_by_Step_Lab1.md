@@ -13,6 +13,7 @@
     - [Parte 5: Criar Diretrizes para Proteger Contra Data Poisoning](#parte-5-criar-diretrizes-para-proteger-contra-data-poisoning)
     - [Parte 6: Verificar que a Diretriz Está Funcionando](#parte-6-verificar-que-a-diretriz-está-funcionando)
     - [Próximos passos](#próximos-passos)
+    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Próximos Passos](#próximos-passos-1)
 
 ## Visão Geral
@@ -391,6 +392,10 @@ Quer saber mais? Consulte a documentação e os materiais oficiais:</b> [IBM Dev
 (https://developer.ibm.com/tutorials/ai-agents-guardrails-watsonx-orchestrate-plugins/)
 
 **Lembre-se**: Data poisoning é uma ameaça séria, mas com validação adequada, diretrizes e monitoramento, você pode proteger seus sistemas de IA e manter a confiança dos usuários.
+
+### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
+
+Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit), [clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais como criar agentes, tools, bases de conhecimentos e muito mais
 
 ## Próximos Passos
 
