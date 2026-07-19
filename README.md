@@ -1,10 +1,11 @@
-# Laboratório de watsonx Orchestrate 16 de Julho de 2026. 
+# Laboratório de watsonx Orchestrate - Segundo Semestre de 2026
 
-- [Laboratório de watsonx Orchestrate 16 de Julho de 2026.](#laboratório-de-watsonx-orchestrate-16-de-julho-de-2026)
+> Ultima atualização: 19 de Julho de 2026
+
+- [Laboratório de watsonx Orchestrate - Segundo Semestre de 2026](#laboratório-de-watsonx-orchestrate---segundo-semestre-de-2026)
   - [Controle e Governança de Agentes de IA com watsonx Orchestrate](#controle-e-governança-de-agentes-de-ia-com-watsonx-orchestrate)
   - [Objetivo](#objetivo)
   - [Valor para o seu Negócio](#valor-para-o-seu-negócio)
-  - [Fluxo de Trabalho com o Orchestrate](#fluxo-de-trabalho-com-o-orchestrate)
 
 
 ## Controle e Governança de Agentes de IA com watsonx Orchestrate
