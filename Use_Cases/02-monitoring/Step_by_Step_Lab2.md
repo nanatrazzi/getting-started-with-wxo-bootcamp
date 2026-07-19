@@ -308,4 +308,4 @@ Todas as operações realizadas também estão disponíveis em uma experiência 
 
 ## Próximos Passos
 
-<b>➜</b> [Clique aqui para acessar o próximo laboratório](./Step_by_Step_Lab3.md)
+<b>➜</b> [Clique aqui para acessar o próximo laboratório - Realizando avaliação de Agentes com watsonx Orchestrate](./Step_by_Step_Lab3.md)

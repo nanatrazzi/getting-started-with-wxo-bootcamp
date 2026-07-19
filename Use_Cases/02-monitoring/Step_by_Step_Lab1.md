@@ -396,4 +396,4 @@ Todas as operações realizadas também estão disponíveis em uma experiência 
 
 ## Próximos Passos
 
-<b>➜</b> [Clique aqui para navegar para o próximo lab](./Step_by_Step_Lab2.md)
+<b>➜</b> [Clique aqui para navegar para o próximo lab - Adicionando Agentes Externos com watsonx Orchestrate](./Step_by_Step_Lab2.md)

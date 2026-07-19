@@ -13,6 +13,7 @@
     - [Parte 4: Testando com Asset Controls](#parte-4-testando-com-asset-controls)
   - [Resultados e importância dos controles construídos com o Orchestrate](#resultados-e-importância-dos-controles-construídos-com-o-orchestrate)
   - [Resumo](#resumo)
+  - [Próximos Passos](#próximos-passos)
 
 ## Visão Geral
 
@@ -425,3 +426,6 @@ Ao concluir este laboratório, você é capaz de:
 
 ---
 
+## Próximos Passos
+
+<b>➜</b> [Clique aqui para navegar para o próximo lab -  Monitorando Agentes em Tempo Real com watsonx Orchestrate](./Step_by_Step_Lab5.md)

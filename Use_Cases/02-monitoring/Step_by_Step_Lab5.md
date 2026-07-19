@@ -87,4 +87,4 @@ Todas as operações realizadas também estão disponíveis em uma experiência 
 
 ## Próximos Passos
 
-<b>➜</b> [Clique aqui para navegar para o próximo lab - Monitorar Agentes em Tempo Real no watsonx Orchestrate](./Step_by_Step_Lab5.md)
+<b>➜</b> [Clique aqui para navegar para o próximo lab - Control Plane Lab do watsonx Orchestrate](./Step_by_Step_Lab6.md)
