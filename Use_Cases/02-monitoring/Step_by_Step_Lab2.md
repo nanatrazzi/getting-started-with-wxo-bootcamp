@@ -13,17 +13,12 @@
 
 ## Visão Geral
 
-Este guia de laboratório orienta você no processo de integração de agentes construídos através de outros frameworks (agentes externos) ao seu ambiente watsonx Orchestrate.
+Neste laboratório, você irá explorar como conectar e orquestrar múltiplos agentes no watsonx Orchestrate para criar experiências mais inteligentes e completas.
 
-Você aprenderá como: 
-
-- Conectar um agente de terceiros que realiza buscas no Google
-- Criar um agente orquestrador mestre para rotear consultas de forma inteligente e testar o sistema multi-agente completo. 
-
-Ao final deste laboratório, você terá um assistente de compra de carros totalmente funcional que combina informações do catálogo com pesquisa web em tempo real.
+Você aprenderá conceitos fundamentais de arquiteturas multiagentes, integração de agentes externos, descoberta de capacidades e tomada de decisão baseada em contexto, permitindo que cada agente contribua com sua especialidade para resolver as solicitações dos usuários.
 
 > [!NOTE]
-> **Pré-requisito:** Este laboratório assume que você já completou o laboratório **Data Poisoning** e criou o **Dealership Support Agent** com a base de conhecimento do catálogo de veículos. O agente criado naquele laboratório será usado aqui como o agente de pesquisa do catálogo.
+> **Pré-requisito:** Este laboratório assume que você já concluiu o [laboratório 1](Step_by_Step_Lab1.md) e criou um agente com a base de conhecimento do catálogo de veículos. O agente criado naquele laboratório será reutilizado aqui como agente responsável pelas consultas ao catálogo.
 
 ### Parte 1: Conectar Agente de Busca Google de Terceiros
 
