@@ -1,4 +1,4 @@
-Copyright (c) 2026 Nathalia Trazzi - IBM
+Copyright (c) 2026 Nathalia Trazzi - Client Engineering - IBM Americas
 
 All Rights Reserved.
 
