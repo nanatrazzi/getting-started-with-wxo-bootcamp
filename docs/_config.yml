@@ -1,2 +1,5 @@
 title: "Controle e Governança de Agentes de IA com watsonx Orchestrate"
 description: "Laboratórios de Monitoramento e Governança com IBM watsonx Orchestrate"
+remote_theme: just-the-docs/just-the-docs@v0.10.1
+plugins:
+  - jekyll-remote-theme
