@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controle e Governança de Agentes de IA — watsonx Orchestrate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe;
+    --carbon-blue-70: #0043ce;
+    --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616;
+    --carbon-gray-90: #262626;
+    --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252;
+    --carbon-gray-30: #c6c6c6;
+    --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4;
+    --carbon-white: #ffffff;
+    --carbon-teal-60: #007d79;
+    --carbon-purple-60: #8a3ffc;
+    --carbon-green-60: #198038;
+    --carbon-green-10: #defbe6;
+    --carbon-yellow-30: #f1c21b;
+    --carbon-red-60: #da1e28;
+    --sidebar-width: 256px;
+    --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--carbon-gray-100); background: var(--carbon-gray-10); line-height: 1.5; }
+
+  /* ─── TOP HEADER ─── */
+  .c-header {
+    position: fixed; top: 0; left: 0; right: 0; height: var(--header-height);
+    background: var(--carbon-gray-100); color: var(--carbon-white);
+    display: flex; align-items: center; z-index: 9000;
+    padding: 0 16px; gap: 16px;
+  }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__logo svg { fill: var(--carbon-white); }
+  .c-header__name { font-size: 14px; font-weight: 400; letter-spacing: .1px; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; font-weight: 400; color: var(--carbon-white); }
+
+  /* ─── LEFT NAV ─── */
+  .c-sidenav {
+    position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width);
+    background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000;
+  }
+  .c-sidenav__section-title {
+    padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px;
+    text-transform: uppercase; color: var(--carbon-gray-30);
+  }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; transition: background .1s, color .1s; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; letter-spacing: .2px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+
+  /* ─── MAIN CONTENT ─── */
+  .c-content {
+    margin-left: var(--sidebar-width); margin-top: var(--header-height);
+    padding: 40px 48px 80px; max-width: 900px;
+  }
+
+  /* ─── BREADCRUMB ─── */
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--carbon-gray-70); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb span { color: var(--carbon-gray-30); }
+
+  /* ─── PAGE HEADER ─── */
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 32px; font-weight: 300; line-height: 1.25; color: var(--carbon-gray-100); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 16px; color: var(--carbon-gray-70); line-height: 1.5; max-width: 640px; }
+
+  /* ─── TYPOGRAPHY ─── */
+  h2 { font-size: 20px; font-weight: 400; margin: 40px 0 16px; color: var(--carbon-gray-100); }
+  h3 { font-size: 16px; font-weight: 600; margin: 32px 0 12px; color: var(--carbon-gray-100); }
+  h4 { font-size: 14px; font-weight: 600; margin: 24px 0 8px; color: var(--carbon-gray-100); }
+  p { margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; font-size: 14px; line-height: 1.6; }
+  strong { font-weight: 600; }
+  a { color: var(--carbon-blue-60); }
+
+  /* ─── TILE CARDS ─── */
+  .lab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin: 32px 0; }
+  .lab-card {
+    background: var(--carbon-white); border: 1px solid var(--carbon-gray-20);
+    padding: 20px; text-decoration: none; color: inherit;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: box-shadow .15s, border-color .15s;
+  }
+  .lab-card:hover { border-color: var(--carbon-blue-60); box-shadow: 0 4px 16px rgba(0,0,0,.12); }
+  .lab-card__num { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .32px; color: var(--carbon-blue-60); }
+  .lab-card__title { font-size: 16px; font-weight: 500; color: var(--carbon-gray-100); line-height: 1.3; }
+  .lab-card__desc { font-size: 13px; color: var(--carbon-gray-70); flex: 1; }
+  .lab-card__arrow { font-size: 18px; color: var(--carbon-blue-60); align-self: flex-end; }
+
+  /* ─── INFO BOXES ─── */
+  .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
+  .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
+  .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
+  .callout--tip { border-color: var(--carbon-teal-60); background: #d9fbfb; }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 4px; }
+  .callout--note .callout__title { color: var(--carbon-blue-60); }
+  .callout--warning .callout__title { color: #a4780a; }
+  .callout--tip .callout__title { color: var(--carbon-teal-60); }
+  .callout p:last-child { margin: 0; }
+
+  /* ─── OBJECTIVE TILES ─── */
+  .objective-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; margin: 24px 0; }
+  .objective-tile { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 16px; }
+  .objective-tile__icon { font-size: 20px; margin-bottom: 8px; }
+  .objective-tile__label { font-size: 13px; font-weight: 600; color: var(--carbon-gray-100); margin-bottom: 4px; }
+  .objective-tile__text { font-size: 12px; color: var(--carbon-gray-70); line-height: 1.5; }
+
+  /* ─── FLOW DIAGRAM (mermaid replacement) ─── */
+  .flow-diagram { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 24px; margin: 24px 0; }
+  .flow-diagram__title { font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--carbon-gray-70); margin-bottom: 20px; letter-spacing: .32px; }
+  .flow-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+  .flow-node { background: #e1f5ff; border: 1px solid #b3d9f4; padding: 8px 14px; font-size: 13px; font-weight: 500; color: var(--carbon-gray-90); border-radius: 2px; }
+  .flow-node--green { background: #d4edda; border-color: #9fd1ae; }
+  .flow-node--yellow { background: #fff3cd; border-color: #f1c96e; }
+  .flow-node--red { background: #f8d7da; border-color: #e8a2a7; }
+  .flow-arrow { color: var(--carbon-gray-70); font-size: 16px; }
+  .flow-label { font-size: 11px; color: var(--carbon-gray-70); }
+
+  /* ─── FOOTER ─── */
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--carbon-gray-70); background: var(--carbon-white); }
+
+  @media (max-width: 768px) {
+    .c-sidenav { transform: translateX(-100%); }
+    .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="c-header">
+  <a class="c-header__logo" href="index.html">
+    <svg width="58" height="23" viewBox="0 0 58 23" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h6.28v2.09H0zM0 3.49h6.28v2.09H0zM1.26 6.98h3.77v2.09H1.26zM1.26 10.47h3.77v2.09H1.26zM1.26 13.95h3.77v2.09H1.26zM0 17.44h6.28v2.09H0zM0 20.93h6.28v2.09H0zM8.37 0h6.28v2.09H8.37zM8.37 3.49h6.28v2.09H8.37zM9.63 6.98h3.77v2.09H9.63zM9.63 10.47h3.77v2.09H9.63zM9.63 13.95h3.77v2.09H9.63zM8.37 17.44h6.28v2.09H8.37zM8.37 20.93h6.28v2.09H8.37zM18.84 0h6.28v2.09h-6.28zM18.84 3.49h6.28v2.09h-6.28zM20.1 6.98h3.77v2.09H20.1zM20.1 13.95h3.77v2.09H20.1zM18.84 17.44h6.28v2.09h-6.28zM18.84 20.93h6.28v2.09h-6.28z"/>
+    </svg>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Controle e Governança de Agentes de IA</span>
+</header>
+
+<!-- SIDEBAR NAV -->
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item active" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Laboratórios</div>
+  <a class="c-sidenav__item" href="lab1.html"><span class="lab-num">Lab 1</span>Data Poisoning</a>
+  <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
+  <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Avaliação de Agentes</a>
+  <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Controles &amp; PII</a>
+  <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Monitoramento</a>
+  <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">IBM watsonx Orchestrate · Série de Laboratórios</div>
+    <h1 class="page-header__h1">Controle e Governança de Agentes de IA</h1>
+    <p class="page-header__subtitle">Aprenda a implementar práticas de governança para agentes de IA utilizando a interface do watsonx Orchestrate — guardrails, monitoramento, debugging e avaliação.</p>
+  </div>
+
+  <p>Nos laboratórios desta série, você aprenderá como implementar práticas de governança para agentes de IA utilizando a interface do watsonx Orchestrate.</p>
+  <p>Serão abordados conceitos como guardrails, monitoramento, debugging e avaliação de agentes para reduzir riscos relacionados à IA Generativa e garantir operações mais seguras e confiáveis.</p>
+
+  <h2>Por que isso é importante?</h2>
+  <p>Antes de disponibilizar um agente para os usuários, precisamos responder algumas perguntas:</p>
+
+  <div class="callout callout--note">
+    <div>
+      <div class="callout__title">Perguntas Essenciais</div>
+      <ul style="margin:0;padding-left:20px;">
+        <li>As respostas estão corretas?</li>
+        <li>O agente é seguro?</li>
+        <li>Ele respeita regras de compliance?</li>
+        <li>Os custos de uso estão controlados?</li>
+        <li>Como identificar problemas após o deployment?</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Objetivo</h2>
+  <p>Este laboratório ajuda times de gerentes de produto, engenheiros de IA e líderes de negócio a implementar um framework abrangente de governança usando as capacidades integradas de avaliação e monitoramento do watsonx Orchestrate.</p>
+
+  <h2>Atividades que vamos realizar</h2>
+  <p>Implementar capacidades de <strong>Controles e Governança de IA Agêntica</strong> para abordar:</p>
+
+  <div class="objective-grid">
+    <div class="objective-tile">
+      <div class="objective-tile__icon">🛡️</div>
+      <div class="objective-tile__label">Injeção de Prompt</div>
+      <div class="objective-tile__text">Proteger contra usuários maliciosos que instruem o LLM a gerar conteúdo prejudicial ou executar ações perigosas.</div>
+    </div>
+    <div class="objective-tile">
+      <div class="objective-tile__icon">🧠</div>
+      <div class="objective-tile__label">Alucinações</div>
+      <div class="objective-tile__text">Detectar e mitigar casos onde o LLM gera declarações falsas ou inventadas.</div>
+    </div>
+    <div class="objective-tile">
+      <div class="objective-tile__icon">🚫</div>
+      <div class="objective-tile__label">Saída Tóxica (HAP)</div>
+      <div class="objective-tile__text">Prevenir geração de conteúdo odioso, abusivo ou inapropriado com filtros da IBM.</div>
+    </div>
+    <div class="objective-tile">
+      <div class="objective-tile__icon">🔒</div>
+      <div class="objective-tile__label">Vazamento de PII</div>
+      <div class="objective-tile__text">Proteger informações pessoalmente identificáveis presentes em bases de conhecimento.</div>
+    </div>
+    <div class="objective-tile">
+      <div class="objective-tile__icon">📊</div>
+      <div class="objective-tile__label">Avaliação de Qualidade</div>
+      <div class="objective-tile__text">Medir a qualidade das saídas antes de colocar o sistema em produção.</div>
+    </div>
+    <div class="objective-tile">
+      <div class="objective-tile__icon">📡</div>
+      <div class="objective-tile__label">Monitoramento</div>
+      <div class="objective-tile__text">Acompanhamento contínuo com métricas em tempo real para garantir alto desempenho.</div>
+    </div>
+    <div class="objective-tile">
+      <div class="objective-tile__icon">🔔</div>
+      <div class="objective-tile__label">Alertas</div>
+      <div class="objective-tile__text">Notificações quando houver violações nas métricas de qualidade, modelo ou desempenho.</div>
+    </div>
+    <div class="objective-tile">
+      <div class="objective-tile__icon">🐛</div>
+      <div class="objective-tile__label">Debugging</div>
+      <div class="objective-tile__text">Análise e investigação de problemas quando o sistema não se comporta como esperado.</div>
+    </div>
+  </div>
+
+  <h2>Valor para o seu Negócio</h2>
+  <ul>
+    <li><strong>Prevenir proliferação de agentes</strong>: A proliferação descontrolada de agentes aumenta a complexidade, o custo computacional e os riscos, daí a necessidade de gerenciar e governar um grande número de agentes em uma organização.</li>
+    <li><strong>Proteção de reputação</strong>: As organizações precisam garantir que seus sistemas de IA operem de forma segura, ética e alinhada às políticas corporativas. Falhas como ataques de prompt injection, respostas incorretas, geração de conteúdo inadequado ou execução de ações não autorizadas podem impactar a confiança dos usuários, gerar riscos operacionais e comprometer a reputação da empresa.</li>
+    <li><strong>Infrações regulatórias e questões legais</strong>: Muitos riscos de IA são abordados por leis e regulamentos em muitas jurisdições. As ferramentas de gerenciamento de risco abordadas neste laboratório ajudam a reduzir potenciais questões de conformidade legal e regulatória.</li>
+    <li><strong>Produtividade</strong>: Economia de tempo fazendo avaliações manuais e verificações de qualidade, bem como monitorando manualmente os modelos e sistemas de IA de sua equipe.</li>
+  </ul>
+
+  <h2>Fluxo de Trabalho com o Orchestrate</h2>
+  <p>O ciclo de vida de agentes no watsonx Orchestrate segue um modelo de melhoria contínua:</p>
+
+  <div class="flow-diagram">
+    <div class="flow-diagram__title">Ciclo de Vida de Agentes — Melhoria Contínua</div>
+    <div class="flow-row">
+      <div class="flow-node">Avaliação Pré-Deployment</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="background:#fff3cd;border-color:#f1c96e;">Padrões de Qualidade Atendidos?</div>
+    </div>
+    <div class="flow-row" style="margin-left:32px;">
+      <div class="flow-label">Não →</div>
+      <div class="flow-node" style="background:#f8d7da;border-color:#e8a2a7;">Refinar Configuração do Agente</div>
+      <div class="flow-arrow">↑ (repetir)</div>
+    </div>
+    <div class="flow-row" style="margin-top:12px;">
+      <div class="flow-label">Sim →</div>
+      <div class="flow-node flow-node--green">Deploy do Agente</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node flow-node--green">Ativar Monitoramento</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node flow-node--yellow">Monitoramento Pós-Deployment</div>
+    </div>
+    <div class="flow-row" style="margin-top:12px;">
+      <div class="flow-arrow">↓</div>
+      <div class="flow-label">Analisar Métricas → Problemas? →</div>
+      <div class="flow-node flow-node--red">Melhoria Contínua</div>
+      <div class="flow-arrow">→ Atualizar &amp; Repetir</div>
+    </div>
+  </div>
+
+  <h2>Laboratórios</h2>
+  <p>Clique em um laboratório para começar:</p>
+
+  <div class="lab-grid">
+    <a class="lab-card" href="lab1.html">
+      <div class="lab-card__num">Laboratório 1</div>
+      <div class="lab-card__title">Proteção contra Envenenamento de Dados</div>
+      <div class="lab-card__desc">Aprenda a identificar e proteger agentes contra ataques de data poisoning usando diretrizes no watsonx Orchestrate.</div>
+      <div class="lab-card__arrow">→</div>
+    </a>
+    <a class="lab-card" href="lab2.html">
+      <div class="lab-card__num">Laboratório 2</div>
+      <div class="lab-card__title">Adicionando Agentes Externos</div>
+      <div class="lab-card__desc">Explore como conectar e orquestrar múltiplos agentes via protocolo A2A para criar experiências mais inteligentes.</div>
+      <div class="lab-card__arrow">→</div>
+    </a>
+    <a class="lab-card" href="lab3.html">
+      <div class="lab-card__num">Laboratório 3</div>
+      <div class="lab-card__title">Avaliação de Agentes</div>
+      <div class="lab-card__desc">Crie casos de teste, execute avaliações automatizadas e analise métricas de desempenho dos agentes.</div>
+      <div class="lab-card__arrow">→</div>
+    </a>
+    <a class="lab-card" href="lab4.html">
+      <div class="lab-card__num">Laboratório 4</div>
+      <div class="lab-card__title">Controles &amp; Filtragem de PII</div>
+      <div class="lab-card__desc">Implemente controles determinísticos para prevenir vazamento de informações pessoais identificáveis.</div>
+      <div class="lab-card__arrow">→</div>
+    </a>
+    <a class="lab-card" href="lab5.html">
+      <div class="lab-card__num">Laboratório 5</div>
+      <div class="lab-card__title">Monitoramento em Tempo Real</div>
+      <div class="lab-card__desc">Acompanhe o desempenho dos agentes, analise padrões de conversação e monitore métricas de qualidade.</div>
+      <div class="lab-card__arrow">→</div>
+    </a>
+    <a class="lab-card" href="lab6.html">
+      <div class="lab-card__num">Laboratório 6</div>
+      <div class="lab-card__title">Control Plane</div>
+      <div class="lab-card__desc">Explore o Agentic Control Plane para gerenciar, observar e otimizar agentes de forma centralizada.</div>
+      <div class="lab-card__arrow">→</div>
+    </a>
+  </div>
+
+  <div style="margin-top:48px; padding-top:32px; border-top: 1px solid var(--carbon-gray-20);">
+    <a href="lab1.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--carbon-blue-60);color:white;padding:12px 24px;text-decoration:none;font-size:14px;font-weight:500;">
+      Começar o Laboratório 1 →
+    </a>
+  </div>
+</main>
+
+<footer class="c-footer">
+  IBM watsonx Orchestrate · Laboratórios de Controle e Governança de Agentes de IA · 2026
+</footer>
+
+</body>
+</html>

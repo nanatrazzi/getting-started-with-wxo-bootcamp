@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 2 — Agentes Externos · watsonx Orchestrate</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe; --carbon-blue-70: #0043ce; --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616; --carbon-gray-90: #262626; --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252; --carbon-gray-30: #c6c6c6; --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4; --carbon-white: #ffffff; --carbon-teal-60: #007d79;
+    --carbon-green-60: #198038; --carbon-green-10: #defbe6; --carbon-yellow-30: #f1c21b;
+    --carbon-red-60: #da1e28; --sidebar-width: 256px; --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--carbon-gray-100); background: var(--carbon-gray-10); line-height: 1.5; }
+  .c-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--carbon-gray-100); color: var(--carbon-white); display: flex; align-items: center; z-index: 9000; padding: 0 16px; gap: 16px; }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__logo svg { fill: var(--carbon-white); }
+  .c-header__name { font-size: 14px; font-weight: 400; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; font-weight: 400; color: var(--carbon-white); }
+  .c-sidenav { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000; }
+  .c-sidenav__section-title { padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30); }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 900px; }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--carbon-gray-70); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 28px; font-weight: 300; line-height: 1.25; color: var(--carbon-gray-100); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 14px; color: var(--carbon-gray-70); line-height: 1.5; }
+  h2 { font-size: 20px; font-weight: 400; margin: 40px 0 16px; color: var(--carbon-gray-100); border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; color: var(--carbon-gray-100); }
+  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--carbon-gray-100); }
+  p { margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; font-size: 14px; line-height: 1.6; }
+  strong { font-weight: 600; }
+  a { color: var(--carbon-blue-60); }
+  .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
+  .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
+  .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
+  .callout--tip { border-color: var(--carbon-teal-60); background: #d9fbfb; }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
+  .callout--note .callout__title { color: var(--carbon-blue-60); }
+  .callout--warning .callout__title { color: #a4780a; }
+  .callout--tip .callout__title { color: var(--carbon-teal-60); }
+  .callout p:last-child, .callout ul:last-child { margin: 0; }
+  .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
+  .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+  .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
+  .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
+  .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
+  .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
+  .lab-nav a:hover { background: var(--carbon-blue-10); }
+  .lab-nav a.primary:hover { background: var(--carbon-blue-70); }
+  .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--carbon-gray-70); background: var(--carbon-white); }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } }
+</style>
+</head>
+<body>
+
+<header class="c-header">
+  <a class="c-header__logo" href="index.html">
+    <svg width="58" height="23" viewBox="0 0 58 23" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h6.28v2.09H0zM0 3.49h6.28v2.09H0zM1.26 6.98h3.77v2.09H1.26zM1.26 10.47h3.77v2.09H1.26zM1.26 13.95h3.77v2.09H1.26zM0 17.44h6.28v2.09H0zM0 20.93h6.28v2.09H0zM8.37 0h6.28v2.09H8.37zM8.37 3.49h6.28v2.09H8.37zM9.63 6.98h3.77v2.09H9.63zM9.63 10.47h3.77v2.09H9.63zM9.63 13.95h3.77v2.09H9.63zM8.37 17.44h6.28v2.09H8.37zM8.37 20.93h6.28v2.09H8.37zM18.84 0h6.28v2.09h-6.28zM18.84 3.49h6.28v2.09h-6.28zM20.1 6.98h3.77v2.09H20.1zM20.1 13.95h3.77v2.09H20.1zM18.84 17.44h6.28v2.09h-6.28zM18.84 20.93h6.28v2.09h-6.28z"/>
+    </svg>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Controle e Governança de Agentes de IA</span>
+</header>
+
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Laboratórios</div>
+  <a class="c-sidenav__item" href="lab1.html"><span class="lab-num">Lab 1</span>Data Poisoning</a>
+  <a class="c-sidenav__item active" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
+  <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Avaliação de Agentes</a>
+  <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Controles &amp; PII</a>
+  <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Monitoramento</a>
+  <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
+</nav>
+
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+    <span>›</span>
+    <span>Laboratório 2</span>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">Laboratório 2 · Arquitetura Multi-agente</div>
+    <h1 class="page-header__h1">Adicionando Agentes Externos com watsonx Orchestrate</h1>
+    <p class="page-header__subtitle">Explore como conectar e orquestrar múltiplos agentes no watsonx Orchestrate para criar experiências mais inteligentes e completas.</p>
+  </div>
+
+  <!-- TOC -->
+  <nav style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:10px;">Índice</div>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte1">Parte 1: Conectar Agente de Busca Google de Terceiros</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte2">Parte 2: Criar Agente de Compra de Carros</a></li>
+    </ul>
+  </nav>
+
+  <section id="visao-geral">
+    <h2>Visão Geral</h2>
+    <p>Neste laboratório, você irá explorar como conectar e orquestrar múltiplos agentes no watsonx Orchestrate para criar experiências mais inteligentes e completas.</p>
+    <p>Você aprenderá conceitos fundamentais de arquiteturas multiagentes, integração de agentes externos, descoberta de capacidades e tomada de decisão baseada em contexto, permitindo que cada agente contribua com sua especialidade para resolver as solicitações dos usuários.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/lab2.PNG" alt="Arquitetura multi-agente — visão geral">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Pré-requisito</div>
+        <p style="margin:0;">Este laboratório assume que você já concluiu o <a href="lab1.html">Laboratório 1</a> e criou um agente com a base de conhecimento do catálogo de veículos. O agente criado naquele laboratório será reutilizado aqui como agente responsável pelas consultas ao catálogo.</p>
+      </div>
+    </div>
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">⚠️ Atenção</div>
+        <p>Este laboratório utiliza agentes externos que não foram desenvolvidos no watsonx Orchestrate. Para as atividades deste exercício, será utilizado um agente criado com o Langflow, integrado ao Orchestrate por meio do protocolo <strong>A2A (Agent-to-Agent)</strong>.</p>
+        <p>Para estabelecer a comunicação entre os agentes, será necessário ter acesso à <strong>URL do agente</strong> e à respectiva <strong>API Key</strong>.</p>
+        <p style="margin-bottom:0;">Essas credenciais serão fornecidas pelo instrutor. Antes de prosseguir com o laboratório, certifique-se de obtê-las para garantir que todas as etapas possam ser executadas corretamente.</p>
+      </div>
+    </div>
+
+    <p>Para saber mais sobre o protocolo de comunicação A2A, <a href="https://www.ibm.com/br-pt/think/topics/agent2agent-protocol" target="_blank">clique aqui</a>.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PARTE 1 -->
+  <section id="parte1">
+    <h2>Parte 1: Conectar Agente de Busca Google de Terceiros</h2>
+    <p>Agora vamos conectar o agente externo que realiza buscas na web por informações sobre carros, avaliações e dados de mercado.</p>
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">Este agente usa o protocolo Agent-to-Agent (A2A) para se comunicar com o watsonx Orchestrate. Para ter acesso a esse agente, utilize as credenciais e links que o seu instrutor irá fornecer para você.</p>
+      </div>
+    </div>
+
+    <ol class="step-list">
+      <li>
+        <div class="step-content">
+          <p>Clique no link <strong>Manage Agents</strong> no menu no canto superior esquerdo.</p>
+          <p>Clique no botão <strong>Create agent</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_01.png" alt="Create agent">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Selecione <strong>Create from scratch</strong>.</p>
+          <p>Copie e cole as informações em seus respectivos campos:</p>
+          <p><strong>Name:</strong></p>
+          <div class="code-block">Agente de Busca</div>
+          <p><strong>Description:</strong></p>
+          <div class="code-block">Este agente pesquisa no Google informações em tempo real, como avaliações de usuários, classificações e comparações de mercado, mas apenas para carros que estão em nosso catálogo. Não deve fornecer informações sobre veículos não vendidos pela nossa concessionária.</div>
+          <p>Clique no botão <strong>Create</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_02.png" alt="Criação do Agente de Busca">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Navegue até a seção <strong>Agents</strong>. Vamos adicionar um agente externo, um agente que não foi construído no Orchestrate para uso.</p>
+          <p>Clique no botão <strong>Add agent</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_04.png" alt="Add agent externo">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>Import</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_05.png" alt="Import agent">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Escolha <strong>External agent</strong> e então <strong>Next</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_06.png" alt="External agent — Next">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Selecione <strong>External agent via A2A standard</strong>.</p>
+          <p>Preencha os detalhes de conexão fornecidos pelo seu instrutor:</p>
+          <ul>
+            <li><strong>Endpoint URL</strong>: (Obtenha do instrutor)</li>
+            <li><strong>Authentication Type</strong>: Selecione <strong>API Key</strong></li>
+            <li><strong>API Key Value</strong>: (Obtenha do instrutor)</li>
+          </ul>
+          <p>Role para baixo até a seção <strong>Define new agent</strong> e preencha os detalhes:</p>
+          <p><strong>Name:</strong></p>
+          <div class="code-block">Agente de Buscas</div>
+          <p><strong>Ou um nome de sua preferência para identificação desse agente</strong></p>
+          <p><strong>Description:</strong></p>
+          <div class="code-block">Este agente se conecta ao serviço Tavily para realizar uma busca na web e retornar os principais resultados</div>
+          <p>Então, clique em <code>Done</code>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_08.png" alt="Configuração do agente externo A2A">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Seu agente foi adicionado com sucesso.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_09.png" alt="Agente externo adicionado">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Na seção <strong>Behavior</strong>, adicione as seguintes instruções:</p>
+          <div class="code-block"># VALIDAÇÃO DE VEÍCULO
+
+Antes de atender qualquer solicitação, identifique qual veículo do catálogo o usuário está tentando mencionar.
+
+A identificação deve ser flexível e tolerar:
+
+- Nomes incompletos
+- Pequenas variações de escrita
+- Erros de digitação
+- Apelidos e abreviações comuns
+- Omissão da marca ou da versão
+
+Exemplos válidos:
+
+- "Versa" → Nissan Versa
+- "Nissan Versa" → Nissan Versa
+- "Kona" → Hyundai Kona Electric
+- "Hyundai Kona" → Hyundai Kona Electric
+- "Spider" → Alfa Romeo Spider
+- "Alfa Spider" → Alfa Romeo Spider
+- "911" → Porsche 911 Carrera GTS
+- "Porsche 911" → Porsche 911 Carrera GTS
+- "Carrera GTS" → Porsche 911 Carrera GTS
+- "Niro" → Kia Niro
+- "Kia Nero" → Kia Niro
+- "Kia Niro" → Kia Niro
+
+Se houver alta confiança de que o veículo mencionado corresponde a um item do catálogo, considere-o válido e prossiga normalmente.
+
+Somente rejeite a solicitação quando não for possível associar o veículo informado a nenhum dos modelos do catálogo.
+
+Se o veículo NÃO pertencer ao catálogo, responda exatamente:
+
+"Desculpe, eu só posso fornecer informações sobre os seguintes veículos: Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro."</div>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_10.png" alt="Instruções do Behavior — Validação de Veículo">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Teste o agente com estas consultas:</p>
+          <div class="code-block">O que os proprietários dizem sobre o Porsche 911 Carrera GTS?</div>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_11.png" alt="Teste do agente de busca — Porsche 911">
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_12.png" alt="Resultado da busca — Porsche 911">
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PARTE 2 -->
+  <section id="parte2">
+    <h2>Parte 2: Criar Agente de Compra de Carros</h2>
+    <p>Agora, vamos criar um agente orquestrador que roteia consultas de forma inteligente para o agente especializado apropriado.</p>
+
+    <p>Retorne para a página de gerenciamento de agentes, para isso basta clicar em <code>Manage agents</code> no link azul ao topo da página de estúdio de criação de agentes.</p>
+
+    <ol class="step-list">
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>Create agent +</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_15.png" alt="Create Agent — orquestrador">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique no botão <strong>Create from scratch</strong>.</p>
+          <p>Copie e cole os nomes e descrições em seus respectivos campos:</p>
+          <p><strong>Name:</strong></p>
+          <div class="code-block">Assistente de Compra de Veículos</div>
+          <p><strong>Description:</strong></p>
+          <div class="code-block">Assistente inteligente de compra de carros que roteia consultas para agentes especializados. Fornece informações abrangentes tanto do nosso catálogo quanto de pesquisas externas de mercado.</div>
+          <p>Clique no botão <strong>Create</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_16.png" alt="Criação do Assistente de Compra">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Em <strong>Agent style</strong>, selecione <strong>ReAct</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_17.png" alt="Seleção de Agent Style — ReAct">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Navegue até a seção <strong>Agents</strong>, clique no botão <strong>Add agent +</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_18.png" alt="Add agent — seção Agents">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Selecione <strong>Add from local instance</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_19.png" alt="Add from local instance">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Selecione os dois agentes criados por você anteriormente.</p>
+          <div class="callout callout--note">
+            <div>
+              <p style="margin:0;">Não se preocupe em selecionar os mesmos nomes que estão na imagem abaixo. Selecione os agentes que foram criados por você nos laboratórios até esse momento. As imagens são apenas para auxiliar o processo de aprendizado.</p>
+            </div>
+          </div>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_19.png" alt="Seleção dos dois agentes sub-agentes">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Na seção <strong>Behavior</strong>, adicione a seguinte lógica de roteamento:</p>
+          <div class="code-block">Você é o Assistente de Compra de Veículos. Sua função é identificar a intenção do usuário e encaminhar a solicitação para o agente especializado correto.
+
+# REGRAS DE ROTEAMENTO
+
+## 1. CONSULTAS SOBRE CATÁLOGO → Agente de suporte ao revendedor
+
+Encaminhe para o agente **Agente de suporte ao revendedor** quando o usuário pedir:
+
+- Preço
+- Especificações
+- Disponibilidade
+- Versões
+- Comparação entre veículos do catálogo
+- Informações da concessionária
+- Informações de estoque
+
+Exemplos:
+
+- "Qual o preço do Versa?"
+- "Me mostre os SUVs disponíveis"
+- "Compare o Versa e o Kona"
+- "Quais são as especificações do Porsche 911?"
+
+## 2. PESQUISA EXTERNA → Agente_Langflow_Buscas
+
+Encaminhe para o agente **Agente_Langflow_Buscas** quando o usuário pedir:
+
+- Avaliações de proprietários
+- Reviews
+- Opiniões de usuários
+- Reclamações comuns
+- Notícias
+- Recalls
+- Comparações de mercado
+- Análises especializadas
+
+Exemplos:
+
+- "O que os donos falam do Porsche 911?"
+- "Existem recalls do Kona?"
+- "Quais são os principais problemas do Niro?"
+- "Busque avaliações do Versa"
+
+Observação:
+- Esta regra se aplica tanto para veículos do catálogo quanto para veículos que não fazem parte do catálogo.
+
+## 3. CONSULTAS HÍBRIDAS → AMBOS OS AGENTES
+
+Quando a pergunta exigir informações internas do catálogo e pesquisa externa.
+
+Exemplos:
+
+- "O que os avaliadores dizem sobre o Porsche 911 e quais são suas especificações?"
+- "Compare o Versa com seus concorrentes e mostre os dados técnicos."
+
+Fluxo:
+
+1. Consultar o agente **Agente de suporte ao revendedor**
+2. Consultar o agente **Agente_Langflow_Buscas.**
+3. Consolidar os resultados em uma única resposta.
+
+# REGRAS ADICIONAIS
+
+- Sempre determine primeiro se o veículo pertence ao catálogo, consultando o agente **Agente de suporte ao revendedor.**
+- Nunca rejeite uma consulta apenas porque o usuário informou um nome parcial.
+- Sempre prefira interpretar o veículo pretendido quando houver alta confiança.
+- Somente peça esclarecimentos quando houver ambiguidade real.
+- Para pesquisas externas, utilize exclusivamente o agente **Agente_Langflow_Buscas.**</div>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_22.png" alt="Behavior do agente orquestrador — lógica de roteamento">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Teste o agente com várias consultas:</p>
+          <div class="code-block">Compare o Kia Niro com o Hyundai Kona Electric</div>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_23.png" alt="Teste — Comparação Kia Niro x Hyundai Kona">
+          <div class="code-block">Pesquise uma comparação de usuários com Kia Niro com o Hyundai Kona Electric</div>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_24.png" alt="Teste — Pesquisa comparação de usuários">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>Deploy</strong> no topo da tela ao lado esquerdo. Em seguida, clique em <strong>Deploy</strong> novamente.</p>
+          <p>O deploy do seu agente agora está ativo! Clique em <strong>Activate agent monitoring</strong> quando solicitado.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <h3>Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
+  <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit). <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais como criar agentes, tools, bases de conhecimentos e muito mais.</p>
+
+  <div class="lab-nav">
+    <a href="lab1.html">← Lab 1: Data Poisoning</a>
+    <a href="lab3.html" class="primary">Lab 3: Avaliação de Agentes →</a>
+  </div>
+</main>
+
+<footer class="c-footer">
+  IBM watsonx Orchestrate · Laboratório 2 — Adicionando Agentes Externos · 2026
+</footer>
+</body>
+</html>

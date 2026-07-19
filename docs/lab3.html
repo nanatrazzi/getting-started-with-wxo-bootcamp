@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 3 — Avaliação de Agentes · watsonx Orchestrate</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe; --carbon-blue-70: #0043ce; --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616; --carbon-gray-90: #262626; --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252; --carbon-gray-30: #c6c6c6; --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4; --carbon-white: #ffffff; --carbon-teal-60: #007d79;
+    --carbon-green-60: #198038; --carbon-green-10: #defbe6; --carbon-yellow-30: #f1c21b;
+    --carbon-red-60: #da1e28; --sidebar-width: 256px; --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--carbon-gray-100); background: var(--carbon-gray-10); line-height: 1.5; }
+  .c-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--carbon-gray-100); color: var(--carbon-white); display: flex; align-items: center; z-index: 9000; padding: 0 16px; gap: 16px; }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__logo svg { fill: var(--carbon-white); }
+  .c-header__name { font-size: 14px; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; color: var(--carbon-white); }
+  .c-sidenav { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000; }
+  .c-sidenav__section-title { padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30); }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 900px; }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--carbon-gray-70); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 28px; font-weight: 300; line-height: 1.25; color: var(--carbon-gray-100); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 14px; color: var(--carbon-gray-70); line-height: 1.5; }
+  h2 { font-size: 20px; font-weight: 400; margin: 40px 0 16px; color: var(--carbon-gray-100); border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; color: var(--carbon-gray-100); }
+  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--carbon-gray-100); }
+  p { margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; font-size: 14px; line-height: 1.6; }
+  strong { font-weight: 600; }
+  a { color: var(--carbon-blue-60); }
+  .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
+  .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
+  .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
+  .callout--note .callout__title { color: var(--carbon-blue-60); }
+  .callout--warning .callout__title { color: #a4780a; }
+  .callout p:last-child { margin: 0; }
+  .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
+  .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+  .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .metric-card { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 14px 16px; }
+  .metric-card__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; color: var(--carbon-gray-70); margin-bottom: 4px; }
+  .metric-card__title { font-size: 14px; font-weight: 600; color: var(--carbon-gray-100); margin-bottom: 4px; }
+  .metric-card__desc { font-size: 12px; color: var(--carbon-gray-70); line-height: 1.5; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--carbon-gray-80); color: var(--carbon-white); padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--carbon-gray-20); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--carbon-gray-10); }
+  .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
+  .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
+  .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
+  .lab-nav a:hover { background: var(--carbon-blue-10); }
+  .lab-nav a.primary:hover { background: var(--carbon-blue-70); }
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--carbon-gray-70); background: var(--carbon-white); }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .metrics-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="c-header">
+  <a class="c-header__logo" href="index.html">
+    <svg width="58" height="23" viewBox="0 0 58 23" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h6.28v2.09H0zM0 3.49h6.28v2.09H0zM1.26 6.98h3.77v2.09H1.26zM1.26 10.47h3.77v2.09H1.26zM1.26 13.95h3.77v2.09H1.26zM0 17.44h6.28v2.09H0zM0 20.93h6.28v2.09H0zM8.37 0h6.28v2.09H8.37zM8.37 3.49h6.28v2.09H8.37zM9.63 6.98h3.77v2.09H9.63zM9.63 10.47h3.77v2.09H9.63zM9.63 13.95h3.77v2.09H9.63zM8.37 17.44h6.28v2.09H8.37zM8.37 20.93h6.28v2.09H8.37zM18.84 0h6.28v2.09h-6.28zM18.84 3.49h6.28v2.09h-6.28zM20.1 6.98h3.77v2.09H20.1zM20.1 13.95h3.77v2.09H20.1zM18.84 17.44h6.28v2.09h-6.28zM18.84 20.93h6.28v2.09h-6.28z"/>
+    </svg>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Controle e Governança de Agentes de IA</span>
+</header>
+
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Laboratórios</div>
+  <a class="c-sidenav__item" href="lab1.html"><span class="lab-num">Lab 1</span>Data Poisoning</a>
+  <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
+  <a class="c-sidenav__item active" href="lab3.html"><span class="lab-num">Lab 3</span>Avaliação de Agentes</a>
+  <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Controles &amp; PII</a>
+  <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Monitoramento</a>
+  <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
+</nav>
+
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+    <span>›</span>
+    <span>Laboratório 3</span>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">Laboratório 3 · Avaliação e Qualidade</div>
+    <h1 class="page-header__h1">Realizando Avaliação de Agentes com watsonx Orchestrate</h1>
+    <p class="page-header__subtitle">Aprenda a criar casos de teste, executar avaliações automatizadas, analisar métricas de desempenho e utilizar ferramentas de depuração.</p>
+  </div>
+
+  <!-- TOC -->
+  <nav style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:10px;">Índice</div>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo1">Passo 1 — Criar e Executar Testes</a></li>
+      <li style="margin-bottom:6px;"><a href="#resultados">Revisar os Resultados</a></li>
+      <li style="margin-bottom:6px;"><a href="#metricas">Entendendo as Métricas</a></li>
+    </ul>
+  </nav>
+
+  <section id="visao-geral">
+    <h2>Visão Geral</h2>
+    <p>Este laboratório apresenta as melhores práticas para avaliar, testar e depurar agentes de IA utilizando os recursos nativos de teste e debugging do watsonx Orchestrate.</p>
+    <p>Ao longo das atividades, você aprenderá a criar casos de teste, executar avaliações automatizadas, analisar métricas de desempenho e utilizar ferramentas de depuração para compreender o comportamento dos agentes e identificar possíveis problemas.</p>
+    <p>Essas habilidades são fundamentais para validar a qualidade das respostas, aumentar a confiabilidade dos agentes e garantir que eles estejam preparados para uso em cenários reais antes da implantação.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <section id="passo1">
+    <h2>Passo 1 — Criar e Executar Testes</h2>
+    <p>Com o agente orquestrador criado no laboratório anterior aberto, vamos enviar 3 perguntas para executar um teste.</p>
+
+    <ol class="step-list">
+      <li>
+        <div class="step-content">
+          <p>Envie a pergunta abaixo para o agente:</p>
+          <div class="code-block">Mostre os veículos que vocês têm no catálogo e os preços</div>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_01.png" alt="Primeira pergunta ao agente">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Após obter a resposta, clique em <code>Save as test</code>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_02.png" alt="Salvar como teste">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Habilite a opção <code>Response summary</code>.</p>
+          <p>Em seguida, clique em <code>Save</code>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_03.png" alt="Habilitar Response summary e salvar">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>A primeira pergunta para executar o teste foi realizada.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_04.png" alt="Primeira pergunta de teste salva">
+          <p>Dê restart no chat, através do botão de restart <strong>↻</strong>.</p>
+          <p>Para cada pergunta da lista abaixo:</p>
+          <ul>
+            <li>Envie a pergunta</li>
+            <li>Execute os passos 2, 3 e 4</li>
+            <li>Clique no botão Restart</li>
+          </ul>
+          <div class="code-block">Estou procurando um SUV familiar abaixo de $40.000 com bom consumo de combustível. O que você recomenda do catálogo e como eles se comparam aos líderes de mercado?</div>
+          <div class="code-block">As avaliações dos proprietários são mais positivas para o Alfa Romeo Spider ou para o Porsche 911?</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Selecione o botão <strong>Test agent</strong> no canto superior direito.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_05.png" alt="Botão Test agent">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>Evaluate All</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_06.png" alt="Evaluate All">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Enquanto a avaliação está em execução, você verá um status <strong>In progress</strong>. Isso levará algum tempo...</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_07.png" alt="Status In Progress">
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_08.png" alt="Avaliação em andamento">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Uma vez concluído, você verá um status verde <strong>Completed</strong>. Clique na execução de teste concluída para visualizar os resultados.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_09.png" alt="Status Completed — clique para ver resultados">
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <hr class="section-divider">
+
+  <section id="resultados">
+    <h2>Revisar os Resultados da Avaliação</h2>
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Atenção</div>
+        <p style="margin:0;">Seus resultados podem variar das capturas de tela. Por exemplo, as capturas de tela mostram uma falha devido a uma chamada de ferramenta perdida e uma resposta incorreta. Os seus podem ser diferentes.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_10.png" alt="Resultados da avaliação do agente">
+
+    <p>Você pode baixar os resultados para análise posterior.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <section id="metricas">
+    <h2>Entendendo as Métricas</h2>
+    <p>Abaixo está um detalhamento das métricas principais e o que elas significam:</p>
+
+    <h3>Roteamento e Precisão</h3>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-card__label">Roteamento</div>
+        <div class="metric-card__title">Orchestrate agent routing F1</div>
+        <div class="metric-card__desc">Média harmônica de precisão e recall para decisões de roteamento. Mede quão precisamente o agente mestre roteia consultas para agentes especializados.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Correspondência</div>
+        <div class="metric-card__title">Keyword match</div>
+        <div class="metric-card__desc">Se a resposta contém palavras-chave esperadas.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Semântica</div>
+        <div class="metric-card__title">Semantic match</div>
+        <div class="metric-card__desc">Se a resposta é semanticamente similar à saída esperada.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Texto</div>
+        <div class="metric-card__title">Text match</div>
+        <div class="metric-card__desc">Se a resposta corresponde exatamente à saída de texto esperada.</div>
+      </div>
+    </div>
+
+    <h3>Métricas de Execução</h3>
+    <table>
+      <thead><tr><th>Métrica</th><th>Descrição</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Total steps</strong></td><td>Número total de ações ou operações realizadas em todos os testes</td></tr>
+        <tr><td><strong>LLM steps</strong></td><td>Número de vezes que o modelo de linguagem foi invocado para gerar respostas</td></tr>
+        <tr><td><strong>Average agent response time (s)</strong></td><td>Tempo médio levado para gerar cada resposta em segundos</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Métricas de Uso de Ferramentas</h3>
+    <table>
+      <thead><tr><th>Métrica</th><th>Descrição</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Total tool calls</strong></td><td>Número de vezes que agentes ou ferramentas externas foram invocados durante os testes</td></tr>
+        <tr><td><strong>Expected tool calls</strong></td><td>Número de chamadas de ferramentas que eram esperadas</td></tr>
+        <tr><td><strong>Correct tool calls</strong></td><td>Número de chamadas de ferramentas que foram feitas corretamente</td></tr>
+        <tr><td><strong>Missed tool calls</strong></td><td>Número de chamadas de ferramentas esperadas que não foram feitas</td></tr>
+        <tr><td><strong>Tool calls with incorrect parameters</strong></td><td>Número de chamadas de ferramentas feitas com parâmetros errados</td></tr>
+        <tr><td><strong>Tool call recall</strong></td><td>Proporção de chamadas de ferramentas necessárias que foram realmente feitas</td></tr>
+        <tr><td><strong>Tool call precision</strong></td><td>Proporção de chamadas de ferramentas relevantes para o total de chamadas de ferramentas</td></tr>
+        <tr><td><strong>Tool match success</strong></td><td>Se as ferramentas corretas foram chamadas</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Métricas de Sucesso</h3>
+    <table>
+      <thead><tr><th>Métrica</th><th>Descrição</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Journey success</strong></td><td>Se o cenário de teste completo alcançou seu resultado pretendido</td></tr>
+        <tr><td><strong>Journey completion</strong></td><td>Se a interação de teste de múltiplas etapas completou todas as etapas sem erros</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
+    <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit). <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais como criar agentes, tools, bases de conhecimentos e muito mais.</p>
+  </section>
+
+  <div class="lab-nav">
+    <a href="lab2.html">← Lab 2: Agentes Externos</a>
+    <a href="lab4.html" class="primary">Lab 4: Controles &amp; PII →</a>
+  </div>
+</main>
+
+<footer class="c-footer">
+  IBM watsonx Orchestrate · Laboratório 3 — Realizando Avaliação de Agentes · 2026
+</footer>
+</body>
+</html>
