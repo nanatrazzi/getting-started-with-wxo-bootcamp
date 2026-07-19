@@ -317,6 +317,54 @@ Como identificar problemas após o deployment?</div>
   <!-- HERO IMAGE 2 (Main_image.png from README line 85) -->
   <img class="hero-img" src="../Assets_for_BuildBooks/Main_image.png" alt="Laboratório watsonx Orchestrate — governança e valor">
 
+  <!-- FLUXO DE TRABALHO (from LabMonitoring.md mermaid diagram) -->
+  <h2>Fluxo de Trabalho com o Orchestrate</h2>
+  <p>O ciclo de vida de agentes no watsonx Orchestrate segue um modelo de melhoria contínua:</p>
+
+  <div style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:28px 32px;margin:20px 0;">
+    <div style="font-size:12px;font-weight:600;letter-spacing:.32px;text-transform:uppercase;color:var(--carbon-gray-70);margin-bottom:24px;">Ciclo de Vida de Agentes — Melhoria Contínua</div>
+
+    <!-- Row 1: Start -->
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+      <div style="background:#e1f5ff;border:1px solid #b3d9f4;padding:10px 18px;font-size:13px;font-weight:500;color:var(--carbon-gray-90);">Avaliação Pré-Deployment</div>
+      <div style="color:var(--carbon-gray-70);font-size:16px;">→</div>
+      <div style="background:#fff3cd;border:1px solid #f1c96e;padding:10px 18px;font-size:13px;font-weight:500;color:var(--carbon-gray-90);">Padrões de Qualidade Atendidos?</div>
+    </div>
+
+    <!-- Row 2: No branch -->
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;margin-left:32px;">
+      <div style="font-size:12px;color:var(--carbon-gray-70);font-style:italic;">Não →</div>
+      <div style="background:#f8d7da;border:1px solid #e8a2a7;padding:10px 18px;font-size:13px;font-weight:500;color:var(--carbon-gray-90);">Refinar Configuração do Agente</div>
+      <div style="font-size:12px;color:var(--carbon-gray-70);font-style:italic;">↩ (repetir avaliação)</div>
+    </div>
+
+    <!-- Row 3: Yes branch -->
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;">
+      <div style="font-size:12px;color:var(--carbon-gray-70);font-style:italic;">Sim →</div>
+      <div style="background:#d4edda;border:1px solid #9fd1ae;padding:10px 18px;font-size:13px;font-weight:500;color:var(--carbon-gray-90);">Deploy do Agente</div>
+      <div style="color:var(--carbon-gray-70);font-size:16px;">→</div>
+      <div style="background:#d4edda;border:1px solid #9fd1ae;padding:10px 18px;font-size:13px;font-weight:500;color:var(--carbon-gray-90);">Ativar Monitoramento</div>
+      <div style="color:var(--carbon-gray-70);font-size:16px;">→</div>
+      <div style="background:#fff3cd;border:1px solid #f1c96e;padding:10px 18px;font-size:13px;font-weight:500;color:var(--carbon-gray-90);">Monitoramento Pós-Deployment</div>
+    </div>
+
+    <!-- Row 4: Metrics -->
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;margin-left:32px;">
+      <div style="color:var(--carbon-gray-70);font-size:16px;">↓</div>
+      <div style="font-size:12px;color:var(--carbon-gray-70);font-style:italic;">Analisar Métricas de Performance →</div>
+      <div style="background:#fff3cd;border:1px solid #f1c96e;padding:10px 18px;font-size:13px;font-weight:500;color:var(--carbon-gray-90);">Problemas ou Oportunidades de Melhoria?</div>
+    </div>
+
+    <!-- Row 5: Continuous improvement -->
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-left:32px;">
+      <div style="font-size:12px;color:var(--carbon-gray-70);font-style:italic;">Sim →</div>
+      <div style="background:#f8d7da;border:1px solid #e8a2a7;padding:10px 18px;font-size:13px;font-weight:500;color:var(--carbon-gray-90);">Melhoria Contínua</div>
+      <div style="color:var(--carbon-gray-70);font-size:16px;">→</div>
+      <div style="background:#f8d7da;border:1px solid #e8a2a7;padding:10px 18px;font-size:13px;font-weight:500;color:var(--carbon-gray-90);">Atualizar Knowledge, Tools ou Config</div>
+      <div style="font-size:12px;color:var(--carbon-gray-70);font-style:italic;">↩ (volta à Avaliação Pré-Deployment)</div>
+    </div>
+  </div>
+
   <hr class="section-divider">
 
   <!-- PRÉ-REQUISITOS -->
