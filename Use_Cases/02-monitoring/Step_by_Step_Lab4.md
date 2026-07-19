@@ -1,8 +1,8 @@
 # Controles no watsonx Orchestrate 
 
-## Sumário
+## Índice
 - [Controles no watsonx Orchestrate](#controles-no-watsonx-orchestrate)
-  - [Sumário](#sumário)
+  - [Índice](#índice)
   - [Visão Geral](#visão-geral)
   - [O que é PII (Personal Identifiable Information)?](#o-que-é-pii-personal-identifiable-information)
   - [Pré-requisitos](#pré-requisitos)
@@ -33,6 +33,9 @@ Personal Identifiable Information (**PII**) é qualquer dado que possa ser usado
 
 > [!Note]
 > Se o dado pode ser usado para identificar uma pessoa, ele é considerado PII.
+
+
+![watsonx Orchestrate](../../Assets_for_BuildBooks/lab4.PNG)
 
 ## Pré-requisitos
 
@@ -73,7 +76,7 @@ Atualize a descrição do **Profile** com o seguinte texto:
 Este agente dá suporte aos ciclos de vendas da Concessionária ABC. Você deve encaminhar todas as consultas de usuários para o agente de busca na
 ```
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/monitoring_labs/lab04/lab04_monitoring_04.png)
+≈
 
 
 Em `Agent style` selecione `ReAct Core`
