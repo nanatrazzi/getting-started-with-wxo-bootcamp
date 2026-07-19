@@ -23,25 +23,25 @@ Vamos verificar o dashboard de monitoramento.
 
 Clique em **IBM watsonx Orchestrate** no canto superior esquerdo para retornar à tela de boas-vindas do control plane.
 
-![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab04_monitoring/lab04_monitoring_01.png)
+![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab05/lab05_monitoring_01.png)
 
 Vamos explorar as analytics de agentes usando o chat à esquerda.
 
-![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab04_monitoring/lab04_monitoring_02.png)
+![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab05/lab05_monitoring_02.png)
 
 Faça a seguinte pergunta: ```Mostre os agentes com a menor taxa de sucesso desta semana```
 
-![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab04_monitoring/lab04_monitoring_03.png)
+![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab05/lab05_monitoring_03.png)
 
 Em seguida, vamos explorar Platform e Agent Analytics.
 
 Clique no ícone de hambúrguer conforme indicado na imagem abaixo:
 
-![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab04_monitoring/lab04_monitoring_04.png)
+![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab05/lab05_monitoring_04.png)
 
 Selecione **Analyze** no menu hambúrguer.
 
-![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab04_monitoring/lab04_monitoring_05.png)
+![Control plane welcome screen](../../Assets_for_BuildBooks/monitoring_labs/lab05/lab05_monitoring_05.png)
 
 Você verá o dashboard de avaliação com métricas-chave incluindo principais conversas, usuários únicos e duração média de conversação.
 
@@ -49,19 +49,19 @@ Você também verá gráficos refletindo o número de conversas com cada agente 
 
 Clique no seu agente recém-criado, o orquestrador
 
-![Conversation analysis](../../Assets_for_BuildBooks/monitoring_labs/lab04_monitoring/lab04_monitoring_06.png)
+![Conversation analysis](../../Assets_for_BuildBooks/monitoring_labs/lab05/lab05_monitoring_06.png)
 
 Isso mostra detalhes de todas as mensagens na conversação do seu agente.
 
-![Conversation analysis](../../Assets_for_BuildBooks/monitoring_labs/lab04_monitoring/lab04_monitoring_07.png)
+![Conversation analysis](../../Assets_for_BuildBooks/monitoring_labs/lab05/lab05_monitoring_07.png)
 
 Vamos alterar a visualização, clique na aba `Conversations`
 
-![Conversation analysis](../../Assets_for_BuildBooks/monitoring_labs/lab04_monitoring/lab04_monitoring_08.png)
+![Conversation analysis](../../Assets_for_BuildBooks/monitoring_labs/lab05/lab05_monitoring_08.png)
 
 <h3>Note que devido a você ter poucas interações no seu agente e em apenas um dia, a maioria das métricas não deve estar disponível, assim como na imagem abaixo.</h3>
 
-![Conversation analysis](../../Assets_for_BuildBooks/monitoring_labs/lab04_monitoring/lab04_monitoring_09.png)
+![Conversation analysis](../../Assets_for_BuildBooks/monitoring_labs/lab05/lab05_monitoring_09.png)
 
 **Entendendo as Métricas**:
 
