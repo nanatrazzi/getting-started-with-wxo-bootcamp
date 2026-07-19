@@ -2,17 +2,27 @@
 
 > Ultima atualização: 19 de Julho de 2026
 
+<h3> As instruções para iniciar o laboratório estão no final deste arquivo.</h3>
+<p> Antes de começar, reserve alguns minutos para ler todo o conteúdo com atenção. O Time técnico elaborou esse material com muito carinho, e cada seção foi preparada para fornecer contexto, conceitos importantes e dicas que ajudarão você a aproveitar melhor a experiência e a entender o propósito de cada etapa do laboratório. </p>
+
+----
+
+## Conteúdo
+
 - [Laboratório de watsonx Orchestrate - Segundo Semestre de 2026](#laboratório-de-watsonx-orchestrate---segundo-semestre-de-2026)
+  - [Conteúdo](#conteúdo)
   - [Controle e Governança de Agentes de IA com watsonx Orchestrate](#controle-e-governança-de-agentes-de-ia-com-watsonx-orchestrate)
   - [Objetivo](#objetivo)
   - [Valor para o seu Negócio](#valor-para-o-seu-negócio)
+  - [Pré Requesitos](#pré-requesitos)
+  - [Iniciando o laboratório](#iniciando-o-laboratório)
 
 
 ## Controle e Governança de Agentes de IA com watsonx Orchestrate
 
 Nos laboratórios de hoje, você aprenderá como implementar práticas de governança para agentes de IA utilizando a interface do watsonx Orchestrate.
 
-Serão abordados conceitos como guardrails, monitoramento, debugging e avaliação de agentes para reduzir riscos relacionados à IA Generativa e garantir operações mais seguras e confiáveis.
+Serão abordados conceitos como guardrails, controles monitoramento, debugging e avaliação de agentes para reduzir riscos relacionados à IA Generativa e garantir operações mais seguras e confiáveis.
 
 **Mas porque isso é importante?**
 
@@ -25,6 +35,8 @@ Ele respeita regras de compliance?
 Os custos de uso estão controlados?
 Como identificar problemas após o deployment?
 </code>
+
+[Laboratório](./Assets_for_BuildBooks/Main_image.png)
 
 ## Objetivo 
 
@@ -64,4 +76,15 @@ Ao completar este laboratório, você ganhará confiança para colocar seus agen
 
 **Produtividade**: Economia de tempo fazendo avaliações manuais e verificações de qualidade, bem como monitorando manualmente os modelos e sistemas de IA de sua equipe.
 
-[Clique aqui para começar](./Use_Cases/02-monitoring/Step_by_Step_Lab1.md)
+
+## Pré Requesitos
+
+- Laptop/Computador com acesso a internet
+- Acesso ao watsox Orchestrate
+- Acesso aos arquivos complementares que você irá utilizar nesse laboratório forneceido pelo instrutor do laboratório
+
+## Iniciando o laboratório
+
+<b>Pronto para iniciar?</b>
+
+-> [Clique aqui para começar](./Use_Cases/02-monitoring/Step_by_Step_Lab1.md)
