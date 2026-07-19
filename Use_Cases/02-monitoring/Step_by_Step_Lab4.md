@@ -4,7 +4,7 @@
 - [Controles no watsonx Orchestrate](#controles-no-watsonx-orchestrate)
   - [Índice](#índice)
   - [Visão Geral](#visão-geral)
-  - [O que é PII (Personal Identifiable Information)?](#o-que-é-pii-personal-identifiable-information)
+    - [O que é PII (Personal Identifiable Information)?](#o-que-é-pii-personal-identifiable-information)
   - [Pré-requisitos](#pré-requisitos)
   - [Descrição do Caso de Uso](#descrição-do-caso-de-uso)
     - [Parte 1: Acessar o watsonx Orchestrate e configurar o agente](#parte-1-acessar-o-watsonx-orchestrate-e-configurar-o-agente)
@@ -19,9 +19,13 @@
 
 Neste laboratório você vai aprender a proteger agentes de IA contra vazamento de PII (Informações de Identificação Pessoal, do inglês Personally Identifiable Information) usando controls no watsonx Orchestrate.
 
-Vamos identificar dados PII e implementar as proteções necessárias de forma simples e rápida.
+Os Controls(Controles) são políticas de governança aplicadas sobre os ativos do ambiente: Agentes, modelos e tools (ferramentas). Diferentemente de instruções escritas no prompt, operam no caminho da mensagem, fora do modelo. Valem independentemente do que o agente decide responder.
 
-## O que é PII (Personal Identifiable Information)?
+Ao longo do lab vamos identificar dados sensíveis e configurar as proteções que impedem sua exposição.
+
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/lab4.PNG)
+
+### O que é PII (Personal Identifiable Information)?
 
 Personal Identifiable Information (**PII**) é qualquer dado que possa ser usado para identificar um indivíduo. Alguns exemplos:
 
