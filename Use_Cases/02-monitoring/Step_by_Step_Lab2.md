@@ -20,6 +20,9 @@ Você aprenderá conceitos fundamentais de arquiteturas multiagentes, integraç�
 > [!NOTE]
 > **Pré-requisito:** Este laboratório assume que você já concluiu o [laboratório 1](Step_by_Step_Lab1.md) e criou um agente com a base de conhecimento do catálogo de veículos. O agente criado naquele laboratório será reutilizado aqui como agente responsável pelas consultas ao catálogo.
 
+![Create agent](../../Assets_for_BuildBooks/lab1.PNG)
+
+
 ### Parte 1: Conectar Agente de Busca Google de Terceiros
 
 Agora vamos conectar o agente externo que realiza buscas na web por informações sobre carros, avaliações e dados de mercado.
