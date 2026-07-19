@@ -33,21 +33,21 @@ Com o agente orquestrador criado no [laboratório anterior](./Step_by_Step_LabB.
 Mostre os veículos que vocês têm no catálogo e os preços
 ```
 
-![test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_01.png)
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_01.png)
 
 2. Após obter a resposta, clique em `Save as test`
 
-![test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_02.png)
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_02.png)
 
 3. Habilite a opção `Response summary`
 
 4. Em seguida, clique em `Save`
 
-![test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_03.png)
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_03.png)
 
 A primeira pergunta para executar o teste foi realizada.
 
-![test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_04.png)
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_04.png)
 
 Dê restart no chat, através do botão de restart `↻`
 
@@ -67,30 +67,30 @@ As avaliações dos proprietários são mais positivas para o Alfa Romeo Spider 
 
 Selecione o botão **Test agent** no canto superior direito.
 
-![Select test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_05.png)
+![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_05.png)
 
 Clique em **Evaluate All**.
 
-![Select test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_06.png)
+![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_06.png)
 
 Enquanto a avaliação está em execução, você verá um status **In progress**.
 
 Isso levará algum tempo...
 
-![Select test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_07.png)
+![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_07.png)
 
-![Select test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_08.png)
+![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_08.png)
 
 Uma vez concluído, você verá um status verde **Completed**. Clique na execução de teste concluída para visualizar os resultados.
 
-![Select test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_09.png)
+![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_09.png)
 
 ### Revise os resultados da avaliação.
 
 > Seus resultados podem variar das capturas de tela acima. Por exemplo, as capturas de tela mostram uma falha devido a uma chamada de ferramenta perdida e uma resposta incorreta. Os seus podem ser diferentes.
 
 
-![Select test](../../Assets_for_BuildBooks/monitoring_labs/lab03_monitoring/lab03_monitoring_10.png)
+![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_10.png)
 
 Abaixo está um detalhamento das métricas principais e o que elas significam:
 
