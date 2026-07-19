@@ -10,4 +10,4 @@ Access to this repository does not grant any license or rights to use, reproduce
 
 Unauthorized use, reproduction, or distribution of this material is strictly prohibited.
 
-For permission requests, please contact the repository owner.
+For permission requests, please contact the repository owner. (n.trazzi@ibm.com)
