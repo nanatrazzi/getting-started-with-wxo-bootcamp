@@ -2,7 +2,11 @@
 
 ## Visão Geral
 
-Este guia de laboratório apresenta as capacidades de monitoramento em tempo real no watsonx Orchestrate. Você aprenderá como rastrear o desempenho de agentes, analisar padrões de conversação e monitorar métricas-chave como taxas de sucesso, feedback de usuários e indicadores de segurança de conteúdo. O monitoramento em tempo real é crucial para manter a qualidade dos agentes em produção e identificar problemas antes que impactem os usuários.
+Este laboratório apresenta os recursos de monitoramento em tempo real disponíveis no watsonx Orchestrate.
+
+Ao longo das atividades, você aprenderá a acompanhar o desempenho dos agentes, analisar padrões de conversação e monitorar métricas importantes, como taxas de sucesso, feedback dos usuários e indicadores de segurança e qualidade das respostas.
+
+O monitoramento contínuo é essencial para garantir a eficiência dos agentes em produção, identificar comportamentos inesperados e agir proativamente na resolução de problemas antes que eles impactem a experiência dos usuários.
 
 ---
 
