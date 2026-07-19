@@ -20,7 +20,7 @@ Você aprenderá conceitos fundamentais de arquiteturas multiagentes, integraç�
 > [!NOTE]
 > **Pré-requisito:** Este laboratório assume que você já concluiu o [laboratório 1](Step_by_Step_Lab1.md) e criou um agente com a base de conhecimento do catálogo de veículos. O agente criado naquele laboratório será reutilizado aqui como agente responsável pelas consultas ao catálogo.
 
-![Create agent](../../Assets_for_BuildBooks/lab1.PNG)
+![Create agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_01.png)
 
 
 ### Parte 1: Conectar Agente de Busca Google de Terceiros
@@ -34,7 +34,7 @@ Agora vamos conectar o agente externo que realiza buscas na web por informaçõe
 
 2. Clique no botão **Create agent**.
 
-![Create agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_01.png)
+![Create agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_01.png)
 
 Selecione **Create from scratch**.
 
@@ -49,7 +49,7 @@ Este agente pesquisa no Google informações em tempo real, como avaliações de
 
 Clique no botão **Create**.
 
-![Create agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_02.png)
+![Create agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_02.png)
 
 Navegue até a seção **Agents**
 
@@ -57,15 +57,15 @@ Vamos adicionar um agente externo, um agente que não foi construído no Orchest
 
 Clique no botão **Add agent**.
 
-![Create agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_04.png)
+![Create agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_04.png)
 
 Clique em **Import**
 
-![Import Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_05.png)
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_05.png)
 
 Escolha **External agent** e então **Next**
 
-![Import Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_06.png)
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_06.png)
 
 1. Selecione **External agent via A2A standard**.
 
@@ -93,11 +93,11 @@ Role para baixo até a seção **Define new agent** e preencha os detalhes:
 
 Então, clique em `Done`
 
-![Import Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_08.png)
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_08.png)
 
 Seu agente foi adicionado com sucesso
 
-![Import Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_09.png)
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_09.png)
 
 Na seção **Behavior**, adicione as seguintes instruções:
 
@@ -138,7 +138,7 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
 "Desculpe, eu só posso fornecer informações sobre os seguintes veículos: Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro."
 ```
 
-![Import Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_10.png)
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_10.png)
 
 
 1. Teste o agente com estas consultas:
@@ -147,11 +147,11 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
     O que os proprietários dizem sobre o Porsche 911 Carrera GTS?
     ```
 
-![Test Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_11.png)
+![Test Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_11.png)
 
 ```O que os proprietários dizem sobre o Porsche 911 Carrera GTS?```
 
-![Test Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_12.png)
+![Test Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_12.png)
 
 ### Parte 2: Criar Agente de Compra de Carros
 
@@ -161,7 +161,7 @@ Retorne para a página de gerenciamento de agentes, para isso basta clicar em `M
 
 Clique em **Create agent +**.
 
-![Create Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_15.png)
+![Create Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_15.png)
 
 Clique no botão **Create from scratch**.
 
@@ -179,25 +179,25 @@ Copie e cole os nomes e descrições em seus respectivos campos:
 
 Clique no botão **Create**
 
-![Create Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_16.png)
+![Create Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_16.png)
 
 Em **Agent style**, selecione **ReAct**
 
-![Create Agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_17.png)
+![Create Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_17.png)
 
 Navegue até a seção **Agents**, clique no botão **Add agent +**.
 
-![Add agents](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_18.png)
+![Add agents](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_18.png)
 
 Selecione **Add from local instance**.
 
-![Add agents](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_19.png)
+![Add agents](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_19.png)
 
 Selecione os dois agentes criados por você anteriormente
 
 **Não se preocupe em selecionar os mesmos nomes que estão na imagem abaixo, selecione o que foi criado por você nos laboratórios até esse momento. As imagens são apenas para auxiliar o processo de aprendizado**
 
-![Add agents](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_19.png)
+![Add agents](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_19.png)
 
 Na seção **Behavior**, adicione a seguinte lógica de roteamento:
 
@@ -273,7 +273,7 @@ Fluxo:
 
 ```
     
-![Master behavior](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_22.png)
+![Master behavior](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_22.png)
 
 Teste o agente com várias consultas:
 
@@ -281,13 +281,13 @@ Teste o agente com várias consultas:
   Compare o Kia Niro com o Hyundai Kona Electric
   ```
 
-![Test master agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_23.png)
+![Test master agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_23.png)
 
   ```
   Pesquise uma comparação de usuários com Kia Niro com o Hyundai Kona Electric
   ```
 
-![Test master agent](../../Assets_for_BuildBooks/monitoring_labs/lab02_monitoring/lab02_monitoring_24.png)
+![Test master agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_24.png)
 
 Clique em **Deploy** no topo da tela ao lado esquerdo
 
