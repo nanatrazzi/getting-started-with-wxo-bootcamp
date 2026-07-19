@@ -5,11 +5,13 @@
 - [Control Plane Lab do watsonx Orchestrate](#control-plane-lab-do-watsonx-orchestrate)
   - [Índice](#índice)
   - [Visão Geral](#visão-geral)
-  - [Explorando o Control Plane](#explorando-o-control-plane)
+  - [Explorando o Control Plane - High Level](#explorando-o-control-plane---high-level)
     - [Dashboard](#dashboard)
-  - [Needs Attention (Atenção necessária)](#needs-attention-atenção-necessária)
-  - [Alertas operacionais](#alertas-operacionais)
-  - [Agent Analytics](#agent-analytics)
+  - [Sessão: Needs Attention (Atenção necessária)](#sessão-needs-attention-atenção-necessária)
+  - [Sessão: Alertas operacionais](#sessão-alertas-operacionais)
+  - [Sessão: Agent Analytics](#sessão-agent-analytics)
+  - [Controles](#controles)
+    - [Observação](#observação)
     - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Resumo](#resumo)
   - [Próximos passos](#próximos-passos)
@@ -27,7 +29,7 @@ Caso tenha seu próprio ambiente dedicado do watsonx Orchestrate, você poderá 
 > Nós estamos trabalhando em uma atualização deste laboratório para incluir scripts para os instrutores importarem agents e ferramentas, de forma que o dashboard contenha uma variedade de dados suficiente para executar este lab do Agentic Control Plane de forma independente.
 > O laboratório é vivo e será atualizado ao decorrer dos próximos dias...
 
-## Explorando o Control Plane
+## Explorando o Control Plane - High Level
 
 ### Dashboard
 
@@ -61,7 +63,7 @@ A seção **Agent Analytics** permite revisar agents ativos, mensagens, mensagen
 
 Vamos voltar à seção **Needs Attention** para observar os diferentes tipos de alertas.
 
-## Needs Attention (Atenção necessária)
+## Sessão: Needs Attention (Atenção necessária)
 
 Vamos examinar os diferentes tipos de alertas disponíveis na seção **Needs Attention**: Operations, Incidents e Insights.
 
@@ -81,7 +83,7 @@ Em seguida, temos os alertas de _Insights_. São recomendações para melhorar a
 
 <b>Os Insights ajudam a entender causas raiz e evidências relacionadas a agents e ferramentas com falhas.</b>
 
-## Alertas operacionais
+## Sessão: Alertas operacionais
 
 Vamos tentar abrir um dos alertas para ver o que acontece. 
 
@@ -99,7 +101,7 @@ Observe que o Orchestrate enviou para a página utilizada no laboratório de `Re
 
 Retorne para página inicial do **Orchestrate**
 
-## Agent Analytics
+## Sessão: Agent Analytics
 
 Na seção **Agent Analytics**, podemos passar de insights no nível do ambiente para investigação específica por agent.
 
@@ -134,21 +136,23 @@ Aqui o Orchestrate permite ter visão detalhada de como os agentes e workflows e
 
 Na linha de filtros, é possível controlar o que aparece no painel:
 
-All agents: Seletor para escolher se você quer ver todos os agentes ou um específico.
-Last 24 hrs: O período analisado (aqui, últimas 24 horas). É por isso que a URL termina em timeRange=past-24-hours.
+<b>All agents:</b> Seletor para escolher se você quer ver todos os agentes ou um específico.
+
+<b>Last 24 hrs:</b> O período analisado (aqui, últimas 24 horas). É por isso que a URL termina em timeRange=past-24-hours.
 
 O ícone de atualizar (recarregar os dados) à direita
 
-
-**Métricas principais (cards do topo)**
+<h2> Métricas principais (cards do topo)</h2>
 
 Três indicadores-resumo do período:
 
-Total conversations: Total de conversas realizadas.
-Unique users: Quantos usuários distintos interagiram.
-Avg conversation duration: Duração média de cada conversa.
+<b>Total conversations:</b> Total de conversas realizadas.
 
-**Agent trend**
+<b>Unique users:</b> Quantos usuários distintos interagiram.
+
+<b>Avg conversation duration:</b> Duração média de cada conversa.
+
+<h2> Agent trend</h2>
 
 Temos gráfico de barras para comparação dos agentes entre si. No topo dele há dois seletores: Top 5 (mostra os 5 principais) e Conversations (a métrica usada para ordenar — poderia ser trocada por outra, como duração).
 
@@ -156,7 +160,7 @@ Cada agente aparece com o número de conversas como na imagem a seguir.
 
 Os ícones no canto do gráfico permitem ver os dados em formato de tabela, expandir o gráfico e acessar mais opções.
 
-**User Feedback**
+<h2>User Feedback</h2>
 Para acompanhar o feedback dos usuários para cada agente
 
 Agents — nome do agente (em azul, clicável para ver detalhes).
@@ -173,7 +177,7 @@ Ao selecionar um agent específico, você abrirá a visualização do agent buil
 
 Essa é a página de análise de um agente específico, você chegou aqui clicando no nome do agente na tela de Analytics anterior. É o nível mais aprofundado do monitoramento.
 
-O breadcrumb agora mostra três níveis: Home / Analytics / Assistente de Compra de Veículos , deixando claro o caminho percorrido até o detalhe do agente. 
+O _breadcrumb_ agora mostra três níveis: Home / Analytics / Assistente de Compra de Veículos , deixando claro o caminho percorrido até o detalhe do agente. 
 
 Logo em seguida há duas abas:
 
@@ -220,7 +224,7 @@ Aqui aparece o diálogo completo da conversa selecionada, no formato de chat. No
 
 Essa é uma parte valiosa: você consegue ler exatamente o que o usuário perguntou e como o agente respondeu, verificando se a resposta foi correta, completa e bem formatada.
 
-**Coluna da direita: Detalhes **
+**Coluna da direita: Detalhes**
 
 Um painel com os metadados da conversa selecionada:
 
@@ -234,20 +238,27 @@ Clique no ícone da _joaninha_, como indicado na imagem abaixo:
 ![Ícone de debug (joaninha) para acessar a tela de depuração da conversa](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_16.png)
 
 
-Essa é a tela de Debug de um agente.
+<b>Essa é a tela de Debug de um agente.</b>
 
 1.  São os diferentes componentes que podem aparecer no fluxo, cada um com seu próprio ícone:
 
-- User input: ponto de entrada, onde a mensagem do usuário chega.
-- Agent: O agente que orquestra as tarefas.
-- LLM: chamada a um modelo de linguagem.
-- Tool: Função externa que o agente pode acionar.
-- API: endpoint HTTP/REST.
-- Knowledge base — Busca por informação em uma base de conhecimento, seja feita no próprio Orchestrate como utilizando bancos vetoriais.
-- Workflow: Processo de várias etapas.
-- Answer: Nó de resposta final.
+-> User input: ponto de entrada, onde a mensagem do usuário chega.
 
-2. Para retornar para o node anterior
+-> Agent: O agente que orquestra as tarefas.
+
+-> LLM: chamada a um modelo de linguagem.
+
+-> Tool: Função externa que o agente pode acionar.
+
+-> API: endpoint HTTP/REST.
+
+-> Knowledge base — Busca por informação em uma base de conhecimento, seja feita no próprio Orchestrate como utilizando bancos vetoriais.
+
+-> Workflow: Processo de várias etapas.
+  
+-> Answer: Nó de resposta final.
+
+2. Para retornar para o node anterior 
 
 3. Para avançar para o próximo node
 
@@ -255,17 +266,17 @@ Essa é a tela de Debug de um agente.
 
 5. Executar novamente para recarregar/reexecutar o trace.
 
-6. Alternar a visualização do fluxo, mudando o layout do gráfico e realça o caminho que foi realmente percorrido na execução.
+5. Alternar a visualização do fluxo, mudando o layout do gráfico e realça o caminho que foi realmente percorrido na execução.
 
-7. Reorganiza o diagrama num layout de árvore horizontal (da esquerda para a direita), exibindo a hierarquia dos nós de forma mais limpa e alinhada. É uma forma alternativa de visualizar o mesmo fluxo.
+6. Reorganiza o diagrama num layout de árvore horizontal (da esquerda para a direita), exibindo a hierarquia dos nós de forma mais limpa e alinhada. É uma forma alternativa de visualizar o mesmo fluxo.
 
-8. Mostra uma visão geral do nó selecionado, com os principais dados de forma resumida (por exemplo, o texto do input do usuário).
+7. Mostra uma visão geral do nó selecionado, com os principais dados de forma resumida (por exemplo, o texto do input do usuário).
 
-9.  Input: Mostra os dados de entrada que o nó recebeu, ou seja, o que chegou até ele para ser processado.
+8. Input: Mostra os dados de entrada que o nó recebeu, ou seja, o que chegou até ele para ser processado.
 
-10.  Output: Mostra os dados de saída que o nó gerou, ou seja, o resultado do processamento.
+9. Output: Mostra os dados de saída que o nó gerou, ou seja, o resultado do processamento.
 
-11. Logs (Node logs): Mostra os registros técnicos detalhados daquele nó, úteis para depurar e entender o que aconteceu internamente em cada passo.
+9. Logs (Node logs): Mostra os registros técnicos detalhados daquele nó, úteis para depurar e entender o que aconteceu internamente em cada passo.
 
 ![Tela de Debug - fluxo de execução com nós User input, Agent, LLM, Tool, Knowledge base e Answer](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_17.png)
 
@@ -275,7 +286,7 @@ Clique no ícone de alterar a visualização do fluxo, nomeado como 6 na imagem 
 
 Ao ativar esse ícone, o diagrama passa a realçar em azul apenas o caminho que a execução realmente percorreu, enquanto os nós e conexões que não foram usados ficam apagados.
 
-No exemplo vemos isso claramente: o caminho ativo, em azul forte, vai de User input → Assistente de Compra → Agente de suporte, que então aciona o LLM (groq/openai/gpt-os...), a base de conhecimento (Catálogo de Carros) e o nó de Answer. Já o ramo do Agente de Busca e seus nós filhos aparecem quase transparentes, indicando que aquele caminho não foi seguido nesta execução.
+No exemplo vemos isso claramente: o caminho ativo, em azul forte, vai de: User input → Assistente de Compra → Agente de suporte, que então aciona o LLM (groq/openai/gpt-os...), a base de conhecimento (Catálogo de Carros) e o nó de Answer. Já o ramo do Agente de Busca e seus nós filhos aparecem quase transparentes, indicando que aquele caminho não foi seguido nesta execução.
 
 Essa visualização é útil para você enxergar rapidamente por onde a requisição passou de fato, sem se distrair com os nós que existem no fluxo mas não participaram daquela execução específica. Em vez de precisar analisar o diagrama inteiro, você foca apenas no trajeto real, o que ajuda muito na hora de investigar o comportamento do agente para fazer um _debug_ de um problema.
 
@@ -291,13 +302,13 @@ Repare na diferença em relação às visualizações anteriores: aqui o fluxo a
 
 Com os nós de cada nível organizados em uma mesma coluna vertical. O gráfico fica mais compacto e fácil de acompanhar.
 
- O layout em árvore é especial quando o diagrama tem muitos nós, porque distribui os elementos de maneira mais ordenada e evita que as conexões fiquem confusas ou sobrepostas. Você escolhe o modo de visualização que ficar mais legível para o que quer analisar naquele momento.
+<b>O layout em árvore é especial quando o diagrama tem muitos nós, porque distribui os elementos de maneira mais ordenada e evita que as conexões fiquem confusas ou sobrepostas. Você escolhe o modo de visualização que ficar mais legível para o que quer analisar naquele momento.</b>
 
 ![Debug - aba Input do nó User input exibindo a mensagem enviada pelo usuário](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_20.png)
 
 Ao clicar na aba `Input` (com o passo User input selecionado na imagem abaixo), o painel abaixo passa a mostrar os dados de entrada que aquele nó recebeu.
 
-Em vez do resumo, aparecem os campos Request e Message, ambos com o texto "Mostre os veículos que vocês têm no catálogo e os preços" — ou seja, exatamente o que chegou até o nó para ser processado.
+Em vez do resumo, aparecem os campos Request e Message, ambos com o texto "Mostre os veículos que vocês têm no catálogo e os preços", ou seja, exatamente o que chegou até o nó para ser processado.
 
 
 ![Debug - nó Agent expandido mostrando sub-passos de raciocínio, colaboração, processamento e resposta](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21.png)
@@ -308,7 +319,7 @@ Quando o passo `Agent` é clicado, ele se expande e revela os sub-passos interno
 - Collaborator: Agente de suporte ao revendedor (a chamada ao colaborador)
 -  Agent processing (processamento) 
 -  Answer (preparando a resposta), cada um com seu tempo de execução. Assim você vê a sequência real de ações do agente.
-- 
+
 E ao clicar na aba `LLM Model` (em Node properties), o painel mostra qual modelo de linguagem está por trás desse agente.
 
 ![Debug - aba LLM Model em Node properties exibindo o modelo de linguagem utilizado pelo agente](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21-b.png)
@@ -329,10 +340,17 @@ Na seção `Control`, clique em `View all`
 
 ![Seção Platform Analytics - Controls com opção View all na área de controles](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_22.png)
 
+## Controles 
 
 Essa é a página de Controls (controles) do Orchestrate. Os controles servem para definir e governar o comportamento dos seus ativos de IA Agêntica.
 
 Você pode aplicá-los no nível de ativo (para agentes, modelos e ferramentas MCP) ou no nível empresarial (afetando toda a instância, através de políticas, guardrails e comportamentos da plataforma)
+
+----
+
+### Observação
+
+> A criação de controles já foi abordada no [Laboratório 4](./Step_by_Step_Lab4.md). No entanto, neste laboratório exploraremos um tipo diferente de controle que, por também fazer parte dos recursos de **Control Planning** do watsonx Orchestrate, merece uma abordagem mais detalhada.
 
 Há duas abas:
 
@@ -341,22 +359,20 @@ Há duas abas:
 
 O Orchestrate permite também visualizar as informações abaixo:
 
-- Total number of controls: 0 — o número total de controles criados na instância.
+- Total number of controls: Número total de controles criados na instância.
 
-- Agents with Controls: 0 — quantos agentes têm algum controle aplicado a eles.
+- Agents with Controls: Quantos agentes têm algum controle aplicado a eles.
 
-- Models with Controls: 0 — quantos modelos têm algum controle aplicado.
-- 
-- MCP Tools with Controls: 0 — quantas ferramentas MCP têm algum controle aplicado.
+- Models with Controls: Quantos modelos têm algum controle aplicado.
 
-Todos aparecem zerados porque nenhum controle foi criado ainda. Conforme os controles forem sendo criados para seus ativos, esses números serão atualizados para refletir a cobertura de governança da instância.
+- MCP Tools with Controls: Quantas tools(ferramentas) MCP têm algum controle aplicado.
 
-Como não existe nenhum controle, aparece a mensagem "Get started with controls", explicando que os controles ajudam a impor regras que governam como agentes, modelos e ferramentas MCP se comportam.
+
+Se sua interface existir um controle é completamente normal, no exemplo abaixo não há. No entanto isso não interfere em nada nos fins de aprendizado deste laboratório.
 
 Clique no botão `Create Control`
 
 ![Página de Controls - Asset Controls e Enterprise Controls sem nenhum controle criado ainda](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_23.png)
-
 
 Nessa janela _pop-up_ vamos criar um controle. Temos diversos tipos de controles disponíveis para aplicar tanto em agentes, tools e modelos.
 
@@ -367,7 +383,6 @@ Nessa janela _pop-up_ vamos criar um controle. Temos diversos tipos de controles
 2. Em seguida, clique em `Next`
 
 ![Seleção de Content Guardrails como tipo de controle e clique em Next](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_25.png)
-
 
 1. Dê um nome ao controle. Digite um nome que identifique o controle. No exemplo foi usado Controle_de_palavras_de_baixo_calão.
 
@@ -428,7 +443,7 @@ De volta à página de Controle, note a notificação verde "Control created suc
 
 Repare que agora os cards de resumo no topo foram atualizados com a nova criação do controle.
 
-![Página de Controls com notificação de controle criado com sucesso e cards de resumo atualizados](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_33 copy.png)
+![Página de Controls com notificação de controle criado com sucesso e cards de resumo atualizados](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_33.png)
 
 Clique na aba **Enterprise Controls**
 
