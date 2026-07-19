@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 5 — Monitoramento em Tempo Real · watsonx Orchestrate</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe; --carbon-blue-70: #0043ce; --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616; --carbon-gray-90: #262626; --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252; --carbon-gray-30: #c6c6c6; --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4; --carbon-white: #ffffff; --carbon-teal-60: #007d79;
+    --carbon-green-60: #198038; --carbon-green-10: #defbe6; --carbon-yellow-30: #f1c21b;
+    --carbon-red-60: #da1e28; --sidebar-width: 256px; --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--carbon-gray-100); background: var(--carbon-gray-10); line-height: 1.5; }
+  .c-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--carbon-gray-100); color: var(--carbon-white); display: flex; align-items: center; z-index: 9000; padding: 0 16px; gap: 16px; }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__logo svg { fill: var(--carbon-white); }
+  .c-header__name { font-size: 14px; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; color: var(--carbon-white); }
+  .c-sidenav { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000; }
+  .c-sidenav__section-title { padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30); }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 900px; }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--carbon-gray-70); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 28px; font-weight: 300; line-height: 1.25; color: var(--carbon-gray-100); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 14px; color: var(--carbon-gray-70); line-height: 1.5; }
+  h2 { font-size: 20px; font-weight: 400; margin: 40px 0 16px; color: var(--carbon-gray-100); border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; color: var(--carbon-gray-100); }
+  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--carbon-gray-100); }
+  p { margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; font-size: 14px; line-height: 1.6; }
+  strong { font-weight: 600; }
+  a { color: var(--carbon-blue-60); }
+  .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
+  .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; color: var(--carbon-blue-60); }
+  .callout p:last-child { margin: 0; }
+  .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
+  .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+  .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .metric-card { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 16px; }
+  .metric-card__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; color: var(--carbon-gray-70); margin-bottom: 4px; }
+  .metric-card__title { font-size: 14px; font-weight: 600; color: var(--carbon-gray-100); margin-bottom: 6px; }
+  .metric-card__desc { font-size: 13px; color: var(--carbon-gray-70); line-height: 1.5; }
+  .metric-card__value { font-size: 22px; font-weight: 300; color: var(--carbon-blue-60); margin-top: 6px; }
+  .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
+  .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
+  .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
+  .lab-nav a:hover { background: var(--carbon-blue-10); }
+  .lab-nav a.primary:hover { background: var(--carbon-blue-70); }
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--carbon-gray-70); background: var(--carbon-white); }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .metrics-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="c-header">
+    <a class="c-header__logo" href="index.html">
+    <span style="display:inline-flex;align-items:center;justify-content:center;background:#0f62fe;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;padding:4px 9px;line-height:1;">IBM</span>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Controle e Governança de Agentes de IA</span>
+</header>
+
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Laboratórios</div>
+  <a class="c-sidenav__item" href="lab1.html"><span class="lab-num">Lab 1</span>Data Poisoning</a>
+  <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
+  <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Avaliação de Agentes</a>
+  <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Controles &amp; PII</a>
+  <a class="c-sidenav__item active" href="lab5.html"><span class="lab-num">Lab 5</span>Monitoramento</a>
+  <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
+</nav>
+
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+    <span>›</span>
+    <span>Laboratório 5</span>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">Laboratório 5 · Observabilidade</div>
+    <h1 class="page-header__h1">Monitorando Agentes em Tempo Real com watsonx Orchestrate</h1>
+    <p class="page-header__subtitle">Acompanhe o desempenho dos agentes, analise padrões de conversação e monitore métricas de qualidade em tempo real.</p>
+  </div>
+
+  <!-- TOC -->
+  <nav style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:10px;">Índice</div>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
+      <li style="margin-bottom:6px;"><a href="#visualizar">Visualizar Resultados de Monitoramento</a></li>
+      <li style="margin-bottom:6px;"><a href="#metricas">Entendendo as Métricas</a></li>
+    </ul>
+  </nav>
+
+  <section id="visao-geral">
+    <h2>Visão Geral</h2>
+    <p>Este laboratório apresenta os recursos de monitoramento em tempo real disponíveis no watsonx Orchestrate.</p>
+    <p>Ao longo das atividades, você aprenderá a acompanhar o desempenho dos agentes, analisar padrões de conversação e monitorar métricas importantes, como taxas de sucesso, feedback dos usuários e indicadores de segurança e qualidade das respostas.</p>
+    <p>O monitoramento contínuo é essencial para garantir a eficiência dos agentes em produção, identificar comportamentos inesperados e agir proativamente na resolução de problemas antes que eles impactem a experiência dos usuários.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <section id="visualizar">
+    <h2>Visualizar Resultados de Monitoramento</h2>
+    <p>Vamos verificar o dashboard de monitoramento.</p>
+
+    <ol class="step-list">
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>IBM watsonx Orchestrate</strong> no canto superior esquerdo para retornar à tela de boas-vindas do control plane.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_monitoring_01.png" alt="Tela de boas-vindas do Control Plane">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Vamos explorar as analytics de agentes usando o chat à esquerda.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_monitoring_02.png" alt="Analytics — chat à esquerda">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Faça a seguinte pergunta:</p>
+          <div class="code-block">Mostre os agentes com a menor taxa de sucesso desta semana</div>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_monitoring_03.png" alt="Pergunta sobre taxa de sucesso dos agentes">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Em seguida, vamos explorar Platform e Agent Analytics. Clique no ícone de hambúrguer conforme indicado na imagem abaixo:</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_monitoring_04.png" alt="Ícone de hambúrguer — navegação">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Selecione <strong>Analyze</strong> no menu hambúrguer.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_monitoring_05.png" alt="Menu — Analyze">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Você verá o dashboard de avaliação com métricas-chave incluindo principais conversas, usuários únicos e duração média de conversação. Você também verá gráficos refletindo o número de conversas com cada agente e o desempenho de seus agentes.</p>
+          <p>Clique no seu agente recém-criado, o orquestrador.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_monitoring_06.png" alt="Dashboard de analytics com agentes">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Isso mostra detalhes de todas as mensagens na conversação do seu agente.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_monitoring_07.png" alt="Detalhes das mensagens do agente">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Vamos alterar a visualização, clique na aba <code>Conversations</code>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_monitoring_08.png" alt="Aba Conversations">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <div class="callout callout--note">
+            <div>
+              <div class="callout__title">Nota</div>
+              <p style="margin:0;">Note que devido a você ter poucas interações no seu agente e em apenas um dia, a maioria das métricas não deve estar disponível, assim como na imagem abaixo.</p>
+            </div>
+          </div>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_monitoring_09.png" alt="Dashboard com poucas métricas disponíveis">
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <hr class="section-divider">
+
+  <section id="metricas">
+    <h2>Entendendo as Métricas</h2>
+
+    <h3>Métricas de Feedback do Usuário</h3>
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-card__label">Feedback Positivo</div>
+        <div class="metric-card__title">👍 Thumbs up</div>
+        <div class="metric-card__desc">Número de respostas de feedback positivo dos usuários indicando satisfação com a resposta do agente.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Feedback Negativo</div>
+        <div class="metric-card__title">👎 Thumbs down</div>
+        <div class="metric-card__desc">Número de respostas de feedback negativo dos usuários indicando insatisfação com a resposta do agente.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Sem avaliação</div>
+        <div class="metric-card__title">Not rated</div>
+        <div class="metric-card__desc">Número de interações onde os usuários não forneceram feedback.</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Qualidade</div>
+        <div class="metric-card__title">Toxicity</div>
+        <div class="metric-card__desc">Pontuação indicando o nível de conteúdo tóxico, ofensivo ou inapropriado na resposta (0.00 = nenhuma toxicidade detectada).</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Privacidade — Entrada</div>
+        <div class="metric-card__title">Input PII</div>
+        <div class="metric-card__desc">Pontuação indicando se informações pessoalmente identificáveis foram detectadas na entrada do usuário (0.00 = nenhuma PII detectada).</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-card__label">Privacidade — Saída</div>
+        <div class="metric-card__title">Output PII</div>
+        <div class="metric-card__desc">Pontuação indicando se informações pessoalmente identificáveis foram detectadas na resposta do agente (0.00 = nenhuma PII detectada).</div>
+      </div>
+    </div>
+
+    <h3>Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
+    <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit). <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais como criar agentes, tools, bases de conhecimentos e muito mais.</p>
+  </section>
+
+  <div class="lab-nav">
+    <a href="lab4.html">← Lab 4: Controles &amp; PII</a>
+    <a href="lab6.html" class="primary">Lab 6: Control Plane →</a>
+  </div>
+</main>
+
+<footer class="c-footer">
+  Nathalia Trazzi | Technical Solutions Architect & AI Engineer
+</footer>
+</body>
+</html>
