@@ -30,7 +30,7 @@ Nos laboratórios de hoje, você aprenderá como implementar práticas de govern
 
 Serão abordados conceitos como guardrails, controles monitoramento, debugging e avaliação de agentes para reduzir riscos relacionados à IA Generativa e garantir operações mais seguras e confiáveis.
 
-[Laboratório](./Assets_for_BuildBooks/Main_image_2.png)
+![Laboratório](./Assets_for_BuildBooks/Main_image_2.png)
 
 **Mas porque isso é importante?**
 
@@ -82,8 +82,7 @@ Ao completar este laboratório, você ganhará confiança para colocar seus agen
 
 **Produtividade**: Economia de tempo fazendo avaliações manuais e verificações de qualidade, bem como monitorando manualmente os modelos e sistemas de IA de sua equipe.
 
-
-[Laboratório](./Assets_for_BuildBooks/Main_image.png)
+![Laboratório](./Assets_for_BuildBooks/Main_image.png)
 
 ## Pré Requesitos
 
