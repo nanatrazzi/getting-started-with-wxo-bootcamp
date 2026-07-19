@@ -3,7 +3,11 @@
 
 ## Visão Geral
 
-Este guia de laboratório ensina como avaliar e depurar sistematicamente seus agentes de IA usando as capacidades integradas de teste e debugging do watsonx Orchestrate. Você aprenderá a criar casos de teste, executar avaliações automatizadas, interpretar métricas de desempenho e usar ferramentas de debugging para entender o comportamento do agente e identificar problemas. Essas habilidades são essenciais para garantir que seus agentes tenham desempenho confiável antes da implantação.
+Este laboratório apresenta as melhores práticas para avaliar, testar e depurar agentes de IA utilizando os recursos nativos de teste e debugging do watsonx Orchestrate.
+
+Ao longo das atividades, você aprenderá a criar casos de teste, executar avaliações automatizadas, analisar métricas de desempenho e utilizar ferramentas de depuração para compreender o comportamento dos agentes e identificar possíveis problemas.
+
+Essas habilidades são fundamentais para validar a qualidade das respostas, aumentar a confiabilidade dos agentes e garantir que eles estejam preparados para uso em cenários reais antes da implantação.
 
 ---
 
