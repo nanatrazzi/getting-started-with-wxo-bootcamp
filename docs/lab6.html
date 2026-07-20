@@ -185,23 +185,23 @@
     <p>Clique em <strong>IBM watsonx Orchestrate</strong> no canto superior esquerdo para ir à tela inicial/dashboard, caso ainda não esteja lá.</p>
     <p>O dashboard é a experiência inicial do Control Plane, o ponto de partida para gerenciar seu ecossistema de agents. A partir daqui, podemos visualizar rapidamente métricas de desempenho e a saúde geral do ambiente de AI Agents.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_01.png" alt="Tela inicial do Control Plane — dashboard de métricas e saúde do ambiente">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_01.png" alt="Tela inicial do Control Plane — dashboard de métricas e saúde do ambiente">
 
     <p>Na parte superior, podemos criar novos agents, explorar o catálogo de agents ou retomar trabalhos recentes.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_02.png" alt="Parte superior do dashboard — opções para criar agentes, explorar catálogo e trabalhos recentes">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_02.png" alt="Parte superior do dashboard — opções para criar agentes, explorar catálogo e trabalhos recentes">
 
     <p>A seção <strong>Needs Attention</strong> destaca problemas no ambiente de AI agents que podem exigir atenção:</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_03.png" alt="Seção Needs Attention — problemas no ambiente que requerem atenção">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_03.png" alt="Seção Needs Attention — problemas no ambiente que requerem atenção">
 
     <p>Aqui podemos monitorar alertas operacionais, incidentes e insights, como credenciais ausentes, pontos de sobrecarga de desempenho ou lacunas de avaliação, e navegar rapidamente para as ações necessárias para manter os agents saudáveis e confiáveis.</p>
 
     <p>Na seção <strong>Platform Analytics</strong>, você pode inspecionar resumos de modelos e controles: total de modelos, modelos em uso e controles por asset.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_04.png" alt="Seção Platform Analytics — resumo de modelos e controles por asset">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_04.png" alt="Seção Platform Analytics — resumo de modelos e controles por asset">
 
     <p>Você também pode visualizar todos os controles existentes para seus modelos, agents e ferramentas, além de adicionar novos controles. Veremos como adicionar controles mais adiante neste lab.</p>
 
     <p>A seção <strong>Agent Analytics</strong> permite revisar agents ativos, mensagens, mensagens com falha e métricas de latência para identificar regressões ou picos recentes:</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_05.png" alt="Seção Agent Analytics — agentes ativos, mensagens, falhas e métricas de latência">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_05.png" alt="Seção Agent Analytics — agentes ativos, mensagens, falhas e métricas de latência">
 
     <p>Vamos voltar à seção <strong>Needs Attention</strong> para observar os diferentes tipos de alertas.</p>
   </section>
@@ -232,15 +232,15 @@
     </div>
 
     <p>Primeiro, temos os alertas de <em>Operations</em>. São bloqueios operacionais com uma solução conhecida:</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_06.png" alt="Needs Attention — alertas de Operations com bloqueios operacionais conhecidos">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_06.png" alt="Needs Attention — alertas de Operations com bloqueios operacionais conhecidos">
 
     <p>Em seguida, temos os alertas de <em>Incidents</em>. Selecione o tile de contagem de Incidents para filtrar a lista de alertas por itens de nível de incidente:</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_07.png" alt="Needs Attention — alertas de Incidents com taxa de falha do agente nas últimas 24h">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_07.png" alt="Needs Attention — alertas de Incidents com taxa de falha do agente nas últimas 24h">
 
     <p>Observe como a lista de alertas mudou. Agora você pode ver que há um alerta indicando que um dos nossos AI agents teve uma taxa de falha de 9% nas últimas 24 horas.</p>
 
     <p>Em seguida, temos os alertas de <em>Insights</em>. Clique em Insights agora para visualizá-los:</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_08.png" alt="Needs Attention — alertas de Insights com recomendações para melhorar qualidade dos agentes">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_08.png" alt="Needs Attention — alertas de Insights com recomendações para melhorar qualidade dos agentes">
 
     <p><strong>Os Insights ajudam a entender causas raiz e evidências relacionadas a agents e ferramentas com falhas.</strong></p>
   </section>
@@ -253,7 +253,7 @@
     <p>Vamos tentar abrir um dos alertas para ver o que acontece.</p>
     <p>Como seu ambiente é novo, não possui muitos agentes e ainda não passou por muitos testes e interações, vamos continuar na aba <code>Insights</code>.</p>
     <p>Clique no link na coluna <code>Actions</code> para detalhar o problema:</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_09.png" alt="Alertas operacionais — link de ação na coluna Actions para detalhar o problema">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_09.png" alt="Alertas operacionais — link de ação na coluna Actions para detalhar o problema">
 
     <p>Observe que o Orchestrate enviou para a página utilizada no laboratório de <em>Realizando avaliação de Agente</em>.</p>
     <div class="callout callout--note">
@@ -262,7 +262,7 @@
         <p style="margin:0;">Não é necessária nenhuma ação, apenas se quiser realizar novos testes conforme visto no laboratório <em>Realizando avaliação de Agente</em>.</p>
       </div>
     </div>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_10.png" alt="Página de avaliação de agente aberta a partir do alerta operacional">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_10.png" alt="Página de avaliação de agente aberta a partir do alerta operacional">
 
     <p>Retorne para página inicial do <strong>Orchestrate</strong>.</p>
   </section>
@@ -299,10 +299,10 @@
       </div>
     </div>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_11.png" alt="Painel Agent Analytics — inventário de agentes com tabela de conversas e métricas por agente">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_11.png" alt="Painel Agent Analytics — inventário de agentes com tabela de conversas e métricas por agente">
 
     <p>Clique em <strong>View agent analytics</strong>.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_12.png" alt="Tela de Agent Analytics completa com filtros de período e gráfico de tendência por agente">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_12.png" alt="Tela de Agent Analytics completa com filtros de período e gráfico de tendência por agente">
 
     <p>Aqui o Orchestrate permite ter visão detalhada de como os agentes e workflows estão se comportando.</p>
 
@@ -341,7 +341,7 @@
     </ul>
 
     <p>Selecione o último agente criado por você.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_13.png" alt="Seleção de agente específico na tabela de Agent Analytics">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_13.png" alt="Seleção de agente específico na tabela de Agent Analytics">
 
     <p>Ao selecionar um agent específico, você abrirá a visualização do agent builder e poderá inspecionar sua configuração. Ao fazer isso, você passa dos insights do Control Plane para o próprio agent.</p>
     <p>Essa é a página de análise de um agente específico. O <em>breadcrumb</em> agora mostra três níveis: <strong>Home / Analytics / Assistente de Compra de Veículos</strong>, deixando claro o caminho percorrido até o detalhe do agente.</p>
@@ -373,10 +373,10 @@
     <p><strong>User feedback (painel central):</strong> Feedback dos usuários em forma de gráfico, com a legenda Thumbs up (roxo) e Thumbs down (azul).</p>
     <p><strong>Evaluation (painel à direita):</strong> Funcionalidade que serve para avaliar a qualidade das respostas do agente segundo critérios automáticos, como <em>Toxicity</em> (toxicidade), que verifica se o agente gerou conteúdo inadequado/ofensivo.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_14.png" alt="Aba Overview do agente selecionado — métricas de conversas, tokens, usuários, latência e feedback">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_14.png" alt="Aba Overview do agente selecionado — métricas de conversas, tokens, usuários, latência e feedback">
 
     <p>Clique na aba <code>Conversations</code>.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_15.png" alt="Aba Conversations do agente — lista de conversas individuais com transcrição e detalhes">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_15.png" alt="Aba Conversations do agente — lista de conversas individuais com transcrição e detalhes">
 
     <p>Essa é a aba Conversations do mesmo agente — é o nível mais granular do monitoramento. Aqui você não vê mais números agregados, mas sim cada conversa individual, mensagem por mensagem.</p>
 
@@ -401,7 +401,7 @@
   <section id="debug">
     <h2>Debugging — Tela de Debug</h2>
     <p>Clique no ícone da <em>joaninha</em>, como indicado na imagem abaixo:</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_16.png" alt="Ícone de debug (joaninha) para acessar a tela de depuração da conversa">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_16.png" alt="Ícone de debug (joaninha) para acessar a tela de depuração da conversa">
 
     <p><strong>Essa é a tela de Debug de um agente.</strong></p>
 
@@ -428,29 +428,29 @@
     <div class="debug-item"><div class="debug-num">8</div><div class="debug-body">Input — Mostra os dados de entrada que o nó recebeu, ou seja, o que chegou até ele para ser processado.</div></div>
     <div class="debug-item"><div class="debug-num">9</div><div class="debug-body">Output — Mostra os dados de saída que o nó gerou, ou seja, o resultado do processamento. / Logs (Node logs) — Mostra os registros técnicos detalhados daquele nó.</div></div>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_17.png" alt="Tela de Debug — fluxo de execução com nós User input, Agent, LLM, Tool, Knowledge base e Answer">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_17.png" alt="Tela de Debug — fluxo de execução com nós User input, Agent, LLM, Tool, Knowledge base e Answer">
 
     <h3>Visualização com Caminho Ativo Destacado</h3>
     <p>Clique no ícone de alterar a visualização do fluxo (item 6 na imagem anterior).</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_18.png" alt="Debug — visualização com caminho ativo destacado em azul mostrando o trajeto real da execução">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_18.png" alt="Debug — visualização com caminho ativo destacado em azul mostrando o trajeto real da execução">
 
     <p>Ao ativar esse ícone, o diagrama passa a realçar em azul apenas o caminho que a execução realmente percorreu, enquanto os nós e conexões que não foram usados ficam apagados.</p>
     <p>No exemplo vemos isso claramente: o caminho ativo, em azul forte, vai de: <code>User input → Assistente de Compra → Agente de suporte</code>, que então aciona o LLM, a base de conhecimento (Catálogo de Carros) e o nó de Answer. Já o ramo do Agente de Busca e seus nós filhos aparecem quase transparentes, indicando que aquele caminho não foi seguido nesta execução.</p>
 
     <h3>Layout em Árvore Horizontal</h3>
     <p>Clique no ícone de reorganização (item 7 na imagem explicativa).</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_19.png" alt="Debug — layout em árvore horizontal reorganizando o diagrama de execução da esquerda para a direita">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_19.png" alt="Debug — layout em árvore horizontal reorganizando o diagrama de execução da esquerda para a direita">
 
     <p>Ao ativar esse ícone, o diagrama é reorganizado num layout de árvore horizontal, com os nós dispostos da esquerda para a direita em colunas bem alinhadas. O fluxo aparece mais limpo e hierárquico, seguindo uma sequência clara:</p>
     <div class="code-block">User input → Assistente de Compra → Agente de suporte → LLM / Catálogo de Carros / Answer</div>
     <p><strong>O layout em árvore é especial quando o diagrama tem muitos nós, porque distribui os elementos de maneira mais ordenada e evita que as conexões fiquem confusas ou sobrepostas.</strong></p>
 
     <h3>Aba Input do nó User input</h3>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_20.png" alt="Debug — aba Input do nó User input exibindo a mensagem enviada pelo usuário">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_20.png" alt="Debug — aba Input do nó User input exibindo a mensagem enviada pelo usuário">
     <p>Ao clicar na aba <code>Input</code> (com o passo User input selecionado), o painel abaixo passa a mostrar os dados de entrada que aquele nó recebeu: os campos Request e Message com o texto exato que chegou até o nó para ser processado.</p>
 
     <h3>Expandindo o nó Agent — sub-passos internos</h3>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21.png" alt="Debug — nó Agent expandido mostrando sub-passos de raciocínio, colaboração, processamento e resposta">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21.png" alt="Debug — nó Agent expandido mostrando sub-passos de raciocínio, colaboração, processamento e resposta">
     <p>Quando o passo <code>Agent</code> é clicado, ele se expande e revela os sub-passos internos que o agente executou:</p>
     <ul>
       <li><strong>Agent reasoning</strong> (raciocínio)</li>
@@ -460,15 +460,15 @@
     </ul>
 
     <p>Ao clicar na aba <code>LLM Model</code> (em Node properties), o painel mostra qual modelo de linguagem está por trás desse agente.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21-b.png" alt="Debug — aba LLM Model em Node properties exibindo o modelo de linguagem utilizado pelo agente">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21-b.png" alt="Debug — aba LLM Model em Node properties exibindo o modelo de linguagem utilizado pelo agente">
 
     <p>Com o passo Agent ainda selecionado, ao clicar em <code>About</code> (em Node properties), o painel mostra os dados de identificação do agente: Name, Display name e Description.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21-c.png" alt="Debug — aba About em Node properties com nome, display name e descrição do agente">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21-c.png" alt="Debug — aba About em Node properties com nome, display name e descrição do agente">
 
     <p>Clique no ícone de <code>X</code> da interface do Orchestrate para retornar à página inicial.</p>
 
     <p>Navegue até a seção de <code>Platform analytics</code>. Na seção <code>Control</code>, clique em <code>View all</code>.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_22.png" alt="Seção Platform Analytics — Controls com opção View all na área de controles">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_22.png" alt="Seção Platform Analytics — Controls com opção View all na área de controles">
   </section>
 
   <hr class="section-divider">
@@ -501,17 +501,17 @@
     </ul>
 
     <p>Clique no botão <code>Create Control</code>.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_23.png" alt="Página de Controls — Asset Controls e Enterprise Controls sem nenhum controle criado ainda">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_23.png" alt="Página de Controls — Asset Controls e Enterprise Controls sem nenhum controle criado ainda">
 
     <p>Nessa janela <em>pop-up</em> vamos criar um controle. Temos diversos tipos de controles disponíveis para aplicar tanto em agentes, tools e modelos.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_24.png" alt="Pop-up de criação de controle — tipos disponíveis para agentes, tools e modelos">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_24.png" alt="Pop-up de criação de controle — tipos disponíveis para agentes, tools e modelos">
 
     <ol class="step-list">
       <li>
         <div class="step-content">
           <p>Selecione <code>Content Guardrails</code> para testar uma das opções disponíveis.</p>
           <p>Em seguida, clique em <code>Next</code>.</p>
-          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_25.png" alt="Seleção de Content Guardrails como tipo de controle e clique em Next">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_25.png" alt="Seleção de Content Guardrails como tipo de controle e clique em Next">
         </div>
       </li>
       <li>
@@ -519,7 +519,7 @@
           <p>Dê um nome ao controle. No exemplo foi usado <code>Controle_de_palavras_de_baixo_calão</code>.</p>
           <p>(Opcional) Adicione uma descrição no campo <em>Control instance description</em>.</p>
           <p>Escolha o tipo de aplicação (Enforcement type) — marque onde o controle deve atuar.</p>
-          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_26.png" alt="Configure Control — nome, descrição e Enforcement type do controle Content Guardrails">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_26.png" alt="Configure Control — nome, descrição e Enforcement type do controle Content Guardrails">
         </div>
       </li>
       <li>
@@ -537,7 +537,7 @@
               <tr><td><strong>Social Bias</strong></td><td>Viés social / preconceito</td></tr>
             </tbody>
           </table>
-          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_27.png" alt="Configure Control — toggles de detecção por tipo de conteúdo: sexual, violência, HAP, harm, jailbreak e viés social">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_27.png" alt="Configure Control — toggles de detecção por tipo de conteúdo: sexual, violência, HAP, harm, jailbreak e viés social">
         </div>
       </li>
       <li>
@@ -546,37 +546,37 @@
           <p>Em <strong>Block message</strong>, você digita o texto que o usuário verá quando o conteúdo dele for bloqueado. No exemplo foi usado:</p>
           <div class="code-block">Esse conteúdo não é apropriado para esta conversa. Peço que mantenhamos uma comunicação respeitosa e construtiva. Estou aqui para ajudar da melhor forma possível e fornecer suporte adequado às suas necessidades</div>
           <p>Utilize a mesma mensagem copiando e colando no campo, ou escreva uma de sua preferência. Clique em <code>Next</code>.</p>
-          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_28.png" alt="Configure Control — tipos de conteúdo ativados e mensagem de bloqueio personalizada definida">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_28.png" alt="Configure Control — tipos de conteúdo ativados e mensagem de bloqueio personalizada definida">
         </div>
       </li>
       <li>
         <div class="step-content">
           <p>Clique em <code>Add agent</code> para criar o guardrail em um agente.</p>
-          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_29.png" alt="Assign asset — clique em Add agent para vincular o controle a um agente">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_29.png" alt="Assign asset — clique em Add agent para vincular o controle a um agente">
         </div>
       </li>
       <li>
         <div class="step-content">
           <p>Selecione um agente criado por você, como por exemplo, o agente orquestrador criado no último laboratório de criação de agentes. Clique em <code>Select</code>.</p>
-          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_30.png" alt="Janela Add agent — seleção do agente orquestrador para aplicar o controle">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_30.png" alt="Janela Add agent — seleção do agente orquestrador para aplicar o controle">
         </div>
       </li>
       <li>
         <div class="step-content">
           <p>Clique em <code>Next</code>.</p>
-          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_31.png" alt="Assign asset — confirmação dos agentes selecionados antes de prosseguir">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_31.png" alt="Assign asset — confirmação dos agentes selecionados antes de prosseguir">
         </div>
       </li>
       <li>
         <div class="step-content">
           <p>Você chegou à última etapa. Aqui o objetivo é conferir toda a configuração antes de criar o controle. Revise tudo que foi criado e em seguida, clique em <code>Create control</code>.</p>
-          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_32.png" alt="Review — resumo completo da configuração do controle antes de criar">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_32.png" alt="Review — resumo completo da configuração do controle antes de criar">
         </div>
       </li>
       <li>
         <div class="step-content">
           <p>De volta à página de Controle, note a notificação verde <strong>"Control created successfully"</strong> (controle criado com sucesso). Repare que agora os cards de resumo no topo foram atualizados com a nova criação do controle.</p>
-          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_33.png" alt="Página de Controls com notificação de controle criado com sucesso e cards de resumo atualizados">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_33.png" alt="Página de Controls com notificação de controle criado com sucesso e cards de resumo atualizados">
         </div>
       </li>
     </ol>
@@ -608,13 +608,13 @@
     </table>
 
     <p>Retorne à aba <code>Asset control</code>. Clique no ícone de hambúrguer ao lado esquerdo da tela, escolha <code>Build</code>.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_34.png" alt="Menu hambúrguer com opção Build selecionada para acessar o agente">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_34.png" alt="Menu hambúrguer com opção Build selecionada para acessar o agente">
 
     <p>Escolha o agente que teve o controle aplicado.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_35.png" alt="Lista de agentes no Build — seleção do agente com o controle aplicado">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_35.png" alt="Lista de agentes no Build — seleção do agente com o controle aplicado">
 
     <p>Envie uma pergunta extremamente ofensiva e de baixo calão para ver o guardrail recém-criado operando no agente.</p>
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_36.png" alt="Preview do agente — guardrail de Content Guardrails bloqueando mensagem ofensiva">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_36.png" alt="Preview do agente — guardrail de Content Guardrails bloqueando mensagem ofensiva">
 
     <h3>Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
     <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit). <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais como criar agentes, tools, bases de conhecimentos e muito mais.</p>
