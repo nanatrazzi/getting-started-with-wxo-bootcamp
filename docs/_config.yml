@@ -1,5 +1,19 @@
 title: "Controle e Governança de Agentes de IA com watsonx Orchestrate"
-description: "Laboratórios de Monitoramento e Governança com IBM watsonx Orchestrate"
+description: "Laboratórios de monitoramento e governança com IBM watsonx Orchestrate"
+
 remote_theme: just-the-docs/just-the-docs@v0.10.1
+
 plugins:
   - jekyll-remote-theme
+
+
+url: "https://nanatrazzi.github.io"
+baseurl: "/getting-started-with-wxo-bootcamp"
+
+search_enabled: true
+heading_anchors: true
+color_scheme: light
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
