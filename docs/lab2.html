@@ -160,74 +160,255 @@
       </div>
     </div>
 
+    <h3>Criando o Agente de Busca</h3>
+
     <ol class="step-list">
       <li>
         <div class="step-content">
           <p>Clique no link <strong>Manage Agents</strong> no menu no canto superior esquerdo.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
           <p>Clique no botão <strong>Create agent</strong>.</p>
           <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_01.png" alt="Create agent">
         </div>
       </li>
+    </ol>
+
+    <p>Selecione <strong>Create from scratch</strong>.</p>
+    <p>Copie e cole as informações em seus respectivos campos:</p>
+    <p><strong>Name:</strong></p>
+    <div class="code-block">Agente de Busca</div>
+    <p><strong>Description:</strong></p>
+    <div class="code-block">Este agente pesquisa no Google informações em tempo real, como avaliações de usuários, classificações e comparações de mercado, mas apenas para carros que estão em nosso catálogo. Não deve fornecer informações sobre veículos não vendidos pela nossa concessionária.</div>
+    <p>Clique no botão <strong>Create</strong>.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_02.png" alt="Criação do Agente de Busca">
+
+    <p>Navegue até a seção <strong>Agents</strong>.</p>
+    <p>Vamos adicionar um agente externo, um agente que não foi construído no Orchestrate para uso.</p>
+    <p>Clique no botão <strong>Add agent</strong>.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent01.png" alt="Add agent — adicionar agente externo">
+
+    <p>Clique em <strong>Import</strong>.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent02.png" alt="Import agent">
+
+    <h3>Importando o agente externo via A2A</h3>
+
+    <div class="callout callout--note">
+      <div>
+        <p style="margin:0;">A numeração abaixo acompanha as marcações em vermelho exibidas nas capturas de tela do assistente de importação.</p>
+      </div>
+    </div>
+
+    <ol class="step-list">
       <li>
         <div class="step-content">
-          <p>Selecione <strong>Create from scratch</strong>.</p>
-          <p>Copie e cole as informações em seus respectivos campos:</p>
-          <p><strong>Name:</strong></p>
-          <div class="code-block">Agente de Busca</div>
-          <p><strong>Description:</strong></p>
-          <div class="code-block">Este agente pesquisa no Google informações em tempo real, como avaliações de usuários, classificações e comparações de mercado, mas apenas para carros que estão em nosso catálogo. Não deve fornecer informações sobre veículos não vendidos pela nossa concessionária.</div>
-          <p>Clique no botão <strong>Create</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_02.png" alt="Criação do Agente de Busca">
+          <p>No primeiro item, selecione o ícone de <em>drop down</em>.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent03.png" alt="Seleção do drop down do tipo de agente">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent04.png" alt="Opções de tipo de agente externo">
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Navegue até a seção <strong>Agents</strong>. Vamos adicionar um agente externo, um agente que não foi construído no Orchestrate para uso.</p>
-          <p>Clique no botão <strong>Add agent</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_04.png" alt="Add agent externo">
+          <p>Selecione ou mantenha <strong>External agent via A2A standard</strong>.</p>
+          <p>Há também outras opções para se trabalhar com agentes e assistentes externos no watsonx Orchestrate.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent05.png" alt="External agent via A2A standard">
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Clique em <strong>Import</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_05.png" alt="Import agent">
+          <p>Escolha a versão <code>0.3.0</code> do tipo de protocolo que estamos trabalhando, <strong>A2A</strong>.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent06.png" alt="Seleção da versão 0.3.0 do protocolo A2A">
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Escolha <strong>External agent</strong> e então <strong>Next</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_06.png" alt="External agent — Next">
+          <p>O campo <strong>External agent's URL</strong> é o endereço público onde seu agente externo está rodando. É por essa URL que o watsonx Orchestrate vai buscar o <em>Agent Card</em> (o documento que descreve as capacidades do agente no padrão A2A) e enviar as requisições em tempo de execução.</p>
+          <div class="callout callout--note">
+            <div>
+              <p style="margin:0;">Nesse campo você deve copiar e colar o endpoint que o seu instrutor do bootcamp compartilhou, caso contrário, busque por Nathalia Trazzi.</p>
+            </div>
+          </div>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent07.png" alt="Campo External agent's URL">
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Selecione <strong>External agent via A2A standard</strong>.</p>
-          <p>Preencha os detalhes de conexão fornecidos pelo seu instrutor:</p>
-          <ul>
-            <li><strong>Endpoint URL</strong>: (Obtenha do instrutor)</li>
-            <li><strong>Authentication Type</strong>: Selecione <strong>API Key</strong></li>
-            <li><strong>API Key Value</strong>: (Obtenha do instrutor)</li>
-          </ul>
-          <p>Role para baixo até a seção <strong>Define new agent</strong> e preencha os detalhes:</p>
-          <p><strong>Name:</strong></p>
+          <p>A seção <strong>Define new agent</strong> controla como o agente importado vai aparecer dentro do Orchestrate, é a "identidade" dele na plataforma, independente de como ele foi construído externamente.</p>
+          <p>Em <strong>Display name</strong>, informe o nome visível do agente:</p>
           <div class="code-block">Agente de Buscas</div>
-          <p><strong>Ou um nome de sua preferência para identificação desse agente</strong></p>
-          <p><strong>Description:</strong></p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Em <strong>Description of agent capabilities</strong>, descreva o que o agente é capaz de fazer.</p>
+          <p>Esse campo não é apenas documentação: o modelo de IA usa essa descrição para decidir, em tempo de execução, quando encaminhar a solicitação do usuário para este agente em vez de outro. Por isso, descreva as capacidades de forma objetiva e específica (o que ele faz, com qual serviço, e o que retorna).</p>
+          <p>Copie e cole o texto abaixo nesse campo:</p>
           <div class="code-block">Este agente se conecta ao serviço Tavily para realizar uma busca na web e retornar os principais resultados</div>
-          <p>Então, clique em <code>Done</code>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_08.png" alt="Configuração do agente externo A2A">
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Seu agente foi adicionado com sucesso.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_09.png" alt="Agente externo adicionado">
+          <p>Clique em <strong>Next</strong> para avançar para a etapa de conexão.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent08.png" alt="Define new agent — Display name e Description">
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Na seção <strong>Behavior</strong>, adicione as seguintes instruções:</p>
-          <div class="code-block"># VALIDAÇÃO DE VEÍCULO
+          <p>A etapa <strong>Connect</strong> define <em>como</em> o Orchestrate vai se autenticar no agente externo.</p>
+          <div class="callout callout--warning">
+            <div>
+              <div class="callout__title">Atenção</div>
+              <p style="margin:0;">Na imagem abaixo, a tela lista as conexões compatíveis com A2A que já existem no ambiente (no exemplo, conexões como <em>Maximo IT</em>, <em>Bob Microservice</em> e <em>Cloudant Documents DB</em>). No entanto, no seu ambiente, por ser novo e de laboratório, é normal você não possuir conexões no momento. Note que as conexões podem ser reutilizadas quando necessário, selecionando o <em>radio button</em> correspondente.</p>
+            </div>
+          </div>
+          <p>Como vamos criar uma credencial dedicada para este agente, clique em <strong>Add A2A agent connection</strong>.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent09.png" alt="Etapa Connect — Add A2A agent connection">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>A janela <strong>Add connection</strong> cria um registro de credenciais reutilizável. O <strong>Connection ID (Required)</strong> é o identificador técnico da conexão, usado internamente e pela CLI/ADK. Ele aceita apenas letras, números, underscores (<code>_</code>) e hífens (<code>-</code>).</p>
+          <p>Informe:</p>
+          <div class="code-block">api-key-external-agent</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>O <strong>Display name</strong> é o nome amigável exibido nas telas do produto.</p>
+          <p>Informe:</p>
+          <div class="code-block">api-key-external-agent</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>O campo <strong>Connection description</strong> é opcional e serve para que outros desenvolvedores do time identifiquem rapidamente para que serve esta conexão. Você pode deixá-lo vazio neste lab ou escrever algo como "Credencial de acesso ao agente externo de buscas".</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>Save and continue</strong>.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent10.png" alt="Add connection — Define connection details">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>O Orchestrate exibe um aviso importante: <strong>depois de criada, a conexão não pode ser renomeada nem excluída</strong>. Confira o ID e o nome informados antes de prosseguir e, estando tudo certo, clique em <strong>Continue</strong>.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent11.png" alt="Confirmação — You're about to add a connection">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Agora você configura o <strong>ambiente de draft</strong>, as credenciais usadas quando você testa e pré-visualiza o agente no chat de desenvolvimento, antes de publicá-lo. Mais adiante você fará o mesmo para o ambiente <em>live</em>, que é o usado pelos canais já implantados. Manter os dois separados permite, por exemplo, apontar o draft para uma chave de teste e o live para a chave de produção.</p>
+          <p>Deixe o <strong>Single sign-on (SSO)</strong> em <em>Off</em> (o SSO seria usado se você quisesse propagar a identidade do usuário logado para o serviço externo) e localize o campo <strong>Authentication type</strong>.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent12.png" alt="Configure draft connection — Authentication type">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>Choose an option</strong> para abrir a lista de tipos de autenticação suportados.</p>
+          <p>As opções disponíveis cobrem os padrões mais comuns:</p>
+          <ul>
+            <li><strong>API Key</strong> — envia uma chave fixa em cada requisição (header, query ou body). É o mais simples e o que usaremos aqui.</li>
+            <li><strong>Basic Auth</strong> — usuário e senha codificados em Base64.</li>
+            <li><strong>Bearer Token</strong> — envia um token no header <code>Authorization</code>.</li>
+            <li><strong>OAuth2 Authorization Code</strong> — fluxo com consentimento do usuário, típico de integrações com SaaS.</li>
+            <li><strong>OAuth2 Client Credential</strong> — fluxo máquina-a-máquina, sem usuário envolvido.</li>
+            <li><strong>OAuth2 Password</strong> — fluxo com usuário e senha trocados por um token.</li>
+          </ul>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Selecione <strong>API Key</strong>.</p>
+          <div class="callout callout--warning">
+            <div>
+              <div class="callout__title">Atenção</div>
+              <p style="margin:0;">Diferente dos demais campos, o <strong>tipo de autenticação não pode ser alterado depois que a conexão for salva</strong>. Se errar, será necessário criar uma nova conexão.</p>
+            </div>
+          </div>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent13.png" alt="Lista de tipos de autenticação — API Key">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Em <strong>API Key Location (optional)</strong>, você define onde a chave será inserida na requisição HTTP. Selecione <code>header</code>, que é o esperado pelo nosso agente externo.</p>
+          <p>O campo <strong>Server URL (optional)</strong>, ao lado, permite sobrescrever a URL base apenas para este ambiente. Deixe em branco, pois já informamos a URL do agente anteriormente.</p>
+          <p>A seção <strong>Runtime Parameters</strong> permite adicionar campos customizados enviados em tempo de execução; não é necessária neste lab.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Em <strong>Credential type</strong>, escolha quem fornece a credencial:</p>
+          <ul>
+            <li><strong>Member credentials</strong> — cada usuário precisa informar a própria credencial para usar o agente. Indicado quando o acesso deve ser individualizado e auditado por pessoa.</li>
+            <li><strong>Team credentials</strong> — uma única credencial, fornecida por você, é compartilhada por todos os usuários do ambiente.</li>
+          </ul>
+          <p>Selecione <strong>Team credentials</strong>, já que todos usarão a mesma chave do serviço de busca.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent14.png" alt="API Key Location e Credential type">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>No campo <strong>API Key</strong>, cole a chave usada para autenticar as requisições ao agente externo. O valor é armazenado de forma segura e fica mascarado após o salvamento.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>Next</strong>.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent15.png" alt="Campo API Key preenchido">
+          <p>A mensagem <em>Configuration added successfully</em> confirma que o ambiente de draft foi salvo, e a tela avança para <strong>Configure live environment</strong>, a configuração que será usada pelos canais já implantados (chat embutido, integrações, etc.).</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Para não repetir todo o preenchimento, clique em <strong>Paste draft configuration</strong>: isso copia as definições do draft (tipo de autenticação, localização da chave e credenciais) para o ambiente live. Em seguida, revise se o <strong>Authentication type</strong> ficou como <em>API Key</em> e se o <strong>Credential type</strong> está em <em>Team credentials</em>, pois a tela vem com <em>Member credentials</em> pré-selecionado.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent16.png" alt="Configure live connection — Paste draft configuration">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent17.png" alt="Configuração live revisada">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>E clique em <strong>Finish</strong>.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent19.png" alt="Conclusão da configuração da conexão">
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Retornando à etapa <strong>Connect</strong>, a mensagem <em>New Connection added!</em> confirma que a conexão foi criada.</p>
+          <p>Observe que a nova entrada <strong>api-key-external-agent</strong> agora aparece no topo da lista, com as colunas <strong>Draft</strong> e <strong>Live</strong> ambas indicando <em>API Key</em> e <em>Team credentials</em>, sinal de que os dois ambientes foram configurados corretamente.</p>
+          <div class="callout callout--warning">
+            <div>
+              <div class="callout__title">Atenção</div>
+              <p style="margin:0;">Se alguma das colunas estiver vazia ou divergente, use o menu de três pontos (⋮) à direita da linha para revisar a configuração antes de continuar.</p>
+            </div>
+          </div>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent20.png" alt="Nova conexão api-key-external-agent na lista">
+          <p>Criar a conexão não é o mesmo que associá-la ao agente. Selecione o <em>radio button</em> à esquerda de <strong>api-key-external-agent</strong> para indicar que é essa credencial que o Orchestrate deve usar ao se comunicar com o agente externo.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>Done</strong> para concluir a importação.</p>
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent21.png" alt="Seleção da conexão e botão Done">
+        </div>
+      </li>
+    </ol>
+
+    <p>A mensagem <em>Agents updated</em> confirma que a operação foi concluída. De volta à tela de edição do <strong>Agente de Busca</strong>, na aba <strong>Toolset</strong>, o agente externo <strong>Agente de Buscas</strong> aparece agora na seção <strong>Agents</strong> — a lista de agentes para os quais o seu agente pode delegar tarefas.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent22.png" alt="Agente externo listado na seção Agents do Toolset">
+
+    <h3>Definindo o comportamento do agente</h3>
+
+    <p>Com o agente externo importado, seu agente ganhou um novo especialista à disposição. O watsonx Orchestrate agora atua como orquestrador: ele interpreta o pedido do usuário, identifica que a tarefa é de busca na web e delega ao Agente de Buscas, tudo de forma transparente, mesmo que esse agente tenha sido construído em outra plataforma.</p>
+
+    <p>Vamos agora definir o comportamento do nosso agente, ensinando a ele quando e como usar esse novo colaborador.</p>
+
+    <p>Na seção <strong>Behavior</strong>, adicione as seguintes instruções:</p>
+
+    <div class="code-block"># VALIDAÇÃO DE VEÍCULO
 
 Antes de atender qualquer solicitação, identifique qual veículo do catálogo o usuário está tentando mencionar.
 
@@ -261,18 +442,18 @@ Somente rejeite a solicitação quando não for possível associar o veículo in
 Se o veículo NÃO pertencer ao catálogo, responda exatamente:
 
 "Desculpe, eu só posso fornecer informações sobre os seguintes veículos: Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro."</div>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_10.png" alt="Instruções do Behavior — Validação de Veículo">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Teste o agente com estas consultas:</p>
-          <div class="code-block">O que os proprietários dizem sobre o Porsche 911 Carrera GTS?</div>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_11.png" alt="Teste do agente de busca — Porsche 911">
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_12.png" alt="Resultado da busca — Porsche 911">
-        </div>
-      </li>
-    </ol>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_10.png" alt="Instruções do Behavior — Validação de Veículo">
+
+    <p>Teste o agente com estas consultas:</p>
+
+    <div class="code-block">O que os proprietários dizem sobre o Porsche 911 Carrera GTS?</div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_11.png" alt="Teste do agente de busca — Porsche 911">
+
+    <div class="code-block">O que os proprietários dizem sobre o Porsche 911 Carrera GTS?</div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_12.png" alt="Resultado da busca — Porsche 911">
   </section>
 
   <hr class="section-divider">
