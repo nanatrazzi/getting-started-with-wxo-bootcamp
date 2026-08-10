@@ -52,7 +52,7 @@ Ao completar este laboratório, você ganhará confiança para colocar seus agen
 
 **Infrações regulatórias e questões legais**: Muitos riscos de IA são abordados por leis e regulamentos em muitas jurisdições. Embora um dos laboratórios os aborde com maior detalhe, as ferramentas de gerenciamento de risco abordadas neste laboratório também ajudam a reduzir potenciais questões de conformidade legal e regulatória.
 
-**Produtividade**: Economia de tempo fazendo avaliações manuais e verificações de qualidade, bem como monitorando manualmente os modelos e sistemas de IA de sua equipe.
+**Produtividade**: Economia de tempo ao automatizar avaliações, controles de qualidade e o monitoramento de modelos e sistemas de IA
 
 ## Fluxo de Trabalho com o Orchestrate
 
