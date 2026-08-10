@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lab 2 — Agentes Externos · watsonx Orchestrate</title>
+<title>Lab 2 · Agentes Externos · watsonx Orchestrate</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -57,8 +57,10 @@
   .callout--tip .callout__title { color: var(--carbon-teal-60); }
   .callout p:last-child, .callout ul:last-child { margin: 0; }
   .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
-  .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
-  .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-list > li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+  .step-list > li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-content ul { list-style: disc; }
+  .step-content ul li { display: list-item; }
   .step-content { flex: 1; }
   .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
   code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
@@ -125,7 +127,7 @@
     <p>Neste laboratório, você irá explorar como conectar e orquestrar múltiplos agentes no watsonx Orchestrate para criar experiências mais inteligentes e completas.</p>
     <p>Você aprenderá conceitos fundamentais de arquiteturas multiagentes, integração de agentes externos, descoberta de capacidades e tomada de decisão baseada em contexto, permitindo que cada agente contribua com sua especialidade para resolver as solicitações dos usuários.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab2.PNG" alt="Arquitetura multi-agente — visão geral">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab2.PNG" alt="Arquitetura multi-agente: visão geral">
 
     <div class="callout callout--note">
       <div>
@@ -188,7 +190,7 @@
     <p>Navegue até a seção <strong>Agents</strong>.</p>
     <p>Vamos adicionar um agente externo, um agente que não foi construído no Orchestrate para uso.</p>
     <p>Clique no botão <strong>Add agent</strong>.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent01.png" alt="Add agent — adicionar agente externo">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent01.png" alt="Add agent: adicionar agente externo">
 
     <p>Clique em <strong>Import</strong>.</p>
     <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent02.png" alt="Import agent">
@@ -251,7 +253,7 @@
       <li>
         <div class="step-content">
           <p>Clique em <strong>Next</strong> para avançar para a etapa de conexão.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent08.png" alt="Define new agent — Display name e Description">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent08.png" alt="Define new agent: Display name e Description">
         </div>
       </li>
       <li>
@@ -264,7 +266,7 @@
             </div>
           </div>
           <p>Como vamos criar uma credencial dedicada para este agente, clique em <strong>Add A2A agent connection</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent09.png" alt="Etapa Connect — Add A2A agent connection">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent09.png" alt="Etapa Connect: Add A2A agent connection">
         </div>
       </li>
       <li>
@@ -289,20 +291,20 @@
       <li>
         <div class="step-content">
           <p>Clique em <strong>Save and continue</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent10.png" alt="Add connection — Define connection details">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent10.png" alt="Add connection: Define connection details">
         </div>
       </li>
       <li>
         <div class="step-content">
           <p>O Orchestrate exibe um aviso importante: <strong>depois de criada, a conexão não pode ser renomeada nem excluída</strong>. Confira o ID e o nome informados antes de prosseguir e, estando tudo certo, clique em <strong>Continue</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent11.png" alt="Confirmação — You're about to add a connection">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent11.png" alt="Confirmação: You're about to add a connection">
         </div>
       </li>
       <li>
         <div class="step-content">
           <p>Agora você configura o <strong>ambiente de draft</strong>, as credenciais usadas quando você testa e pré-visualiza o agente no chat de desenvolvimento, antes de publicá-lo. Mais adiante você fará o mesmo para o ambiente <em>live</em>, que é o usado pelos canais já implantados. Manter os dois separados permite, por exemplo, apontar o draft para uma chave de teste e o live para a chave de produção.</p>
           <p>Deixe o <strong>Single sign-on (SSO)</strong> em <em>Off</em> (o SSO seria usado se você quisesse propagar a identidade do usuário logado para o serviço externo) e localize o campo <strong>Authentication type</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent12.png" alt="Configure draft connection — Authentication type">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent12.png" alt="Configure draft connection: Authentication type">
         </div>
       </li>
       <li>
@@ -310,12 +312,12 @@
           <p>Clique em <strong>Choose an option</strong> para abrir a lista de tipos de autenticação suportados.</p>
           <p>As opções disponíveis cobrem os padrões mais comuns:</p>
           <ul>
-            <li><strong>API Key</strong> — envia uma chave fixa em cada requisição (header, query ou body). É o mais simples e o que usaremos aqui.</li>
-            <li><strong>Basic Auth</strong> — usuário e senha codificados em Base64.</li>
-            <li><strong>Bearer Token</strong> — envia um token no header <code>Authorization</code>.</li>
-            <li><strong>OAuth2 Authorization Code</strong> — fluxo com consentimento do usuário, típico de integrações com SaaS.</li>
-            <li><strong>OAuth2 Client Credential</strong> — fluxo máquina-a-máquina, sem usuário envolvido.</li>
-            <li><strong>OAuth2 Password</strong> — fluxo com usuário e senha trocados por um token.</li>
+            <li><strong>API Key</strong>: envia uma chave fixa em cada requisição (header, query ou body). É o mais simples e o que usaremos aqui.</li>
+            <li><strong>Basic Auth</strong>: usuário e senha codificados em Base64.</li>
+            <li><strong>Bearer Token</strong>: envia um token no header <code>Authorization</code>.</li>
+            <li><strong>OAuth2 Authorization Code</strong>: fluxo com consentimento do usuário, típico de integrações com SaaS.</li>
+            <li><strong>OAuth2 Client Credential</strong>: fluxo máquina-a-máquina, sem usuário envolvido.</li>
+            <li><strong>OAuth2 Password</strong>: fluxo com usuário e senha trocados por um token.</li>
           </ul>
         </div>
       </li>
@@ -328,7 +330,7 @@
               <p style="margin:0;">Diferente dos demais campos, o <strong>tipo de autenticação não pode ser alterado depois que a conexão for salva</strong>. Se errar, será necessário criar uma nova conexão.</p>
             </div>
           </div>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent13.png" alt="Lista de tipos de autenticação — API Key">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent13.png" alt="Lista de tipos de autenticação: API Key">
         </div>
       </li>
       <li>
@@ -342,8 +344,8 @@
         <div class="step-content">
           <p>Em <strong>Credential type</strong>, escolha quem fornece a credencial:</p>
           <ul>
-            <li><strong>Member credentials</strong> — cada usuário precisa informar a própria credencial para usar o agente. Indicado quando o acesso deve ser individualizado e auditado por pessoa.</li>
-            <li><strong>Team credentials</strong> — uma única credencial, fornecida por você, é compartilhada por todos os usuários do ambiente.</li>
+            <li><strong>Member credentials</strong>: cada usuário precisa informar a própria credencial para usar o agente. Indicado quando o acesso deve ser individualizado e auditado por pessoa.</li>
+            <li><strong>Team credentials</strong>: uma única credencial, fornecida por você, é compartilhada por todos os usuários do ambiente.</li>
           </ul>
           <p>Selecione <strong>Team credentials</strong>, já que todos usarão a mesma chave do serviço de busca.</p>
           <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent14.png" alt="API Key Location e Credential type">
@@ -364,7 +366,7 @@
       <li>
         <div class="step-content">
           <p>Para não repetir todo o preenchimento, clique em <strong>Paste draft configuration</strong>: isso copia as definições do draft (tipo de autenticação, localização da chave e credenciais) para o ambiente live. Em seguida, revise se o <strong>Authentication type</strong> ficou como <em>API Key</em> e se o <strong>Credential type</strong> está em <em>Team credentials</em>, pois a tela vem com <em>Member credentials</em> pré-selecionado.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent16.png" alt="Configure live connection — Paste draft configuration">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent16.png" alt="Configure live connection: Paste draft configuration">
           <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent17.png" alt="Configuração live revisada">
         </div>
       </li>
@@ -396,7 +398,7 @@
       </li>
     </ol>
 
-    <p>A mensagem <em>Agents updated</em> confirma que a operação foi concluída. De volta à tela de edição do <strong>Agente de Busca</strong>, na aba <strong>Toolset</strong>, o agente externo <strong>Agente de Buscas</strong> aparece agora na seção <strong>Agents</strong> — a lista de agentes para os quais o seu agente pode delegar tarefas.</p>
+    <p>A mensagem <em>Agents updated</em> confirma que a operação foi concluída. De volta à tela de edição do <strong>Agente de Busca</strong>, na aba <strong>Toolset</strong>, o agente externo <strong>Agente de Buscas</strong> aparece agora na seção <strong>Agents</strong>, que lista os agentes para os quais o seu agente pode delegar tarefas.</p>
 
     <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/add_external_agent22.png" alt="Agente externo listado na seção Agents do Toolset">
 
@@ -443,17 +445,17 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
 
 "Desculpe, eu só posso fornecer informações sobre os seguintes veículos: Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro."</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_10.png" alt="Instruções do Behavior — Validação de Veículo">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_10.png" alt="Instruções do Behavior: Validação de Veículo">
 
     <p>Teste o agente com estas consultas:</p>
 
     <div class="code-block">O que os proprietários dizem sobre o Porsche 911 Carrera GTS?</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_11.png" alt="Teste do agente de busca — Porsche 911">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_11.png" alt="Teste do agente de busca: Porsche 911">
 
     <div class="code-block">O que os proprietários dizem sobre o Porsche 911 Carrera GTS?</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_12.png" alt="Resultado da busca — Porsche 911">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_12.png" alt="Resultado da busca: Porsche 911">
   </section>
 
   <hr class="section-divider">
@@ -469,7 +471,7 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
       <li>
         <div class="step-content">
           <p>Clique em <strong>Create agent +</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_15.png" alt="Create Agent — orquestrador">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_15.png" alt="Create Agent: orquestrador">
         </div>
       </li>
       <li>
@@ -487,13 +489,13 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
       <li>
         <div class="step-content">
           <p>Em <strong>Agent style</strong>, selecione <strong>ReAct</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_17.png" alt="Seleção de Agent Style — ReAct">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_17.png" alt="Seleção de Agent Style: ReAct">
         </div>
       </li>
       <li>
         <div class="step-content">
           <p>Navegue até a seção <strong>Agents</strong>, clique no botão <strong>Add agent +</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_18.png" alt="Add agent — seção Agents">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_18.png" alt="Add agent: seção Agents">
         </div>
       </li>
       <li>
@@ -584,16 +586,16 @@ Fluxo:
 - Sempre prefira interpretar o veículo pretendido quando houver alta confiança.
 - Somente peça esclarecimentos quando houver ambiguidade real.
 - Para pesquisas externas, utilize exclusivamente o agente **Agente_Langflow_Buscas.**</div>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_22.png" alt="Behavior do agente orquestrador — lógica de roteamento">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_22.png" alt="Behavior do agente orquestrador: lógica de roteamento">
         </div>
       </li>
       <li>
         <div class="step-content">
           <p>Teste o agente com várias consultas:</p>
           <div class="code-block">Compare o Kia Niro com o Hyundai Kona Electric</div>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_23.png" alt="Teste — Comparação Kia Niro x Hyundai Kona">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_23.png" alt="Teste: Comparação Kia Niro x Hyundai Kona">
           <div class="code-block">Pesquise uma comparação de usuários com Kia Niro com o Hyundai Kona Electric</div>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_24.png" alt="Teste — Pesquisa comparação de usuários">
+          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab02/lab02_monitoring_24.png" alt="Teste: Pesquisa comparação de usuários">
         </div>
       </li>
       <li>
