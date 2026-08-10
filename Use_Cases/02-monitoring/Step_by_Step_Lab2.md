@@ -74,47 +74,164 @@ Vamos adicionar um agente externo, um agente que não foi construído no Orchest
 
 Clique no botão **Add agent**.
 
-![Create agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_04.png)
+![Create agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent01.png)
 
 Clique em **Import**
 
-![Import Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_05.png)
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent02.png)
 
-Escolha **External agent** e então **Next**
+1. No primeiro item, selecione o ícone de _drop down_
 
-![Import Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_06.png)
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent03.png)
 
-1. Selecione **External agent via A2A standard**.
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent04.png)
 
-2. Preencha os detalhes de conexão fornecidos pelo seu instrutor:
+2. Selecione ou mantenha **External agent via A2A standard**.
 
-**Endpoint URL**: (Obtenha do instrutor)
+Há também outras opções para se trabalhar com agentes e assitentes externos no watsonx Orchestrate.
 
-**Authentication Type**: Selecione **API Key**
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent05.png)
 
-**API Key Value**: (Obtenha do instrutor)
+3. Escolha a versão `0.3.0` do tipo de protocolo que estamos trabalhando **A2A**
 
-Role para baixo até a seção **Define new agent** e preencha os detalhes:
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent06.png)
 
- **Name**:
-   ```
-   Agente de Buscas
-   ```
+4. O campo **External agent's URL** é o endereço público onde seu agente externo está rodando. É por essa URL que o watsonx Orchestrate vai buscar o *Agent Card* (o documento que descreve as capacidades do agente no padrão A2A) e enviar as requisições em tempo de execução. 
 
-**Ou um nome de sua preferência para identificação desse agente**
+> Nesse campo você deve copiar e colar o endpoint que o seu instrutor do bootcamp compartilhou, caso contrário, busque por Nathalia Trazzi.
 
- **Description**:
-   ```
-   Este agente se conecta ao serviço Tavily para realizar uma busca na web e retornar os principais resultados
-   ```
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent07.png)
 
-Então, clique em `Done`
+A seção **Define new agent** controla como o agente importado vai aparecer dentro do Orchestrate, é a "identidade" dele na plataforma, independente de como ele foi construído externamente.
 
-![Import Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_08.png)
+5. Em **Display name**, informe o nome visível do agente: `Agente de Buscas`.
 
-Seu agente foi adicionado com sucesso
+6. Em **Description of agent capabilities**, descreva o que o agente é capaz de fazer. 
 
-![Import Agent](../../Assets_for_BuildBooks/labs/lab02/lab02_monitoring_09.png)
+Esse campo não é apenas documentação: o modelo de IA usa essa descrição para decidir, em tempo de execução, quando encaminhar a solicitação do usuário para este agente em vez de outro. Por isso, descreva as capacidades de forma objetiva e específica (o que ele faz, com qual serviço, e o que retorna):
+
+Copie e cole o texto abaixo nesse campo:
+
+`Este agente se conecta ao serviço Tavily para realizar uma busca na web e retornar os principais resultados`
+
+7. Clique em **Next** para avançar para a etapa de conexão.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent08.png)
+
+A etapa **Connect** define *como* o Orchestrate vai se autenticar no agente externo.
+
+> [!WARNING]
+> Na imagem abaixo,a tela lista as conexões compatíveis com A2A que já existem no ambiente (no exemplo, conexões como *Maximo IT*, *Bob Microservice* e *Cloudant Documents DB*), no entanto, no seu ambiente por ser novo e de laboratório, é normal você não possuir conexões no momento. > Note que as conexões podem ser reutilizadas quando necessário,  selecionando o _radio button_ correspondente.
+
+8. Como vamos criar uma credencial dedicada para este agente, clique em **Add A2A agent connection**.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent09.png)
+
+9. A janela **Add connection** cria um registro de credenciais reutilizável. O **Connection ID (Required)** é o identificador técnico da conexão, usado internamente e pela CLI/ADK. Ele aceita apenas letras, números, underscores (`_`) e hífens (`-`).
+
+Informe: `api-key-external-agent`
+
+10.  O **Display name** é o nome amigável exibido nas telas do produto. 
+
+Informe: `api-key-external-agent`
+
+11.  O campo **Connection description** é opcional e serve para que outros desenvolvedores do time identifiquem rapidamente para que serve esta conexão. Você pode deixá-lo vazio neste lab ou escrever algo como "Credencial de acesso ao agente externo de buscas".
+
+12. Clique em **Save and continue**.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent10.png)
+
+13. O Orchestrate exibe um aviso importante: **depois de criada, a conexão não pode ser renomeada nem excluída**. Confira o ID e o nome informados antes de prosseguir e, estando tudo certo, clique em **Continue**.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent11.png)
+
+14. Agora você configura o **ambiente de draft** as credenciais usadas quando você testa e pré-visualiza o agente no chat de desenvolvimento, antes de publicá-lo. Mais adiante você fará o mesmo para o ambiente *live*, que é o usado pelos canais já implantados. Manter os dois separados permite, por exemplo, apontar o draft para uma chave de teste e o live para a chave de produção.
+
+Deixe o **Single sign-on (SSO)** em *Off* (o SSO seria usado se você quisesse propagar a identidade do usuário logado para o serviço externo) e localize o campo **Authentication type**.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent12.png)
+
+15. Clique em **Choose an option** para abrir a lista de tipos de autenticação suportados.
+
+As opções disponíveis cobrem os padrões mais comuns:
+
+- **API Key** Envia uma chave fixa em cada requisição (header, query ou body). É o mais simples e o que usaremos aqui.
+
+- **Basic Auth** Usuário e senha codificados em Base64.
+
+- **Bearer Token** Envia um token no header `Authorization`.
+
+- **OAuth2 Authorization Code** Fluxo com consentimento do usuário, típico de integrações com SaaS.
+
+- **OAuth2 Client Credential** Fluxo máquina-a-máquina, sem usuário envolvido.
+
+- **OAuth2 Password** Fluxo com usuário e senha trocados por um token.
+
+16. Selecione **API Key**.
+
+> Diferente dos demais campos, o **tipo de autenticação não pode ser alterado depois que a conexão for salva**. Se errar, será necessário criar uma nova conexão.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent13.png)
+
+17.  Em **API Key Location (optional)**, você define onde a chave será inserida na requisição HTTP. Selecione `header`, que é o esperado pelo nosso agente externo.
+
+O campo **Server URL (optional)**, ao lado, permite sobrescrever a URL base apenas para este ambiente. Deixe em branco, pois já informamos a URL do agente no passo 
+
+A seção **Runtime Parameters** permite adicionar campos customizados enviados em tempo de execução; não é necessária neste lab.
+
+18.  Em **Credential type**, escolha quem fornece a credencial:
+
+- **Member credentials** Cada usuário precisa informar a própria credencial para usar o agente. Indicado quando o acesso deve ser individualizado e auditado por pessoa.
+
+- **Team credentials** Uma única credencial, fornecida por você, é compartilhada por todos os usuários do ambiente.
+
+Selecione **Team credentials**, já que todos usarão a mesma chave do serviço de busca.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent14.png)
+
+19. No campo **API Key**, cole a chave usada para autenticar as requisições ao agente externo. O valor é armazenado de forma segura e fica mascarado após o salvamento.
+
+20. Clique em **Next**.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent15.png)
+
+A mensagem *Configuration added successfully* confirma que o ambiente de draft foi salvo, e a tela avança para **Configure live environment** a configuração que será usada pelos canais já implantados (chat embutido, integrações, etc.).
+
+21.   Para não repetir todo o preenchimento, clique em **Paste draft configuration**: Isso copia as definições do draft (tipo de autenticação, localização da chave e credenciais) para o ambiente live. Em seguida, revise se o **Authentication type** ficou como *API Key* e se o **Credential type** está em *Team credentials* ,a tela vem com *Member credentials* pré-selecionado.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent16.png)
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent17.png)
+
+E clique em **Finish**.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent19.png)
+
+
+Retornando à etapa **Connect**, e a mensagem *New Connection added!* confirma que a conexão foi criada. 
+
+Observe que a nova entrada **api-key-external-agent** agora aparece no topo da lista, com as colunas **Draft** e **Live** ambas indicando *API Key* e *Team credentials* sinal de que os dois ambientes foram configurados corretamente.
+
+> [!WARNING]
+> Se alguma das colunas estiver vazia ou divergente, use o menu de três pontos (⋮) à direita da linha para revisar a configuração antes de continuar.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent20.png)
+
+Criar a conexão não é o mesmo que associá-la ao agente. 
+
+23. Selecione o _radio button_ à esquerda de **api-key-external-agent** para indicar que é essa credencial que o Orchestrate deve usar ao se comunicar com o agente externo.
+
+24. Clique em **Done** para concluir a importação.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent21.png)
+
+  A mensagem *Agents updated* confirma que a operação foi concluída. De volta à tela de edição do **Agente de Busca**, na aba **Toolset**, o agente externo **Agente de Buscas** aparece agora na seção **Agents** — a lista de agentes para os quais o seu agente pode delegar tarefas.
+
+![Import Agent](../../Assets_for_BuildBooks/labs/lab02/add_external_agent22.png)
+
+Com o agente externo importado, seu agente ganhou um novo especialista à disposição. O watsonx Orchestrate agora atua como orquestrador: Ele interpreta o pedido do usuário, identifica que a tarefa é de busca na web e delega ao Agente de Buscas, tudo de forma transparente, mesmo que esse agente tenha sido construído em outra plataforma.
+
+Vamos agora definir o comportamento do nosso agente, ensinando a ele quando e como usar esse novo colaborador.
 
 Na seção **Behavior**, adicione as seguintes instruções:
 
