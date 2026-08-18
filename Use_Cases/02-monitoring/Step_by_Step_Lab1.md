@@ -60,11 +60,7 @@ Um funcionário descontente fez upload de dados envenenados que incluem material
 4. **Ataques de Disponibilidade**: Corromper dados para tornar o sistema não confiável
    - Exemplo: Inserir informações contraditórias entre documentos
 
-<<<<<<< HEAD
-**Ataques de data poisoning tipicamente utilizam uma combinação das diferentes técnicas cobertas. Neste laboratório, usaremos uma tática única (e comum) de atores maliciosos; os dados envenenados parecem corretos ao olho humano, mas na realidade, foram envenenados com texto branco invisível!**
-=======
 **Ataques de data poisoning tipicamente utilizam uma combinação das diferentes técnicas cobertas; Este laboratório, usaremos uma tática única (e comum) de atores maliciosos; os dados envenenados parecem corretos ao olho humano, mas na realidade, foram envenenados com texto branco invisível!**
->>>>>>> main
 
 > Uma visão lado a lado de um ataque de data poisoning. Os dados envenenados (lado esquerdo da imagem) parecem corretos ao olho humano, mas na realidade, foram envenenados com texto branco invisível. O lado direito da imagem mostra os dados reais, com a informação maliciosa em texto preto.
 
