@@ -46,7 +46,7 @@ Clique no ícone circular de IA, no canto inferior esquerdo, para abrir o assist
 
 ### Overview: visão geral do ambiente
 
-A aba **Overview**, selecionada por padrão, reúne seis cartões de resumo: Messages, Feedback, Deployment status, Evaluation status, Agents e Controls, cada um com a taxa de sucesso ou a distribuição relevante da última semana. À direita, o painel **Needs attention** já aponta o que precisa da sua atenção, agrupado por categoria — Evaluation, Adoption, Credentials, Execution e Quality — sem que você precise procurar manualmente.
+A aba **Overview**, selecionada por padrão, reúne seis cartões de resumo: Messages, Feedback, Deployment status, Evaluation status, Agents e Controls, cada um com a taxa de sucesso ou a distribuição relevante da última semana. À direita, o painel **Needs attention** já aponta o que precisa da sua atenção, agrupado por categoria (Evaluation, Adoption, Credentials, Execution e Quality), sem que você precise procurar manualmente.
 
 ![Métricas da aba Overview](../../Assets_for_BuildBooks/labs/lab06/lab06_03.png)
 
@@ -96,7 +96,7 @@ A seção **Insights** mostra quantos agentes já possuem avaliações configura
 
 ![Insights e Agent feedback](../../Assets_for_BuildBooks/labs/lab06/lab06_13.png)
 
-Role a página para ver três painéis lado a lado — **Top agents by positive feedback**, **Top agents by negative feedback** e **Tool call success** — seguidos pelo gráfico **Feedback trends**, que permite alternar entre mensagens totais, bem-sucedidas, com falha, feedback positivo e negativo.
+Role a página para ver três painéis lado a lado: **Top agents by positive feedback**, **Top agents by negative feedback** e **Tool call success**, seguidos pelo gráfico **Feedback trends**, que permite alternar entre mensagens totais, bem-sucedidas, com falha, feedback positivo e negativo.
 
 ![Rankings de feedback e Tool call success](../../Assets_for_BuildBooks/labs/lab06/lab06_14.png)
 
@@ -128,7 +128,7 @@ Volte ao topo e clique na aba **Security and Risk**.
 
 ![Navegando para Security and Risk](../../Assets_for_BuildBooks/labs/lab06/lab06_20.png)
 
-Essa aba resume o painel **Controls summary**, com o total de controles configurados na instância e sua divisão entre Agent controls, Tool controls e Model controls, além da lista **Recent controls**. Como você ainda não criou nenhum controle, todos os contadores aparecem zerados — isso muda na última parte deste laboratório, quando você criar seu primeiro controle.
+Essa aba resume o painel **Controls summary**, com o total de controles configurados na instância e sua divisão entre Agent controls, Tool controls e Model controls, além da lista **Recent controls**. Como você ainda não criou nenhum controle, todos os contadores aparecem zerados; isso muda na última parte deste laboratório, quando você criar seu primeiro controle.
 
 ![Security and Risk sem controles](../../Assets_for_BuildBooks/labs/lab06/lab06_21.png)
 
@@ -197,7 +197,7 @@ Abaixo de uma das respostas do agente, clique no ícone de engrenagem para abrir
 
 ![Ícone de debug em uma resposta](../../Assets_for_BuildBooks/labs/lab06/lab06_35.png)
 
-A janela **Debug** se abre em tela cheia, dividida em duas áreas principais. À esquerda, o **Agent flow** exibe um diagrama com os nós percorridos durante a conversa — agentes, modelos de LLM, bases de conhecimento e respostas — conectados na ordem em que foram acionados. No topo, o **Trace ID** identifica de forma única aquela execução, com navegação entre execuções anteriores e seguintes pelos botões `Previous` e `Next`. Logo abaixo do diagrama, a **Execution timeline** lista, passo a passo, cada etapa da execução — entrada do usuário, raciocínio do agente, chamadas a colaboradores e a resposta final — com o tempo gasto em cada uma. Na parte inferior, o painel **Variables** alterna entre as abas `Summary`, `Input`, `Output` e `Node logs`, enquanto **Node properties** detalha as propriedades do nó selecionado.
+A janela **Debug** se abre em tela cheia, dividida em duas áreas principais. À esquerda, o **Agent flow** exibe um diagrama com os nós percorridos durante a conversa (agentes, modelos de LLM, bases de conhecimento e respostas), conectados na ordem em que foram acionados. No topo, o **Trace ID** identifica de forma única aquela execução, com navegação entre execuções anteriores e seguintes pelos botões `Previous` e `Next`. Logo abaixo do diagrama, a **Execution timeline** lista, passo a passo, cada etapa da execução (entrada do usuário, raciocínio do agente, chamadas a colaboradores e a resposta final), com o tempo gasto em cada uma. Na parte inferior, o painel **Variables** alterna entre as abas `Summary`, `Input`, `Output` e `Node logs`, enquanto **Node properties** detalha as propriedades do nó selecionado.
 
 ![Visão geral anotada da janela Debug](../../Assets_for_BuildBooks/labs/lab06/lab06_36.png)
 
@@ -211,7 +211,7 @@ Um segundo ícone de layout apresenta o fluxo de forma mais linear e simplificad
 
 ![Layout linear do Agent flow confirmado](../../Assets_for_BuildBooks/labs/lab06/lab06_39.png)
 
-Clique na etapa **User input**, na Execution timeline, e depois na aba `Input` do painel Variables para ver os dados brutos enviados pelo usuário naquele passo — os campos Request e Message trazem o texto exato da pergunta.
+Clique na etapa **User input**, na Execution timeline, e depois na aba `Input` do painel Variables para ver os dados brutos enviados pelo usuário naquele passo: os campos Request e Message trazem o texto exato da pergunta.
 
 ![Aba Input com os dados do usuário](../../Assets_for_BuildBooks/labs/lab06/lab06_40.png)
 
@@ -235,7 +235,7 @@ Como nenhum controle foi criado ainda, a página **Controls** aparece vazia, com
 
 ### Selecionando o tipo de controle
 
-A janela **Create Control** se abre com um assistente de quatro etapas: `Select Control`, `Configure Control`, `Assign Assets` e `Review`. Na primeira etapa, os controles disponíveis são organizados por tipo de ativo — **Agents** (Content Guardrails, Output Length Guard, Regex Pattern, Secrets Detector e PII Filter) e **Tools** (Content Guardrails, Output Length Guard, Rate Limiter, SQLSanitizer e Secrets Detector).
+A janela **Create Control** se abre com um assistente de quatro etapas: `Select Control`, `Configure Control`, `Assign Assets` e `Review`. Na primeira etapa, os controles disponíveis são organizados por tipo de ativo: **Agents** (Content Guardrails, Output Length Guard, Regex Pattern, Secrets Detector e PII Filter) e **Tools** (Content Guardrails, Output Length Guard, Rate Limiter, SQLSanitizer e Secrets Detector).
 
 ![Etapa Select Control](../../Assets_for_BuildBooks/labs/lab06/lab06_45.png)
 
@@ -253,7 +253,7 @@ Controle_de_palavras_de_baixo_calão
 
 ![Nome e tipo de enforcement do controle](../../Assets_for_BuildBooks/labs/lab06/lab06_47.png)
 
-Role para baixo até a seção `Toggle detection for each content type`. Por padrão, todos os tipos de conteúdo — Sexual Content, Violence, HAP (Hate, Abuse and Profanity), Harm, Jailbreak e Social Bias — vêm desativados (`Off`).
+Role para baixo até a seção `Toggle detection for each content type`. Por padrão, todos os tipos de conteúdo: Sexual Content, Violence, HAP (Hate, Abuse and Profanity), Harm, Jailbreak e Social Bias, vêm desativados (`Off`).
 
 ![Tipos de conteúdo desativados](../../Assets_for_BuildBooks/labs/lab06/lab06_48.png)
 
@@ -271,7 +271,7 @@ Na etapa **Assign Assets**, clique em `Add Agent` para escolher a quais agentes 
 
 ![Etapa Assign Assets](../../Assets_for_BuildBooks/labs/lab06/lab06_50.png)
 
-Na janela **Add Agent**, marque a caixa de seleção ao lado de um agente criado por você — no exemplo, `Assistente de Compra de Veiculos` — e clique em `Select`.
+Na janela **Add Agent**, marque a caixa de seleção ao lado de um agente criado por você (no exemplo, `Assistente de Compra de Veiculos`) e clique em `Select`.
 
 ![Selecionando o agente na janela Add Agent](../../Assets_for_BuildBooks/labs/lab06/lab06_51.png)
 
@@ -307,7 +307,7 @@ No painel **Preview**, à direita, envie uma mensagem com palavras de baixo cal�
 
 Parabéns! 🎉 Você concluiu o Control Plane Lab do watsonx Orchestrate.
 
-Ao longo deste laboratório, você navegou pelas seis abas do dashboard do Agentic Control Plane — Overview, Adoption, FinOps, Quality, Reliability e Security and Risk —, entendendo como cada uma resume um aspecto diferente da operação dos seus agentes: uso geral, engajamento, custo de tokens, qualidade das respostas, confiabilidade e segurança. Em seguida, você usou a ferramenta Debug para investigar, passo a passo, o fluxo de execução de uma conversa real, inspecionando o agente, o modelo de linguagem utilizado e os dados de entrada e saída de cada etapa. Por fim, você criou um Controle de Content Guardrails, configurou os tipos de conteúdo a serem bloqueados, atribuiu o controle a um agente e testou seu funcionamento na prática.
+Ao longo deste laboratório, você navegou pelas seis abas do dashboard do Agentic Control Plane: Overview, Adoption, FinOps, Quality, Reliability e Security and Risk, entendendo como cada uma resume um aspecto diferente da operação dos seus agentes: uso geral, engajamento, custo de tokens, qualidade das respostas, confiabilidade e segurança. Em seguida, você usou a ferramenta Debug para investigar, passo a passo, o fluxo de execução de uma conversa real, inspecionando o agente, o modelo de linguagem utilizado e os dados de entrada e saída de cada etapa. Por fim, você criou um Controle de Content Guardrails, configurou os tipos de conteúdo a serem bloqueados, atribuiu o controle a um agente e testou seu funcionamento na prática.
 
 Com isso, você agora sabe onde encontrar as principais métricas de adoção, custo, qualidade, confiabilidade e segurança dos seus agentes, como depurar uma conversa até o nível de cada chamada de modelo, e como aplicar controles de segurança para proteger seus agentes contra conteúdo impróprio antes que ele chegue aos usuários.
 
@@ -319,7 +319,7 @@ Todas as operações realizadas também estão disponíveis em uma experiência 
 
 Este é o último laboratório desta série. Abaixo está uma coletânea de links oficiais, documentação, tutoriais e novidades da IBM watsonx Orchestrate e do Agent Development Kit (ADK) para você continuar se aprofundando.
 
-> Última atualização da coletânea: 24/08/2026.
+> Última atualização da coletânea: 15/07/2026.
 
 | Recurso | Link |
 |---|---|
@@ -336,8 +336,8 @@ Este é o último laboratório desta série. Abaixo está uma coletânea de link
 
 | Recurso | Link |
 |---|---|
-| GitHub — `IBM/ibm-watsonx-orchestrate-adk` | https://github.com/IBM/ibm-watsonx-orchestrate-adk |
-| PyPI — `ibm-watsonx-orchestrate` | https://pypi.org/project/ibm-watsonx-orchestrate/ |
+| GitHub: `IBM/ibm-watsonx-orchestrate-adk` | https://github.com/IBM/ibm-watsonx-orchestrate-adk |
+| PyPI: `ibm-watsonx-orchestrate` | https://pypi.org/project/ibm-watsonx-orchestrate/ |
 
 ---
 
@@ -366,7 +366,7 @@ Este é o último laboratório desta série. Abaixo está uma coletânea de link
 | Gerenciamento de dependências Python | https://developer.watson-orchestrate.ibm.com/tools/python_dependency_management |
 | Estrutura de resposta e anotações de tools | https://developer.watson-orchestrate.ibm.com/tools/tool_response_structure |
 | Logs de tools Python | https://developer.watson-orchestrate.ibm.com/tools/log_behavior |
-| Toolkits — visão geral | https://developer.watson-orchestrate.ibm.com/tools/toolkits/overview |
+| Toolkits: visão geral | https://developer.watson-orchestrate.ibm.com/tools/toolkits/overview |
 | Toolkits MCP remotos | https://developer.watson-orchestrate.ibm.com/tools/toolkits/remote_mcp_toolkits |
 | Toolkits MCP locais | https://developer.watson-orchestrate.ibm.com/tools/toolkits/local_mcp_toolkits |
 | Toolkits Python | https://developer.watson-orchestrate.ibm.com/tools/toolkits/python_toolkits |
@@ -446,7 +446,7 @@ Este é o último laboratório desta série. Abaixo está uma coletânea de link
 | Avaliação rápida | https://developer.watson-orchestrate.ibm.com/evaluate/quick_eval |
 | Rubric Evaluations | https://developer.watson-orchestrate.ibm.com/evaluate/rubric |
 | Teste de vulnerabilidade de LLM | https://developer.watson-orchestrate.ibm.com/evaluate/llm_vulnerability |
-| Traces — visão geral | https://developer.watson-orchestrate.ibm.com/traces/overview |
+| Traces: visão geral | https://developer.watson-orchestrate.ibm.com/traces/overview |
 | Traces via CLI | https://developer.watson-orchestrate.ibm.com/traces/traces_with_cli |
 | Traces via Python | https://developer.watson-orchestrate.ibm.com/traces/traces_with_python |
 
@@ -456,11 +456,11 @@ Este é o último laboratório desta série. Abaixo está uma coletânea de link
 
 | Tópico | Link |
 |---|---|
-| Knowledge bases — visão geral | https://developer.watson-orchestrate.ibm.com/knowledge_base/overview |
+| Knowledge bases: visão geral | https://developer.watson-orchestrate.ibm.com/knowledge_base/overview |
 | Criando knowledge bases | https://developer.watson-orchestrate.ibm.com/knowledge_base/build_kb |
 | Por que usar conexões | https://developer.watson-orchestrate.ibm.com/connections/overview |
 | Criando conexões | https://developer.watson-orchestrate.ibm.com/connections/build_connections |
-| Canais — visão geral (Teams, Slack, WhatsApp, SMS...) | https://developer.watson-orchestrate.ibm.com/channels/overview |
+| Canais: visão geral (Teams, Slack, WhatsApp, SMS...) | https://developer.watson-orchestrate.ibm.com/channels/overview |
 | Adicionando voz a um agente | https://developer.watson-orchestrate.ibm.com/voice/adding_voice_to_agent |
 | Configuração de voz | https://developer.watson-orchestrate.ibm.com/voice/managing_voice |
 | Plug-ins | https://developer.watson-orchestrate.ibm.com/plugins/plugins |
@@ -478,10 +478,10 @@ Este é o último laboratório desta série. Abaixo está uma coletânea de link
 | Agente Healthcare Provider | https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_4_healthcare_provider |
 | Usando watsonx Orchestrate + BeeAI Framework | https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_beeai_framework |
 | Usando watsonx Orchestrate + Langflow | https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_langflow |
-| CI/CD — Parte 1 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-1 |
-| CI/CD — Parte 2 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-2 |
-| CI/CD — Parte 3 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-3 |
-| CI/CD — Parte 4 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-4 |
+| CI/CD: Parte 1 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-1 |
+| CI/CD: Parte 2 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-2 |
+| CI/CD: Parte 3 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-3 |
+| CI/CD: Parte 4 | https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-4 |
 | Guia de Performance (geral) | https://developer.watson-orchestrate.ibm.com/tutorials/performance/performance-guide-v2 |
 | Tutoriais avançados | https://developer.watson-orchestrate.ibm.com/tutorials/advanced_tutorials |
 | Getting Started (IBM Developer) | https://developer.ibm.com/tutorials/getting-started-with-watsonx-orchestrate/ |
@@ -505,7 +505,7 @@ Este é o último laboratório desta série. Abaixo está uma coletânea de link
 |---|---|
 | Troubleshooting | https://developer.watson-orchestrate.ibm.com/release/troubleshooting |
 | **Agentic Control Plane** (anúncio, jun/2026) | https://www.ibm.com/new/announcements/introducing-the-agentic-control-plane |
-| What's new — comunidade (mar/2026) | https://community.ibm.com/community/user/blogs/daiane-camila-bizari2/2026/04/02/whats-new-in-ibm-watsonx-orchestrate |
+| What's new: comunidade (mar/2026) | https://community.ibm.com/community/user/blogs/daiane-camila-bizari2/2026/04/02/whats-new-in-ibm-watsonx-orchestrate |
 | "Orchestrate More, Worry Less" (mar/2026) | https://community.ibm.com/community/user/blogs/alan-francis-cheeramvelil/2026/04/12/orchestrate-more-worry-less-whats-new-in-ibm-watso |
 | Newsletter técnica (jun/2026) | https://community.ibm.com/community/user/blogs/gustavo-villegas/2026/05/28/watsonx-orchestrate-news-a-touchpoint-june2026 |
 
