@@ -42,7 +42,7 @@ Neste laboratório, assim como no [Laboratório 1](./Step_by_Step_Lab1.md), vamo
 
 Guidelines dependem do agente seguir a orientação. Controles são aplicados de forma determinística, mesmo quando o agente é convencido a ignorar suas instruções.
 
-O cenário é o seguinte. Um usuário faz uma pergunta simples e, por trás dela, o agente aciona uma ferramenta externa de busca para responder. Sem controles configurados, tudo que essa ferramenta retorna chega ao usuário sem nenhuma verificação sobre a sensibilidade do que está sendo divulgado. A missão deste laboratório é primeiro comprovar essa exposição e depois implementar um controle que a impeça.
+Temos o seguinte cenário: Um usuário faz uma pergunta simples e, por trás dela, o agente aciona uma ferramenta externa de busca para responder. Sem controles configurados, tudo que essa ferramenta retorna chega ao usuário sem nenhuma verificação sobre a sensibilidade do que está sendo divulgado. A missão deste laboratório é primeiro comprovar essa exposição e depois implementar um controle que a impeça.
 
 ### Parte 1: Acessar o watsonx Orchestrate e configurar o agente
 
@@ -55,10 +55,9 @@ Utilize o agente **agente de buscas** para localizar as informações solicitada
 
 Em seguida apresente o resultado de forma clara, objetiva e completa, preservando os detalhes relevantes encontrados.
 ```
+Essa é a instrução que vamos colocar à prova na próxima parte. Ela diz ao Assistente de Compra de Veículos para sempre delegar a busca de informações ao agente especializado, sem qualquer ressalva sobre o tipo de dado que pode voltar dessa busca.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_01.png)
-
-É essa instrução que vamos colocar à prova na próxima parte. Ela diz ao Assistente de Compra de Veículos para sempre delegar a busca de informações ao agente especializado, sem qualquer ressalva sobre o tipo de dado que pode voltar dessa busca.
 
 ### Parte 2: Testando sem Asset Controls
 
@@ -96,23 +95,23 @@ Clique no menu hambúrguer, no canto superior esquerdo da tela.
 
 Clique em `Manage` para expandir a sessão.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_07.png)
-
 Em seguida, clique em `Controls`.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_08.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_07.png)
 
 Nesse momento o painel de controles está vazio, sem nenhum controle criado. Clique em `Create Control`.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_09.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_08.png)
 
 A tela Select Control lista os tipos de controle disponíveis, organizados por onde eles atuam.
 
 Em Agents, aplicados diretamente ao agente, estão o Content Guardrails, que detecta e bloqueia conteúdo sexual, violento, discurso de ódio, conteúdo nocivo, tentativas de jailbreak e viés social, o Output Length Guard, que limita o tamanho mínimo e máximo da saída em caracteres ou tokens, o Regex Pattern, que detecta conteúdo que corresponda a uma expressão regular fornecida pelo usuário e redige ou bloqueia, o Secrets Detector, que identifica credenciais e segredos em entradas e saídas, e o PII Filter, que detecta e mascara PII em argumentos, entradas e saídas do agente.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_10.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_09.png)
 
 Em Tools, aplicados às ferramentas utilizadas por agentes e workflows, estão o Content Guardrails e o Output Length Guard, com a mesma função da versão de agente mas atuando sobre o que a ferramenta processa, o Rate Limiter, que impõe limites de chamadas por tool ou tenant, e o SQLSanitizer, que detecta SQL de risco e pode remover comentários ou bloquear a execução.
+
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_10.png)
 
 Em Models, aplicados ao modelo de inteligência artificial generativa utilizado pelos agentes, estão o Fallback, que define política de fallback e tratamento de códigos de status, o Load Balance, que distribui chamadas entre múltiplos modelos com pesos configuráveis, e o Retry, que repete a chamada ao mesmo modelo até um número configurável de tentativas em códigos HTTP específicos.
 
