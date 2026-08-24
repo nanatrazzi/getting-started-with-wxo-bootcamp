@@ -1,9 +1,9 @@
 
-# Adicionando Agentes Externos com watsonx Orchestrate
+# Adicionando Agentes Externos e Orquestradores com watsonx Orchestrate 
 
 ## Índice
 
-- [Adicionando Agentes Externos com watsonx Orchestrate](#adicionando-agentes-externos-com-watsonx-orchestrate)
+- [Adicionando Agentes Externos e Orquestradores com watsonx Orchestrate](#adicionando-agentes-externos-e-orquestradores-com-watsonx-orchestrate)
   - [Índice](#índice)
   - [Visão Geral](#visão-geral)
     - [Parte 1: Conectar Agente de Busca Google de Terceiros](#parte-1-conectar-agente-de-busca-google-de-terceiros)
