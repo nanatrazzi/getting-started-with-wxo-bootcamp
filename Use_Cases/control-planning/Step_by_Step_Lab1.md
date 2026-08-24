@@ -82,11 +82,11 @@ Sistemas RAG (Retrieval-Augmented Generation) são particularmente vulneráveis 
 
 **1.** Faça login no IBM Cloud (cloud.ibm.com). Navegue até o menu hambúrguer no canto superior esquerdo, depois para **Resource List**. Abra a seção **AI/Machine Learning**. Você deve ver um serviço **watsonx Orchestrate**. Clique para abri-lo.
 
-![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/i1.png)
+![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_01.png)
 
 **2.** Clique no botão **Launch watsonx Orchestrate**:
 
-![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/i2.png)
+![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_02.png)
 
 <h3>Criar Agente de Pesquisa de Carros com Base de Conhecimento Envenenada.</h3>
 
@@ -94,7 +94,8 @@ Nesta seção, você criará um agente usando uma base de conhecimento **envenen
 
 Primeiro, vá para a página inicial do watsonx Orchestrate, clique no menu hambúrguer `(☰)`, selecione `Build`.
 
-![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/BAP_1.png)
+
+![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_03.png)
 
 ![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_monitoring_02.png)
 
