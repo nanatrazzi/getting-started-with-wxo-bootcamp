@@ -250,7 +250,7 @@ Após responder à solicitação principal do cliente, você pode fazer UMA perg
 Exemplos: "Você procura um veículo para uso urbano ou viagens?" ou "Seu interesse é em economia, desempenho ou espaço interno?"
 ```
 
-Ao salvar, você verá a confirmação **Instructions updated successfully**, e a seção **Guidelines**, logo abaixo, ainda vazia ("Start by creating guidelines").
+Ao salvar, você verá a confirmação **Instructions updated successfully**.
 
 ![Instructions salvas](../../Assets_for_BuildBooks/labs/lab01/lab01_26.png)
 
