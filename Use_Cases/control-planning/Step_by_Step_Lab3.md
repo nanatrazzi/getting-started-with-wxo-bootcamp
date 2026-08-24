@@ -1,6 +1,7 @@
 # Controles no watsonx Orchestrate
 
 ## Índice
+
 - [Controles no watsonx Orchestrate](#controles-no-watsonx-orchestrate)
   - [Índice](#índice)
   - [Visão Geral](#visão-geral)

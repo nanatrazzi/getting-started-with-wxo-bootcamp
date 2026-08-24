@@ -1,4 +1,3 @@
-
 # Adicionando Agentes Externos e Orquestradores com watsonx Orchestrate
 
 ## Índice
@@ -6,7 +5,8 @@
 1. [Visão Geral](#visão-geral)
 2. [Parte 1: Conectar Agente de Busca de Terceiros](#parte-1-conectar-agente-de-busca-de-terceiros)
 3. [Parte 2: Criar o Agente Orquestrador](#parte-2-criar-o-agente-orquestrador)
-4. [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
+4. [Resumo](#resumo)
+   - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
 5. [Próximos Passos](#próximos-passos)
 
 ## Visão Geral

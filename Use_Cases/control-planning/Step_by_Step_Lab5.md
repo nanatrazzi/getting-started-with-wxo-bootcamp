@@ -14,6 +14,8 @@ O monitoramento contínuo é essencial para garantir a eficiência dos agentes e
   - [Visão Geral](#visão-geral)
   - [Índice](#índice)
   - [Visualizar Resultados de Monitoramento](#visualizar-resultados-de-monitoramento)
+  - [Entendendo as Métricas](#entendendo-as-métricas)
+  - [Resumo](#resumo)
   - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Próximos Passos](#próximos-passos)
 
@@ -67,10 +69,27 @@ Clique na aba `Conversations` para mudar da visão agregada para a visão de con
 
 Selecione uma conversa na lista à esquerda para ver a troca de mensagens completa entre o usuário e o agente, com a opção de expandir o raciocínio de cada resposta. O painel Details, à direita, traz o identificador da conversa, o identificador do usuário, o horário de início e o total de feedbacks positivos e negativos recebidos naquela conversa específica.
 
+Note que devido a você ter poucas interações no seu agente e em apenas um dia, a maioria das métricas não deve estar disponível, assim como na imagem abaixo.
 
 Esses dois caminhos se complementam. O dashboard do Agentic Control Plane, com o assistente por linguagem natural, é o ponto de partida para perguntas amplas sobre o estado geral dos seus agentes. A página clássica de Analytics, com o detalhamento por conversa, é onde você investiga um caso específico até a mensagem exata que precisa ser entendida.
 
 ![Conversation analysis](../../Assets_for_BuildBooks/labs/lab05/lab05_11.png)
+
+## Entendendo as Métricas:
+
+Métricas de Feedback do Usuário:
+
+`Thumbs up`: Número de respostas de feedback positivo dos usuários indicando satisfação com a resposta do agente.
+
+`Thumbs down`: Número de respostas de feedback negativo dos usuários indicando insatisfação com a resposta do agente.
+
+`Not rated`: Número de interações onde os usuários não forneceram feedback.
+
+`Toxicity`: Pontuação indicando o nível de conteúdo tóxico, ofensivo ou inapropriado na resposta (0.00 = nenhuma toxicidade detectada).
+
+`Input PII`: Pontuação indicando se informações pessoalmente identificáveis foram detectadas na entrada do usuário (0.00 = nenhuma PII detectada).
+
+`Output PII`: Pontuação indicando se informações pessoalmente identificáveis foram detectadas na resposta do agente (0.00 = nenhuma PII detectada).
 
 ## Resumo
 

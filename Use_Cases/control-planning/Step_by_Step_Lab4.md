@@ -15,6 +15,7 @@ Essas habilidades são fundamentais para validar a qualidade das respostas, aume
   - [Índice](#índice)
   - [Passo 1](#passo-1)
     - [Revise os resultados da avaliação](#revise-os-resultados-da-avaliação)
+  - [Resumo](#resumo)
     - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Próximos Passos](#próximos-passos)
 
