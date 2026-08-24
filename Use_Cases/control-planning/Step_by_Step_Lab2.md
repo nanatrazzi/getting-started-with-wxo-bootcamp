@@ -176,7 +176,13 @@ A notificação **Agents updated** confirma a operação.
 
 Com o agente externo importado, o **Agente de Busca** ganhou um especialista à disposição. O watsonx Orchestrate passa a atuar como orquestrador: interpreta o pedido do usuário, identifica que a tarefa é de busca na web e delega ao Agente de Buscas, de forma transparente, mesmo esse agente tendo sido construído em outra plataforma.
 
-Vamos agora ensinar ao agente quando e como usar esse novo colaborador. Na aba **Behavior**, no campo **Instructions**, adicione as instruções abaixo. Elas fazem o agente validar, antes de qualquer busca, se o veículo mencionado pelo usuário pertence ao catálogo, mesmo diante de nomes incompletos, apelidos ou pequenos erros de digitação:
+Vamos agora ensinar ao agente quando e como usar esse novo colaborador.
+
+Clique na aba **Behavior**
+
+![Instruções de validação de veículo](../../Assets_for_BuildBooks/labs/lab02/lab02_23.png)
+
+No campo **Instructions**, adicione as instruções abaixo. Elas fazem o agente validar, antes de qualquer busca, se o veículo mencionado pelo usuário pertence ao catálogo, mesmo diante de nomes incompletos, apelidos ou pequenos erros de digitação:
 
 ```
 # VALIDAÇÃO DE VEÍCULO
@@ -215,7 +221,8 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
 "Desculpe, eu só posso fornecer informações sobre os seguintes veículos: Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro."
 ```
 
-![Instruções de validação de veículo](../../Assets_for_BuildBooks/labs/lab02/lab02_23.png)
+![Teste do agente com o Alfa Romeo Spider](../../Assets_for_BuildBooks/labs/lab02/lab02_24.png)
+
 
 Teste o agente no **Draft Preview**. Envie a pergunta:
 
@@ -224,8 +231,6 @@ pesquisa sobre o Alfa Romeo Spider
 ```
 
 O agente reconhece o veículo, delega a busca ao colaborador externo e devolve um resumo completo, com histórico do modelo, características técnicas e as diferentes gerações lançadas ao longo dos anos.
-
-![Teste do agente com o Alfa Romeo Spider](../../Assets_for_BuildBooks/labs/lab02/lab02_24.png)
 
 ![Resposta detalhada do Agente de Buscas](../../Assets_for_BuildBooks/labs/lab02/lab02_25.png)
 
@@ -374,13 +379,13 @@ Fluxo:
 - Para pesquisas externas, utilize exclusivamente o agente **Agente_Langflow_Buscas.**
 ```
 
-![Instruções de roteamento e teste de consulta híbrida](../../Assets_for_BuildBooks/labs/lab02/lab02_39.png)
-
 Teste com uma consulta híbrida, que combina uma pergunta de mercado com um pedido de comparação:
 
 ```
 Busque sobre o Kia Niro com o Hyundai Kona Electric e faça uma comparação
 ```
+
+![Instruções de roteamento e teste de consulta híbrida](../../Assets_for_BuildBooks/labs/lab02/lab02_39.png)
 
 O orquestrador reconhece que a pergunta pede tanto reviews de proprietários quanto uma análise comparativa, consulta os dois agentes especializados e devolve uma resposta única: características de cada modelo segundo avaliações de donos, seguidas de uma comparação direta entre eles.
 
@@ -435,6 +440,12 @@ Com o orquestrador testado nos dois cenários, catálogo isolado e consulta híb
 O deploy do seu agente está ativo. Quando solicitado, clique em **Activate agent monitoring** para acompanhar o uso do agente em produção.
 
 -----
+
+## 🎉 Parabéns!
+
+Você concluiu o Laboratório 2. Além de reforçar tudo o que já sabia sobre criação de agentes, você deu um passo importante: aprendeu a conectar um agente construído fora do watsonx Orchestrate por meio do protocolo A2A, e a montar um agente orquestrador capaz de decidir, sozinho, para qual especialista encaminhar cada pergunta, seja o catálogo interno, a busca externa, ou os dois ao mesmo tempo.
+
+Esse é o tipo de arquitetura multiagente que sustenta soluções reais de produção. Muito bem!
 
 ### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
 
