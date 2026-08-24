@@ -110,7 +110,7 @@ O **Draft Preview**, em especial, será sua ferramenta principal ao longo do lab
 
 A **Description** não é só documentação: o watsonx Orchestrate a utiliza para decidir quando acionar este agente em cenários multiagente, e o modelo escolhido é o "cérebro" que vai interpretar tanto as instruções quanto o conteúdo recuperado da base de conhecimento, inclusive o conteúdo envenenado.
 
-Após preencher as informações do agente, clique na aba **Knowledge*** 
+Após preencher as informações do agente, clique na aba **Knowledge**
 
 ![Agent profile](../../Assets_for_BuildBooks/labs/lab01/lab01_07.png)
 
@@ -120,7 +120,7 @@ Após preencher as informações do agente, clique na aba **Knowledge***
 
 ![Add Source](../../Assets_for_BuildBooks/labs/lab01/lab01_08.png)
 
-**9.** No modal **Add knowledge**, escolha **New knowledge** 
+**9.** No modal **Add knowledge**, escolha **New knowledge**
 
 ![New knowledge](../../Assets_for_BuildBooks/labs/lab01/lab01_09.png)
 
@@ -134,7 +134,7 @@ O watsonx Orchestrate oferece várias formas de conectar conhecimento: upload di
 
 Para este laboratório usamos **Upload files**, o cenário mais comum, e também o mais vulnerável, no dia a dia das empresas: alguém do time sobe um PDF, DOCX, PPTX ou CSV diretamente, sem passar por validação automatizada. Essa é exatamente a brecha que um ator malicioso explora.
 
-**11.** Confirme que **Upload files** está selecionado (aparece com a etiqueta **Selected**) e clique em **Next**.
+**11.** Confirme que **Upload files** está selecionado, e clique em **Next**.
 
 ![Upload files selecionado](../../Assets_for_BuildBooks/labs/lab01/lab01_12.png)
 
