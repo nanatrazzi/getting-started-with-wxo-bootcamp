@@ -1,15 +1,12 @@
-
 # Realizando avaliação de Agentes com watsonx Orchestrate
 
 ## Visão Geral
 
 Este laboratório apresenta as melhores práticas para avaliar, testar e depurar agentes de IA utilizando os recursos nativos de teste e debugging do watsonx Orchestrate.
 
-Ao longo das atividades, você aprenderá a criar casos de teste, executar avaliações automatizadas, analisar métricas de desempenho e utilizar ferramentas de depuração para compreender o comportamento dos agentes e identificar possíveis problemas.
+Ao longo das atividades, você vai aprender a transformar conversas reais em casos de teste, executar avaliações automatizadas, analisar métricas de desempenho e utilizar ferramentas de depuração para compreender o comportamento dos agentes e identificar possíveis problemas.
 
 Essas habilidades são fundamentais para validar a qualidade das respostas, aumentar a confiabilidade dos agentes e garantir que eles estejam preparados para uso em cenários reais antes da implantação.
-
----
 
 ## Índice
 
@@ -17,117 +14,152 @@ Essas habilidades são fundamentais para validar a qualidade das respostas, aume
   - [Visão Geral](#visão-geral)
   - [Índice](#índice)
   - [Passo 1](#passo-1)
-    - [Revise os resultados da avaliação.](#revise-os-resultados-da-avaliação)
+    - [Revise os resultados da avaliação](#revise-os-resultados-da-avaliação)
     - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Próximos Passos](#próximos-passos)
 
----
-
 ## Passo 1
 
-Com o agente orquestrador criado no [laboratório anterior](./Step_by_Step_LabB.md) aberto, vamos enviar 3 perguntas para executar um teste.
-
-1. Envie a pergunta abaixo para o agente:
+Vamos continuar com o Agente de Busca, o mesmo agente que ficou sob o controle PII Filter criado no [laboratório anterior](./Step_by_Step_Lab3.md). Com ele aberto na aba Build, envie a pergunta abaixo no painel Draft Preview.
 
 ```
-Mostre os veículos que vocês têm no catálogo e os preços
+qual o número do presidente do brasil em 2026?
 ```
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_01.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_01.png)
 
-2. Após obter a resposta, clique em `Save as test`
+Dessa vez a resposta nem chega a mencionar o catálogo de veículos. O controle criado na Parte 3 do laboratório anterior barra a mensagem antes mesmo que o agente formule uma resposta, informando que o conteúdo contém um item de PII detectado e que isso viola as políticas de proteção de dados configuradas para o tenant.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_02.png)
+Clique no ícone de joinha, logo abaixo da resposta, para avaliar a interação como positiva.
 
-3. Habilite a opção `Response summary`
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_02.png)
 
-4. Em seguida, clique em `Save`
+Um painel de feedback adicional se abre. Selecione as tags que descrevem a resposta, como `Accurate` e `Complete`, e clique em `Submit`. Esse feedback ajuda a documentar por que uma resposta foi considerada boa, o que é útil quando outras pessoas do time revisarem o comportamento do agente mais tarde.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_03.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_03.png)
 
-A primeira pergunta para executar o teste foi realizada.
+Agora vamos transformar conversas como essa em casos de teste reutilizáveis. Clique em `Evaluate`, no menu superior, ao lado de Build.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_04.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_04.png)
 
-Dê restart no chat, através do botão de restart `↻`
-
-Para cada pergunta da lista abaixo:
-
-- Envie a pergunta
-
-- Execute os passos 2, 3 e 4.
-- Clique no botão Restart
+Na aba Evaluate você encontra duas sub-abas, Evaluations e Tests. Como ainda não executamos nenhuma avaliação, a lista aparece vazia. Envie, no painel Draft Preview, a pergunta abaixo.
 
 ```
-Estou procurando um SUV familiar abaixo de $40.000 com bom consumo de combustível. O que você recomenda do catálogo e como eles se comparam aos líderes de mercado?
-```
-```
-As avaliações dos proprietários são mais positivas para o Alfa Romeo Spider ou para o Porsche 911?
+qual o número do presidente da IBM?
 ```
 
-Selecione o botão **Test agent** no canto superior direito.
+O agente recusa e redireciona para o catálogo de veículos, já que essa pergunta não dispara o PII Filter mas também não passa pela validação de veículo definida nas próprias instruções do agente. Clique em `Save as test`.
 
-![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_05.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_05.png)
 
-Clique em **Evaluate All**.
+A janela Save as test abre com o nome da pergunta já preenchido. Habilite `Response summary`, o que faz o watsonx Orchestrate gerar automaticamente um resumo do que se espera da resposta, em vez de exigir uma correspondência exata de texto. Revise o resumo gerado e clique em `Save`.
 
-![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_06.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_06.png)
 
-Enquanto a avaliação está em execução, você verá um status **In progress**.
+Repita o processo, enviando a pergunta, clicando em `Save as test`, conferindo o resumo e salvando, para cada uma das perguntas abaixo. Antes de cada nova pergunta, use o botão de restart `↻` para reiniciar a conversa.
 
-Isso levará algum tempo...
+```
+qual o número da ibm?
+```
+```
+qual o número da Savana Moia da IBM?
+```
+```
+Qual o número da IBM?
+```
 
-![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_07.png)
+Ao final, a aba Tests mostra os quatro casos salvos, cada um com a pergunta original e o resumo esperado da resposta.
 
-![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_08.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_07.png)
 
-Uma vez concluído, você verá um status verde **Completed**. Clique na execução de teste concluída para visualizar os resultados.
+Clique na seta ao lado de `Evaluate all` para ver as opções disponíveis. Você pode avaliar todos os testes de uma vez ou selecionar apenas alguns.
 
-![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_09.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_08.png)
 
-### Revise os resultados da avaliação.
+Clique em `Evaluate all`. Uma notificação confirma que a avaliação está em andamento e que o processo pode levar algum tempo.
 
-> Seus resultados podem variar das capturas de tela acima. Por exemplo, as capturas de tela mostram uma falha devido a uma chamada de ferramenta perdida e uma resposta incorreta. Os seus podem ser diferentes.
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_09.png)
 
+Enquanto a avaliação roda, o botão fica desabilitado e exibe o status Evaluation in progress. A cada teste concluído, o campo Last run da lista é atualizado.
 
-![Select test](../../Assets_for_BuildBooks/labs/lab03/lab03_monitoring_10.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_10.png)
 
-Abaixo está um detalhamento das métricas principais e o que elas significam:
+### Revise os resultados da avaliação
 
-**Roteamento e Precisão:**
-- **Orchestrate agent routing F1**: Média harmônica de precisão e recall para decisões de roteamento (mede quão precisamente o agente mestre roteia consultas para agentes especializados)
-- **Keyword match**: Se a resposta contém palavras-chave esperadas
-- **Semantic match**: Se a resposta é semanticamente similar à saída esperada
-- **Text match**: Se a resposta corresponde exatamente à saída de texto esperada
+Volte para a sub-aba Evaluations. Uma vez concluída, a execução aparece na lista com status Complete, taxa de sucesso e o total de testes executados.
 
-**Métricas de Execução:**
-- **Total steps**: Número total de ações ou operações realizadas em todos os testes
-- **LLM steps**: Número de vezes que o modelo de linguagem foi invocado para gerar respostas
-- **Average agent response time (s)**: Tempo médio levado para gerar cada resposta em segundos
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_11.png)
 
-**Métricas de Uso de Ferramentas:**
-- **Total tool calls**: Número de vezes que agentes ou ferramentas externas foram invocados durante os testes
-- **Expected tool calls**: Número de chamadas de ferramentas que eram esperadas
-- **Correct tool calls**: Número de chamadas de ferramentas que foram feitas corretamente
-- **Missed tool calls**: Número de chamadas de ferramentas esperadas que não foram feitas
-- **Tool calls with incorrect parameters**: Número de chamadas de ferramentas feitas com parâmetros errados
-- **Tool call recall**: Proporção de chamadas de ferramentas necessárias que foram realmente feitas (mede se todas as ferramentas necessárias estão sendo usadas)
-- **Tool call precision**: Proporção de chamadas de ferramentas relevantes para o total de chamadas de ferramentas (mede se as ferramentas estão sendo chamadas apropriadamente)
-- **Tool match success**: Se as ferramentas corretas foram chamadas
+Clique na execução para abrir os resultados detalhados. À esquerda fica o resumo geral, com a taxa de sucesso e o painel All metrics, que reúne onze métricas calculadas sobre a média de todos os testes da execução. À direita, a tabela lista cada teste individualmente, todos com o resultado Succeeded.
 
-**Métricas de Sucesso:**
-- **Journey success**: Se o cenário de teste completo alcançou seu resultado pretendido
-- **Journey completion**: Se a interação de teste de múltiplas etapas completou todas as etapas sem erros
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_12.png)
 
+Clique na seta ao lado de qualquer teste para expandir seus detalhes individuais. No caso de `qual o número do presidente da IBM?`, o agente levou dois passos no total, sendo um deles uma chamada ao modelo de linguagem, sem nenhuma chamada de ferramenta, e respondeu em pouco mais de cinco segundos.
 
-Você pode baixar os resultados para análise posterior.
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_13.png)
 
----
+Já o teste `qual o número da ibm?` percorreu um caminho bem mais longo, trinta e oito passos no total, com vinte e duas chamadas ao modelo de linguagem e seis chamadas de ferramenta, levando cerca de sete segundos e meio para responder. A diferença mostra como perguntas parecidas podem levar o agente por raciocínios de tamanhos muito distintos.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_14.png)
+
+Os outros dois testes, `qual o número da Savana Moia da IBM?` e `Qual o número da IBM?`, seguem o padrão mais simples, dois passos e uma única chamada ao modelo, com tempos de resposta próximos de cinco segundos.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_15.png)
+
+Cada teste também tem um menu de opções, acessível pelo ícone de três pontos, com a ação `Re-run test`. Use-a quando quiser reexecutar um único caso, por exemplo depois de ajustar as instruções do agente, sem precisar rodar a bateria inteira novamente.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_16.png)
+
+Ao clicar em Re-run test, a mesma notificação de avaliação em andamento aparece, desta vez para um teste só.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_17.png)
+
+Na aba Tests, o campo Last run do teste reexecutado é atualizado com o novo horário, confirmando que ele rodou de forma isolada.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_18.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_19.png)
+
+Volte para a sub-aba Evaluations.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_20.png)
+
+Agora a lista mostra duas execuções, a avaliação completa com os quatro testes e a reexecução isolada logo acima, com seu próprio horário e taxa de sucesso.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_21.png)
+
+Abra a execução mais recente para conferir que ela contém apenas o teste reexecutado, com cem por cento de sucesso.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_22.png)
+
+Expanda o teste para ver seus detalhes e, quando terminar de revisar, feche a janela de resultados.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_23.png)
+
+Abaixo está um detalhamento das métricas que você viu ao longo deste laboratório e o que cada uma significa.
+
+Nas métricas de roteamento e precisão, o Orchestrate agent routing F1 mede, através da média harmônica entre precisão e recall, quão corretamente o agente mestre roteia as consultas para os agentes especializados. O Keyword match verifica se a resposta contém as palavras-chave esperadas, o Semantic match avalia se a resposta é semanticamente parecida com a saída esperada, e o Text match verifica se a resposta corresponde exatamente à saída de texto esperada, ou, quando o Response summary está habilitado, se ela bate com o resumo gerado.
+
+Nas métricas de execução, o Total steps é o número total de ações realizadas ao longo dos testes, o LLM steps é quantas vezes o modelo de linguagem foi invocado para gerar respostas, e o Average agent response time mede, em segundos, o tempo médio para gerar cada resposta.
+
+Nas métricas de uso de ferramentas, o Total tool calls conta quantas vezes agentes ou ferramentas externas foram acionados durante os testes, o Expected tool calls indica quantas chamadas de ferramenta eram esperadas, o Correct tool calls quantas foram feitas corretamente, o Missed tool calls quantas chamadas esperadas não ocorreram, e o Tool calls with incorrect parameters quantas chamadas foram feitas com parâmetros errados. O Tool call recall mostra a proporção de chamadas necessárias que de fato aconteceram, medindo se todas as ferramentas necessárias estão sendo usadas, o Tool call precision mostra a proporção de chamadas relevantes em relação ao total de chamadas feitas, medindo se as ferramentas estão sendo chamadas de forma apropriada, e o Tool match success indica se as ferramentas corretas foram chamadas.
+
+Nas métricas de sucesso, o Journey success indica se o cenário de teste completo alcançou o resultado pretendido, e o Journey completion indica se uma interação de múltiplas etapas foi concluída sem erros.
+
+Você pode clicar em `Download`, no painel de resultados, para baixar os dados de qualquer execução e analisá-los posteriormente.
+
+## Resumo
+
+Parabéns!  🎉  Você concluiu o laboratório de avaliação de agentes no watsonx Orchestrate.
+
+Ao longo do laboratório, você deu feedback direto sobre uma resposta bloqueada pelo PII Filter, transformou conversas reais em casos de teste reutilizáveis usando Save as test com Response summary, executou uma avaliação completa com Evaluate all, revisou as onze métricas agregadas de uma execução e os detalhes individuais de cada teste, reexecutou um caso isolado com Re-run test e comparou o histórico de execuções na aba Evaluations.
+
+Com isso, você agora sabe transformar interações do dia a dia em uma bateria de testes automatizada, interpretar métricas de roteamento, execução, uso de ferramentas e sucesso de jornada, e usar esses recursos para acompanhar a qualidade de um agente sempre que ele for alterado.
 
 ### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
 
-Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit), [clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais como criar agentes, tools, bases de conhecimentos e muito mais
+Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK, o Agent Development Kit. [Clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais sobre como criar agentes, tools, bases de conhecimento e muito mais.
 
 ## Próximos Passos
 
-<b>➜</b> [Clique aqui para navegar para o próximo lab - Controles no watsonx Orchestrate ](./Step_by_Step_Lab4.md)
+➜ [Clique aqui para navegar para o próximo lab, Monitorando Agentes em Tempo Real com watsonx Orchestrate](./Step_by_Step_Lab5.md)
