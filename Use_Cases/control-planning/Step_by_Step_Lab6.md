@@ -1,496 +1,325 @@
 # Control Plane Lab do watsonx Orchestrate
 
+## Visão Geral
+
+Este laboratório apresenta o Agentic Control Plane do watsonx Orchestrate, um conjunto de painéis e ferramentas que reúne, em um só lugar, a visão de adoção, custos, qualidade, confiabilidade e segurança dos seus agentes.
+
+Ao longo das atividades, você vai navegar pelas diferentes abas do dashboard, aprender a depurar uma conversa específica usando o Debug, e criar um Controle de Content Guardrails para bloquear conteúdo impróprio nas interações de um agente.
+
+Conhecer essas ferramentas é essencial para operar agentes de IA com confiança, permitindo identificar rapidamente pontos de atenção, investigar comportamentos inesperados e aplicar salvaguardas antes que um agente seja exposto a usuários reais.
+
 ## Índice
 
 - [Control Plane Lab do watsonx Orchestrate](#control-plane-lab-do-watsonx-orchestrate)
-  - [Índice](#índice)
   - [Visão Geral](#visão-geral)
-  - [Explorando o Control Plane - High Level](#explorando-o-control-plane---high-level)
-    - [Dashboard](#dashboard)
-  - [Sessão: Needs Attention (Atenção necessária)](#sessão-needs-attention-atenção-necessária)
-  - [Sessão: Alertas operacionais](#sessão-alertas-operacionais)
-  - [Sessão: Agent Analytics](#sessão-agent-analytics)
-  - [Controles](#controles)
-    - [Observação](#observação)
-    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
+  - [Índice](#índice)
+  - [Explorando o Dashboard do Control Plane](#explorando-o-dashboard-do-control-plane)
+    - [Overview: visão geral do ambiente](#overview-visão-geral-do-ambiente)
+    - [Adoption: engajamento e uso dos agentes](#adoption-engajamento-e-uso-dos-agentes)
+    - [FinOps: consumo de tokens](#finops-consumo-de-tokens)
+    - [Quality: qualidade das respostas](#quality-qualidade-das-respostas)
+    - [Reliability: confiabilidade e desempenho](#reliability-confiabilidade-e-desempenho)
+    - [Security and Risk: controles de segurança](#security-and-risk-controles-de-segurança)
+  - [Depurando uma Conversa com o Debug](#depurando-uma-conversa-com-o-debug)
+    - [Avaliando o agente na aba Evaluate](#avaliando-o-agente-na-aba-evaluate)
+    - [Analisando conversas na aba Analyze](#analisando-conversas-na-aba-analyze)
+    - [Abrindo o Debug de uma conversa](#abrindo-o-debug-de-uma-conversa)
+  - [Criando um Controle de Content Guardrails](#criando-um-controle-de-content-guardrails)
+    - [Selecionando o tipo de controle](#selecionando-o-tipo-de-controle)
+    - [Configurando o controle](#configurando-o-controle)
+    - [Atribuindo o controle a um agente](#atribuindo-o-controle-a-um-agente)
+    - [Revisando e criando o controle](#revisando-e-criando-o-controle)
+  - [Testando o Controle Criado](#testando-o-controle-criado)
   - [Resumo](#resumo)
-  - [Próximos passos](#próximos-passos)
+    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
+  - [Próximos Passos](#próximos-passos)
 
+## Explorando o Dashboard do Control Plane
 
-## Visão Geral
+Ao acessar o ambiente da sua instância do watsonx Orchestrate, você chega diretamente ao dashboard do Agentic Control Plane, com uma saudação personalizada e um resumo de quantos agentes estão em produção (Live) e quantos usuários interagiram com eles nos últimos 30 dias.
 
-O **Control Plane** do **watsonx Orchestrate** oferece às empresas uma forma centralizada de gerenciar, observar e otimizar agents em diferentes equipes, ferramentas, modelos e runtimes sejam eles construídos no Orchestrate ou executados em outros ambientes.
+![Overview dashboard](../../Assets_for_BuildBooks/labs/lab06/lab06_01.png)
 
-Neste lab, vamos experimentar em primeira mão o **Agentic Control Plane** (ACP). Tenha em mente que os benefícios do ACP ficam mais evidentes quanto mais agentes e ferramentas você tiver construído e implementando, tanto no watsonx Orchestrate quanto externamente, e quanto mais você tiver interagido com eles para obter dados reais.
+Clique no ícone circular de IA, no canto inferior esquerdo, para abrir o assistente do painel de controle. Ele oferece sugestões prontas, como identificar pontos de atenção de performance, lacunas de cobertura de testes e investigar feedback negativo, além de um campo para perguntas livres em linguagem natural.
 
-Caso tenha seu próprio ambiente dedicado do watsonx Orchestrate, você poderá ver apenas alguns agents no dashboard do ACP. De qualquer forma, você poderá experimentar e aprender sobre os benefícios do Agentic Control Plane na prática! Vamos começar!
+![Assistente do dashboard](../../Assets_for_BuildBooks/labs/lab06/lab06_02.png)
+
+### Overview: visão geral do ambiente
+
+A aba **Overview**, selecionada por padrão, reúne seis cartões de resumo: Messages, Feedback, Deployment status, Evaluation status, Agents e Controls, cada um com a taxa de sucesso ou a distribuição relevante da última semana. À direita, o painel **Needs attention** já aponta o que precisa da sua atenção, agrupado por categoria — Evaluation, Adoption, Credentials, Execution e Quality — sem que você precise procurar manualmente.
+
+![Métricas da aba Overview](../../Assets_for_BuildBooks/labs/lab06/lab06_03.png)
+
+Role a página para baixo para ver as seções **Usage trends** e **Operational trends**, com gráficos de usuários ativos, agentes ativos, mensagens, uso de tokens, taxa de falha, conversas com erro e latência P50 ao longo dos últimos sete dias.
+
+![Usage e Operational trends](../../Assets_for_BuildBooks/labs/lab06/lab06_04.png)
+
+### Adoption: engajamento e uso dos agentes
+
+Volte ao topo da página e clique na aba **Adoption**.
+
+![Navegando para Adoption](../../Assets_for_BuildBooks/labs/lab06/lab06_05.png)
+
+A seção **Engagement depth** mostra a relação entre usuários, conversas e chamadas de modelo, como usuários por agente, conversas por usuário, mensagens por conversa e chamadas de LLM por conversa. Logo abaixo, a tabela **Agent analytics** detalha, por agente, o número de conversas, usuários únicos, duração média, tokens consumidos, chamadas de LLM, taxa de erro e latência P95.
+
+![Engagement depth e Agent analytics](../../Assets_for_BuildBooks/labs/lab06/lab06_06.png)
+
+A tabela também traz uma legenda de cores para interpretar rapidamente a taxa de erro e a latência de cada agente, além de paginação para instâncias com muitos agentes.
+
+![Legenda da tabela de agentes](../../Assets_for_BuildBooks/labs/lab06/lab06_07.png)
+
+Role a página para ver o gráfico **Adoption trends**, que compara conversas, usuários ativos e agentes ativos ao longo do tempo, e o painel **Model usage distribution**, que mostra quantos modelos estão em uso e quantos agentes utilizam cada um deles.
+
+![Adoption trends e Model usage distribution](../../Assets_for_BuildBooks/labs/lab06/lab06_08.png)
+
+### FinOps: consumo de tokens
+
+Volte ao topo e clique na aba **FinOps**.
+
+![Navegando para FinOps](../../Assets_for_BuildBooks/labs/lab06/lab06_09.png)
+
+O **Token summary** resume o total de tokens consumidos na semana, com a divisão entre tokens de entrada e saída e o número de chamadas de LLM. Logo abaixo, **Token usage** permite alternar a visão **By agent** ou **By model** e traz um gráfico de rosca com a distribuição percentual de tokens entre os agentes, complementado por uma tabela detalhada.
+
+![Token summary e Token usage](../../Assets_for_BuildBooks/labs/lab06/lab06_10.png)
+
+Role a página para ver **Token trends**, com pílulas de alternância para Total, Input e Output tokens ao longo dos últimos sete dias.
+
+![Token trends](../../Assets_for_BuildBooks/labs/lab06/lab06_11.png)
+
+### Quality: qualidade das respostas
+
+Volte ao topo e clique na aba **Quality**.
+
+![Navegando para Quality](../../Assets_for_BuildBooks/labs/lab06/lab06_12.png)
+
+A seção **Insights** mostra quantos agentes já possuem avaliações configuradas, o total de feedback de usuários (positivo e negativo) e as métricas de Helpfulness score e Hallucination score. A tabela **Agent feedback** detalha, por agente, o total de mensagens, mensagens com falha, feedback positivo e negativo, e a proporção de feedback positivo.
+
+![Insights e Agent feedback](../../Assets_for_BuildBooks/labs/lab06/lab06_13.png)
+
+Role a página para ver três painéis lado a lado — **Top agents by positive feedback**, **Top agents by negative feedback** e **Tool call success** — seguidos pelo gráfico **Feedback trends**, que permite alternar entre mensagens totais, bem-sucedidas, com falha, feedback positivo e negativo.
+
+![Rankings de feedback e Tool call success](../../Assets_for_BuildBooks/labs/lab06/lab06_14.png)
+
+### Reliability: confiabilidade e desempenho
+
+Volte ao topo e clique na aba **Reliability**.
+
+![Navegando para Reliability](../../Assets_for_BuildBooks/labs/lab06/lab06_15.png)
+
+A seção **Utilization** mostra, na janela de sete dias, quantos modelos estão ativos, a média de mensagens por conversa, mensagens por agente ativo e quantos agentes estão sob carga com falhas de trace. A tabela **Agent latency** detalha, por agente, mensagens, mensagens com falha, taxa de erro e as latências P50, P95 e P99.
+
+![Utilization e Agent latency](../../Assets_for_BuildBooks/labs/lab06/lab06_16.png)
+
+Role a página para ver **Deployment readiness** (total de chamadas de ferramenta, conversas com falha e latência P95), **Runtime inventory** (contagem de agentes, toolkits, tools e bases de conhecimento) e os gráficos **Latency trends** e **Failed messages over time**.
+
+![Deployment readiness, Runtime inventory e Latency trends](../../Assets_for_BuildBooks/labs/lab06/lab06_17.png)
+
+O painel **Runtime inventory** dá um retrato rápido de tudo o que está publicado na sua instância: agentes, toolkits, tools e bases de conhecimento.
+
+![Runtime inventory em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_18.png)
+
+Já o gráfico **Latency trends** permite alternar entre os percentis P50, P95 e P99 para identificar picos de latência ao longo da semana.
+
+![Latency trends em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_19.png)
+
+### Security and Risk: controles de segurança
+
+Volte ao topo e clique na aba **Security and Risk**.
+
+![Navegando para Security and Risk](../../Assets_for_BuildBooks/labs/lab06/lab06_20.png)
+
+Essa aba resume o painel **Controls summary**, com o total de controles configurados na instância e sua divisão entre Agent controls, Tool controls e Model controls, além da lista **Recent controls**. Como você ainda não criou nenhum controle, todos os contadores aparecem zerados — isso muda na última parte deste laboratório, quando você criar seu primeiro controle.
+
+![Security and Risk sem controles](../../Assets_for_BuildBooks/labs/lab06/lab06_21.png)
 
 > [!NOTE]
-> Nós estamos trabalhando em uma atualização deste laboratório para incluir scripts para os instrutores importarem agents e ferramentas, de forma que o dashboard contenha uma variedade de dados suficiente para executar este lab do Agentic Control Plane de forma independente.
-> O laboratório é vivo e será atualizado ao decorrer dos próximos dias...
+> Ao voltar para a aba Overview, um tour guiado pode aparecer sugerindo navegar pelas demais abas usando a seta `>` ao final da barra de abas. Sinta-se à vontade para explorar as abas adicionais por conta própria.
 
-## Explorando o Control Plane - High Level
+![Tour guiado no dashboard](../../Assets_for_BuildBooks/labs/lab06/lab06_22.png)
 
-### Dashboard
+## Depurando uma Conversa com o Debug
 
-Clique em **IBM watsonx Orchestrate** no canto superior esquerdo para ir à tela inicial/dashboard, caso ainda não esteja lá. 
+Agora que você já conhece o dashboard, vamos investigar uma conversa específica de um agente. Clique no ícone de menu hambúrguer, no canto superior esquerdo, para abrir a navegação lateral.
 
-O dashboard é a experiência inicial do Control Plane, o ponto de partida para gerenciar seu ecossistema de agents.
+![Abrindo o menu lateral](../../Assets_for_BuildBooks/labs/lab06/lab06_23.png)
 
-A partir daqui, podemos visualizar rapidamente métricas de desempenho e a saúde geral do ambiente de AI Agents.
+No menu, selecione **Build** para acessar a área de construção de agentes e ferramentas.
 
-![Tela inicial do Control Plane - dashboard de métricas e saúde do ambiente](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_01.png)
+![Menu lateral com Build em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_24.png)
 
-Na parte superior, podemos criar novos agents, explorar o catálogo de agents ou retomar trabalhos recentes.
+Na página **Build agents and tools**, clique no agente **Car Sales Assistant**.
 
-![Parte superior do dashboard - opções para criar agentes, explorar catálogo e trabalhos recentes](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_02.png)
+![Página Build agents and tools](../../Assets_for_BuildBooks/labs/lab06/lab06_25.png)
 
-A seção **Needs Attention** destaca problemas no ambiente de AI agents que podem exigir atenção:
+Na aba **Behavior** do agente, observe as instruções configuradas. Neste ambiente de laboratório, o agente foi propositalmente configurado com uma instrução inadequada sobre o modelo "Kia Nero", que usaremos mais adiante para testar o controle de conteúdo. Clique em **Evaluate**, no menu superior, para seguir para a próxima etapa.
 
-![Seção Needs Attention - problemas no ambiente que requerem atenção](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_03.png)
+![Aba Behavior do Car Sales Assistant](../../Assets_for_BuildBooks/labs/lab06/lab06_26.png)
 
-Aqui podemos monitorar alertas operacionais, incidentes e insights, como credenciais ausentes, pontos de sobrecarga de desempenho ou lacunas de avaliação, e navegar rapidamente para as ações necessárias para manter os agents saudáveis e confiáveis.
+### Avaliando o agente na aba Evaluate
 
-Na seção **Platform Analytics**, você pode inspecionar resumos de modelos e controles: total de modelos, modelos em uso e controles por asset.
+Na sub-aba **Evaluations**, como nenhuma avaliação foi executada ainda, a lista aparece vazia, com a opção de iniciar uma nova avaliação.
 
-![Seção Platform Analytics - resumo de modelos e controles por asset](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_04.png)
+![Aba Evaluate vazia](../../Assets_for_BuildBooks/labs/lab06/lab06_27.png)
 
-Você também pode visualizar todos os controles existentes para seus modelos, agents e ferramentas, além de adicionar novos controles. Veremos como adicionar controles no próximo e último lab.
+Clique na sub-aba **Tests**. Como nenhum teste foi salvo ainda, o watsonx Orchestrate sugere ter uma conversa com o agente e clicar em `Save as test` para criar o primeiro caso de teste.
 
-A seção **Agent Analytics** permite revisar agents ativos, mensagens, mensagens com falha e métricas de latência para identificar regressões ou picos recentes:
+![Sub-aba Tests vazia](../../Assets_for_BuildBooks/labs/lab06/lab06_28.png)
 
-![Seção Agent Analytics - agentes ativos, mensagens, falhas e métricas de latência](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_05.png)
+### Analisando conversas na aba Analyze
 
-Vamos voltar à seção **Needs Attention** para observar os diferentes tipos de alertas.
+Abra novamente o menu lateral e selecione **Analyze**.
 
-## Sessão: Needs Attention (Atenção necessária)
+![Menu lateral com Analyze em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_29.png)
 
-Vamos examinar os diferentes tipos de alertas disponíveis na seção **Needs Attention**: Operations, Incidents e Insights.
+A página **Analytics** mostra o total de conversas, usuários únicos e a duração média das conversas no período selecionado, o gráfico **Agent trend**, comparando o volume de conversas entre os agentes, e a tabela **User Feedback**, com a contagem de feedback positivo e negativo por agente.
 
-Primeiro, temos os alertas de _Operations_. São bloqueios operacionais com uma solução conhecida, como por exemplo credenciais de conexão ausentes:
+![Página Analytics](../../Assets_for_BuildBooks/labs/lab06/lab06_30.png)
 
-![Needs Attention - alertas de Operations com bloqueios operacionais conhecidos](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_06.png)
+Esses dados dão uma visão consolidada de como os agentes estão sendo usados e recebidos pelos usuários.
 
-Em seguida, temos os alertas de _Incidents_. São alertas de produção que requerem investigação. Selecione o tile de contagem de Incidents para filtrar a lista de alertas por itens de nível de incidente:
+![Visão consolidada da página Analytics](../../Assets_for_BuildBooks/labs/lab06/lab06_31.png)
 
-![Needs Attention - alertas de Incidents com taxa de falha do agente nas últimas 24h](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_07.png)
+Clique no nome **Car Sales Assistant**, na tabela de feedback, para abrir os detalhes desse agente.
 
-Observe como a lista de alertas mudou. Agora você pode ver que há um alerta indicando que um dos nossos AI agents teve uma taxa de falha de 9% nas últimas 24 horas.
+![Selecionando o Car Sales Assistant na tabela](../../Assets_for_BuildBooks/labs/lab06/lab06_32.png)
 
-Em seguida, temos os alertas de _Insights_. São recomendações para melhorar a qualidade e a prontidão dos agents. Clique em Insights agora para visualizá-los:
+Na aba **Overview** do agente, você encontra métricas mais específicas: contagem de tokens de entrada e saída, duração média de conversação, latência média por mensagem, o gráfico **Usage trend**, o donut de **User feedback** e o painel **Evaluation**, que inclui a métrica de toxicidade (ainda em Preview).
 
-![Needs Attention - alertas de Insights com recomendações para melhorar qualidade dos agentes](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_08.png)
+![Overview do agente Car Sales Assistant](../../Assets_for_BuildBooks/labs/lab06/lab06_33.png)
 
-<b>Os Insights ajudam a entender causas raiz e evidências relacionadas a agents e ferramentas com falhas.</b>
+Clique na aba **Conversations** para ver a lista de conversas individuais. Selecione uma conversa para acompanhar a troca de mensagens completa entre o usuário e o agente, junto com o painel **Details**, que traz o identificador da conversa, o identificador do usuário, o horário de início e o total de feedbacks recebidos.
 
-## Sessão: Alertas operacionais
+![Aba Conversations com uma conversa aberta](../../Assets_for_BuildBooks/labs/lab06/lab06_34.png)
 
-Vamos tentar abrir um dos alertas para ver o que acontece. 
+### Abrindo o Debug de uma conversa
 
-Como seu ambiente é novo, não possui muitos agentes e ainda não passou por muitos testes e interações, vamos continuar na aba `Insights`
+Abaixo de uma das respostas do agente, clique no ícone de engrenagem para abrir a ferramenta de depuração daquela etapa específica da conversa.
 
-Clique no link na coluna `Actions` para detalhar o problema:
+![Ícone de debug em uma resposta](../../Assets_for_BuildBooks/labs/lab06/lab06_35.png)
 
-![Alertas operacionais - link de ação na coluna Actions para detalhar o problema](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_09.png)
+A janela **Debug** se abre em tela cheia, dividida em duas áreas principais. À esquerda, o **Agent flow** exibe um diagrama com os nós percorridos durante a conversa — agentes, modelos de LLM, bases de conhecimento e respostas — conectados na ordem em que foram acionados. No topo, o **Trace ID** identifica de forma única aquela execução, com navegação entre execuções anteriores e seguintes pelos botões `Previous` e `Next`. Logo abaixo do diagrama, a **Execution timeline** lista, passo a passo, cada etapa da execução — entrada do usuário, raciocínio do agente, chamadas a colaboradores e a resposta final — com o tempo gasto em cada uma. Na parte inferior, o painel **Variables** alterna entre as abas `Summary`, `Input`, `Output` e `Node logs`, enquanto **Node properties** detalha as propriedades do nó selecionado.
 
-Observe que o Orchestrate enviou para a página utilizada no laboratório de `Realizando avaliação de Agente`
+![Visão geral anotada da janela Debug](../../Assets_for_BuildBooks/labs/lab06/lab06_36.png)
 
-<b>Não é necessária nenhuma ação, apenas se quiser realizar novos testes conforme visto no laboratório `Realizando avaliação de Agente`</b>
+Use os ícones de layout na barra de ferramentas, acima do diagrama, para alternar entre diferentes formas de visualizar o fluxo do agente.
 
-![Página de avaliação de agente aberta a partir do alerta operacional](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_10.png)
+![Alternando o layout do Agent flow](../../Assets_for_BuildBooks/labs/lab06/lab06_37.png)
 
-Retorne para página inicial do **Orchestrate**
+Um segundo ícone de layout apresenta o fluxo de forma mais linear e simplificada, facilitando o acompanhamento sequencial das etapas.
 
-## Sessão: Agent Analytics
+![Layout linear do Agent flow](../../Assets_for_BuildBooks/labs/lab06/lab06_38.png)
 
-Na seção **Agent Analytics**, podemos passar de insights no nível do ambiente para investigação específica por agent.
+![Layout linear do Agent flow confirmado](../../Assets_for_BuildBooks/labs/lab06/lab06_39.png)
 
-À esquerda, Assistente de IA (chat): esse assistente conversacional ajuda a interpretar os dados de monitoramento. Em vez de você ter que ler tabela por tabela, você pode simplesmente perguntar em linguagem natural. Ele já sugere três "atalhos" de análise:
+Clique na etapa **User input**, na Execution timeline, e depois na aba `Input` do painel Variables para ver os dados brutos enviados pelo usuário naquele passo — os campos Request e Message trazem o texto exato da pergunta.
 
--> Performance hotspots — quais agentes tiveram maior duração média de conversa ou maior volume de conversas nas últimas 24h.
+![Aba Input com os dados do usuário](../../Assets_for_BuildBooks/labs/lab06/lab06_40.png)
 
--> Coverage gaps — quais agentes ativos estão sem avaliações (evaluations) ou com cobertura de testes fraca.
+Clique na etapa **Agent** da Execution timeline e depois na aba `About`, dentro de **Node properties**, para ver os detalhes técnicos do agente responsável por aquele passo, como o nome interno, o nome de exibição e a descrição configurada.
 
--> Feedback investigation — listar os agentes com mais feedback negativo e detalhar esse feedback.
+![Aba About do Node properties](../../Assets_for_BuildBooks/labs/lab06/lab06_41.png)
 
-À direita no **Painel Agent analytics**  é o painel de métricas propriamente dito, onde você acompanha a saúde e o uso dos agentes.
+Clique na aba `LLM Model` para ver qual modelo de linguagem foi usado naquele passo, incluindo seu identificador, rótulo, descrição e o provedor responsável por hospedá-lo.
 
-Na faixa superior, temos visão do inventário de agentes:
+![Aba LLM Model do Node properties](../../Assets_for_BuildBooks/labs/lab06/lab06_42.png)
 
-Total agents: Total de agentes criados.
-Draft: 50% / Live: 50% — Proporção entre agentes em rascunho e agentes já publicados.
+## Criando um Controle de Content Guardrails
 
-Native agents: 4 / Imported agents: 0 / External agents: 2 — a origem dos agentes (criados nativamente, importados ou externos). 
+Com a janela de Debug ainda aberta, abra o menu lateral e, em **Manage**, selecione **Controls** para acessar a área de criação de controles.
 
-Depois, há a opção de filtrar por período (07/09/2026 a 07/15/2026) e o link `View agent analytics` que leva à página completa de análise.
+![Navegando para Manage > Controls](../../Assets_for_BuildBooks/labs/lab06/lab06_43.png)
 
-Por fim, uma tabela detalhada por agente, com busca (Search agents) e as colunas Name, Users, Conversations, Average conversation…, Evaluations, Last updated. No exemplo da imagem a seguir, temos apenas o agente `AskOrchestrate` aparece com 1 usuário, 2 conversas, 2s de duração média, 0 avaliações e última atualização em 9/jul/2026.
+Como nenhum controle foi criado ainda, a página **Controls** aparece vazia, com uma mensagem de boas-vindas explicando que os controles ajudam a impor regras sobre o comportamento de agentes, modelos e ferramentas MCP. Clique em `Create Control`.
 
-![Painel Agent Analytics - inventário de agentes com tabela de conversas e métricas por agente](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_11.png)
+![Página Controls vazia](../../Assets_for_BuildBooks/labs/lab06/lab06_44.png)
 
-Clique em **View agent analytics**
+### Selecionando o tipo de controle
 
-![Tela de Agent Analytics completa com filtros de período e gráfico de tendência por agente](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_12.png)
+A janela **Create Control** se abre com um assistente de quatro etapas: `Select Control`, `Configure Control`, `Assign Assets` e `Review`. Na primeira etapa, os controles disponíveis são organizados por tipo de ativo — **Agents** (Content Guardrails, Output Length Guard, Regex Pattern, Secrets Detector e PII Filter) e **Tools** (Content Guardrails, Output Length Guard, Rate Limiter, SQLSanitizer e Secrets Detector).
 
-Aqui o Orchestrate permite ter visão detalhada de como os agentes e workflows estão se comportando.
+![Etapa Select Control](../../Assets_for_BuildBooks/labs/lab06/lab06_45.png)
 
-Na linha de filtros, é possível controlar o que aparece no painel:
+Selecione **Content Guardrails**, na seção Agents. Essa opção aplica um serviço externo de detecção de conteúdo para identificar conteúdo sexual, violência, discurso de ódio, conteúdo prejudicial, tentativas de jailbreak e viés social. Clique em `Next`.
 
-<b>All agents:</b> Seletor para escolher se você quer ver todos os agentes ou um específico.
+![Content Guardrails selecionado](../../Assets_for_BuildBooks/labs/lab06/lab06_46.png)
 
-<b>Last 24 hrs:</b> O período analisado (aqui, últimas 24 horas). É por isso que a URL termina em timeRange=past-24-hours.
+### Configurando o controle
 
-O ícone de atualizar (recarregar os dados) à direita
+Na etapa **Configure Control**, dê um nome ao controle no campo `Control instance name`, como no exemplo abaixo. Em `Enforcement type`, marque `Input`, para que o controle analise as mensagens enviadas pelos usuários antes de chegarem ao agente.
 
-<h2> Métricas principais (cards do topo)</h2>
+```
+Controle_de_palavras_de_baixo_calão
+```
 
-Três indicadores-resumo do período:
+![Nome e tipo de enforcement do controle](../../Assets_for_BuildBooks/labs/lab06/lab06_47.png)
 
-<b>Total conversations:</b> Total de conversas realizadas.
+Role para baixo até a seção `Toggle detection for each content type`. Por padrão, todos os tipos de conteúdo — Sexual Content, Violence, HAP (Hate, Abuse and Profanity), Harm, Jailbreak e Social Bias — vêm desativados (`Off`).
 
-<b>Unique users:</b> Quantos usuários distintos interagiram.
+![Tipos de conteúdo desativados](../../Assets_for_BuildBooks/labs/lab06/lab06_48.png)
 
-<b>Avg conversation duration:</b> Duração média de cada conversa.
+Ative todos os toggles, deixando-os em `On`, e revise o campo `Block message`, que já vem preenchido com uma mensagem padrão explicando ao usuário por que o conteúdo foi bloqueado. Você pode personalizar esse texto como preferir, ou usar o texto sugerido abaixo. Clique em `Next`.
 
-<h2> Agent trend</h2>
+```
+Esse conteúdo não é apropriado para esta conversa. Peço que mantenhamos uma comunicação respeitosa e construtiva. Estou aqui para ajudar da melhor forma possível e fornecer suporte adequado às suas necessidades.
+```
 
-Temos gráfico de barras para comparação dos agentes entre si. No topo dele há dois seletores: Top 5 (mostra os 5 principais) e Conversations (a métrica usada para ordenar — poderia ser trocada por outra, como duração).
+![Todos os tipos de conteúdo ativados e Block message preenchido](../../Assets_for_BuildBooks/labs/lab06/lab06_49.png)
 
-Cada agente aparece com o número de conversas como na imagem a seguir.
+### Atribuindo o controle a um agente
 
-Os ícones no canto do gráfico permitem ver os dados em formato de tabela, expandir o gráfico e acessar mais opções.
+Na etapa **Assign Assets**, clique em `Add Agent` para escolher a quais agentes esse controle será aplicado.
 
-<h2>User Feedback</h2>
-Para acompanhar o feedback dos usuários para cada agente
+![Etapa Assign Assets](../../Assets_for_BuildBooks/labs/lab06/lab06_50.png)
 
-Agents — nome do agente (em azul, clicável para ver detalhes).
-Thumbs down 👎 — quantidade de avaliações negativas.
-Thumbs up 👍 — quantidade de avaliações positivas.
+Na janela **Add Agent**, marque a caixa de seleção ao lado de um agente criado por você — no exemplo, `Assistente de Compra de Veiculos` — e clique em `Select`.
 
-----
+![Selecionando o agente na janela Add Agent](../../Assets_for_BuildBooks/labs/lab06/lab06_51.png)
 
-Selecione o último agente criado por você
+O agente selecionado aparece na tabela, junto com sua descrição. Clique em `Next`.
 
-![Seleção de agente específico na tabela de Agent Analytics](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_13.png)
+![Agente atribuído ao controle](../../Assets_for_BuildBooks/labs/lab06/lab06_52.png)
 
-Ao selecionar um agent específico, você abrirá a visualização do agent builder e poderá inspecionar sua configuração. Ao fazer isso, você passa dos insights do Control Plane para o próprio agent. 
+### Revisando e criando o controle
 
-Essa é a página de análise de um agente específico, você chegou aqui clicando no nome do agente na tela de Analytics anterior. É o nível mais aprofundado do monitoramento.
+A etapa **Review** resume toda a configuração: o tipo de controle, o nome da instância, o tipo de ativo, o hook configurado (`Input`) e, logo abaixo, os detalhes de configuração com cada tipo de conteúdo habilitado. Revise as informações e clique em `Create control`.
 
-O _breadcrumb_ agora mostra três níveis: Home / Analytics / Assistente de Compra de Veículos , deixando claro o caminho percorrido até o detalhe do agente. 
+![Etapa Review](../../Assets_for_BuildBooks/labs/lab06/lab06_53.png)
 
-Logo em seguida há duas abas:
+Uma notificação confirma que o controle foi criado com sucesso. Na página **Asset Controls**, o total de controles e o número de agentes com controles passam a mostrar `1`, e o novo controle aparece listado, com a informação de que está aplicado a `1 agent`.
 
-- Overview (selecionada) — a visão geral com todas as métricas.
-- Conversations — Onde você pode inspecionar as conversas individuais desse agente.
+![Controle criado com sucesso](../../Assets_for_BuildBooks/labs/lab06/lab06_54.png)
 
-E, como nas telas anteriores, o filtro de período Last 24 hrs e o botão de atualizar continuam disponíveis.
+## Testando o Controle Criado
 
-**Métricas principais (cards do topo)**
-Aqui aparecem mais indicadores do que na tela geral, porque agora o foco é um único agente. São seis cards:
+Abra o menu lateral novamente e selecione **Build** para voltar à área de agentes.
 
-- Total conversations: Total de conversas desse agente.
-- Input token count: Quantidade de tokens recebidos (o que os usuários enviaram + o contexto processado). 
-- Output token count: Tokens gerados pelo agente nas respostas.
-- Unique users: Usuários distintos que interagiram.
-- Avg conversation duration: Duração média de cada conversa.
-- Avg message latency: Tempo médio que o agente leva para responder cada mensagem (indicador de velocidade/performance).
+![Menu lateral com Build em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_55.png)
 
-**Os tokens e a latência ajudam a avaliar eficiência e custo do agente, não só uso.**
+Na página **Build agents and tools**, clique no agente que você acabou de vincular ao controle.
 
-**Usage trend (gráfico à esquerda)**: Mostra a tendência de uso ao longo do tempo, medida em número de mensagens por dia. 
+![Selecionando o agente com o controle aplicado](../../Assets_for_BuildBooks/labs/lab06/lab06_56.png)
 
-**User feedback (painel central)**: Aqui aparece o feedback dos usuários em forma de gráfico, com a legenda Thumbs up (roxo) e Thumbs down (azul). 
+No painel **Preview**, à direita, envie uma mensagem com palavras de baixo calão para testar o controle. O agente não chega a processar o conteúdo ofensivo: a resposta é bloqueada antes mesmo de chegar ao modelo, e o agente retorna a mensagem de bloqueio configurada na etapa de configuração, pedindo que a comunicação seja mantida respeitosa e construtiva.
 
-**Evaluation (painel à direita)** Essa é uma funcionalidade serve para avaliar a qualidade das respostas do agente segundo critérios automáticos, como Toxicity (toxicidade), que verifica se o agente gerou conteúdo inadequado/ofensivo. 
-
-Como não temos dados suficientes nesse momento, aparece "No toxicity data available". Esse seletor normalmente permite escolher outras dimensões de avaliação além de toxicidade.
-
-![Aba Overview do agente selecionado - métricas de conversas, tokens, usuários, latência e feedback](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_14.png)
-
-Clique na aba `Conversations`
-
-![Aba Conversations do agente - lista de conversas individuais com transcrição e detalhes](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_15.png)
-
-Essa é a aba Conversations do mesmo agente, é o nível mais granular do monitoramento: Aqui você não vê mais números agregados, mas sim cada conversa individual, mensagem por mensagem.
-
-**Coluna da esquerda: Lista de conversas**
-
-É a lista de todas as conversas do agente no período. Cada item mostra um ID único da conversa (ex: 68b50f19-db4a-4555-a...) e há quando aconteceu ("4h ago"). A primeira está selecionada (destacada com a barra azul à esquerda). Clicando em qualquer uma delas, o conteúdo aparece na coluna central. É como uma _caixa de entrada de e-mails_ de todas as interações que os usuários tiveram com esse agente.
-
-**Coluna central: A transcrição da conversa**
-
-Aqui aparece o diálogo completo da conversa selecionada, no formato de chat. No topo indica o usuário que participou, e o histórico de mensagens.
-
-Essa é uma parte valiosa: você consegue ler exatamente o que o usuário perguntou e como o agente respondeu, verificando se a resposta foi correta, completa e bem formatada.
-
-**Coluna da direita: Detalhes**
-
-Um painel com os metadados da conversa selecionada:
-
-- Conversation ID: o identificador único completo.
-- User ID: Quem interagiu 
-- Started : Quando começou
-- User Feedback: Thumbs up: / Thumbs down: 0
-
-Clique no ícone da _joaninha_, como indicado na imagem abaixo:
-
-![Ícone de debug (joaninha) para acessar a tela de depuração da conversa](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_16.png)
-
-
-<b>Essa é a tela de Debug de um agente.</b>
-
-1.  São os diferentes componentes que podem aparecer no fluxo, cada um com seu próprio ícone:
-
--> User input: ponto de entrada, onde a mensagem do usuário chega.
-
--> Agent: O agente que orquestra as tarefas.
-
--> LLM: chamada a um modelo de linguagem.
-
--> Tool: Função externa que o agente pode acionar.
-
--> API: endpoint HTTP/REST.
-
--> Knowledge base — Busca por informação em uma base de conhecimento, seja feita no próprio Orchestrate como utilizando bancos vetoriais.
-
--> Workflow: Processo de várias etapas.
-  
--> Answer: Nó de resposta final.
-
-2. Para retornar para o node anterior 
-
-3. Para avançar para o próximo node
-
-4. ID único da conversa
-
-5. Executar novamente para recarregar/reexecutar o trace.
-
-5. Alternar a visualização do fluxo, mudando o layout do gráfico e realça o caminho que foi realmente percorrido na execução.
-
-6. Reorganiza o diagrama num layout de árvore horizontal (da esquerda para a direita), exibindo a hierarquia dos nós de forma mais limpa e alinhada. É uma forma alternativa de visualizar o mesmo fluxo.
-
-7. Mostra uma visão geral do nó selecionado, com os principais dados de forma resumida (por exemplo, o texto do input do usuário).
-
-8. Input: Mostra os dados de entrada que o nó recebeu, ou seja, o que chegou até ele para ser processado.
-
-9. Output: Mostra os dados de saída que o nó gerou, ou seja, o resultado do processamento.
-
-9. Logs (Node logs): Mostra os registros técnicos detalhados daquele nó, úteis para depurar e entender o que aconteceu internamente em cada passo.
-
-![Tela de Debug - fluxo de execução com nós User input, Agent, LLM, Tool, Knowledge base e Answer](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_17.png)
-
-Clique no ícone de alterar a visualização do fluxo, nomeado como 6 na imagem anterior.
-
-![Debug - visualização com caminho ativo destacado em azul mostrando o trajeto real da execução](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_18.png)
-
-Ao ativar esse ícone, o diagrama passa a realçar em azul apenas o caminho que a execução realmente percorreu, enquanto os nós e conexões que não foram usados ficam apagados.
-
-No exemplo vemos isso claramente: o caminho ativo, em azul forte, vai de: User input → Assistente de Compra → Agente de suporte, que então aciona o LLM (groq/openai/gpt-os...), a base de conhecimento (Catálogo de Carros) e o nó de Answer. Já o ramo do Agente de Busca e seus nós filhos aparecem quase transparentes, indicando que aquele caminho não foi seguido nesta execução.
-
-Essa visualização é útil para você enxergar rapidamente por onde a requisição passou de fato, sem se distrair com os nós que existem no fluxo mas não participaram daquela execução específica. Em vez de precisar analisar o diagrama inteiro, você foca apenas no trajeto real, o que ajuda muito na hora de investigar o comportamento do agente para fazer um _debug_ de um problema.
-
-Clique no ícone de reorganização, nomeado como item 7 na imagem explicativa da página
-
-![Debug - layout em árvore horizontal reorganizando o diagrama de execução da esquerda para a direita](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_19.png)
-
-Ao ativar esse ícone, o diagrama é reorganizado num layout de árvore horizontal, com os nós dispostos da esquerda para a direita em colunas bem alinhadas.
-
-Repare na diferença em relação às visualizações anteriores: aqui o fluxo aparece mais limpo e hierárquico, seguindo uma sequência clara:
-
-`User input → Assistente de Compra → Agente de suporte → LLM / Catálogo de Carros / Answer`
-
-Com os nós de cada nível organizados em uma mesma coluna vertical. O gráfico fica mais compacto e fácil de acompanhar.
-
-<b>O layout em árvore é especial quando o diagrama tem muitos nós, porque distribui os elementos de maneira mais ordenada e evita que as conexões fiquem confusas ou sobrepostas. Você escolhe o modo de visualização que ficar mais legível para o que quer analisar naquele momento.</b>
-
-![Debug - aba Input do nó User input exibindo a mensagem enviada pelo usuário](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_20.png)
-
-Ao clicar na aba `Input` (com o passo User input selecionado na imagem abaixo), o painel abaixo passa a mostrar os dados de entrada que aquele nó recebeu.
-
-Em vez do resumo, aparecem os campos Request e Message, ambos com o texto "Mostre os veículos que vocês têm no catálogo e os preços", ou seja, exatamente o que chegou até o nó para ser processado.
-
-
-![Debug - nó Agent expandido mostrando sub-passos de raciocínio, colaboração, processamento e resposta](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21.png)
-
-Quando o passo `Agent` é clicado, ele se expande e revela os sub-passos internos que o agente executou: 
-
-- Agent reasoning (raciocínio)
-- Collaborator: Agente de suporte ao revendedor (a chamada ao colaborador)
--  Agent processing (processamento) 
--  Answer (preparando a resposta), cada um com seu tempo de execução. Assim você vê a sequência real de ações do agente.
-
-E ao clicar na aba `LLM Model` (em Node properties), o painel mostra qual modelo de linguagem está por trás desse agente.
-
-![Debug - aba LLM Model em Node properties exibindo o modelo de linguagem utilizado pelo agente](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21-b.png)
-
-Com o passo Agent ainda selecionado, ao clicar em `About` (em Node properties), o painel mostra os dados de identificação do agente:
-
-- Name: Nome técnico interno do agente
--  Display name: Nome do agente  
--  Description: Explicação sobre o agente definida ou atualizada na hora de seu desenvolvimento
-
-Clique no ícone de `X` da interface do Orchestrate para retornar à página inicial
-
-![Debug - aba About em Node properties com nome, display name e descrição do agente](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21-c.png)
-
-Navegue até a seção de `Platform analytics`
-
-Na seção `Control`, clique em `View all`
-
-![Seção Platform Analytics - Controls com opção View all na área de controles](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_22.png)
-
-## Controles 
-
-Essa é a página de Controls (controles) do Orchestrate. Os controles servem para definir e governar o comportamento dos seus ativos de IA Agêntica.
-
-Você pode aplicá-los no nível de ativo (para agentes, modelos e ferramentas MCP) ou no nível empresarial (afetando toda a instância, através de políticas, guardrails e comportamentos da plataforma)
-
-----
-
-### Observação
-
-> A criação de controles já foi abordada no [Laboratório 4](./Step_by_Step_Lab4.md). No entanto, neste laboratório exploraremos um tipo diferente de controle que, por também fazer parte dos recursos de **Control Planning** do watsonx Orchestrate, merece uma abordagem mais detalhada.
-
-Há duas abas:
-
--  Asset Controls (selecionada — controles por ativo)
--  Enterprise Controls (controles empresariais)
-
-O Orchestrate permite também visualizar as informações abaixo:
-
-- Total number of controls: Número total de controles criados na instância.
-
-- Agents with Controls: Quantos agentes têm algum controle aplicado a eles.
-
-- Models with Controls: Quantos modelos têm algum controle aplicado.
-
-- MCP Tools with Controls: Quantas tools(ferramentas) MCP têm algum controle aplicado.
-
-
-Se sua interface existir um controle é completamente normal, no exemplo abaixo não há. No entanto isso não interfere em nada nos fins de aprendizado deste laboratório.
-
-Clique no botão `Create Control`
-
-![Página de Controls - Asset Controls e Enterprise Controls sem nenhum controle criado ainda](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_23.png)
-
-Nessa janela _pop-up_ vamos criar um controle. Temos diversos tipos de controles disponíveis para aplicar tanto em agentes, tools e modelos.
-
-![Pop-up de criação de controle - tipos disponíveis para agentes, tools e modelos](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_24.png)
-
-1. Selecione `Content Guardrails` para testar uma das opções disponíveis.
-
-2. Em seguida, clique em `Next`
-
-![Seleção de Content Guardrails como tipo de controle e clique em Next](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_25.png)
-
-1. Dê um nome ao controle. Digite um nome que identifique o controle. No exemplo foi usado Controle_de_palavras_de_baixo_calão.
-
-2. (Opcional) Adicione uma descrição. No campo Control instance description, você pode escrever uma breve explicação do que esse controle faz. É opcional, então pode deixar em branco.
-
-3. Escolha o tipo de aplicação (Enforcement type). Marque onde o controle deve atuar (campo obrigatório, indicado pela segunda seta vermelha):
-
-![Configure Control - nome, descrição e Enforcement type do controle Content Guardrails](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_26.png)
-
-Ainda na etapa Configure Control, ao rolar a tela para baixo você encontra a seção "Toggle detection for each content type" (ativar detecção para cada tipo de conteúdo).
-
-Aqui aparecem os tipos de conteúdo que o controle Content Guardrails pode detectar, cada um com um botão de alternância (toggle):
-
-- Sexual Content (conteúdo sexual)
-- Violence (violência)
-- HAP (conteúdo de ódio, abuso e palavrões — Hate, Abuse and Profanity)
-- Harm (conteúdo nocivo)
-- Jailbreak (tentativas de burlar as regras do modelo)
-- Social Bias (viés social/preconceito)
-
-![Configure Control - toggles de detecção por tipo de conteúdo: sexual, violência, HAP, harm, jailbreak e viés social](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_27.png)
-
-1. Ative os tipos de conteúdo.
-
-2. Block message, você digita o texto que o usuário verá quando o conteúdo dele for bloqueado pelo controle. 
-
-No exemplo foi escrito: `Esse conteúdo não é apropriado para esta conversa. Peço que mantenhamos uma comunicação respeitosa e construtiva. Estou aqui para ajudar da melhor forma possível e fornecer suporte adequado às suas necessidades`
-
-Utilize a mesma mensagem copiando e colando no campo, ou escreva uma de sua preferência.
-
-3. Clique em `Next`
-
-![Configure Control - tipos de conteúdo ativados e mensagem de bloqueio personalizada definida](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_28.png)
-
-
-Clique em `Add agent` para criar o guardrail em um agente
-
-![Assign asset - clique em Add agent para vincular o controle a um agente](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_29.png)
-
-1. Selecione um agente criado por você, como por exemplo, o agente orquestrador que foi criado no último laboratório de criação de agentes
-
-2. Clique em `Select`
-
-![Janela Add agent - seleção do agente orquestrador para aplicar o controle](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_30.png)
-
-Clique em `Next`
-
-![Assign asset - confirmação dos agentes selecionados antes de prosseguir](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_31.png)
-
-Você chegou à última etapa. Aqui o objetivo é conferir toda a configuração antes de criar o controle.
-
-Revise tudo que foi criado e em seguida, clique em `Create control`
-
-![Review - resumo completo da configuração do controle antes de criar](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_32.png)
-
-
-De volta à página de Controle, note a notificação verde "Control created successfully" (controle criado com sucesso), confirmando que deu tudo certo.
-
-Repare que agora os cards de resumo no topo foram atualizados com a nova criação do controle.
-
-![Página de Controls com notificação de controle criado com sucesso e cards de resumo atualizados](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_33.png)
-
-Clique na aba **Enterprise Controls**
-
-Há também uma série de enterprise controls disponíveis. Não entraremos em detalhes sobre eles neste lab, mas você pode dar uma rápida olhada para ver o que está disponível!
-
-Primeiro, clique em **Enterprise Controls** e revise os diferentes tipos de enterprise controls disponíveis:
-
-**Data retention** O controle de data retention permite gerenciar a retenção de dados, especificando por quanto tempo o histórico de chats dos usuários neste tenant do wxO deve ser mantido (o padrão é 30 dias), após o qual será automaticamente excluído. Observe que todo o histórico de chats será excluído após 365 dias.
-
-**Network** Você pode definir o acesso à rede especificando quais endereços IP podem acessar seu sistema (restrições de rede de entrada) e quais destinos externos seu sistema pode se conectar (restrições de rede de saída).
-
-**Analytics** Este enterprise control ajuda a gerenciar como o analytics é coletado e exibido para seu tenant em dashboards, logs ou relatórios. Essas configurações ajudam a controlar quais informações são capturadas para que sua equipe possa obter insights úteis enquanto permanece alinhada às suas necessidades de privacidade e tratamento de dados. Você pode habilitar _Enable PII Masking_ para proteger dados potencialmente sensíveis, mascarando informações de identificação pessoal (PII) comuns nos metadados de trace. Quando o mascaramento está habilitado, inputs dos usuários e outputs dos agents permanecem visíveis, enquanto atributos sensíveis detectados — como e-mails e números de telefone — são mascarados antes de aparecer em dashboards, logs ou relatórios.
-
-Retorne à aba `Asset control`
-
-Clique no ícone de hambúrguer ao lado esquerdo da tela, escolha `Build`
-
-![Menu hambúrguer com opção Build selecionada para acessar o agente](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_34.png)
-
-Escolha o agente que teve o controle aplicado
-
-![Lista de agentes no Build - seleção do agente com o controle aplicado](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_35.png)
-
-
-Envie uma pergunta extremamente ofensiva e de baixo calão para ver o guardrail recém-criado operando no agente.
-
-![Preview do agente - guardrail de Content Guardrails bloqueando mensagem ofensiva](../../Assets_for_BuildBooks/labs/lab06/lab06_monitoring_36.png)
-
-### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
-
-Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit), [clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais como criar agentes, tools, bases de conhecimentos e muito mais
+![Controle bloqueando conteúdo impróprio](../../Assets_for_BuildBooks/labs/lab06/lab06_57.png)
 
 ## Resumo
 
-Controlar agents de IA empresariais exige mais do que um único dashboard. Requer visibilidade, governança, observabilidade, depuração, analytics e investigação assistida por IA em todo o ambiente de agents.
+Parabéns! 🎉 Você concluiu o Control Plane Lab do watsonx Orchestrate.
 
-Com o Control Plane, as equipes podem passar de sinais dispersos para um controle centralizado, ajudando as empresas a gerenciar agents com maior confiança, clareza e segurança em escala.
+Ao longo deste laboratório, você navegou pelas seis abas do dashboard do Agentic Control Plane — Overview, Adoption, FinOps, Quality, Reliability e Security and Risk —, entendendo como cada uma resume um aspecto diferente da operação dos seus agentes: uso geral, engajamento, custo de tokens, qualidade das respostas, confiabilidade e segurança. Em seguida, você usou a ferramenta Debug para investigar, passo a passo, o fluxo de execução de uma conversa real, inspecionando o agente, o modelo de linguagem utilizado e os dados de entrada e saída de cada etapa. Por fim, você criou um Controle de Content Guardrails, configurou os tipos de conteúdo a serem bloqueados, atribuiu o controle a um agente e testou seu funcionamento na prática.
 
-**Parabéns por concluir o lab do Agentic Control Plane!**
+Com isso, você agora sabe onde encontrar as principais métricas de adoção, custo, qualidade, confiabilidade e segurança dos seus agentes, como depurar uma conversa até o nível de cada chamada de modelo, e como aplicar controles de segurança para proteger seus agentes contra conteúdo impróprio antes que ele chegue aos usuários.
 
----
+### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
 
-## Próximos passos
+Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK, o Agent Development Kit. [Clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais sobre como criar agentes, tools, bases de conhecimento e muito mais.
 
-Coletânea de links oficiais, documentação, tutoriais e novidades da IBM watsonx Orchestrate e do Agent Development Kit (ADK).
+## Próximos Passos
 
-> Última atualização da coletânea: 15/07/2026.
+Este é o último laboratório desta série. Abaixo está uma coletânea de links oficiais, documentação, tutoriais e novidades da IBM watsonx Orchestrate e do Agent Development Kit (ADK) para você continuar se aprofundando.
+
+> Última atualização da coletânea: 24/08/2026.
 
 | Recurso | Link |
 |---|---|
@@ -500,7 +329,6 @@ Coletânea de links oficiais, documentação, tutoriais e novidades da IBM watso
 | Comandos CLI úteis | https://developer.watson-orchestrate.ibm.com/getting_started/cli |
 | Exemplos | https://developer.watson-orchestrate.ibm.com/getting_started/examples |
 | Índice completo da doc (`llms.txt`) | https://developer.watson-orchestrate.ibm.com/llms.txt |
-
 
 ---
 
@@ -624,7 +452,7 @@ Coletânea de links oficiais, documentação, tutoriais e novidades da IBM watso
 
 ---
 
-<b> Knowledge Bases, Conexões e Canais</b>
+<b>Knowledge Bases, Conexões e Canais</b>
 
 | Tópico | Link |
 |---|---|
@@ -660,7 +488,7 @@ Coletânea de links oficiais, documentação, tutoriais e novidades da IBM watso
 
 ---
 
-<b>Documentação oficial do produto </b>
+<b>Documentação oficial do produto</b>
 
 | Recurso | Link |
 |---|---|
@@ -682,5 +510,3 @@ Coletânea de links oficiais, documentação, tutoriais e novidades da IBM watso
 | Newsletter técnica (jun/2026) | https://community.ibm.com/community/user/blogs/gustavo-villegas/2026/05/28/watsonx-orchestrate-news-a-touchpoint-june2026 |
 
 > Dica: consulte sempre a página **What's new** para ver a versão mais recente, já que a ADK é atualizada com frequência.
-
----
