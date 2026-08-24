@@ -441,9 +441,10 @@ O deploy do seu agente está ativo. Quando solicitado, clique em **Activate agen
 
 -----
 
-## 🎉 Parabéns!
+## Resumo
 
-Você concluiu o Laboratório 2. Além de reforçar tudo o que já sabia sobre criação de agentes, você deu um passo importante: aprendeu a conectar um agente construído fora do watsonx Orchestrate por meio do protocolo A2A, e a montar um agente orquestrador capaz de decidir, sozinho, para qual especialista encaminhar cada pergunta, seja o catálogo interno, a busca externa, ou os dois ao mesmo tempo.
+ Parabéns! 🎉 
+ Você concluiu o Laboratório 2. Além de reforçar tudo o que já sabia sobre criação de agentes, você deu um passo importante: aprendeu a conectar um agente construído fora do watsonx Orchestrate por meio do protocolo A2A, e a montar um agente orquestrador capaz de decidir, sozinho, para qual especialista encaminhar cada pergunta, seja o catálogo interno, a busca externa, ou os dois ao mesmo tempo.
 
 Esse é o tipo de arquitetura multiagente que sustenta soluções reais de produção. Muito bem!
 
