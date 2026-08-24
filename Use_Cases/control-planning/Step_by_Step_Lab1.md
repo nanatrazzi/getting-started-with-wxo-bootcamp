@@ -94,14 +94,13 @@ Nesta seção, você criará um agente usando uma base de conhecimento **envenen
 
 Primeiro, vá para a página inicial do watsonx Orchestrate, clique no menu hambúrguer `(☰)`, selecione `Build`.
 
-
 ![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_03.png)
-
-![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_monitoring_02.png)
 
 Clique no botão `Create agent`.
 
-![Create from scratch](../../Assets_for_BuildBooks/labs/lab01/lab01_monitoring_03.png)
+![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_04.png)
+
+[[[A PARTIR DAQUI ATUALIZAR]]]
 
 Clique no botão `Create from scratch`
 
