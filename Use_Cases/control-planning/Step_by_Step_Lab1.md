@@ -137,15 +137,13 @@ A **Description** não é só documentação: o watsonx Orchestrate a utiliza pa
 
 ![New knowledge](../../Assets_for_BuildBooks/labs/lab01/lab01_09.png)
 
-**10.** Na tela **Choose knowledge source**, selecione **Upload files**.
-
-![Choose knowledge source](../../Assets_for_BuildBooks/labs/lab01/lab01_10.png)
-
-O watsonx Orchestrate oferece várias formas de conectar conhecimento: upload direto de arquivos, conectores como Google Drive, Box e SharePoint (em breve) e fontes externas de vetores como Milvus, Elasticsearch, Astra DB e OpenSearch, visíveis ao rolar a tela:
+Note que, o **watsonx Orchestrate** oferece várias formas de conectar conhecimento: upload direto de arquivos, conectores como Google Drive, Box e SharePoint (em breve) e conexões com bancos vetoriais como **Milvus, Elasticsearch, Astra DB** e **OpenSearch**, visíveis ao rolar a tela:
 
 ![Fontes de conhecimento disponíveis](../../Assets_for_BuildBooks/labs/lab01/lab01_11.png)
 
-Para este laboratório usamos **Upload files**, o cenário mais comum, e também o mais vulnerável, no dia a dia das empresas: alguém do time sobe um PDF, DOCX, PPTX ou CSV diretamente, sem passar por validação automatizada. Essa é exatamente a brecha que um ator malicioso explora.
+**10.** Na tela **Choose knowledge source**, selecione **Upload files**.
+
+![Choose knowledge source](../../Assets_for_BuildBooks/labs/lab01/lab01_10.png)
 
 **11.** Confirme que **Upload files** está selecionado, e clique em **Next**.
 
