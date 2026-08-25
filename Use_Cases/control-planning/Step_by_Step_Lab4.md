@@ -168,7 +168,23 @@ Também é possível observar o impacto da complexidade no desempenho. Enquanto 
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_14.png)
 
-Os outros dois testes, `qual o número da Savana Moia da IBM?` e `Qual o número da IBM?`, seguem o padrão mais simples, dois passos e uma única chamada ao modelo, com tempos de resposta próximos de cinco segundos.
+Ao analisar os testes individualmente, é possível perceber que perguntas aparentemente semelhantes podem gerar comportamentos muito diferentes no agente.
+
+O caso **"qual o número da ibm?"** foi o mais complexo. Apesar de ter sido aprovado, o agente precisou executar **38 etapas**, realizar **22 chamadas ao modelo de linguagem** e acionar **6 ferramentas** antes de chegar à resposta. Esse comportamento sugere que a pergunta exigiu múltiplas verificações, pesquisas ou decisões de roteamento ao longo do fluxo.
+
+Em contraste, o teste **"qual o número da Savana Moia da IBM?"** foi resolvido de forma muito mais direta. O agente executou apenas **2 etapas**, realizou **1 chamada ao modelo de linguagem** e não utilizou nenhuma ferramenta externa. Isso indica um fluxo simples, com baixa complexidade operacional.
+
+Apesar da diferença significativa de processamento, ambos os testes apresentaram os mesmos indicadores de qualidade:
+
+- **Succeeded**: o teste foi aprovado.
+- **Orchestrate agent routing F1 = 1**: o roteamento ocorreu corretamente.
+- **Text match = Summary Matched**: a resposta gerada correspondeu ao resultado esperado.
+- **Journey success = Yes**: a jornada foi concluída com sucesso.
+- **Journey completion = 1**: a execução atingiu 100% de conclusão.
+
+A diferença também aparece no tempo de resposta. O teste mais simples levou aproximadamente **5,2 segundos**, enquanto o teste que envolveu múltiplas etapas e ferramentas levou cerca de **7,4 segundos**.
+
+Esse tipo de análise é útil para identificar oportunidades de otimização. Quando um teste apresenta um número muito elevado de etapas, chamadas ao modelo ou uso excessivo de ferramentas, pode ser um indicativo de que o agente está seguindo um caminho mais complexo do que o necessário para resolver a solicitação.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_15.png)
 
