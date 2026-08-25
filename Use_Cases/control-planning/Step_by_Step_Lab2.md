@@ -182,11 +182,11 @@ Revise se o **Authentication type** ficou como `API Key` e o **Credential type**
 
 ![Live environment preenchido após colar o draft](../../Assets_for_BuildBooks/labs/lab02/lab02_18.png)
 
-**24.** Confirme **Team credentials** e a API Key preenchida, e clique em **Finish**.
+**24.** Confirme **Team credentials** e a API Key preenchida
 
 ![Team credentials confirmado no live](../../Assets_for_BuildBooks/labs/lab02/lab02_19.png)
 
-A tela mostra **Saving...** por alguns segundos enquanto o Orchestrate grava a conexão nos dois ambientes.
+E clique em **Finish**
 
 ![Salvando a conexão](../../Assets_for_BuildBooks/labs/lab02/lab02_20.png)
 
