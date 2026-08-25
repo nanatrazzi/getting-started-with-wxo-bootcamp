@@ -91,7 +91,7 @@ Volte para a sub-aba Evaluations. Uma vez concluída, a execução aparece na li
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_11.png)
 
-Clique na execução para abrir os resultados detalhados. À esquerda fica o resumo geral, com a taxa de sucesso e o painel All metrics, que reúne onze métricas calculadas sobre a média de todos os testes da execução. À direita, a tabela lista cada teste individualmente, todos com o resultado Succeeded.
+Clique na execução para abrir os resultados detalhados. 
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_12.png)
 
