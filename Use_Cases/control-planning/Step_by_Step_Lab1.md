@@ -23,15 +23,25 @@
 
 ## Visão Geral
 
-Este laboratório prático ensina como proteger agentes de IA contra **ataques de data poisoning** usando diretrizes (*guidelines*) no watsonx Orchestrate. Você vai construir, do zero, um agente conectado a uma base de conhecimento propositalmente envenenada, comprovar na prática que ele cai no ataque, e só depois aplicar a correção, para entender não apenas *como* proteger o agente, mas *por que* cada etapa é necessária.
+Este laboratório prático mostra como proteger agentes de Inteligência Artificial contra ataques de **data poisoning** por meio de diretrizes (guidelines) no **watsonx Orchestrate.** Ao longo dessa atividade, você criará um agente do zero, conectado a uma base de conhecimento propositalmente comprometida. Primeiro, verá na prática como o agente pode ser induzido a fornecer respostas incorretas quando confia em dados manipulados. Em seguida, aplicará mecanismos de proteção para corrigir o problema.
 
-**Data Poisoning** é um tipo de ataque adversarial onde um adversário ou insider malicioso injeta intencionalmente amostras corrompidas, falsas, enganosas ou incorretas em datasets de treinamento, fine-tuning ou RAG.
+O objetivo é entender não apenas como proteger um agente contra esse tipo de ataque, mas também por que cada medida de segurança é necessária.
 
-**Objetivos de Aprendizado**: ao final deste laboratório, você vai entender o que é data poisoning e como ele afeta sistemas RAG, identificar sinais de dados envenenados em bases de conhecimento, criar e aplicar diretrizes para proteger contra data poisoning, testar e verificar mecanismos de proteção, e implementar melhores práticas para higiene de dados.
+> Data Poisoning é uma técnica de ataque em que um agente mal-intencionado, ou até mesmo um usuário com acesso interno, insere informações falsas, enganosas ou incorretas em conjuntos de dados utilizados para treinamento, ajuste fino (fine-tuning) ou recuperação de informações em sistemas RAG (Retrieval-Augmented Generation). Como consequência, o modelo pode aprender comportamentos inadequados ou passar a fornecer respostas incorretas e potencialmente perigosas.
+
+Ao final deste laboratório, você será capaz de:
+
+- Compreender o que é data poisoning e seus impactos em sistemas RAG; <br>
+- Identificar indícios de dados comprometidos em bases de conhecimento; <br>
+- Criar e aplicar diretrizes para mitigar ataques de data poisoning; <br>
+- Testar e validar mecanismos de proteção em agentes de IA; <br>
+- Adotar boas práticas de governança e higiene de dados para aumentar a confiabilidade das respostas geradas. <br>
 
 ## Descrição do Caso de Uso
 
-Você está construindo um Assistente de Vendas de Carros que ajuda clientes a fazer compras do catálogo da sua empresa. Você construiu uma base de conhecimento com informações sobre o catálogo, incluindo imagens, descrições e preços. No entanto, após alguns testes, você descobre que o agente está usando informações enganosas para influenciar decisões dos clientes. Você precisa proteger seu agente deste ataque!
+Você está construindo um Assistente de Vendas de Carros que ajuda clientes a fazer compras do catálogo da sua empresa. Você construiu uma base de conhecimento com informações sobre o catálogo, incluindo imagens, descrições e preços. No entanto, após alguns testes, você descobre que o agente está usando informações enganosas para influenciar decisões dos clientes. 
+
+Você precisa proteger seu agente deste ataque!
 
 **O Cenário de Ataque**:
 
@@ -57,9 +67,8 @@ Sistemas RAG (Retrieval Augmented Generation) são particularmente vulneráveis 
 > [!NOTE]
 > Sempre pratique higiene de dados. Trabalhe de perto com suas equipes de engenharia de dados para garantir alta qualidade de dados antes de incorporar quaisquer fontes de dados em suas bases de conhecimento.
 >
-> Vamos começar!
 
-## Laboratório
+Vamos começar!
 
 ### Parte 1: Acessando o watsonx Orchestrate
 
