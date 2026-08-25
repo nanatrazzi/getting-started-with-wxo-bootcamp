@@ -2,12 +2,14 @@
 
 ## Índice
 
-1. [Visão Geral](#visão-geral)
-2. [Parte 1: Conectar Agente de Busca de Terceiros](#parte-1-conectar-agente-de-busca-de-terceiros)
-3. [Parte 2: Criar o Agente Orquestrador](#parte-2-criar-o-agente-orquestrador)
-4. [Resumo](#resumo)
-   - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
-5. [Próximos Passos](#próximos-passos)
+- [Adicionando Agentes Externos e Orquestradores com watsonx Orchestrate](#adicionando-agentes-externos-e-orquestradores-com-watsonx-orchestrate)
+  - [Índice](#índice)
+  - [Visão Geral](#visão-geral)
+  - [Parte 1: Conectar Agente de Busca de Terceiros](#parte-1-conectar-agente-de-busca-de-terceiros)
+  - [Parte 2: Criar o Agente Orquestrador](#parte-2-criar-o-agente-orquestrador)
+  - [Resumo](#resumo)
+    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
+  - [Próximos Passos](#próximos-passos)
 
 ## Visão Geral
 
@@ -18,7 +20,7 @@ Você vai aprender conceitos fundamentais de arquiteturas multiagentes: integra�
 > [!NOTE]
 > **Pré-requisito:** este laboratório assume que você já concluiu o [laboratório 1](Step_by_Step_Lab1.md) e criou um agente com a base de conhecimento do catálogo de veículos. O agente criado naquele laboratório será reutilizado aqui como o agente responsável pelas consultas ao catálogo.
 
-![Create agent](../../Assets_for_BuildBooks/lab2.PNG)
+![watsonx Orchestrate](../../Assets_for_BuildBooks/lab-external-agents-orchestrator.PNG)
 
 > ⚠️ **Atenção**
 >
