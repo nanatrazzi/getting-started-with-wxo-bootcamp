@@ -31,6 +31,8 @@ PII é qualquer dado que possa ser usado para identificar um indivíduo. Alguns 
 > [!Note]
 > Se o dado pode ser usado para identificar uma pessoa, ele é considerado PII.
 
+![watsonx Orchestrate](../../Assets_for_BuildBooks/lab-control.PNG)
+
 ## Pré-requisitos
 
 Para realizar este laboratório, é necessário ter concluído previamente os seguintes laboratórios:
