@@ -108,7 +108,21 @@ Ainda na seção **Define new agent**, em **Description of agent capabilities**,
 Este agente se conecta ao serviço Tavily para realizar uma busca na web e retornar os principais resultados
 ```
 
-**13.** As opções em **Advanced settings** (**Support streaming**, **Support push notifications** e **Send conversation history**) podem ficar desligadas. Clique em **Next**.
+**13.** Ainda na seção **Define new agent**, localize o campo **Description of agent capabilities** e cole o texto abaixo. 
+
+```Este agente se conecta ao serviço Tavily para realizar buscas na web e retornar informações atualizadas de fontes externas. Pode ser utilizado para responder perguntas que exigem pesquisa na internet, obtenção de dados recentes e consulta a fontes públicas.```
+
+> Assim como a descrição do agente, esse conteúdo será utilizado pelo modelo do watsonx Orchestrate para determinar quando uma solicitação deve ser encaminhada para esse colaborador. Uma descrição clara ajuda o Orchestrate a identificar corretamente os cenários em que esse agente deve ser utilizado.
+
+Em **Advanced settings**, observe que existem opções relacionadas à forma como o agente se comunica com o Orchestrate:
+
+- **Support streaming** permite que as respostas sejam enviadas gradualmente, à medida que são geradas, em vez de aguardar a resposta completa.
+- **Support push notifications** habilita o envio de notificações assíncronas pelo agente para informar atualizações ou resultados posteriores.
+- **Send conversation history** envia ao agente externo o histórico da conversa, fornecendo contexto adicional para a interação.
+
+**Neste laboratório, nenhuma dessas funcionalidades será utilizada, pois o agente apenas receberá uma solicitação, realizará uma busca na web e retornará o resultado.**
+
+**Portanto, mantenha todas as opções desabilitadas** e clique em **Next** para continuar.
 
 ![Descrição de capacidades e advanced settings](../../Assets_for_BuildBooks/labs/lab02/lab02_09.png)
 
