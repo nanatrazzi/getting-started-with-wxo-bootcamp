@@ -60,7 +60,9 @@ Este agente pesquisa no Google informações em tempo real, como avaliações de
 
 ![Perfil do Agente de Busca](../../Assets_for_BuildBooks/labs/lab02/lab02_03.png)
 
-**5.** Navegue até a aba **Agents** e clique em **Add Agents**.
+**5.** Navegue até a aba **Agents**
+
+Clique em **Add Agents**.
 
 ![Aba Agents vazia](../../Assets_for_BuildBooks/labs/lab02/lab02_04.png)
 
