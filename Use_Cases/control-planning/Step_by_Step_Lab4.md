@@ -120,7 +120,33 @@ Clique na seta ao lado de qualquer teste para expandir seus detalhes individuais
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_12.png)
 
+Ao expandir um caso de teste, o watsonx Orchestrate exibe as métricas detalhadas daquela execução específica. Essa visão permite entender não apenas se o teste passou ou falhou, mas também como o sistema chegou ao resultado.
 
+No exemplo da pergunta **"qual o número do presidente da IBM?"**, o resultado foi **Succeeded**, indicando que a resposta gerada atendeu aos critérios definidos para o teste.
+
+As métricas exibidas têm os seguintes significados:
+
+- **Total steps**: quantidade total de etapas executadas durante o processamento da solicitação. Neste caso, foram **2 etapas**.
+
+- **LLM steps**: número de interações com o modelo de linguagem. O valor **1** indica que apenas uma chamada ao modelo foi necessária para produzir a resposta.
+
+- **Total tool calls**: quantidade de ferramentas externas acionadas durante a execução. O valor **0** mostra que nenhuma ferramenta foi utilizada e a resposta foi produzida diretamente pelo modelo.
+
+- **Tool call precision**: mede a precisão na seleção de ferramentas quando há uso de ferramentas. Como nenhuma ferramenta foi chamada, o valor aparece como **NA** (*Not Applicable*).
+
+- **Tool call recall**: mede se as ferramentas necessárias foram efetivamente utilizadas. Também aparece como **NA** porque não houve chamadas de ferramentas.
+
+- **Orchestrate agent routing F1**: avalia a qualidade da decisão de roteamento entre agentes. O valor **1** representa um roteamento perfeito para aquele teste.
+
+- **Text match**: indica o resultado da comparação entre a resposta gerada e a resposta esperada. O status **Summary Matched** mostra que a resposta foi considerada compatível com o resultado esperado definido na avaliação.
+
+- **Journey success**: informa se a jornada completa foi concluída com sucesso. O valor **Yes** confirma que o fluxo terminou corretamente.
+
+- **Journey completion**: taxa de conclusão da jornada. O valor **1** representa conclusão total, equivalente a 100%.
+
+- **Average agent response time (s)**: tempo gasto para gerar a resposta. Neste teste, a execução levou aproximadamente **5,6 segundos**.
+
+Essa visualização é particularmente útil durante a fase de validação, permitindo identificar se um agente utilizou as ferramentas corretas, se o roteamento ocorreu como esperado e se a resposta produzida corresponde aos critérios definidos para o teste.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_13.png)
 
@@ -161,16 +187,6 @@ Abra a execução mais recente para conferir que ela contém apenas o teste reex
 Expanda o teste para ver seus detalhes e, quando terminar de revisar, feche a janela de resultados.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_23.png)
-
-Abaixo está um detalhamento das métricas que você viu ao longo deste laboratório e o que cada uma significa.
-
-Nas métricas de roteamento e precisão, o Orchestrate agent routing F1 mede, através da média harmônica entre precisão e recall, quão corretamente o agente mestre roteia as consultas para os agentes especializados. O Keyword match verifica se a resposta contém as palavras-chave esperadas, o Semantic match avalia se a resposta é semanticamente parecida com a saída esperada, e o Text match verifica se a resposta corresponde exatamente à saída de texto esperada, ou, quando o Response summary está habilitado, se ela bate com o resumo gerado.
-
-Nas métricas de execução, o Total steps é o número total de ações realizadas ao longo dos testes, o LLM steps é quantas vezes o modelo de linguagem foi invocado para gerar respostas, e o Average agent response time mede, em segundos, o tempo médio para gerar cada resposta.
-
-Nas métricas de uso de ferramentas, o Total tool calls conta quantas vezes agentes ou ferramentas externas foram acionados durante os testes, o Expected tool calls indica quantas chamadas de ferramenta eram esperadas, o Correct tool calls quantas foram feitas corretamente, o Missed tool calls quantas chamadas esperadas não ocorreram, e o Tool calls with incorrect parameters quantas chamadas foram feitas com parâmetros errados. O Tool call recall mostra a proporção de chamadas necessárias que de fato aconteceram, medindo se todas as ferramentas necessárias estão sendo usadas, o Tool call precision mostra a proporção de chamadas relevantes em relação ao total de chamadas feitas, medindo se as ferramentas estão sendo chamadas de forma apropriada, e o Tool match success indica se as ferramentas corretas foram chamadas.
-
-Nas métricas de sucesso, o Journey success indica se o cenário de teste completo alcançou o resultado pretendido, e o Journey completion indica se uma interação de múltiplas etapas foi concluída sem erros.
 
 Você pode clicar em `Download`, no painel de resultados, para baixar os dados de qualquer execução e analisá-los posteriormente.
 
