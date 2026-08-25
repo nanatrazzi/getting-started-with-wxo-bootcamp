@@ -150,7 +150,21 @@ Essa visualização é particularmente útil durante a fase de validação, perm
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_13.png)
 
-Já o teste `qual o número da ibm?` percorreu um caminho bem mais longo, trinta e oito passos no total, com vinte e duas chamadas ao modelo de linguagem e seis chamadas de ferramenta, levando cerca de sete segundos e meio para responder. A diferença mostra como perguntas parecidas podem levar o agente por raciocínios de tamanhos muito distintos.
+Ao expandir mais de um caso de teste, fica fácil comparar o comportamento do agente em diferentes cenários. Embora ambos os testes apresentados tenham sido aprovados, as métricas mostram que o nível de esforço necessário para chegar à resposta foi bastante diferente.
+
+No teste **"qual o número do presidente da IBM?"**, o agente executou apenas **2 etapas**, realizou **1 chamada ao modelo de linguagem (LLM)** e não utilizou nenhuma ferramenta externa. Isso indica um fluxo simples, resolvido diretamente pelo modelo.
+
+Já no teste **"qual o número da ibm?"**, o comportamento foi consideravelmente mais complexo. O agente executou **38 etapas**, realizou **22 chamadas ao modelo de linguagem** e fez **6 chamadas a ferramentas**. Esse tipo de resultado normalmente indica que o agente precisou realizar buscas, consultar fontes adicionais ou executar múltiplas decisões de roteamento antes de chegar à resposta final.
+
+Apesar da diferença de complexidade, ambos os testes tiveram:
+
+- **Evaluation result: Succeeded**, indicando aprovação.
+- **Orchestrate agent routing F1 = 1**, demonstrando que o roteamento ocorreu conforme o esperado.
+- **Journey success = Yes**, confirmando que o fluxo foi concluído com sucesso.
+- **Journey completion = 1**, equivalente a 100% de conclusão.
+- **Text match = Summary Matched**, indicando que a resposta gerada foi considerada compatível com a resposta esperada.
+
+Também é possível observar o impacto da complexidade no desempenho. Enquanto o primeiro teste teve um tempo médio de resposta de **5,595 segundos**, o segundo levou **7,432 segundos**, refletindo o número maior de etapas e chamadas realizadas.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_14.png)
 
