@@ -2,9 +2,14 @@
 
 ## Visão Geral
 
-Este laboratório apresenta as melhores práticas para avaliar, testar e depurar agentes de IA utilizando os recursos nativos de teste e debugging do watsonx Orchestrate.
+Este laboratório apresenta as melhores práticas para avaliar, testar e depurar agentes de Inteligência Artificial utilizando os recursos nativos de teste do **watsonx Orchestrate.**
 
-Ao longo das atividades, você vai aprender a transformar conversas reais em casos de teste, executar avaliações automatizadas, analisar métricas de desempenho e utilizar ferramentas de depuração para compreender o comportamento dos agentes e identificar possíveis problemas.
+Ao longo das atividades, você vai aprender:
+
+- Transformar conversas reais em casos de teste, 
+- Executar avaliações automatizadas
+- Analisar métricas de desempenho 
+- Utilizar ferramentas de depuração para compreender o comportamento dos agentes e identificar possíveis problemas.
 
 Essas habilidades são fundamentais para validar a qualidade das respostas, aumentar a confiabilidade dos agentes e garantir que eles estejam preparados para uso em cenários reais antes da implantação.
 
@@ -29,13 +34,19 @@ qual o número do presidente do brasil em 2026?
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_01.png)
 
-Dessa vez a resposta nem chega a mencionar o catálogo de veículos. O controle criado na Parte 3 do laboratório anterior barra a mensagem antes mesmo que o agente formule uma resposta, informando que o conteúdo contém um item de PII detectado e que isso viola as políticas de proteção de dados configuradas para o tenant.
+Dessa vez a resposta nem chega a mencionar o catálogo de veículos. O controle criado na Parte 3 do [laboratório anterior](../control-planning/Step_by_Step_Lab3.md) barra a mensagem antes mesmo que o agente formule uma resposta, informando que o conteúdo contém um item de PII detectado e que isso viola as políticas de proteção de dados configuradas para o tenant.
 
 Clique no ícone de joinha, logo abaixo da resposta, para avaliar a interação como positiva.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_02.png)
 
-Um painel de feedback adicional se abre. Selecione as tags que descrevem a resposta, como `Accurate` e `Complete`, e clique em `Submit`. Esse feedback ajuda a documentar por que uma resposta foi considerada boa, o que é útil quando outras pessoas do time revisarem o comportamento do agente mais tarde.
+Um painel de feedback adicional se abre. Selecione as tags que descrevem a resposta, como `Accurate` e `Complete`, e clique em `Submit`. 
+
+Um painel de feedback adicional se abre. Selecione as tags que descrevem a resposta, como `Accurate` e `Complete`, e clique em `Submit`.
+
+Esse joinha não morre na conversa. O **watsonx Orchestrate** coleta cada avaliação como um sinal de qualidade do agente, e as tags dizem *o que* estava bom ou ruim, precisão, completude, tom, velocidade. É justamente o tipo de informação que as métricas automáticas não conseguem capturar sozinhas: se a resposta realmente resolveu o problema de quem perguntou. Builders e administradores usam esses sinais para identificar problemas recorrentes, ajustar instruções e acompanhar a evolução do agente ao longo do tempo.
+
+Na prática, é o terceiro pilar da avaliação: os testes automatizados que vamos criar a seguir mostram *se* o agente acerta, o monitoramento em tempo real do próximo laboratório mostra *como* ele se comporta em produção, e o feedback dos usuários mostra *se as pessoas concordam* com o resultado. Vale o hábito de avaliar as interações enquanto você constrói, cada joinha vira dado depois.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_03.png)
 
@@ -91,124 +102,66 @@ Volte para a sub-aba Evaluations. Uma vez concluída, a execução aparece na li
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_11.png)
 
-Clique na execução para abrir os resultados detalhados. 
+Clique na execução para abrir os resultados detalhados.
 
-A etapa **Results** apresenta o resultado detalhado da execução da suíte de testes. No painel à esquerda, aparece um resumo consolidado da execução, enquanto o painel principal exibe o resultado individual de cada caso de teste.
+A tela de **Results** se divide em duas áreas: à esquerda, o resumo consolidado da execução; à direita, o resultado caso a caso. Neste exemplo, o indicador **Successful tests** marca **100%**, com **4 de 4** testes aprovados.
 
-Neste exemplo, o indicador **Successful tests** mostra que **100% dos testes foram aprovados**, com **4 de 4 casos executados com sucesso**.
+Logo abaixo, o bloco **All metrics** reúne os números agregados da execução:
 
-Logo abaixo, a seção **All metrics** reúne métricas agregadas da execução:
+| Métrica | O que mede |
+| --- | --- |
+| **Runs** | Quantidade de execuções realizadas |
+| **Total steps** | Total de etapas percorridas nos testes |
+| **LLM steps** | Média de chamadas ao modelo de linguagem por teste |
+| **Tool calls** | Média de chamadas a ferramentas por teste |
+| **Tool call precision** / **recall** | Qualidade da seleção de ferramentas, quando há uso de ferramentas |
+| **Agent routing F1** | Acerto do roteamento entre agentes |
+| **Text match** | Similaridade entre a resposta gerada e a esperada |
+| **Journey success** | Percentual de jornadas concluídas com sucesso |
+| **Journey completion rate** | Taxa de conclusão dos fluxos avaliados |
+| **Average response time** | Tempo médio de resposta |
 
-- **Runs**: quantidade de execuções realizadas.
-- **Total steps**: número total de etapas executadas durante os testes.
-- **LLM steps**: média de chamadas ao modelo de linguagem por teste.
-- **Tool calls**: média de chamadas a ferramentas realizadas durante a execução.
-- **Tool call precision** e **Tool call recall**: métricas relacionadas à qualidade da seleção de ferramentas quando aplicáveis.
-- **Agent routing F1**: avalia a precisão do roteamento entre agentes.
-- **Text match**: percentual de similaridade entre a resposta gerada e a resposta esperada.
-- **Journey success**: percentual de jornadas concluídas com sucesso.
-- **Journey completion rate**: taxa de conclusão dos fluxos avaliados.
-- **Average response time**: tempo médio de resposta dos testes.
+No painel da direita, cada linha é um caso de teste: **Test name** traz a pergunta usada e **Evaluation result** indica se ela passou. **Additional details** mostra informações complementares quando existem, e o menu de três pontos dá acesso às ações do teste.
 
-No painel da direita, cada linha representa um caso de teste executado. A coluna **Test name** exibe a pergunta utilizada durante a avaliação, enquanto **Evaluation result** mostra se o teste foi aprovado ou não.
+A seta à esquerda de cada linha abre a execução completa daquele caso, resposta gerada, caminho percorrido pelo agente e critérios aplicados na avaliação. É essa visão que responde *por que* um teste passou ou falhou.
 
-Os ícones de expansão à esquerda de cada linha permitem visualizar informações adicionais sobre a execução daquele teste específico, incluindo a resposta gerada, o fluxo percorrido pelo agente e os critérios utilizados na avaliação. Essa visão detalhada é especialmente útil para investigar falhas, entender decisões de roteamento e validar o comportamento dos controles configurados.
-
-A coluna **Additional details** exibe informações complementares quando disponíveis, enquanto o menu de ações representado pelos três pontos permite acessar opções adicionais relacionadas ao resultado do teste.
-
-Clique na seta ao lado de qualquer teste para expandir seus detalhes individuais. No caso de `qual o número do presidente da IBM?`, o agente levou dois passos no total, sendo um deles uma chamada ao modelo de linguagem, sem nenhuma chamada de ferramenta, e respondeu em pouco mais de cinco segundos.
+Comece expandindo o caso `qual o número do presidente da IBM?`.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_12.png)
 
-Ao expandir um caso de teste, o watsonx Orchestrate exibe as métricas detalhadas daquela execução específica. Essa visão permite entender não apenas se o teste passou ou falhou, mas também como o sistema chegou ao resultado.
+Os mesmos indicadores do resumo reaparecem aqui, agora referentes a um único teste. 
 
-No exemplo da pergunta **"qual o número do presidente da IBM?"**, o resultado foi **Succeeded**, indicando que a resposta gerada atendeu aos critérios definidos para o teste.
+A leitura deste caso é direta: **2 etapas**, **1 chamada ao modelo** e **nenhuma ferramenta** o modelo respondeu sozinho, sem consultar nada externo. Por isso **Tool call precision** e **Tool call recall** aparecem como **NA** (*Not Applicable*): não houve chamada de ferramenta para avaliar.
 
-As métricas exibidas têm os seguintes significados:
+O restante confirma a aprovação. **Orchestrate agent routing F1 = 1** mostra roteamento correto, **Text match = Summary Matched** indica que a resposta bate com o resumo esperado, e **Journey success = Yes** com **Journey completion = 1** confirmam 100% do fluxo concluído, tudo em cerca de **5,6 segundos**.
 
-- **Total steps**: quantidade total de etapas executadas durante o processamento da solicitação. Neste caso, foram **2 etapas**.
-
-- **LLM steps**: número de interações com o modelo de linguagem. O valor **1** indica que apenas uma chamada ao modelo foi necessária para produzir a resposta.
-
-- **Total tool calls**: quantidade de ferramentas externas acionadas durante a execução. O valor **0** mostra que nenhuma ferramenta foi utilizada e a resposta foi produzida diretamente pelo modelo.
-
-- **Tool call precision**: mede a precisão na seleção de ferramentas quando há uso de ferramentas. Como nenhuma ferramenta foi chamada, o valor aparece como **NA** (*Not Applicable*).
-
-- **Tool call recall**: mede se as ferramentas necessárias foram efetivamente utilizadas. Também aparece como **NA** porque não houve chamadas de ferramentas.
-
-- **Orchestrate agent routing F1**: avalia a qualidade da decisão de roteamento entre agentes. O valor **1** representa um roteamento perfeito para aquele teste.
-
-- **Text match**: indica o resultado da comparação entre a resposta gerada e a resposta esperada. O status **Summary Matched** mostra que a resposta foi considerada compatível com o resultado esperado definido na avaliação.
-
-- **Journey success**: informa se a jornada completa foi concluída com sucesso. O valor **Yes** confirma que o fluxo terminou corretamente.
-
-- **Journey completion**: taxa de conclusão da jornada. O valor **1** representa conclusão total, equivalente a 100%.
-
-- **Average agent response time (s)**: tempo gasto para gerar a resposta. Neste teste, a execução levou aproximadamente **5,6 segundos**.
-
-Essa visualização é particularmente útil durante a fase de validação, permitindo identificar se um agente utilizou as ferramentas corretas, se o roteamento ocorreu como esperado e se a resposta produzida corresponde aos critérios definidos para o teste.
+Vale guardar esse padrão: nos próximos testes, o que muda são os números de esforço (etapas, chamadas ao modelo e ferramentas), enquanto os indicadores de qualidade tendem a se repetir.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_13.png)
 
-Ao expandir mais de um caso de teste, fica fácil comparar o comportamento do agente em diferentes cenários. Embora ambos os testes apresentados tenham sido aprovados, as métricas mostram que o nível de esforço necessário para chegar à resposta foi bastante diferente.
+Com dois casos abertos ao mesmo tempo, a comparação fica evidente. Ambos passaram, mas o esforço para chegar lá foi bem diferente.
 
-No teste **"qual o número do presidente da IBM?"**, o agente executou apenas **2 etapas**, realizou **1 chamada ao modelo de linguagem (LLM)** e não utilizou nenhuma ferramenta externa. Isso indica um fluxo simples, resolvido diretamente pelo modelo.
+Enquanto `qual o número do presidente da IBM?` se resolveu em **2 etapas** e **1 chamada ao modelo**, o teste `qual o número da ibm?` consumiu **38 etapas**, **22 chamadas ao modelo** e **6 chamadas a ferramentas**. Números assim indicam que o agente pesquisou, consultou fontes adicionais ou tomou várias decisões de roteamento antes de fechar a resposta, e isso aparece no relógio: **5,595 segundos** contra **7,432 segundos**.
 
-Já no teste **"qual o número da ibm?"**, o comportamento foi consideravelmente mais complexo. O agente executou **38 etapas**, realizou **22 chamadas ao modelo de linguagem** e fez **6 chamadas a ferramentas**. Esse tipo de resultado normalmente indica que o agente precisou realizar buscas, consultar fontes adicionais ou executar múltiplas decisões de roteamento antes de chegar à resposta final.
-
-Apesar da diferença de complexidade, ambos os testes tiveram:
-
-- **Evaluation result: Succeeded**, indicando aprovação.
-- **Orchestrate agent routing F1 = 1**, demonstrando que o roteamento ocorreu conforme o esperado.
-- **Journey success = Yes**, confirmando que o fluxo foi concluído com sucesso.
-- **Journey completion = 1**, equivalente a 100% de conclusão.
-- **Text match = Summary Matched**, indicando que a resposta gerada foi considerada compatível com a resposta esperada.
-
-Também é possível observar o impacto da complexidade no desempenho. Enquanto o primeiro teste teve um tempo médio de resposta de **5,595 segundos**, o segundo levou **7,432 segundos**, refletindo o número maior de etapas e chamadas realizadas.
+Os indicadores de qualidade, no entanto, são idênticos nos dois: **Succeeded**, **routing F1 = 1**, **Text match = Summary Matched**, **Journey success = Yes** e **Journey completion = 1**. Passar no teste, portanto, não significa ter chegado lá pelo caminho mais curto.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_14.png)
 
-Ao analisar os testes individualmente, é possível perceber que perguntas aparentemente semelhantes podem gerar comportamentos muito diferentes no agente.
+O terceiro caso reforça o ponto. A pergunta `qual o número da Savana Moia da IBM?`, bem mais específica que `qual o número da ibm?`, foi resolvida em **2 etapas**, **1 chamada ao modelo** e nenhuma ferramenta, em cerca de **5,2 segundos** contra as 38 etapas e os **7,4 segundos** da versão genérica. Mesma aprovação, mesmos indicadores de qualidade, uma fração do esforço.
 
-O caso **"qual o número da ibm?"** foi o mais complexo. Apesar de ter sido aprovado, o agente precisou executar **38 etapas**, realizar **22 chamadas ao modelo de linguagem** e acionar **6 ferramentas** antes de chegar à resposta. Esse comportamento sugere que a pergunta exigiu múltiplas verificações, pesquisas ou decisões de roteamento ao longo do fluxo.
-
-Em contraste, o teste **"qual o número da Savana Moia da IBM?"** foi resolvido de forma muito mais direta. O agente executou apenas **2 etapas**, realizou **1 chamada ao modelo de linguagem** e não utilizou nenhuma ferramenta externa. Isso indica um fluxo simples, com baixa complexidade operacional.
-
-Apesar da diferença significativa de processamento, ambos os testes apresentaram os mesmos indicadores de qualidade:
-
-- **Succeeded**: o teste foi aprovado.
-- **Orchestrate agent routing F1 = 1**: o roteamento ocorreu corretamente.
-- **Text match = Summary Matched**: a resposta gerada correspondeu ao resultado esperado.
-- **Journey success = Yes**: a jornada foi concluída com sucesso.
-- **Journey completion = 1**: a execução atingiu 100% de conclusão.
-
-A diferença também aparece no tempo de resposta. O teste mais simples levou aproximadamente **5,2 segundos**, enquanto o teste que envolveu múltiplas etapas e ferramentas levou cerca de **7,4 segundos**.
-
-Esse tipo de análise é útil para identificar oportunidades de otimização. Quando um teste apresenta um número muito elevado de etapas, chamadas ao modelo ou uso excessivo de ferramentas, pode ser um indicativo de que o agente está seguindo um caminho mais complexo do que o necessário para resolver a solicitação.
+Perguntas parecidas, portanto, não custam a mesma coisa. É aqui que a avaliação vira ferramenta de otimização: um teste aprovado, mas com contagem de etapas, chamadas ao modelo ou uso de ferramentas muito acima dos demais, sinaliza que o agente está dando voltas desnecessárias,  algo que costuma ser corrigido ajustando as instruções do agente ou a descrição das ferramentas.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_15.png)
 
-Ao expandir os últimos casos de teste, é possível confirmar que o comportamento do agente foi consistente em diferentes variações da mesma pergunta.
+Os dois últimos casos fecham a leitura. `qual o número da Savana Moia da IBM?` e `Qual o número da IBM?` apresentam métricas praticamente iguais: **2 etapas**, **1 chamada ao modelo**, nenhuma ferramenta e tempo de resposta entre **5,2 e 5,3 segundos**. O agente já tinha as informações necessárias e pôde usá-las diretamente, sem consultas adicionais nem roteamento para outros colaboradores.
 
-Os testes **"qual o número da Savana Moia da IBM?"** e **"Qual o número da IBM?"** foram concluídos com sucesso e apresentaram métricas praticamente idênticas. Em ambos os casos, o agente executou apenas **2 etapas**, realizou **1 chamada ao modelo de linguagem** e não precisou acionar nenhuma ferramenta externa.
-
-Isso indica que as informações necessárias já estavam disponíveis para o agente e puderam ser utilizadas diretamente, sem a necessidade de consultas adicionais ou roteamento para outros colaboradores.
-
-Observe também que:
-
-- **Evaluation result** aparece como **Succeeded**, indicando aprovação do teste.
-- **Orchestrate agent routing F1** possui valor **1**, mostrando que o roteamento ocorreu conforme esperado.
-- **Text match** apresenta o status **Summary Matched**, demonstrando que a resposta gerada corresponde aos critérios definidos para avaliação.
-- **Journey success** está marcado como **Yes**, confirmando que o fluxo foi executado corretamente.
-- **Journey completion** possui valor **1**, equivalente a 100% de conclusão.
-
-O tempo médio de resposta também permaneceu semelhante entre os dois cenários, variando entre aproximadamente **5,2 e 5,3 segundos**.
-
-Quando todos os testes apresentam o status **Succeeded** e métricas compatíveis com o comportamento esperado do agente, podemos considerar a suíte de avaliação validada. No resumo geral da execução, mostrado no painel à esquerda, isso se reflete no indicador **100% Successful tests**, confirmando que os quatro testes definidos para o laboratório foram aprovados.
+Com os quatro casos em **Succeeded** e métricas compatíveis com o comportamento esperado, a suíte de avaliação está validada, é o que o painel da esquerda resume no indicador **100% Successful tests**.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_16.png)
 
-Cada teste também tem um menu de opções, acessível pelo ícone de três pontos, com a ação `Re-run test`. Use-a quando quiser reexecutar um único caso, por exemplo depois de ajustar as instruções do agente, sem precisar rodar a bateria inteira novamente.
+Cada teste também tem um menu de opções, acessível pelo ícone de três pontos, com a ação `Re-run test`.
+
+Use-a quando quiser reexecutar um único caso, por exemplo depois de ajustar as instruções do agente, sem precisar rodar a bateria inteira novamente.
 
 Clique em **Re-run test**, a mesma notificação de avaliação em andamento aparece, desta vez para um teste só.
 
@@ -220,7 +173,7 @@ Na aba Tests, o campo Last run do teste reexecutado é atualizado com o novo hor
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_19.png)
 
-Volte para a sub-aba Evaluations.
+Retorne para a sub-aba **Evaluations.**
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_20.png)
 
