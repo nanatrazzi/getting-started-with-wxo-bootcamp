@@ -135,7 +135,7 @@ Você chega à etapa **Connect**, que define como o Orchestrate vai se autentica
 
 ![Connect, lista de conexões](../../Assets_for_BuildBooks/labs/lab02/lab02_10.png)
 
-Abre se a janela **Add connection**, com três etapas: **Define connection details**, **Configure draft environment** e **Configure live environment**.
+Na janela **Add connection**, faremos as seguintes configurações: **Define connection details**, **Configure draft environment** e **Configure live environment**.
 
 **15.** Em **Connection ID (Required)**, informe `apikey_external_agent`. Esse campo aceita apenas letras, números, underscores e hífens, porque é o identificador técnico usado internamente e pela CLI ou ADK.
 
@@ -172,6 +172,9 @@ Role a tela até **Credential type**. Ele define quem fornece a credencial: **Me
 Você chega a **Configure live environment**, a configuração que os canais já implantados vão usar.
 
 **23.** Para não repetir todo o preenchimento, clique em **Paste draft configuration**. Isso copia as definições do draft (tipo de autenticação, localização da chave e credenciais) para o ambiente live.
+
+> [!WARNING]
+> Embora essa configuração funcione para fins de demonstração neste laboratório, ela não é recomendada para ambientes de produção. Em cenários reais, normalmente são utilizadas credenciais, permissões e configurações específicas para cada ambiente, seguindo as políticas de segurança da organização. Para este exercício, não se preocupe com essa distinção e prossiga utilizando a mesma configuração.
 
 ![Paste draft configuration](../../Assets_for_BuildBooks/labs/lab02/lab02_17.png)
 
