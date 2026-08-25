@@ -165,13 +165,15 @@ Você chega à etapa **Configure draft environment**, as credenciais usadas quan
 
 Role a tela até **Credential type**. Ele define quem fornece a credencial: **Member credentials**, em que cada usuário informa a própria chave, indicado quando o acesso deve ser individualizado; ou **Team credentials**, em que uma única credencial, fornecida por você, é compartilhada por todos os usuários do ambiente.
 
+![Seção Credential type, com Member credentials selecionado por padrão](../../Assets_for_BuildBooks/labs/lab02/lab02_15.png)
+
 **21.** Selecione **Team credentials**, já que todos vão usar a mesma chave do serviço de busca.
 
-![Credential type](../../Assets_for_BuildBooks/labs/lab02/lab02_15.png)
+![Team credentials selecionado](../../Assets_for_BuildBooks/labs/lab02/lab02_16.png)
 
 **22.** No campo **API Key**, cole a chave usada para autenticar as requisições ao agente externo. O valor é mascarado assim que você segue para a próxima etapa. Clique em **Next**.
 
-![API Key preenchida](../../Assets_for_BuildBooks/labs/lab02/lab02_16.png)
+![API Key preenchida no ambiente draft, pronta para clicar em Next](../../Assets_for_BuildBooks/labs/lab02/lab02_17.png)
 
 Você chega a **Configure live environment**, a configuração que os canais já implantados vão usar.
 
@@ -180,19 +182,19 @@ Você chega a **Configure live environment**, a configuração que os canais já
 > [!WARNING]
 > Embora essa configuração funcione para fins de demonstração neste laboratório, ela não é recomendada para ambientes de produção. Em cenários reais, normalmente são utilizadas credenciais, permissões e configurações específicas para cada ambiente, seguindo as políticas de segurança da organização. Para este exercício, não se preocupe com essa distinção e prossiga utilizando a mesma configuração.
 
-![Paste draft configuration](../../Assets_for_BuildBooks/labs/lab02/lab02_17.png)
+![Etapa Configure live environment, com o botão Paste draft configuration em destaque](../../Assets_for_BuildBooks/labs/lab02/lab02_18.png)
 
 Revise se o **Authentication type** ficou como `API Key` e o **Credential type** como `Team credentials`; a tela tende a vir com `Member credentials` pré-selecionado, então vale conferir antes de seguir.
 
-![Live environment preenchido após colar o draft](../../Assets_for_BuildBooks/labs/lab02/lab02_18.png)
+![Live environment preenchido após colar a configuração do draft](../../Assets_for_BuildBooks/labs/lab02/lab02_19.png)
 
 **24.** Confirme **Team credentials** e a API Key preenchida
 
-![Team credentials confirmado no live](../../Assets_for_BuildBooks/labs/lab02/lab02_19.png)
+![Team credentials confirmado no live, pronto para clicar em Finish](../../Assets_for_BuildBooks/labs/lab02/lab02_20.png)
 
 E clique em **Finish**
 
-![Salvando a conexão](../../Assets_for_BuildBooks/labs/lab02/lab02_20.png)
+![Salvando a conexão](../../Assets_for_BuildBooks/labs/lab02/lab02_21.png)
 
 **25.** A notificação **New Connection added!** confirma que a conexão foi criada. Observe que a nova entrada **apikey_external_agent** aparece na lista, com as colunas **Draft** e **Live** indicando `API Key` e `Team credentials`, sinal de que os dois ambientes foram configurados corretamente. Selecione o *radio button* à esquerda dela para indicar que é essa credencial que o Orchestrate deve usar ao se comunicar com o agente externo.
 
@@ -201,13 +203,13 @@ E clique em **Finish**
 
 **26.** Clique em **Done** para concluir a importação.
 
-![Conexão criada e selecionada](../../Assets_for_BuildBooks/labs/lab02/lab02_21.png)
+![Conexão criada e selecionada, pronta para clicar em Done](../../Assets_for_BuildBooks/labs/lab02/lab02_22.png)
 
 A notificação **Agents updated** confirma a operação.
 
 **27.** De volta à tela de edição do **Agente de Busca**, na aba **Agents**, o agente externo **Agente de Buscas** já aparece na lista de colaboradores, junto com a descrição que você definiu ao importá lo.
 
-![Agente de Buscas listado como colaborador](../../Assets_for_BuildBooks/labs/lab02/lab02_22.png)
+![Agente de Buscas listado como colaborador](../../Assets_for_BuildBooks/labs/lab02/lab02_23.png)
 
 Com o agente externo importado, o **Agente de Busca** ganhou um especialista à disposição. O watsonx Orchestrate passa a atuar como orquestrador: interpreta o pedido do usuário, identifica que a tarefa é de busca na web e delega ao Agente de Buscas, de forma transparente, mesmo esse agente tendo sido construído em outra plataforma.
 
@@ -215,7 +217,7 @@ Vamos agora ensinar ao agente quando e como usar esse novo colaborador.
 
 Clique na aba **Behavior**
 
-![Instruções de validação de veículo](../../Assets_for_BuildBooks/labs/lab02/lab02_23.png)
+![Instruções de validação de veículo](../../Assets_for_BuildBooks/labs/lab02/lab02_24.png)
 
 No campo **Instructions**, adicione as instruções abaixo. Elas fazem o agente validar, antes de qualquer busca, se o veículo mencionado pelo usuário pertence ao catálogo, mesmo diante de nomes incompletos, apelidos ou pequenos erros de digitação:
 
@@ -255,8 +257,6 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
 
 "Desculpe, eu só posso fornecer informações sobre os seguintes veículos: Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro."
 ```
-
-![Teste do agente com o Alfa Romeo Spider](../../Assets_for_BuildBooks/labs/lab02/lab02_24.png)
 
 
 Teste o agente no **Draft Preview**. Envie a pergunta:
