@@ -141,11 +141,15 @@ Você chega à etapa **Connect**, que define como o Orchestrate vai se autentica
 
 Na janela **Add connection**, faremos as seguintes configurações: **Define connection details**, **Configure draft environment** e **Configure live environment**.
 
-**15.** Em **Connection ID (Required)**, informe `apikey_external_agent`. Esse campo aceita apenas letras, números, underscores e hífens, porque é o identificador técnico usado internamente e pela CLI ou ADK.
+**15.** Em **Connection ID (Required)**, copie e cole o seguinte nome: `apikey_external_agent`. 
+
+**Esse campo aceita apenas letras, números, underscores e hífens, porque é o identificador técnico usado internamente e pela CLI ou ADK.**
 
 **16.** Em **Display name**, repita `apikey_external_agent`, o nome amigável que vai aparecer nas telas do produto.
 
-**17.** O campo **Connection description** é opcional; você pode deixá lo em branco. Clique em **Save and continue**.
+O campo **Connection description** é opcional e serve para adicionar uma descrição que ajude a identificar a finalidade daquela credencial. Para este laboratório, você pode deixá-lo em branco.
+
+**17.** Clique em **Save and continue**.
 
 ![Define connection details](../../Assets_for_BuildBooks/labs/lab02/lab02_11.png)
 
@@ -153,73 +157,82 @@ Na janela **Add connection**, faremos as seguintes configurações: **Define con
 
 ![Aviso antes de criar a conexão](../../Assets_for_BuildBooks/labs/lab02/lab02_12.png)
 
-Você chega à etapa **Configure draft environment**, as credenciais usadas quando você testa e pré-visualiza o agente no chat de desenvolvimento, antes de publicá lo. Mais adiante você vai repetir a configuração para o ambiente *live*, usado pelos canais já implantados; manter os dois separados permite, por exemplo, apontar o draft para uma chave de teste e o live para a chave de produção.
+Na etapa **Configure draft environment**, as credenciais usadas quando você testa e pré-visualiza o agente no chat de desenvolvimento, antes de publicá lo. 
 
-**19.** Em **Authentication type**, abra a lista. Ela mostra os padrões suportados: **API Key** (uma chave fixa enviada em cada requisição), **Basic Auth** (usuário e senha em Base64), **Bearer Token** (um token no cabeçalho Authorization) e três variações de **OAuth2**, para fluxos com consentimento do usuário ou máquina a máquina. Selecione **API Key**, a opção usada neste laboratório.
+Mais adiante você vai repetir a configuração para o ambiente **live**; manter os dois separados permite, por exemplo, apontar o draft para uma chave de teste e o live para a chave de produção.
+
+**19.** Em **Authentication type**, abra a lista. Ela mostra os padrões suportados: **API Key** (uma chave fixa enviada em cada requisição), **Basic Auth** (usuário e senha em Base64), **Bearer Token** (um token no cabeçalho Authorization) e três variações de **OAuth2**, para fluxos com consentimento do usuário ou máquina a máquina. 
+
+Selecione **API Key**, a opção usada neste laboratório.
 
 ![Authentication type](../../Assets_for_BuildBooks/labs/lab02/lab02_13.png)
 
-**20.** Em **API Key Location**, mantenha `header`, o local esperado pelo agente externo. O campo **Server URL** já vem preenchido com a URL informada anteriormente e pode ficar como está.
+Em **Server URL** cole o link do servidor onde seu agente está hospedado. 
+
+> [!ATTENTION]
+> Peça este link para os instrutores do laboratório.
+
+Em **API Key Location**, mantenha `header`, o local esperado pelo agente externo. No campo ao lado não é necessária nenhuma ação.
 
 ![API Key Location e Server URL](../../Assets_for_BuildBooks/labs/lab02/lab02_14.png)
 
-Role a tela até **Credential type**. Ele define quem fornece a credencial: **Member credentials**, em que cada usuário informa a própria chave, indicado quando o acesso deve ser individualizado; ou **Team credentials**, em que uma única credencial, fornecida por você, é compartilhada por todos os usuários do ambiente.
+20. Role a tela até **Credential type**. 
 
-![Seção Credential type, com Member credentials selecionado por padrão](../../Assets_for_BuildBooks/labs/lab02/lab02_15.png)
+Ele define quem fornece a credencial:
 
-**21.** Selecione **Team credentials**, já que todos vão usar a mesma chave do serviço de busca.
+**Member credentials**, em que cada usuário informa a própria chave, indicado quando o acesso deve ser individualizado; 
 
-![Team credentials selecionado](../../Assets_for_BuildBooks/labs/lab02/lab02_16.png)
+**Team credentials**, em que uma única credencial, fornecida por você, é compartilhada por todos os usuários do ambiente.
 
-**22.** No campo **API Key**, cole a chave usada para autenticar as requisições ao agente externo. O valor é mascarado assim que você segue para a próxima etapa. Clique em **Next**.
+![Credential type](../../Assets_for_BuildBooks/labs/lab02/lab02_15.png)
 
-![API Key preenchida no ambiente draft, pronta para clicar em Next](../../Assets_for_BuildBooks/labs/lab02/lab02_17.png)
 
-Você chega a **Configure live environment**, a configuração que os canais já implantados vão usar.
+**20.** Selecione **Team credentials**, já que todos vão usar a mesma chave do serviço de busca.
 
-**23.** Para não repetir todo o preenchimento, clique em **Paste draft configuration**. Isso copia as definições do draft (tipo de autenticação, localização da chave e credenciais) para o ambiente live.
+![API Key preenchida](../../Assets_for_BuildBooks/labs/lab02/lab02_16.png)
+
+**21.** No campo **API Key**, cole a chave usada para autenticar as requisições ao agente externo. O valor é mascarado assim que você segue para a próxima etapa. Clique em **Next**.
+
+![Paste draft configuration](../../Assets_for_BuildBooks/labs/lab02/lab02_17.png)
+
+**Configure live environment**
+
+**22.** Para não repetir todo o preenchimento, clique em **Paste draft configuration**. Isso copia as definições do draft (tipo de autenticação, localização da chave e credenciais) para o ambiente live.
 
 > [!WARNING]
 > Embora essa configuração funcione para fins de demonstração neste laboratório, ela não é recomendada para ambientes de produção. Em cenários reais, normalmente são utilizadas credenciais, permissões e configurações específicas para cada ambiente, seguindo as políticas de segurança da organização. Para este exercício, não se preocupe com essa distinção e prossiga utilizando a mesma configuração.
 
-![Etapa Configure live environment, com o botão Paste draft configuration em destaque](../../Assets_for_BuildBooks/labs/lab02/lab02_18.png)
+![Paste draft configuration](../../Assets_for_BuildBooks/labs/lab02/lab02_18.png)
 
 Revise se o **Authentication type** ficou como `API Key` e o **Credential type** como `Team credentials`; a tela tende a vir com `Member credentials` pré-selecionado, então vale conferir antes de seguir.
 
-![Live environment preenchido após colar a configuração do draft](../../Assets_for_BuildBooks/labs/lab02/lab02_19.png)
+Confirme **Team credentials** e a API Key preenchida
 
-**24.** Confirme **Team credentials** e a API Key preenchida
+![Team credentials confirmado no live](../../Assets_for_BuildBooks/labs/lab02/lab02_19.png)
 
-![Team credentials confirmado no live, pronto para clicar em Finish](../../Assets_for_BuildBooks/labs/lab02/lab02_20.png)
+**24.** Clique em **Finish**
 
-E clique em **Finish**
+![Salvando a conexão](../../Assets_for_BuildBooks/labs/lab02/lab02_20.png)
 
-![Salvando a conexão](../../Assets_for_BuildBooks/labs/lab02/lab02_21.png)
+A notificação **New Connection added!** confirma que a conexão foi criada. Observe que a nova entrada **apikey_external_agent** aparece na lista, com as colunas **Draft** e **Live** indicando `API Key` e `Team credentials`, sinal de que os dois ambientes foram configurados corretamente. 
 
-**25.** A notificação **New Connection added!** confirma que a conexão foi criada. Observe que a nova entrada **apikey_external_agent** aparece na lista, com as colunas **Draft** e **Live** indicando `API Key` e `Team credentials`, sinal de que os dois ambientes foram configurados corretamente. Selecione o *radio button* à esquerda dela para indicar que é essa credencial que o Orchestrate deve usar ao se comunicar com o agente externo.
+**25.** Selecione o *radio button* à esquerda dela para indicar que é essa credencial que o Orchestrate deve usar ao se comunicar com o agente externo.
 
-> [!WARNING]
-> Se alguma das colunas estiver vazia ou divergente, use o menu de três pontos à direita da linha para revisar a configuração antes de continuar.
+**26.** Clique em **Done**
 
-**26.** Clique em **Done** para concluir a importação.
+![Agente de Buscas listado como colaborador](../../Assets_for_BuildBooks/labs/lab02/lab02_22.png)
 
-![Conexão criada e selecionada, pronta para clicar em Done](../../Assets_for_BuildBooks/labs/lab02/lab02_22.png)
+De volta à tela de edição do **Agente de Busca**, na aba **Agents**, o agente externo **Agente de Buscas** já aparece na lista de colaboradores, junto com a descrição que você definiu ao importá lo.
 
-A notificação **Agents updated** confirma a operação.
-
-**27.** De volta à tela de edição do **Agente de Busca**, na aba **Agents**, o agente externo **Agente de Buscas** já aparece na lista de colaboradores, junto com a descrição que você definiu ao importá lo.
-
-![Agente de Buscas listado como colaborador](../../Assets_for_BuildBooks/labs/lab02/lab02_23.png)
-
-Com o agente externo importado, o **Agente de Busca** ganhou um especialista à disposição. O watsonx Orchestrate passa a atuar como orquestrador: interpreta o pedido do usuário, identifica que a tarefa é de busca na web e delega ao Agente de Buscas, de forma transparente, mesmo esse agente tendo sido construído em outra plataforma.
+Com o agente externo importado, o **Agente de Busca** ganhou um especialista à disposição. O **watsonx Orchestrate** passa a atuar como orquestrador: interpreta o pedido do usuário, identifica que a tarefa é de busca na web e delega ao Agente de Buscas, de forma transparente, mesmo esse agente tendo sido construído em outra plataforma.
 
 Vamos agora ensinar ao agente quando e como usar esse novo colaborador.
 
-Clique na aba **Behavior**
+**27.** Clique na aba **Behavior**
 
-![Instruções de validação de veículo](../../Assets_for_BuildBooks/labs/lab02/lab02_24.png)
+![Instruções de validação de veículo](../../Assets_for_BuildBooks/labs/lab02/lab02_23.png)
 
-No campo **Instructions**, adicione as instruções abaixo. Elas fazem o agente validar, antes de qualquer busca, se o veículo mencionado pelo usuário pertence ao catálogo, mesmo diante de nomes incompletos, apelidos ou pequenos erros de digitação:
+**28.** No campo **Instructions**, adicione as instruções abaixo. Elas fazem o agente validar, antes de qualquer busca, se o veículo mencionado pelo usuário pertence ao catálogo, mesmo diante de nomes incompletos, apelidos ou pequenos erros de digitação:
 
 ```
 # VALIDAÇÃO DE VEÍCULO
@@ -257,6 +270,8 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
 
 "Desculpe, eu só posso fornecer informações sobre os seguintes veículos: Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro."
 ```
+
+![Teste do agente com o Alfa Romeo Spider](../../Assets_for_BuildBooks/labs/lab02/lab02_24.png)
 
 
 Teste o agente no **Draft Preview**. Envie a pergunta:
