@@ -64,7 +64,9 @@ Este agente pesquisa no Google informações em tempo real, como avaliações de
 
 ![Aba Agents vazia](../../Assets_for_BuildBooks/labs/lab02/lab02_04.png)
 
-**6.** Uma janela mostra três formas de adicionar um colaborador: **Catalog** (agentes pré construídos), **Local instance** (agentes já existentes na sua instância) e **Import** (registrar um agente externo). Escolha **Import**, já que o agente de busca foi construído em outra plataforma.
+**6.** Uma janela mostra três formas de adicionar um colaborador: **Catalog** (agentes pré construídos), **Local instance** (agentes já existentes na sua instância) e **Import** (registrar um agente externo). 
+
+Escolha **Import**, já que o agente de busca foi construído em outra plataforma.
 
 ![Add Agents, escolha Import](../../Assets_for_BuildBooks/labs/lab02/lab02_05.png)
 
