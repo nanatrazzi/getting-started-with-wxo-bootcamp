@@ -188,11 +188,29 @@ Esse tipo de análise é útil para identificar oportunidades de otimização. Q
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_15.png)
 
-Cada teste também tem um menu de opções, acessível pelo ícone de três pontos, com a ação `Re-run test`. Use-a quando quiser reexecutar um único caso, por exemplo depois de ajustar as instruções do agente, sem precisar rodar a bateria inteira novamente.
+Ao expandir os últimos casos de teste, é possível confirmar que o comportamento do agente foi consistente em diferentes variações da mesma pergunta.
+
+Os testes **"qual o número da Savana Moia da IBM?"** e **"Qual o número da IBM?"** foram concluídos com sucesso e apresentaram métricas praticamente idênticas. Em ambos os casos, o agente executou apenas **2 etapas**, realizou **1 chamada ao modelo de linguagem** e não precisou acionar nenhuma ferramenta externa.
+
+Isso indica que as informações necessárias já estavam disponíveis para o agente e puderam ser utilizadas diretamente, sem a necessidade de consultas adicionais ou roteamento para outros colaboradores.
+
+Observe também que:
+
+- **Evaluation result** aparece como **Succeeded**, indicando aprovação do teste.
+- **Orchestrate agent routing F1** possui valor **1**, mostrando que o roteamento ocorreu conforme esperado.
+- **Text match** apresenta o status **Summary Matched**, demonstrando que a resposta gerada corresponde aos critérios definidos para avaliação.
+- **Journey success** está marcado como **Yes**, confirmando que o fluxo foi executado corretamente.
+- **Journey completion** possui valor **1**, equivalente a 100% de conclusão.
+
+O tempo médio de resposta também permaneceu semelhante entre os dois cenários, variando entre aproximadamente **5,2 e 5,3 segundos**.
+
+Quando todos os testes apresentam o status **Succeeded** e métricas compatíveis com o comportamento esperado do agente, podemos considerar a suíte de avaliação validada. No resumo geral da execução, mostrado no painel à esquerda, isso se reflete no indicador **100% Successful tests**, confirmando que os quatro testes definidos para o laboratório foram aprovados.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_16.png)
 
-Ao clicar em Re-run test, a mesma notificação de avaliação em andamento aparece, desta vez para um teste só.
+Cada teste também tem um menu de opções, acessível pelo ícone de três pontos, com a ação `Re-run test`. Use-a quando quiser reexecutar um único caso, por exemplo depois de ajustar as instruções do agente, sem precisar rodar a bateria inteira novamente.
+
+Clique em **Re-run test**, a mesma notificação de avaliação em andamento aparece, desta vez para um teste só.
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_17.png)
 
