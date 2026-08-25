@@ -138,7 +138,7 @@ Esses controles podem ser combinados para implementar diferentes estratégias de
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_11.png)
 
-Para este laboratório, selecione `PII Filter` e clique em `Next`.
+Para este laboratório, em `Agents` selecione `PII Filter` e clique em `Next`.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_12.png)
 
