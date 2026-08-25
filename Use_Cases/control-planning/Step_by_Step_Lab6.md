@@ -1,16 +1,22 @@
-# Control Plane Lab do watsonx Orchestrate
+# Monitoramento em Tempo Real e Control Plane do watsonx Orchestrate
 
 ## Visão Geral
 
+Este laboratório apresenta os recursos de monitoramento em tempo real disponíveis no watsonx Orchestrate.
+
+Ao longo das atividades, você vai aprender a acompanhar o desempenho dos agentes e consultar as métricas por linguagem natural através do assistente integrado ao painel de controle.
+
+O monitoramento contínuo é essencial para garantir a eficiência dos agentes em produção, identificar comportamentos inesperados e agir proativamente na resolução de problemas antes que eles impactem a experiência dos usuários.
+
 Este laboratório apresenta o Agentic Control Plane do watsonx Orchestrate, um conjunto de painéis e ferramentas que reúne, em um só lugar, a visão de adoção, custos, qualidade, confiabilidade e segurança dos seus agentes.
 
-Ao longo das atividades, você vai navegar pelas diferentes abas do dashboard, aprender a depurar uma conversa específica usando o Debug, e criar um Controle de Content Guardrails para bloquear conteúdo impróprio nas interações de um agente.
+Ao longo das atividades, você vai navegar pelas diferentes abas do dashboard e criar um Controle de Content Guardrails para bloquear conteúdo impróprio nas interações de um agente.
 
 Conhecer essas ferramentas é essencial para operar agentes de IA com confiança, permitindo identificar rapidamente pontos de atenção, investigar comportamentos inesperados e aplicar salvaguardas antes que um agente seja exposto a usuários reais.
 
 ## Índice
 
-- [Control Plane Lab do watsonx Orchestrate](#control-plane-lab-do-watsonx-orchestrate)
+- [Monitoramento em Tempo Real e Control Plane do watsonx Orchestrate](#monitoramento-em-tempo-real-e-control-plane-do-watsonx-orchestrate)
   - [Visão Geral](#visão-geral)
   - [Índice](#índice)
   - [Explorando o Dashboard do Control Plane](#explorando-o-dashboard-do-control-plane)
@@ -20,10 +26,7 @@ Conhecer essas ferramentas é essencial para operar agentes de IA com confiança
     - [Quality: qualidade das respostas](#quality-qualidade-das-respostas)
     - [Reliability: confiabilidade e desempenho](#reliability-confiabilidade-e-desempenho)
     - [Security and Risk: controles de segurança](#security-and-risk-controles-de-segurança)
-  - [Depurando uma Conversa com o Debug](#depurando-uma-conversa-com-o-debug)
-    - [Avaliando o agente na aba Evaluate](#avaliando-o-agente-na-aba-evaluate)
-    - [Analisando conversas na aba Analyze](#analisando-conversas-na-aba-analyze)
-    - [Abrindo o Debug de uma conversa](#abrindo-o-debug-de-uma-conversa)
+  - [Entendendo as Métricas](#entendendo-as-métricas)
   - [Criando um Controle de Content Guardrails](#criando-um-controle-de-content-guardrails)
     - [Selecionando o tipo de controle](#selecionando-o-tipo-de-controle)
     - [Configurando o controle](#configurando-o-controle)
@@ -35,6 +38,12 @@ Conhecer essas ferramentas é essencial para operar agentes de IA com confiança
   - [Próximos Passos](#próximos-passos)
 
 ## Explorando o Dashboard do Control Plane
+
+Vamos conhecer o painel de controle de monitoramento do watsonx Orchestrate. Ao acessar o ambiente da sua instância do watsonx Orchestrate, você pode ver um aviso apresentando os novos dashboards do Agentic Control Plane, que reúnem em um só lugar as métricas de mensagens, implantação, avaliação, agentes e controles referentes à sua instância.
+
+Feche o aviso clicando em **Maybe later**, para ver o dashboard completo.
+
+![Control plane welcome screen](../../Assets_for_BuildBooks/labs/lab05/lab05_01.png)
 
 Ao acessar o ambiente da sua instância do watsonx Orchestrate, você chega diretamente ao dashboard do Agentic Control Plane, com uma saudação personalizada e um resumo de quantos agentes estão em produção (Live) e quantos usuários interagiram com eles nos últimos 30 dias.
 
@@ -53,6 +62,18 @@ A aba **Overview**, selecionada por padrão, reúne seis cartões de resumo: Mes
 Role a página para baixo para ver as seções **Usage trends** e **Operational trends**, com gráficos de usuários ativos, agentes ativos, mensagens, uso de tokens, taxa de falha, conversas com erro e latência P50 ao longo dos últimos sete dias.
 
 ![Usage e Operational trends](../../Assets_for_BuildBooks/labs/lab06/lab06_04.png)
+
+Em seguida, digite a pergunta abaixo no campo de mensagem do assistente.
+
+```
+Mostre os agentes com a menor taxa de sucesso desta semana
+```
+
+![Control plane welcome screen](../../Assets_for_BuildBooks/labs/lab05/lab05_05.png)
+
+O assistente responde diretamente, sem que você precise navegar por gráficos. Nesse caso, ele identificou o AskOrchestrate como o agente com a menor taxa de sucesso da semana, zero por cento, detalhando o total de conversas e quantas delas falharam. Clique em `Show Reasoning` caso queira ver como o assistente chegou a essa conclusão, e use os ícones de joinha para avaliar a resposta.
+
+![Conversation analysis](../../Assets_for_BuildBooks/labs/lab05/lab05_06.png)
 
 ### Adoption: engajamento e uso dos agentes
 
@@ -137,95 +158,25 @@ Essa aba resume o painel **Controls summary**, com o total de controles configur
 
 ![Tour guiado no dashboard](../../Assets_for_BuildBooks/labs/lab06/lab06_22.png)
 
-## Depurando uma Conversa com o Debug
+## Entendendo as Métricas:
 
-Agora que você já conhece o dashboard, vamos investigar uma conversa específica de um agente. Clique no ícone de menu hambúrguer, no canto superior esquerdo, para abrir a navegação lateral.
+Métricas de Feedback do Usuário:
 
-![Abrindo o menu lateral](../../Assets_for_BuildBooks/labs/lab06/lab06_23.png)
+`Thumbs up`: Número de respostas de feedback positivo dos usuários indicando satisfação com a resposta do agente.
 
-No menu, selecione **Build** para acessar a área de construção de agentes e ferramentas.
+`Thumbs down`: Número de respostas de feedback negativo dos usuários indicando insatisfação com a resposta do agente.
 
-![Menu lateral com Build em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_24.png)
+`Not rated`: Número de interações onde os usuários não forneceram feedback.
 
-Na página **Build agents and tools**, clique no agente **Car Sales Assistant**.
+`Toxicity`: Pontuação indicando o nível de conteúdo tóxico, ofensivo ou inapropriado na resposta (0.00 = nenhuma toxicidade detectada).
 
-![Página Build agents and tools](../../Assets_for_BuildBooks/labs/lab06/lab06_25.png)
+`Input PII`: Pontuação indicando se informações pessoalmente identificáveis foram detectadas na entrada do usuário (0.00 = nenhuma PII detectada).
 
-Na aba **Behavior** do agente, observe as instruções configuradas. Neste ambiente de laboratório, o agente foi propositalmente configurado com uma instrução inadequada sobre o modelo "Kia Nero", que usaremos mais adiante para testar o controle de conteúdo. Clique em **Evaluate**, no menu superior, para seguir para a próxima etapa.
-
-![Aba Behavior do Car Sales Assistant](../../Assets_for_BuildBooks/labs/lab06/lab06_26.png)
-
-### Avaliando o agente na aba Evaluate
-
-Na sub-aba **Evaluations**, como nenhuma avaliação foi executada ainda, a lista aparece vazia, com a opção de iniciar uma nova avaliação.
-
-![Aba Evaluate vazia](../../Assets_for_BuildBooks/labs/lab06/lab06_27.png)
-
-Clique na sub-aba **Tests**. Como nenhum teste foi salvo ainda, o watsonx Orchestrate sugere ter uma conversa com o agente e clicar em `Save as test` para criar o primeiro caso de teste.
-
-![Sub-aba Tests vazia](../../Assets_for_BuildBooks/labs/lab06/lab06_28.png)
-
-### Analisando conversas na aba Analyze
-
-Abra novamente o menu lateral e selecione **Analyze**.
-
-![Menu lateral com Analyze em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_29.png)
-
-A página **Analytics** mostra o total de conversas, usuários únicos e a duração média das conversas no período selecionado, o gráfico **Agent trend**, comparando o volume de conversas entre os agentes, e a tabela **User Feedback**, com a contagem de feedback positivo e negativo por agente.
-
-![Página Analytics](../../Assets_for_BuildBooks/labs/lab06/lab06_30.png)
-
-Esses dados dão uma visão consolidada de como os agentes estão sendo usados e recebidos pelos usuários.
-
-![Visão consolidada da página Analytics](../../Assets_for_BuildBooks/labs/lab06/lab06_31.png)
-
-Clique no nome **Car Sales Assistant**, na tabela de feedback, para abrir os detalhes desse agente.
-
-![Selecionando o Car Sales Assistant na tabela](../../Assets_for_BuildBooks/labs/lab06/lab06_32.png)
-
-Na aba **Overview** do agente, você encontra métricas mais específicas: contagem de tokens de entrada e saída, duração média de conversação, latência média por mensagem, o gráfico **Usage trend**, o donut de **User feedback** e o painel **Evaluation**, que inclui a métrica de toxicidade (ainda em Preview).
-
-![Overview do agente Car Sales Assistant](../../Assets_for_BuildBooks/labs/lab06/lab06_33.png)
-
-Clique na aba **Conversations** para ver a lista de conversas individuais. Selecione uma conversa para acompanhar a troca de mensagens completa entre o usuário e o agente, junto com o painel **Details**, que traz o identificador da conversa, o identificador do usuário, o horário de início e o total de feedbacks recebidos.
-
-![Aba Conversations com uma conversa aberta](../../Assets_for_BuildBooks/labs/lab06/lab06_34.png)
-
-### Abrindo o Debug de uma conversa
-
-Abaixo de uma das respostas do agente, clique no ícone de engrenagem para abrir a ferramenta de depuração daquela etapa específica da conversa.
-
-![Ícone de debug em uma resposta](../../Assets_for_BuildBooks/labs/lab06/lab06_35.png)
-
-A janela **Debug** se abre em tela cheia, dividida em duas áreas principais. À esquerda, o **Agent flow** exibe um diagrama com os nós percorridos durante a conversa (agentes, modelos de LLM, bases de conhecimento e respostas), conectados na ordem em que foram acionados. No topo, o **Trace ID** identifica de forma única aquela execução, com navegação entre execuções anteriores e seguintes pelos botões `Previous` e `Next`. Logo abaixo do diagrama, a **Execution timeline** lista, passo a passo, cada etapa da execução (entrada do usuário, raciocínio do agente, chamadas a colaboradores e a resposta final), com o tempo gasto em cada uma. Na parte inferior, o painel **Variables** alterna entre as abas `Summary`, `Input`, `Output` e `Node logs`, enquanto **Node properties** detalha as propriedades do nó selecionado.
-
-![Visão geral anotada da janela Debug](../../Assets_for_BuildBooks/labs/lab06/lab06_36.png)
-
-Use os ícones de layout na barra de ferramentas, acima do diagrama, para alternar entre diferentes formas de visualizar o fluxo do agente.
-
-![Alternando o layout do Agent flow](../../Assets_for_BuildBooks/labs/lab06/lab06_37.png)
-
-Um segundo ícone de layout apresenta o fluxo de forma mais linear e simplificada, facilitando o acompanhamento sequencial das etapas.
-
-![Layout linear do Agent flow](../../Assets_for_BuildBooks/labs/lab06/lab06_38.png)
-
-![Layout linear do Agent flow confirmado](../../Assets_for_BuildBooks/labs/lab06/lab06_39.png)
-
-Clique na etapa **User input**, na Execution timeline, e depois na aba `Input` do painel Variables para ver os dados brutos enviados pelo usuário naquele passo: os campos Request e Message trazem o texto exato da pergunta.
-
-![Aba Input com os dados do usuário](../../Assets_for_BuildBooks/labs/lab06/lab06_40.png)
-
-Clique na etapa **Agent** da Execution timeline e depois na aba `About`, dentro de **Node properties**, para ver os detalhes técnicos do agente responsável por aquele passo, como o nome interno, o nome de exibição e a descrição configurada.
-
-![Aba About do Node properties](../../Assets_for_BuildBooks/labs/lab06/lab06_41.png)
-
-Clique na aba `LLM Model` para ver qual modelo de linguagem foi usado naquele passo, incluindo seu identificador, rótulo, descrição e o provedor responsável por hospedá-lo.
-
-![Aba LLM Model do Node properties](../../Assets_for_BuildBooks/labs/lab06/lab06_42.png)
+`Output PII`: Pontuação indicando se informações pessoalmente identificáveis foram detectadas na resposta do agente (0.00 = nenhuma PII detectada).
 
 ## Criando um Controle de Content Guardrails
 
-Com a janela de Debug ainda aberta, abra o menu lateral e, em **Manage**, selecione **Controls** para acessar a área de criação de controles.
+Abra o menu lateral e, em **Manage**, selecione **Controls** para acessar a área de criação de controles.
 
 ![Navegando para Manage > Controls](../../Assets_for_BuildBooks/labs/lab06/lab06_43.png)
 
@@ -307,9 +258,13 @@ No painel **Preview**, à direita, envie uma mensagem com palavras de baixo cal�
 
 Parabéns! 🎉 Você concluiu o Control Plane Lab do watsonx Orchestrate.
 
-Ao longo deste laboratório, você navegou pelas seis abas do dashboard do Agentic Control Plane: Overview, Adoption, FinOps, Quality, Reliability e Security and Risk, entendendo como cada uma resume um aspecto diferente da operação dos seus agentes: uso geral, engajamento, custo de tokens, qualidade das respostas, confiabilidade e segurança. Em seguida, você usou a ferramenta Debug para investigar, passo a passo, o fluxo de execução de uma conversa real, inspecionando o agente, o modelo de linguagem utilizado e os dados de entrada e saída de cada etapa. Por fim, você criou um Controle de Content Guardrails, configurou os tipos de conteúdo a serem bloqueados, atribuiu o controle a um agente e testou seu funcionamento na prática.
+Ao longo deste laboratório, você navegou pelas seis abas do dashboard do Agentic Control Plane: Overview, Adoption, FinOps, Quality, Reliability e Security and Risk, entendendo como cada uma resume um aspecto diferente da operação dos seus agentes: uso geral, engajamento, custo de tokens, qualidade das respostas, confiabilidade e segurança.
 
-Com isso, você agora sabe onde encontrar as principais métricas de adoção, custo, qualidade, confiabilidade e segurança dos seus agentes, como depurar uma conversa até o nível de cada chamada de modelo, e como aplicar controles de segurança para proteger seus agentes contra conteúdo impróprio antes que ele chegue aos usuários.
+Em seguida, usou o assistente de IA integrado a esse painel para fazer uma pergunta em linguagem natural sobre a taxa de sucesso dos agentes na semana e recebeu uma resposta direta, já com o raciocínio disponível para consulta.
+
+Por fim, você criou um Controle de Content Guardrails, configurou os tipos de conteúdo a serem bloqueados, atribuiu o controle a um agente e testou seu funcionamento na prática.
+
+Com isso, você agora sabe onde encontrar as principais métricas de adoção, custo, qualidade, confiabilidade e segurança dos seus agentes, e como aplicar controles de segurança para proteger seus agentes contra conteúdo impróprio antes que ele chegue aos usuários.
 
 ### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
 
