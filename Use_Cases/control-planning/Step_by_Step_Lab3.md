@@ -184,25 +184,61 @@ Para este laboratório, marque `Select all`. O campo passa a exibir o indicador 
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_18.png)
 
-Em Default mask strategy você define o que acontece quando um dado sensível é encontrado. Redact substitui o valor por um marcador fixo, ocultando o conteúdo por completo. Partial mantém parte do valor visível, como os últimos dígitos de um cartão, e mascara o restante. Hash troca o valor por um hash, de forma que o mesmo dado sempre gera o mesmo resultado, mas sem possibilidade de reversão. Tokenize substitui o valor por um token que preserva a referência ao dado original, útil quando o fluxo precisa continuar identificando o registro. Remove apaga o valor do texto sem deixar marcador algum.
+Em **Default mask strategy**, você define qual ação será tomada quando um dado sensível for identificado:
+
+- **Redact**: substitui o valor por um marcador fixo, ocultando completamente a informação original.
+
+- **Partial**: mantém apenas parte do valor visível e mascara o restante. É comum em casos como cartões de crédito, onde apenas os últimos dígitos permanecem visíveis.
+
+- **Hash**: substitui o valor por um hash. O mesmo dado sempre gera o mesmo resultado, permitindo correlação sem expor o valor original. O processo não é reversível.
+
+- **Tokenize**: troca o valor por um token que representa o dado original. É útil quando processos posteriores precisam continuar referenciando o mesmo registro sem expor a informação sensível.
+
+- **Remove**: remove completamente o valor do texto, sem deixar qualquer marcador ou indicação de que havia um dado naquele local.
+
+A escolha da estratégia depende do caso de uso. Em cenários onde a informação não deve ser exibida de forma alguma, **Redact** e **Remove** costumam ser as opções mais seguras. Já **Partial**, **Hash** e **Tokenize** são úteis quando parte da informação ou sua rastreabilidade ainda precisa ser preservada.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_19.png)
 
-Selecione `Remove`.
+Para esse laboratório, selecione `Remove`.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_20.png)
 
-Em Enforcement Mode você define qual atitude o controle toma quando encontra algo. Enquanto o Detection Type define o que procurar e o Default mask strategy define como transformar o dado encontrado, o Enforcement Mode decide o que fazer com essa detecção. As opções são combináveis. Block On Detection interrompe o fluxo, bloqueando a mensagem em vez de entregar o conteúdo mascarado, e é a postura mais restritiva, prevalecendo sobre a estratégia de mascaramento quando ativa. Include Detection Details informa na resposta o que foi detectado, indicando os tipos de PII encontrados. Log Detections registra as detecções para auditoria e monitoramento, sem alterar o que o usuário vê.
+Em **Enforcement Mode**, você define qual ação o controle deve tomar quando uma informação sensível for detectada.
+
+Enquanto **Detection Type** determina *o que procurar* e **Default mask strategy** define *como mascarar ou transformar o dado encontrado*, o **Enforcement Mode** determina *o que fazer após a detecção*. As opções podem ser combinadas conforme a necessidade.
+
+- **Block On Detection**: interrompe o fluxo e bloqueia a mensagem quando um dado sensível é identificado. Nesse modo, o conteúdo não é entregue ao usuário, mesmo que uma estratégia de mascaramento tenha sido configurada. É a opção mais restritiva.
+
+- **Include Detection Details**: inclui informações sobre a detecção na resposta, indicando quais tipos de PII foram encontrados. Essa opção é útil para depuração, testes e validação das regras configuradas.
+
+- **Log Detections**: registra as detecções para fins de auditoria, monitoramento e rastreabilidade. Essa configuração não altera o conteúdo exibido ao usuário, apenas gera registros para análise posterior.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_21.png)
 
-Para este laboratório, marque as três opções, Block On Detection, Include Detection Details e Log Detections. O campo passa a exibir o indicador 3.
+Para este laboratório, marque as três opções: `Block On Detection`, `Include Detection Details` e `Log Detections` 
 
-Em seguida, mantenha os valores padrão dos três campos numéricos que aparecem na sequência. Max text bytes, com 10485760 bytes, cerca de dez megabytes, define o tamanho máximo de texto que o controle vai inspecionar em uma única mensagem, existindo para evitar que uma mensagem muito grande sobrecarregue o processo de verificação. Max nested depth, com 32, define até que nível de aninhamento o controle vai descer procurando a informação sensível dentro de uma estrutura de dados, e trinta e dois níveis já é bem mais do que respostas reais costumam ter. Max collection items, com 4096, define quantos itens de uma lista ou array o controle vai examinar, mantendo previsível o custo da inspeção em respostas volumosas.
+O campo passa a exibir o indicador 3.
+
+Em seguida, mantenha os valores padrão dos três parâmetros numéricos exibidos na tela. Esses limites existem para evitar que o processo de inspeção consuma recursos excessivos ao analisar conteúdos muito grandes ou estruturas excessivamente complexas.
+
+- **Max text bytes (10485760)**: define o tamanho máximo de texto que será analisado em uma única entrada ou saída. O valor padrão corresponde a aproximadamente **10 MB**, sendo suficiente para a maioria dos casos de uso.
+
+- **Max nested depth (32)**: determina até quantos níveis de aninhamento o controle deve percorrer ao inspecionar estruturas de dados, como objetos JSON. O valor padrão de **32 níveis** é muito superior ao encontrado normalmente em respostas reais.
+
+- **Max collection items (4096)**: define a quantidade máxima de elementos de coleções, listas ou arrays que serão analisados. Esse limite ajuda a manter o tempo e o custo de processamento previsíveis, mesmo em respostas contendo grandes volumes de dados.
+
+Para este laboratório, mantenha os valores padrão, que oferecem um equilíbrio adequado entre cobertura da inspeção e desempenho.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_22.png)
 
-Os dois últimos campos desta etapa são Custom patterns e Allowlist patterns. Custom patterns aceita expressões regulares para cobrir formatos que as onze categorias nativas não contemplam, como documentos brasileiros, por exemplo o CPF, ou identificadores internos da organização. Allowlist patterns funciona ao contrário, criando exceções para valores que têm formato de PII mas não são sensíveis, como o telefone institucional já divulgado publicamente no site da empresa. Neste laboratório, deixe os dois campos vazios, já que o objetivo é justamente observar o controle bloqueando o número de telefone no teste seguinte.
+Os dois últimos campos desta etapa são **Custom patterns** e **Allowlist patterns**, que permitem personalizar o comportamento da detecção de PII.
+
+- **Custom patterns**: permite adicionar expressões regulares (*regex*) para identificar formatos que não estão cobertos pelas categorias nativas do controle. Isso é útil para detectar dados específicos da sua organização ou de um país, como **CPF**, **CNPJ**, números de matrícula, códigos internos ou outros identificadores proprietários.
+
+- **Allowlist patterns**: funciona como uma lista de exceções. Valores que correspondam aos padrões configurados não serão tratados como PII, mesmo que tenham aparência de informação sensível. Um exemplo seria um telefone institucional ou um endereço de e-mail publicado oficialmente no site da empresa.
+
+Neste laboratório, deixe os dois campos em branco. Como o objetivo é observar o funcionamento do controle durante os testes, não queremos criar regras adicionais nem exceções que possam impedir a detecção do número de telefone utilizado nas próximas etapas.
 
 Clique em `Next`.
 
@@ -212,13 +248,24 @@ A etapa Assign Assets define a quais agentes o controle será aplicado. Como esc
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_24.png)
 
-A janela Add Agent lista todos os agentes disponíveis no ambiente. Marque os agentes ligados à busca externa de informações, que são exatamente os que colocam o agente em contato com dados fora do seu controle direto. Neste laboratório, selecione `Agente_consultor_1924dk`, `Agente_de_Buscas_1944Wq`, `Agente_de_Buscas_48414t`, `Agente de Busca` e `Agente de suporte ao revendedor`. O painel Selected agents, à direita, confirma o total de cinco agentes escolhidos. Clique em `Select`.
+A janela **Add Agent** exibe todos os agentes disponíveis no ambiente que podem receber o controle que está sendo criado.
+
+Como o objetivo deste laboratório é proteger agentes que acessam informações externas e, portanto, podem ser impactados por conteúdo proveniente de fontes fora do seu controle direto, selecione os agentes relacionados a pesquisa e suporte baseado em busca externa:
+
+À medida que os agentes são selecionados, eles aparecem no painel **Selected agents**, localizado à direita da janela. Verifique se o total de **cinco agentes** foi adicionado e clique em **Select** para concluir a associação.
+
+Ao aplicar o controle a esses agentes, todas as respostas geradas por eles passarão a ser inspecionadas antes de serem retornadas ao usuário, reduzindo o risco de exposição de informações sensíveis provenientes de fontes externas.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_25.png)
 
-Note que o Assistente de Compra de Veículos, o agente orquestrador testado na Parte 2, não entra nessa lista. O controle é aplicado diretamente sobre os agentes especializados que realizam buscas e retornam dados externos, que é onde a informação sensível de fato entra no fluxo.
+A etapa **Review** apresenta um resumo completo de todas as configurações realizadas até o momento. As informações ficam organizadas em blocos e cada um deles possui um link **Edit**, que permite retornar diretamente à etapa correspondente caso seja necessário revisar ou alterar alguma configuração antes da criação do controle.
 
-A etapa Review reúne tudo o que foi configurado, organizado em blocos, cada um com um link Edit que leva de volta à etapa correspondente caso algo precise de ajuste. Confira o bloco Control details, com o tipo de controle, nome, descrição, tipo de ativo e os hooks de Input e Output.
+Comece verificando o bloco **Control details**, que reúne as informações gerais do controle, incluindo o tipo selecionado, nome, descrição, tipo de ativo ao qual será aplicado e os **hooks** configurados. Os hooks definem em que momento o controle será executado:
+
+- **Input**: o controle é aplicado antes que a solicitação seja processada pelo agente.
+- **Output**: o controle é aplicado antes que a resposta seja enviada ao usuário.
+
+Como este laboratório tem o objetivo de impedir que informações sensíveis sejam expostas ao usuário, confirme que o hook **Output** está habilitado. O hook **Input** pode permanecer habilitado ou desabilitado conforme
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_26.png)
 
