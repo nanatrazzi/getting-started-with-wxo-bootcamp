@@ -106,15 +106,35 @@ Nesse momento o painel de controles está vazio, sem nenhum controle criado. Cli
 
 A tela Select Control lista os tipos de controle disponíveis, organizados por onde eles atuam.
 
-Em Agents, aplicados diretamente ao agente, estão o Content Guardrails, que detecta e bloqueia conteúdo sexual, violento, discurso de ódio, conteúdo nocivo, tentativas de jailbreak e viés social, o Output Length Guard, que limita o tamanho mínimo e máximo da saída em caracteres ou tokens, o Regex Pattern, que detecta conteúdo que corresponda a uma expressão regular fornecida pelo usuário e redige ou bloqueia, o Secrets Detector, que identifica credenciais e segredos em entradas e saídas, e o PII Filter, que detecta e mascara PII em argumentos, entradas e saídas do agente.
+**Os controles disponíveis no watsonx Orchestrate são organizados por tipo de ativo e podem ser aplicados a Agents, Tools e Models.**
+
+**Agents** os controles atuam diretamente nas interações do agente. Estão disponíveis:
+
+- Content Guardrails, que detecta e bloqueia conteúdo inadequado, incluindo material sexual, violência, discurso de ódio, conteúdo nocivo, tentativas de jailbreak e viés social.
+Output Length Guard, que impõe limites mínimos e máximos para o tamanho das respostas, com base em caracteres ou tokens.
+- Regex Pattern, que identifica conteúdos que correspondam a uma expressão regular definida pelo usuário e pode bloqueá-los ou mascará-los.
+- Secrets Detector, que detecta credenciais, chaves de API e outros segredos em entradas e saídas, permitindo bloqueio ou redação dessas informações.
+- PII Filter, que identifica e mascara informações pessoalmente identificáveis (PII) em argumentos, entradas e saídas do agente.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_09.png)
 
-Em Tools, aplicados às ferramentas utilizadas por agentes e workflows, estão o Content Guardrails e o Output Length Guard, com a mesma função da versão de agente mas atuando sobre o que a ferramenta processa, o Rate Limiter, que impõe limites de chamadas por tool ou tenant, e o SQLSanitizer, que detecta SQL de risco e pode remover comentários ou bloquear a execução.
+**Tools** os controles protegem chamadas para ferramentas externas e integrações:
+
+- Content Guardrails, com a mesma função de análise e filtragem de conteúdo aplicada às interações com ferramentas.
+- Output Length Guard, que limita o tamanho da saída produzida pelas ferramentas.
+- Rate Limiter, que controla a quantidade de chamadas permitidas por ferramenta ou tenant em determinado período, ajudando a evitar abuso ou consumo excessivo de recursos.
+- SQL Sanitizer, que detecta consultas SQL potencialmente perigosas, podendo remover comentários, sanitizar comandos ou bloquear execuções suspeitas.
+- Secrets Detector, que impede o vazamento acidental de credenciais ou segredos durante o uso das ferramentas.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_10.png)
 
-Em Models, aplicados ao modelo de inteligência artificial generativa utilizado pelos agentes, estão o Fallback, que define política de fallback e tratamento de códigos de status, o Load Balance, que distribui chamadas entre múltiplos modelos com pesos configuráveis, e o Retry, que repete a chamada ao mesmo modelo até um número configurável de tentativas em códigos HTTP específicos.
+**Models** os controles aumentam a resiliência e a disponibilidade dos modelos utilizados pelos agentes:
+
+- Fallback, que define modelos alternativos e políticas de tratamento para falhas ou códigos de erro.
+- Load Balance, que distribui requisições entre múltiplos modelos de acordo com pesos configurados, permitindo balanceamento de carga.
+- Retry, que repete automaticamente uma solicitação quando determinadas falhas temporárias são detectadas, reduzindo erros causados por indisponibilidade momentânea.
+
+Esses controles podem ser combinados para implementar diferentes estratégias de governança, segurança e confiabilidade em agentes de IA, reduzindo riscos operacionais e ajudando a atender requisitos de conformidade e proteção de dados.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_11.png)
 
