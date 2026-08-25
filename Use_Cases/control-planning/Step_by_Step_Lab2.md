@@ -295,7 +295,9 @@ O agente confirma que esse tipo de comparação existe em fóruns e sites especi
 
 Agora que o **Agente de Busca** já delega tarefas de pesquisa externa para o **Agente de Buscas**, vamos criar um terceiro agente: um orquestrador que recebe a pergunta do usuário e decide, sozinho, qual dos dois especialistas (o agente de catálogo do laboratório 1 ou o agente de busca externa que você acabou de configurar) deve responder, ou se os dois precisam ser consultados juntos.
 
-Retorne à página de gerenciamento de agentes clicando em **Manage agents**, no link azul no topo da tela do estúdio de criação, e clique em **Create agent**.
+Retorne à página de gerenciamento de agentes clicando no ícone de voltar `<` na interface do watsonx Orchestrate ao topo da página. 
+
+Clique em **Create agent**.
 
 ![Lista de agentes com Create agent em destaque](../../Assets_for_BuildBooks/labs/lab02/lab02_32.png)
 
