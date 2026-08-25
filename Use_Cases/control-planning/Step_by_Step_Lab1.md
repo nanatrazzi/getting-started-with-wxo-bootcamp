@@ -1,25 +1,24 @@
 # Proteção contra envenenamento de dados no watsonx Orchestrate
 
 ## Índice
-1. [Proteção contra envenenamento de dados no watsonx Orchestrate](#proteção-contra-envenenamento-de-dados-no-watsonx-orchestrate)
-   1. [Índice](#índice)
-   2. [Visão Geral](#visão-geral)
-   3. [Descrição do Caso de Uso](#descrição-do-caso-de-uso)
-      1. [Tipos de Ataques de Data Poisoning](#tipos-de-ataques-de-data-poisoning)
-      2. [Por que Sistemas RAG são Vulneráveis?](#por-que-sistemas-rag-são-vulneráveis)
-   4. [Laboratório](#laboratório)
-      1. [Parte 1: Acessando o watsonx Orchestrate](#parte-1-acessando-o-watsonx-orchestrate)
-      2. [Parte 2: Criar Agente de Pesquisa de Carros com Base de Conhecimento Envenenada](#parte-2-criar-agente-de-pesquisa-de-carros-com-base-de-conhecimento-envenenada)
-         1. [Conectando a base de conhecimento envenenada](#conectando-a-base-de-conhecimento-envenenada)
-         2. [Configurações avançadas da base de conhecimento (opcional, mas recomendado entender)](#configurações-avançadas-da-base-de-conhecimento-opcional-mas-recomendado-entender)
-         3. [Configurando o comportamento (Behavior) do agente](#configurando-o-comportamento-behavior-do-agente)
-      3. [Parte 3: Testar o Agente Vulnerável](#parte-3-testar-o-agente-vulnerável)
-      4. [Parte 4: Entendendo o Ataque de Data Poisoning](#parte-4-entendendo-o-ataque-de-data-poisoning)
-      5. [Parte 5: Criar Diretrizes para Proteger Contra Data Poisoning](#parte-5-criar-diretrizes-para-proteger-contra-data-poisoning)
-      6. [Parte 6: Verificar que a Diretriz Está Funcionando](#parte-6-verificar-que-a-diretriz-está-funcionando)
-      7. [Próximos passos](#próximos-passos)
-      8. [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
-   5. [Próximos Passos](#próximos-passos-1)
+- [Proteção contra envenenamento de dados no watsonx Orchestrate](#proteção-contra-envenenamento-de-dados-no-watsonx-orchestrate)
+  - [Índice](#índice)
+  - [Visão Geral](#visão-geral)
+  - [Descrição do Caso de Uso](#descrição-do-caso-de-uso)
+    - [Tipos de Ataques de Data Poisoning](#tipos-de-ataques-de-data-poisoning)
+    - [Por que Sistemas RAG são Vulneráveis?](#por-que-sistemas-rag-são-vulneráveis)
+    - [Parte 1: Acessando o watsonx Orchestrate](#parte-1-acessando-o-watsonx-orchestrate)
+    - [Parte 2: Criar Agente de Pesquisa de Carros com Base de Conhecimento Envenenada](#parte-2-criar-agente-de-pesquisa-de-carros-com-base-de-conhecimento-envenenada)
+      - [Conectando a base de conhecimento envenenada](#conectando-a-base-de-conhecimento-envenenada)
+      - [Configurações avançadas da base de conhecimento (opcional, mas recomendado entender)](#configurações-avançadas-da-base-de-conhecimento-opcional-mas-recomendado-entender)
+      - [Configurando o comportamento (Behavior) do agente](#configurando-o-comportamento-behavior-do-agente)
+    - [Parte 3: Testar o Agente Vulnerável](#parte-3-testar-o-agente-vulnerável)
+    - [Parte 4: Entendendo o Ataque de Data Poisoning](#parte-4-entendendo-o-ataque-de-data-poisoning)
+    - [Parte 5: Criar Diretrizes para Proteger Contra Data Poisoning](#parte-5-criar-diretrizes-para-proteger-contra-data-poisoning)
+    - [Parte 6: Verificar que a Diretriz Está Funcionando](#parte-6-verificar-que-a-diretriz-está-funcionando)
+    - [Próximos passos](#próximos-passos)
+    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
+  - [Próximos Passos](#próximos-passos-1)
 
 ## Visão Geral
 
@@ -36,6 +35,8 @@ Ao final deste laboratório, você será capaz de:
 - Criar e aplicar diretrizes para mitigar ataques de data poisoning; <br>
 - Testar e validar mecanismos de proteção em agentes de IA; <br>
 - Adotar boas práticas de governança e higiene de dados para aumentar a confiabilidade das respostas geradas. <br>
+
+![watsonx Orchestrate](../../Assets_for_BuildBooks/lab-data-poisoning.PNG)
 
 ## Descrição do Caso de Uso
 
