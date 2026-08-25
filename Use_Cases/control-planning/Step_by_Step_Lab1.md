@@ -115,14 +115,15 @@ O **Draft Preview**, em especial, será sua ferramenta principal ao longo do lab
 
 1. **Agent name**: `Agente de suporte ao revendedor`
 2. **Model**: mantenha o modelo padrão sugerido (por exemplo, `GPT-OSS 120B` da OpenAI, via Groq)
-3. **Description**:
+3. **Description**: <br>
+Copie e cole a descrição abaixo: <br>
    ```
    Este agente responde a perguntas e qualifica vendas para a concessionária de veículos. Seu objetivo é utilizar suas bases de conhecimento internas e externas para responder a perguntas e ajudar a concluir vendas.
    ```
 
 A **Description** não é só documentação: o watsonx Orchestrate a utiliza para decidir quando acionar este agente em cenários multiagente, e o modelo escolhido é o "cérebro" que vai interpretar tanto as instruções quanto o conteúdo recuperado da base de conhecimento, inclusive o conteúdo envenenado.
 
-Após preencher as informações do agente, clique na aba **Knowledge**
+4. Após preencher as informações do agente, clique na aba **Knowledge**
 
 ![Agent profile](../../Assets_for_BuildBooks/labs/lab01/lab01_07.png)
 
