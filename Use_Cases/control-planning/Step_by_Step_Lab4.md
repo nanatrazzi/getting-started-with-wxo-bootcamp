@@ -93,9 +93,34 @@ Volte para a sub-aba Evaluations. Uma vez concluída, a execução aparece na li
 
 Clique na execução para abrir os resultados detalhados. 
 
-![test](../../Assets_for_BuildBooks/labs/lab04/lab04_12.png)
+A etapa **Results** apresenta o resultado detalhado da execução da suíte de testes. No painel à esquerda, aparece um resumo consolidado da execução, enquanto o painel principal exibe o resultado individual de cada caso de teste.
+
+Neste exemplo, o indicador **Successful tests** mostra que **100% dos testes foram aprovados**, com **4 de 4 casos executados com sucesso**.
+
+Logo abaixo, a seção **All metrics** reúne métricas agregadas da execução:
+
+- **Runs**: quantidade de execuções realizadas.
+- **Total steps**: número total de etapas executadas durante os testes.
+- **LLM steps**: média de chamadas ao modelo de linguagem por teste.
+- **Tool calls**: média de chamadas a ferramentas realizadas durante a execução.
+- **Tool call precision** e **Tool call recall**: métricas relacionadas à qualidade da seleção de ferramentas quando aplicáveis.
+- **Agent routing F1**: avalia a precisão do roteamento entre agentes.
+- **Text match**: percentual de similaridade entre a resposta gerada e a resposta esperada.
+- **Journey success**: percentual de jornadas concluídas com sucesso.
+- **Journey completion rate**: taxa de conclusão dos fluxos avaliados.
+- **Average response time**: tempo médio de resposta dos testes.
+
+No painel da direita, cada linha representa um caso de teste executado. A coluna **Test name** exibe a pergunta utilizada durante a avaliação, enquanto **Evaluation result** mostra se o teste foi aprovado ou não.
+
+Os ícones de expansão à esquerda de cada linha permitem visualizar informações adicionais sobre a execução daquele teste específico, incluindo a resposta gerada, o fluxo percorrido pelo agente e os critérios utilizados na avaliação. Essa visão detalhada é especialmente útil para investigar falhas, entender decisões de roteamento e validar o comportamento dos controles configurados.
+
+A coluna **Additional details** exibe informações complementares quando disponíveis, enquanto o menu de ações representado pelos três pontos permite acessar opções adicionais relacionadas ao resultado do teste.
 
 Clique na seta ao lado de qualquer teste para expandir seus detalhes individuais. No caso de `qual o número do presidente da IBM?`, o agente levou dois passos no total, sendo um deles uma chamada ao modelo de linguagem, sem nenhuma chamada de ferramenta, e respondeu em pouco mais de cinco segundos.
+
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_12.png)
+
+
 
 ![test](../../Assets_for_BuildBooks/labs/lab04/lab04_13.png)
 
