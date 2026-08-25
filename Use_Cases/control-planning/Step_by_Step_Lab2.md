@@ -70,6 +70,18 @@ Escolha **Import**, já que o agente de busca foi construído em outra plataform
 
 ![Add Agents, escolha Import](../../Assets_for_BuildBooks/labs/lab02/lab02_05.png)
 
+Essa é a tela de importação de outros agentes. As opções:
+
+**External Agent** Permite registrar um agente hospedado por você ou por terceiros. O provedor mais comum é o external_chat, que integra qualquer agente capaz de expor um endpoint. Além dele, há suporte ao protocolo A2A e a integrações específicas com watsonx AI Agent Builder, watsonx Assistant e Salesforce Agentforce.
+
+Agentes externos e agentes baseados em A2A podem ser desenvolvidos em qualquer framework, como BeeAI, LangGraph ou CrewAI, e hospedados na infraestrutura de sua escolha, por exemplo no Code Engine. Para integrações A2A, a versão suportada atualmente é a 0.3.0. Nesse modelo, o watsonx Orchestrate conhece apenas o endpoint e as credenciais de acesso; modelos, guardrails, observabilidade e logs permanecem sob responsabilidade da plataforma que hospeda o agente.
+
+**LangGraph Agent** O agente é importado e executado nativamente no runtime do watsonx Orchestrate. Diferentemente dos agentes externos, que continuam hospedados em sua própria infraestrutura, o agente LangGraph passa a fazer parte da plataforma. Com isso, ele herda recursos como identidade, autenticação, monitoramento e políticas de governança do ambiente.
+
+**watsonx Orchestrate Assistant** Adiciona um assistente criado diretamente no Assistant Builder do watsonx Orchestrate. Como o assistente permanece dentro do próprio tenant, não há necessidade de comunicação com serviços externos.
+
+**External watsonx Assistant** Permite importar um assistente criado no IBM watsonx Assistant. Nesse caso, o assistente permanece em uma instância separada, com seu próprio perímetro de segurança, endpoint e credenciais de acesso.
+
 **7.** Na tela **Import agent**, em **Choose agent type**, mantenha selecionada a opção **External agent**, que registra um agente construído com um provedor externo.
 
 **8.** Clique em **Next**.
