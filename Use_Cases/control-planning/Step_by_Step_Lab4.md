@@ -341,4 +341,4 @@ Ao concluir este laboratório, você é capaz de identificar o que são dados PI
 
 ## Próximos Passos
 
-➜ [Clique aqui para navegar para o próximo lab, Realizando avaliação de Agentes com watsonx Orchestrate](./Step_by_Step_Lab4.md)
+➜ [Clique aqui para navegar para o próximo lab, Debug com watsonx Orchestrate](./Step_by_Step_Lab5.md)
