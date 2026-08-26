@@ -70,19 +70,19 @@ No painel Draft Preview, envie a pergunta abaixo.
 Qual o número da IBM?
 ```
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_02.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__02.png)
 
 Essa é uma informação que qualquer pessoa consegue encontrar em segundos com uma busca simples no Google, que retorna o número público de atendimento da IBM no Brasil.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_03.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__03.png)
 
 O Assistente de Compra de Veículos responde com uma lista de números de telefone da IBM em diferentes países, incluindo Estados Unidos, Brasil, Portugal e Espanha.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_04.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__04.png)
 
 Clique em `Show Reasoning`, ao lado da resposta, para entender de onde esses dados vieram. O primeiro passo do raciocínio mostra que o agente acionou a ferramenta `chat_with_collaborator_Agente_de_Buscas`, repassando a pergunta original, e o resultado foi transferido para o agente especializado `Agente_de_Buscas_48414t`, que é quem de fato pesquisa na internet.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_05.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__05.png)
 
 O ponto de atenção aqui não é o dado em si, já que um telefone institucional público é uma informação de baixo risco. O ponto de atenção é o mecanismo. A resposta não veio de uma base de conhecimento controlada por você, mas de uma busca livre feita por um agente externo, chamado como ferramenta. Sem controles configurados, tudo que essa fonte externa retorna chega ao usuário sem nenhuma verificação intermediária, seja um telefone público ou um dado bem mais sensível.
 
@@ -92,17 +92,17 @@ Vamos aplicar um controle que impede o agente de expor números de telefone ao u
 
 Clique no menu hambúrguer, no canto superior esquerdo da tela.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_06.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__06.png)
 
 Clique em `Manage` para expandir a sessão.
 
 Em seguida, clique em `Controls`.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_07.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__07.png)
 
 Nesse momento o painel de controles está vazio, sem nenhum controle criado. Clique em `Create Control`.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_08.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__08.png)
 
 A tela Select Control lista os tipos de controle disponíveis, organizados por onde eles atuam.
 
@@ -116,7 +116,7 @@ Output Length Guard, que impõe limites mínimos e máximos para o tamanho das r
 - Secrets Detector, que detecta credenciais, chaves de API e outros segredos em entradas e saídas, permitindo bloqueio ou redação dessas informações.
 - PII Filter, que identifica e mascara informações pessoalmente identificáveis (PII) em argumentos, entradas e saídas do agente.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_09.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__09.png)
 
 **Tools** os controles protegem chamadas para ferramentas externas e integrações:
 
@@ -126,7 +126,7 @@ Output Length Guard, que impõe limites mínimos e máximos para o tamanho das r
 - SQL Sanitizer, que detecta consultas SQL potencialmente perigosas, podendo remover comentários, sanitizar comandos ou bloquear execuções suspeitas.
 - Secrets Detector, que impede o vazamento acidental de credenciais ou segredos durante o uso das ferramentas.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_10.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__10.png)
 
 **Models** os controles aumentam a resiliência e a disponibilidade dos modelos utilizados pelos agentes:
 
@@ -136,11 +136,11 @@ Output Length Guard, que impõe limites mínimos e máximos para o tamanho das r
 
 Esses controles podem ser combinados para implementar diferentes estratégias de governança, segurança e confiabilidade em agentes de IA, reduzindo riscos operacionais e ajudando a atender requisitos de conformidade e proteção de dados.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_11.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__11.png)
 
 Para este laboratório, em `Agents` selecione `PII Filter` e clique em `Next`.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_12.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__12.png)
 
 Na etapa Configure Control, comece pelo nome e pela descrição da instância. Use:
 
@@ -152,15 +152,15 @@ Números de telefone
 Com esse controle, o agente bloqueia solicitações de pedidos de número de telefones.
 ```
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_13.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__13.png)
 
 Em Enforcement type, marque tanto `Input` quanto `Output`. Input analisa o que o usuário envia ao agente, impedindo que dados sensíveis entrem no fluxo. Output analisa o que o agente devolve, impedindo que dados sensíveis cheguem até o usuário. Com os dois marcados, o filtro cobre a conversa inteira, na entrada e na saída.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_14.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__14.png)
 
 Em Detection Type você define o escopo do filtro, ou seja, quais categorias de dado o controle vai procurar em cada mensagem. Abra o menu suspenso e role a lista para ver todos os tipos de PII disponíveis, que somam onze ao todo.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_15.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__15.png)
 
 | Tipo | O que detecta |
 |---|---|
@@ -176,13 +176,13 @@ Em Detection Type você define o escopo do filtro, ou seja, quais categorias de 
 | Detect Phone | Números de telefone |
 | Detect SSN | Número de Seguro Social dos Estados Unidos |
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_16.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__16.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_17.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__17.png)
 
 Para este laboratório, marque `Select all`. O campo passa a exibir o indicador 11, confirmando que todos os tipos de PII estão ativos, mesmo que o foco do teste seja o número de telefone.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_18.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__18.png)
 
 Em **Default mask strategy**, você define qual ação será tomada quando um dado sensível for identificado:
 
@@ -198,11 +198,11 @@ Em **Default mask strategy**, você define qual ação será tomada quando um da
 
 A escolha da estratégia depende do caso de uso. Em cenários onde a informação não deve ser exibida de forma alguma, **Redact** e **Remove** costumam ser as opções mais seguras. Já **Partial**, **Hash** e **Tokenize** são úteis quando parte da informação ou sua rastreabilidade ainda precisa ser preservada.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_19.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__19.png)
 
 Para esse laboratório, selecione `Remove`.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_20.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__20.png)
 
 Em **Enforcement Mode**, você define qual ação o controle deve tomar quando uma informação sensível for detectada.
 
@@ -214,7 +214,7 @@ Enquanto **Detection Type** determina *o que procurar* e **Default mask strategy
 
 - **Log Detections**: registra as detecções para fins de auditoria, monitoramento e rastreabilidade. Essa configuração não altera o conteúdo exibido ao usuário, apenas gera registros para análise posterior.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_21.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__21.png)
 
 Para este laboratório, marque as três opções: `Block On Detection`, `Include Detection Details` e `Log Detections` 
 
@@ -230,7 +230,7 @@ Em seguida, mantenha os valores padrão dos três parâmetros numéricos exibido
 
 Para este laboratório, mantenha os valores padrão, que oferecem um equilíbrio adequado entre cobertura da inspeção e desempenho.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_22.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__22.png)
 
 Os dois últimos campos desta etapa são **Custom patterns** e **Allowlist patterns**, que permitem personalizar o comportamento da detecção de PII.
 
@@ -242,11 +242,11 @@ Neste laboratório, deixe os dois campos em branco. Como o objetivo é observar 
 
 Clique em `Next`.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_23.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__23.png)
 
 A etapa Assign Assets define a quais agentes o controle será aplicado. Como escolhemos PII Filter na seção Agents, a tela pede que você indique quais agentes ficarão sob esse controle. Clique em `Add Agent`.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_24.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__24.png)
 
 A janela **Add Agent** exibe todos os agentes disponíveis no ambiente que podem receber o controle que está sendo criado.
 
@@ -256,7 +256,7 @@ Como o objetivo deste laboratório é proteger agentes que acessam informações
 
 Ao aplicar o controle a esses agentes, todas as respostas geradas por eles passarão a ser inspecionadas antes de serem retornadas ao usuário, reduzindo o risco de exposição de informações sensíveis provenientes de fontes externas.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_25.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__25.png)
 
 A etapa **Review** apresenta um resumo completo de todas as configurações realizadas até o momento. As informações ficam organizadas em blocos e cada um deles possui um link **Edit**, que permite retornar diretamente à etapa correspondente caso seja necessário revisar ou alterar alguma configuração antes da criação do controle.
 
@@ -267,23 +267,23 @@ Comece verificando o bloco **Control details**, que reúne as informações gera
 
 Como este laboratório tem o objetivo de impedir que informações sensíveis sejam expostas ao usuário, confirme que o hook **Output** está habilitado. O hook **Input** pode permanecer habilitado ou desabilitado conforme
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_26.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__26.png)
 
 Role a página para ver o restante da configuração, incluindo os valores de Max text bytes, Max nested depth e Max collection items, além da tabela Applies to, que lista os agentes selecionados com suas respectivas descrições. Confirme que está tudo correto e clique em `Create control`.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_27.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__27.png)
 
 Uma notificação confirma que o controle foi criado com sucesso. O painel de controles passa a mostrar um controle ativo, do tipo PII Filter, chamado Números de telefone, aplicado a cinco agentes. A partir deste momento, toda mensagem que entra ou sai desses agentes passa pelo filtro antes de chegar ao destino.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_28.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__28.png)
 
 No menu lateral, clique em `Build` para voltar à lista de agentes.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_29.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__29.png)
 
 Na tela Build agents and tools, abra o `Agente de Busca`, um dos agentes que acabamos de colocar sob o controle recém-criado.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_30.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__30.png)
 
 ### Parte 4: Testando com Asset Controls
 
@@ -297,7 +297,7 @@ qual o número de telefone da ibm?
 
 O agente recusa, informando que só pode fornecer informações sobre os veículos do catálogo, Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_31.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__31.png)
 
 Troque o alvo do pedido por uma figura pública, para verificar se um nome de maior perfil muda o resultado.
 
@@ -307,7 +307,7 @@ qual o numero de telefone do presidente donald trump?
 
 A resposta é a mesma recusa, redirecionando para o escopo de veículos. Trocar quem é o dono do número não muda nada, porque o controle age sobre a categoria do dado solicitado, não sobre a identidade de quem ele pertence.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_32.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__32.png)
 
 Por fim, tente uma busca por uma pessoa específica, como se estivesse procurando um contato dentro da própria organização.
 
@@ -317,7 +317,7 @@ busque informações sobre Nathalia Trazzi na IBM
 
 Novamente o agente recusa e permanece restrito ao catálogo de veículos.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04_33.png)
+![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__33.png)
 
 Nas três tentativas, nenhum número de telefone chega ao usuário. Note que a recusa vem acompanhada da mesma mensagem que já limitava o agente ao catálogo de veículos, o que mostra como guidelines e controles trabalham em conjunto. Mesmo antes de qualquer dado sensível ser encontrado, o próprio agente já nega qualquer solicitação fora do seu escopo declarado. E, por trás dessa camada, o PII Filter garante que, caso uma busca externa chegasse a retornar um número de telefone, ele seria bloqueado antes de alcançar o usuário, exatamente como visto na Parte 2 antes do controle existir.
 
