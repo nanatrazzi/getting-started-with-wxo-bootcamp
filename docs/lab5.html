@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lab 5 — Monitoramento em Tempo Real · watsonx Orchestrate</title>
+<title>Lab 5 · Debug de Agentes · watsonx Orchestrate</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -49,21 +49,28 @@
   a { color: var(--carbon-blue-60); }
   .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
   .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
-  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; color: var(--carbon-blue-60); }
+  .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
+  .callout--note .callout__title { color: var(--carbon-blue-60); }
+  .callout--warning .callout__title { color: #a4780a; }
   .callout p:last-child { margin: 0; }
   .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
   .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
   .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
   .step-content { flex: 1; }
   .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
   .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
   .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
   .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
-  .metric-card { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 16px; }
+  .metric-card { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 14px 16px; }
   .metric-card__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; color: var(--carbon-gray-70); margin-bottom: 4px; }
-  .metric-card__title { font-size: 14px; font-weight: 600; color: var(--carbon-gray-100); margin-bottom: 6px; }
-  .metric-card__desc { font-size: 13px; color: var(--carbon-gray-70); line-height: 1.5; }
-  .metric-card__value { font-size: 22px; font-weight: 300; color: var(--carbon-blue-60); margin-top: 6px; }
+  .metric-card__title { font-size: 14px; font-weight: 600; color: var(--carbon-gray-100); margin-bottom: 4px; }
+  .metric-card__desc { font-size: 12px; color: var(--carbon-gray-70); line-height: 1.5; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--carbon-gray-80); color: var(--carbon-white); padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--carbon-gray-20); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--carbon-gray-10); }
   .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
   .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
   .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
@@ -93,7 +100,7 @@
   <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
   <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Avaliação de Agentes</a>
   <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Controles &amp; PII</a>
-  <a class="c-sidenav__item active" href="lab5.html"><span class="lab-num">Lab 5</span>Monitoramento</a>
+  <a class="c-sidenav__item active" href="lab5.html"><span class="lab-num">Lab 5</span>Debug de Agentes</a>
   <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
 </nav>
 
@@ -105,140 +112,295 @@
   </div>
 
   <div class="page-header">
-    <div class="page-header__eyebrow">Laboratório 5 · Observabilidade</div>
-    <h1 class="page-header__h1">Monitorando Agentes em Tempo Real com watsonx Orchestrate</h1>
-    <p class="page-header__subtitle">Acompanhe o desempenho dos agentes, analise padrões de conversação e monitore métricas de qualidade em tempo real.</p>
+    <div class="page-header__eyebrow">Laboratório 5 · Depuração e Diagnóstico</div>
+    <h1 class="page-header__h1">Debug de Agentes com watsonx Orchestrate</h1>
+    <p class="page-header__subtitle">Percorra a linha do tempo de execução, leia as variáveis de cada nó e transforme uma resposta suspeita em um diagnóstico concreto.</p>
   </div>
 
-  <!-- TOC -->
+  <!-- Índice -->
   <nav style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:20px 24px;margin-bottom:32px;">
     <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:10px;">Índice</div>
     <ul style="list-style:none;padding:0;margin:0;">
       <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
-      <li style="margin-bottom:6px;"><a href="#visualizar">Visualizar Resultados de Monitoramento</a></li>
-      <li style="margin-bottom:6px;"><a href="#metricas">Entendendo as Métricas</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo1">Passo 1: Reproduza a conversa</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo2">Passo 2: Entenda a janela de Debug</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo3">Passo 3: O passo User input</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo4">Passo 4: O passo Agent</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo5">Passo 5: O passo Answer</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo6">Passo 6: Leia o fluxo de outras maneiras</a></li>
+      <li style="margin-bottom:6px;"><a href="#resumo">Resumo</a></li>
+      <li style="margin-bottom:6px;"><a href="#sou-desenvolvedor">Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</a></li>
+      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos Passos</a></li>
     </ul>
   </nav>
 
+  <!-- VISÃO GERAL -->
   <section id="visao-geral">
     <h2>Visão Geral</h2>
-    <p>Este laboratório apresenta os recursos de monitoramento em tempo real disponíveis no watsonx Orchestrate.</p>
-    <p>Ao longo das atividades, você aprenderá a acompanhar o desempenho dos agentes, analisar padrões de conversação e monitorar métricas importantes, como taxas de sucesso, feedback dos usuários e indicadores de segurança e qualidade das respostas.</p>
-    <p>O monitoramento contínuo é essencial para garantir a eficiência dos agentes em produção, identificar comportamentos inesperados e agir proativamente na resolução de problemas antes que eles impactem a experiência dos usuários.</p>
+
+    <p>Quando um agente responde de um jeito inesperado, a pergunta que importa não é apenas o que ele respondeu, e sim por que ele chegou até ali. O modo de debug do <strong>watsonx Orchestrate</strong> responde exatamente isso: Registra cada passo da execução, mostra o caminho percorrido dentro do fluxo do agente e expõe os dados brutos que trafegaram entre o usuário, o modelo de linguagem e os colaboradores.</p>
+
+    <p>Neste laboratório você vai:</p>
+
+    <ul>
+      <li>Reproduzir uma interação no Draft Preview abrir a janela de Debug a partir da própria resposta;</li>
+      <li>Percorrer a linha do tempo de execução passo a passo;</li>
+      <li>Ler as variáveis de entrada e saída de cada nó;</li>
+      <li>Interpretar o log detalhado em JSON e alternar entre as visualizações do fluxo para isolar o caminho que realmente foi executado.;</li>
+    </ul>
+
+    <p>Ao final, você vai saber transformar uma resposta suspeita em um diagnóstico concreto, identificando se o problema está nas instruções do agente, no roteamento entre colaboradores ou na resposta do modelo.</p>
   </section>
 
   <hr class="section-divider">
 
-  <section id="visualizar">
-    <h2>Visualizar Resultados de Monitoramento</h2>
-    <p>Vamos verificar o dashboard de monitoramento.</p>
+  <!-- PASSO 1 -->
+  <section id="passo1">
+    <h2>Passo 1: Reproduza a conversa</h2>
 
-    <ol class="step-list">
-      <li>
-        <div class="step-content">
-          <p>Clique em <strong>IBM watsonx Orchestrate</strong> no canto superior esquerdo para retornar à tela de boas-vindas do control plane.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_monitoring_01.png" alt="Tela de boas-vindas do Control Plane">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Vamos explorar as analytics de agentes usando o chat à esquerda.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_monitoring_02.png" alt="Analytics — chat à esquerda">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Faça a seguinte pergunta:</p>
-          <div class="code-block">Mostre os agentes com a menor taxa de sucesso desta semana</div>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_monitoring_03.png" alt="Pergunta sobre taxa de sucesso dos agentes">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Em seguida, vamos explorar Platform e Agent Analytics. Clique no ícone de hambúrguer conforme indicado na imagem abaixo:</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_monitoring_04.png" alt="Ícone de hambúrguer — navegação">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Selecione <strong>Analyze</strong> no menu hambúrguer.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_monitoring_05.png" alt="Menu — Analyze">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Você verá o dashboard de avaliação com métricas-chave incluindo principais conversas, usuários únicos e duração média de conversação. Você também verá gráficos refletindo o número de conversas com cada agente e o desempenho de seus agentes.</p>
-          <p>Clique no seu agente recém-criado, o orquestrador.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_monitoring_06.png" alt="Dashboard de analytics com agentes">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Isso mostra detalhes de todas as mensagens na conversação do seu agente.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_monitoring_07.png" alt="Detalhes das mensagens do agente">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Vamos alterar a visualização, clique na aba <code>Conversations</code>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_monitoring_08.png" alt="Aba Conversations">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <div class="callout callout--note">
-            <div>
-              <div class="callout__title">Nota</div>
-              <p style="margin:0;">Note que devido a você ter poucas interações no seu agente e em apenas um dia, a maioria das métricas não deve estar disponível, assim como na imagem abaixo.</p>
-            </div>
-          </div>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_monitoring_09.png" alt="Dashboard com poucas métricas disponíveis">
-        </div>
-      </li>
-    </ol>
+    <p>Vamos continuar com o Agente de Busca, o mesmo agente do <a href="lab4.html">laboratório anterior</a>. Com ele aberto na aba Build, olhe para o topo do painel Draft Preview: a faixa azul com a mensagem <code>Running in debug mode</code> avisa que o Orchestrate está gravando o rastreamento completo de tudo que acontece ali. É esse registro que alimenta a janela de depuração.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_01.png" alt="Faixa Running in debug mode no Draft Preview">
+
+    <p>Envie a pergunta abaixo no Draft Preview.</p>
+
+    <div class="code-block">qual o número da ibm?</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_02.png" alt="Pergunta enviada no Draft Preview">
+
+    <p>O agente responde que só pode falar sobre os veículos do catálogo, já que a pergunta não passa pela validação de veículo definida nas instruções.</p>
+
+    <p>Logo abaixo da resposta aparecem quatro ícones: positivo, negativo, copiar e uma joaninha. A joaninha abre a depuração daquela mensagem específica. Clique nela.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_03.png" alt="Ícones abaixo da resposta, incluindo a joaninha">
   </section>
 
   <hr class="section-divider">
 
-  <section id="metricas">
-    <h2>Entendendo as Métricas</h2>
+  <!-- PASSO 2 -->
+  <section id="passo2">
+    <h2>Passo 2: Entenda a janela de Debug</h2>
 
-    <h3>Métricas de Feedback do Usuário</h3>
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-card__label">Feedback Positivo</div>
-        <div class="metric-card__title">👍 Thumbs up</div>
-        <div class="metric-card__desc">Número de respostas de feedback positivo dos usuários indicando satisfação com a resposta do agente.</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-card__label">Feedback Negativo</div>
-        <div class="metric-card__title">👎 Thumbs down</div>
-        <div class="metric-card__desc">Número de respostas de feedback negativo dos usuários indicando insatisfação com a resposta do agente.</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-card__label">Sem avaliação</div>
-        <div class="metric-card__title">Not rated</div>
-        <div class="metric-card__desc">Número de interações onde os usuários não forneceram feedback.</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-card__label">Qualidade</div>
-        <div class="metric-card__title">Toxicity</div>
-        <div class="metric-card__desc">Pontuação indicando o nível de conteúdo tóxico, ofensivo ou inapropriado na resposta (0.00 = nenhuma toxicidade detectada).</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-card__label">Privacidade — Entrada</div>
-        <div class="metric-card__title">Input PII</div>
-        <div class="metric-card__desc">Pontuação indicando se informações pessoalmente identificáveis foram detectadas na entrada do usuário (0.00 = nenhuma PII detectada).</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-card__label">Privacidade — Saída</div>
-        <div class="metric-card__title">Output PII</div>
-        <div class="metric-card__desc">Pontuação indicando se informações pessoalmente identificáveis foram detectadas na resposta do agente (0.00 = nenhuma PII detectada).</div>
+    <p>A tela <code>Debug: Agente de Busca</code> ocupa toda a área de trabalho e se divide em duas partes. À esquerda fica o <code>Agent flow</code>, o mapa de todos os nós que formam o agente. À direita fica o rastreamento da execução, organizado em <code>Execution timeline</code>, <code>Variables</code> e <code>Node properties</code>.</p>
+
+    <p>O aviso amarelo no topo merece atenção: a tela desenha a versão atual do agente, que pode não ser a mesma que rodou quando a conversa aconteceu. Se você editar o agente e depois voltar para depurar uma conversa antiga, o diagrama pode mostrar nós que ainda nem existiam na execução original.</p>
+
+    <p>Abra o seletor <code>Legends</code>, no rodapé do canvas, para aprender a ler o diagrama. Os tipos de nó descrevem o papel de cada caixa:</p>
+
+    <ul>
+      <li><code>User input</code> é o ponto de entrada da conversa.</li>
+      <li><code>Agent</code> orquestra as tarefas.</li>
+      <li><code>LLM</code> representa uma chamada ao modelo de linguagem.</li>
+      <li><code>Tool</code> é uma função externa.</li>
+      <li><code>API</code> é um endpoint HTTP ou REST.</li>
+      <li><code>Knowledge base</code> faz busca por recuperação.</li>
+      <li><code>Workflow</code> é um processo de várias etapas.</li>
+      <li><code>Answer</code> é o nó de resposta final.</li>
+    </ul>
+
+    <p>Logo abaixo vêm os estados, que dizem se cada nó foi executado (<code>Not yet executed</code>, <code>Used in the execution</code> e <code>Current active node</code>), e os tipos de conexão, que diferenciam a ligação estrutural do agente (<code>Agent flow</code>) do caminho realmente percorrido nesta execução (<code>Current taken path</code>) e das ligações que ficaram de fora (<code>Not used in this execution</code>). Por último, as etiquetas: <code>COLLAB</code> marca um agente colaborador e o ícone de camadas indica que aquele nó tem nós filhos.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_04-a.png" alt="Seletor Legends aberto com os tipos de nó">
+
+    <p>Feche a legenda e olhe para o painel da direita. O bloco <code>Execution timeline</code> resume a conversa inteira em três passos e 1ms de duração: <code>User input</code>, <code>Agent</code> com a etiqueta <code>Model invoked</code> e <code>Answer</code>. Repare que os 0.66ms do passo <code>Agent</code> concentram praticamente todo o tempo, o que já indica onde vale investigar primeiro. Clique no primeiro passo, <code>User input</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_04-b.png" alt="Execution timeline com os três passos da execução">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PASSO 3 -->
+  <section id="passo3">
+    <h2>Passo 3: O passo User input</h2>
+
+    <p>Com o passo selecionado, o nó correspondente acende no canvas e o bloco <code>Variables</code> passa a mostrar os dados daquele ponto do fluxo, distribuídos em quatro abas. A aba <code>Summary</code> já traz a leitura rápida, com a frase que o usuário enviou.</p>
+
+    <p>Abra a aba <code>Input</code>. Os campos <code>Request</code> e <code>Message</code> carregam a mesma pergunta, porque nesse ponto ainda não houve nenhum processamento: o que entrou foi exatamente o que o usuário digitou.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_05.png" alt="Aba Input do passo User input">
+
+    <p>Em <code>Output</code> aparece a mensagem <code>No output information available for this step</code>. Isso é esperado. O nó de entrada apenas recebe a mensagem e a repassa adiante, sem produzir nada por conta própria.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_06.png" alt="Aba Output sem informação disponível">
+
+    <p>A aba <code>Node logs</code> mostra o span, que é o registro bruto do passo. O cabeçalho traz a identificação: <code>stepIndex</code> em zero marca o primeiro passo, <code>spanId</code> com o valor <code>__user_input__</code> identifica o nó, <code>parentAgentId</code> guarda o identificador do Agente de Busca e <code>depth</code> em zero indica que tudo aconteceu no nível principal, sem aninhamento em nenhum colaborador. O botão <code>Raw</code>, no canto direito, alterna entre a versão formatada e o JSON puro.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_07.png" alt="Aba Node logs com o cabeçalho do span">
+
+    <p>Clique em <code>Show more</code> para ver o span inteiro.</p>
+
+    <p>A parte de baixo cobre a execução: <code>duration</code> em zero confirma um passo instantâneo, <code>hasModelCall</code> como false mostra que nenhuma chamada ao modelo saiu daqui, <code>input</code> guarda a mensagem original, <code>output</code> está nulo e <code>status</code> marca <code>success</code>. Os campos <code>childSpanIds</code> vazio e <code>hasChildren</code> como false completam o quadro, este passo não gerou nenhum passo filho.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_08.png" alt="Span completo do passo User input">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PASSO 4 -->
+  <section id="passo4">
+    <h2>Passo 4: O passo Agent</h2>
+
+    <p>Volte para a linha do tempo e clique no segundo passo. A etiqueta <code>Model invoked</code> avisa que foi aqui que o modelo de linguagem entrou em ação.</p>
+
+    <p>No canvas, o caminho percorrido aparece tracejado saindo de <code>User input</code>, passando pelo <code>Agente de Busca</code> e chegando ao nó do modelo <code>groq/openai/gpt-oss</code>. O <code>Agente de Buscas</code>, colaborador identificado pela etiqueta <code>COLLAB</code>, continua apagado, porque não foi acionado nesta conversa. Esse detalhe visual já responde à primeira pergunta de qualquer investigação de roteamento: o agente resolveu sozinho, sem repassar a solicitação.</p>
+
+    <p>O bloco <code>Node properties</code> também muda e ganha três abas, <code>About</code>, <code>Guidelines</code> e <code>LLM Model</code>. Em <code>About</code> estão o nome interno do agente, o nome de exibição, a descrição e as instruções vigentes.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_09.png" alt="Caminho percorrido no canvas e aba About">
+
+    <p>Role o painel para ler as instruções na íntegra. Essa é a leitura mais valiosa da depuração, porque coloca lado a lado o que você escreveu e o que o agente fez. O bloco de validação de veículo pede que o agente identifique o modelo mencionado antes de atender qualquer solicitação, tolerando nomes incompletos, variações de escrita, erros de digitação, apelidos e omissão da marca.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_10.png" alt="Instruções do agente no painel Node properties">
+
+    <p>A lista de exemplos válidos mostra os apelidos aceitos para cada carro do catálogo, de "Versa" a "Carrera GTS". Nenhum deles se parece com a pergunta enviada, o que explica o desfecho.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_11.png" alt="Lista de exemplos válidos nas instruções">
+
+    <p>Em seguida vem a regra de roteamento. Havendo alta confiança de que o veículo pertence ao catálogo, a solicitação deve ser encaminhada ao Agente de Buscas. A recusa só é permitida quando não houver como associar o pedido a nenhum modelo, e a mensagem de rejeição está escrita literalmente nas instruções. É por isso que a resposta saiu palavra por palavra igual ao texto configurado.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_12.png" alt="Regra de roteamento e mensagem de recusa">
+
+    <p>No fim do painel ficam as configurações do nó: <code>Chat with doc</code> e <code>Memory enabled</code> desabilitados, <code>Agent style</code> em <code>Default</code> e <code>Node type</code> como <code>Agent</code>. Quando um agente parece ignorar o contexto de mensagens anteriores, é aqui que se descobre que a memória simplesmente não estava ligada.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_13.png" alt="Configurações do nó no fim do painel">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PASSO 5 -->
+  <section id="passo5">
+    <h2>Passo 5: O passo Answer</h2>
+
+    <p>Selecione o terceiro passo da linha do tempo. O nó <code>Answer</code> acende no fim do caminho tracejado e a aba <code>Summary</code> mostra <code>Input request</code> e <code>Output response</code> com exatamente o mesmo texto. Essa igualdade é o ponto central: o nó de resposta não reescreve nada, ele entrega o que o passo anterior produziu.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_14.png" alt="Aba Summary do passo Answer">
+
+    <p>A aba <code>Input</code> acrescenta o contexto da chamada. <code>Async flag</code> como false e <code>In async execution</code> em zero indicam execução síncrona, <code>Is Collaborator</code> como false confirma que quem responde é o agente principal, <code>Use supervisor interrupt handoff</code> como false mostra que não houve transferência para um supervisor e <code>Agent depth</code> em um informa o nível do agente na hierarquia.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_15.png" alt="Aba Input do passo Answer">
+
+    <p>Em <code>Output</code>, o campo <code>Response</code> traz a resposta final, a mesma que o usuário viu no Draft Preview.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_16.png" alt="Aba Output com a resposta final">
+
+    <p>Abra <code>Node logs</code>. O cabeçalho do span identifica o passo com <code>stepIndex</code> em um, <code>displayIndex</code> em dois, um <code>spanId</code> próprio e <code>operationName</code> igual a <code>answer</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_17.png" alt="Cabeçalho do span do passo Answer">
+
+    <p>Clique em <code>Show more</code>.</p>
+
+    <p>A primeira parte do span cobre a execução e o contexto da conversa. Os valores <code>duration</code> em três, <code>tokenUsage</code> em zero e <code>hasModelCall</code> como false confirmam de novo que este nó não conversa com o modelo. Logo abaixo vem o bloco <code>context</code>, com os identificadores que amarram tudo: <code>wxo_thread_id</code> para a conversa, <code>wxo_run_id</code> para esta execução, além do usuário e do tenant. Vale guardar o <code>wxo_thread_id</code>, é ele que permite reencontrar a mesma conversa nas ferramentas de observabilidade.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_18.png" alt="Bloco context do span">
+
+    <p>O bloco <code>messages</code> traz o diálogo como o modelo o enxergou. A primeira mensagem é a do usuário, marcada com <code>type</code> igual a <code>human</code>.</p>
+
+    <p>A segunda é a resposta, e dentro dela o campo <code>reasoning</code> guarda a justificativa do modelo em uma linha: o usuário perguntou algo sem relação com veículos, então a solicitação precisa ser recusada com a mensagem especificada. É a prova direta de que a instrução foi lida e seguida.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_19.png" alt="Bloco messages com o campo reasoning">
+
+    <p>Em seguida aparecem os metadados do modelo. Os campos <code>model_provider</code>, <code>actual_model</code> e <code>configured_model</code> mostram qual modelo respondeu e confirmam que ele é o mesmo configurado no agente; uma divergência aí explicaria comportamentos estranhos. O <code>finish_reason</code> igual a <code>stop</code> indica encerramento normal, <code>retry_count</code> em zero mostra que não houve nova tentativa e <code>tool_calls</code> vazio confirma que nenhuma ferramenta foi chamada.</p>
+
+    <p>Por fim, <code>usage_metadata</code> contabiliza 1116 tokens de entrada, 118 de saída e 1234 no total, que é o número a observar quando o assunto é custo quando está se utilizando outros modelos.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p>o watsonx Orchestrate não faz cobrança por token e sim por MAUs. (Monthly active users)</p>
+        <p>Para entede mais sobre MAUs, consulte este link: <a href="https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=entitlements-licenses-cloud" target="_blank">https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=entitlements-licenses-cloud</a></p>
+        <p style="margin:0;">Ou o time comercial responsável pela sua conta.</p>
       </div>
     </div>
 
-    <h3>Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
-    <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit). <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais como criar agentes, tools, bases de conhecimentos e muito mais.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_20.png" alt="Metadados do modelo e usage_metadata">
+
+    <p>A sequência seguinte descreve o estado interno do agente no momento da resposta. <code>reflection_enabled</code> como true, com <code>reflection_retry_count</code> em zero e limite em um, significa que a revisão automática estava disponível mas não precisou ser usada. <code>step_count</code> em um conta os ciclos de raciocínio e <code>is_collaborator</code> como false reforça que nenhum colaborador entrou na conversa.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_21.png" alt="Estado interno do agente no span">
+
+    <p>Mais abaixo ficam os campos de planejamento.</p>
+
+    <p>Com <code>plan</code> vazio, <code>current_task</code> sem tarefa ativa e <code>is_planning</code> como false, fica claro que o agente respondeu direto, sem quebrar a solicitação em etapas. O campo <code>citations</code> vazio mostra que nenhuma base de conhecimento foi consultada.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_22.png" alt="Campos de planejamento do span">
+
+    <p>O trecho final reúne o resultado. O campo <code>output</code> repete a resposta entregue e <code>status</code> marca <code>success</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_23.png" alt="Trecho final com output e status">
+
+    <p>Depois vem o bloco <code>tags</code>, com os identificadores de rastreamento: a sessão, a transação, o <code>thread_id</code>, o workspace, o nome do nó e o fluxo interno que executou a resposta. São eles que conectam este passo aos painéis de monitoramento.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_24.png" alt="Bloco tags com os identificadores de rastreamento">
+
+    <p>Os logs guardam as entradas e as saídas de nó em blocos separados, então a conversa, os metadados do modelo e o estado do agente aparecem uma segunda vez, agora dentro de <code>langchain.chain.input</code>. Use essa divisão a seu favor quando estiver procurando algo específico: o que está em <code>langchain.chain.input</code> descreve o que o nó recebeu, e o que está em <code>langchain.chain.output</code> descreve o que ele devolveu.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_25.png" alt="Bloco langchain.chain.input, parte 1">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_26.png" alt="Bloco langchain.chain.input, parte 2">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_27.png" alt="Bloco langchain.chain.input, parte 3">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_28.png" alt="Bloco langchain.chain.input, parte 4">
+
+    <p>Passado o bloco, vem a identificação técnica do passo dentro do motor de execução.</p>
+
+    <p>O campo <code>openinference.span.kind</code> classifica o span como <code>CHAIN</code>, e os campos de <code>langgraph</code> marcam a posição exata do nó no grafo, incluindo a etapa, o nome do nó e o gatilho que levou até ele. Esses valores são úteis para reconstruir a ordem de execução em fluxos maiores.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_29.png" alt="Identificação técnica do span no motor de execução">
+
+    <p>O bloco <code>langchain.chain.output</code> fecha o ciclo com a resposta final do assistente, novamente acompanhada do campo <code>reasoning</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_30.png" alt="Bloco langchain.chain.output">
+
+    <p>A última linha, <code>isWorkflow</code> como false, confirma que a execução seguiu o caminho de um agente comum e não de um workflow. Clique em <code>Show less</code> para recolher o span.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_31.png" alt="Campo isWorkflow e botão Show less">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PASSO 6 -->
+  <section id="passo6">
+    <h2>Passo 6: Leia o fluxo de outras maneiras</h2>
+
+    <p>Os dois últimos ícones da barra superior controlam como o <code>Agent flow</code> é desenhado. O primeiro deles destaca o caminho percorrido dentro do diagrama completo: os nós usados ficam realçados e os demais continuam visíveis, porém apagados. É a visão indicada para comparar o que o agente poderia ter feito com o que ele de fato fez.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_32.png" alt="Visão com o caminho percorrido destacado">
+
+    <p>O segundo ícone vai além e remove do canvas tudo que não participou da execução. Sobram apenas <code>User input</code>, <code>Agente de Busca</code>, o nó do modelo e <code>Answer</code>, em tamanho maior. Em agentes com muitos colaboradores e ferramentas, essa visão elimina o ruído e deixa o caminho real evidente.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_33.png" alt="Visão apenas com os nós executados">
+
+    <p>As setas à esquerda da barra percorrem os passos em ordem, sem precisar clicar na linha do tempo, o que ajuda a acompanhar a execução como uma sequência contínua. O ícone de recarregar atualiza o rastreamento e o <code>X</code>, no canto superior direito, fecha a depuração e devolve você à aba Build.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_debug_34.png" alt="Controles da barra superior da janela de Debug">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- RESUMO -->
+  <section id="resumo">
+    <h2>Resumo</h2>
+
+    <p>Parabéns! 🎉 Você concluiu o laboratório de depuração de agentes no watsonx Orchestrate.</p>
+
+    <p>Ao longo das atividades, você reproduziu uma resposta no Draft Preview em modo de depuração, abriu o rastreamento pelo ícone de inseto, percorreu os três passos da execução, leu as variáveis de entrada e saída de cada nó, interpretou o span completo em JSON e alternou entre as visualizações do fluxo para isolar o caminho executado.</p>
+
+    <p>Mais importante que a mecânica é o método. Quando uma resposta sair errada, a investigação segue sempre a mesma ordem: confira no canvas se o roteamento foi o esperado, leia as instruções vigentes no passo <code>Agent</code>, procure o campo <code>reasoning</code> para entender a decisão do modelo e confirme nos metadados se o modelo e as configurações eram os que você imaginava. Na maioria dos casos o problema aparece em um desses quatro pontos.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SOU DESENVOLVEDOR -->
+  <section id="sou-desenvolvedor">
+    <h2>Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h2>
+
+    <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK, o Agent Development Kit. <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais sobre como criar agentes, tools, bases de conhecimento e muito mais.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PRÓXIMOS PASSOS -->
+  <section id="proximos-passos">
+    <h2>Próximos Passos</h2>
+    <p>➜ <a href="lab6.html">Clique aqui para navegar para o próximo lab, Control Plane Lab do watsonx Orchestrate</a></p>
   </section>
 
   <div class="lab-nav">
@@ -248,7 +410,7 @@
 </main>
 
 <footer class="c-footer">
-  Nathalia Trazzi | Technical Solutions Architect & AI Engineer
+  Made by Nathalia Trazzi & Julia Almeida
 </footer>
 </body>
 </html>
