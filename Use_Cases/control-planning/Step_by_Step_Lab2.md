@@ -169,14 +169,14 @@ Selecione **API Key**, a opção usada neste laboratório.
 
 Em **Server URL** cole o link do servidor onde seu agente está hospedado. 
 
-> [!ATTENTION]
+> [!WARNING]
 > Peça este link para os instrutores do laboratório.
 
 Em **API Key Location**, mantenha `header`, o local esperado pelo agente externo. No campo ao lado não é necessária nenhuma ação.
 
 ![API Key Location e Server URL](../../Assets_for_BuildBooks/labs/lab02/lab02_14.png)
 
-20. Role a tela até **Credential type**. 
+**20.** Role a tela até **Credential type**. 
 
 Ele define quem fornece a credencial:
 
@@ -187,7 +187,7 @@ Ele define quem fornece a credencial:
 ![Credential type](../../Assets_for_BuildBooks/labs/lab02/lab02_15.png)
 
 
-**20.** Selecione **Team credentials**, já que todos vão usar a mesma chave do serviço de busca.
+Selecione **Team credentials**, já que todos vão usar a mesma chave do serviço de busca.
 
 ![API Key preenchida](../../Assets_for_BuildBooks/labs/lab02/lab02_16.png)
 
