@@ -1,4 +1,4 @@
-# Debug de Agentes com watsonx Orchestrate
+# Debug com watsonx Orchestrate
 
 ## Visão Geral
 
@@ -15,7 +15,7 @@ Ao final, você vai saber transformar uma resposta suspeita em um diagnóstico c
 
 ## Índice
 
-- [Debug de Agentes com watsonx Orchestrate](#debug-de-agentes-com-watsonx-orchestrate)
+- [Debug com watsonx Orchestrate](#debug-com-watsonx-orchestrate)
   - [Visão Geral](#visão-geral)
   - [Índice](#índice)
   - [Passo 1: Reproduza a conversa](#passo-1-reproduza-a-conversa)
@@ -237,4 +237,4 @@ Todas as operações realizadas também estão disponíveis em uma experiência 
 
 ## Próximos Passos
 
-➜ [Clique aqui para navegar para o próximo lab, Control Plane Lab do watsonx Orchestrate](./Step_by_Step_Lab6.md)
+➜ [Clique aqui para navegar para o próximo lab, Monitoramento em Tempo Real e Control Plane do watsonx Orchestrate](./Step_by_Step_Lab6.md)
