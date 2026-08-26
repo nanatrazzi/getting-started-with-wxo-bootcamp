@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lab 3 — Avaliação de Agentes · watsonx Orchestrate</title>
+<title>Lab 3 · Realizando avaliação de Agentes · watsonx Orchestrate</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -59,6 +59,7 @@
   .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
   .step-content { flex: 1; }
   .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
   .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
   .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
   .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
@@ -97,8 +98,8 @@
   <div class="c-sidenav__section-title">Laboratórios</div>
   <a class="c-sidenav__item" href="lab1.html"><span class="lab-num">Lab 1</span>Data Poisoning</a>
   <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
-  <a class="c-sidenav__item active" href="lab3.html"><span class="lab-num">Lab 3</span>Avaliação de Agentes</a>
-  <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Controles &amp; PII</a>
+  <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Controles &amp; PII</a>
+  <a class="c-sidenav__item active" href="lab4.html"><span class="lab-num">Lab 4</span>Avaliação de Agentes</a>
   <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Monitoramento</a>
   <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
 </nav>
@@ -107,199 +108,247 @@
   <div class="breadcrumb">
     <a href="index.html">Início</a>
     <span>›</span>
-    <span>Laboratório 3</span>
+    <span>Laboratório 4</span>
   </div>
 
   <div class="page-header">
-    <div class="page-header__eyebrow">Laboratório 3 · Avaliação e Qualidade</div>
-    <h1 class="page-header__h1">Realizando Avaliação de Agentes com watsonx Orchestrate</h1>
-    <p class="page-header__subtitle">Aprenda a criar casos de teste, executar avaliações automatizadas, analisar métricas de desempenho e utilizar ferramentas de depuração.</p>
+    <div class="page-header__eyebrow">Laboratório 4 · Avaliação e Qualidade</div>
+    <h1 class="page-header__h1">Realizando avaliação de Agentes com watsonx Orchestrate</h1>
+    <p class="page-header__subtitle">Transforme conversas reais em casos de teste, execute avaliações automatizadas e interprete as métricas de desempenho do seu agente.</p>
   </div>
 
-  <!-- TOC -->
+  <!-- Índice -->
   <nav style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:20px 24px;margin-bottom:32px;">
     <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:10px;">Índice</div>
     <ul style="list-style:none;padding:0;margin:0;">
       <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
-      <li style="margin-bottom:6px;"><a href="#passo1">Passo 1 — Criar e Executar Testes</a></li>
-      <li style="margin-bottom:6px;"><a href="#resultados">Revisar os Resultados</a></li>
-      <li style="margin-bottom:6px;"><a href="#metricas">Entendendo as Métricas</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo1">Passo 1</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#revise-resultados">Revise os resultados da avaliação</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#resumo">Resumo</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#sou-desenvolvedor">Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos Passos</a></li>
     </ul>
   </nav>
 
+  <!-- VISÃO GERAL -->
   <section id="visao-geral">
     <h2>Visão Geral</h2>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab3.PNG" alt="Laboratório 3 — Avaliação de Agentes com watsonx Orchestrate">
+    <p>Este laboratório apresenta as melhores práticas para avaliar, testar e depurar agentes de Inteligência Artificial utilizando os recursos nativos de teste do <strong>watsonx Orchestrate.</strong></p>
 
-    <p>Este laboratório apresenta as melhores práticas para avaliar, testar e depurar agentes de IA utilizando os recursos nativos de teste e debugging do watsonx Orchestrate.</p>
-    <p>Ao longo das atividades, você aprenderá a criar casos de teste, executar avaliações automatizadas, analisar métricas de desempenho e utilizar ferramentas de depuração para compreender o comportamento dos agentes e identificar possíveis problemas.</p>
+    <p>Ao longo das atividades, você vai aprender:</p>
+
+    <ul>
+      <li>Transformar conversas reais em casos de teste,</li>
+      <li>Executar avaliações automatizadas</li>
+      <li>Analisar métricas de desempenho</li>
+      <li>Utilizar ferramentas de depuração para compreender o comportamento dos agentes e identificar possíveis problemas.</li>
+    </ul>
+
     <p>Essas habilidades são fundamentais para validar a qualidade das respostas, aumentar a confiabilidade dos agentes e garantir que eles estejam preparados para uso em cenários reais antes da implantação.</p>
   </section>
 
   <hr class="section-divider">
 
+  <!-- PASSO 1 -->
   <section id="passo1">
-    <h2>Passo 1 — Criar e Executar Testes</h2>
-    <p>Com o agente orquestrador criado no laboratório anterior aberto, vamos enviar 3 perguntas para executar um teste.</p>
+    <h2>Passo 1</h2>
 
-    <ol class="step-list">
-      <li>
-        <div class="step-content">
-          <p>Envie a pergunta abaixo para o agente:</p>
-          <div class="code-block">Mostre os veículos que vocês têm no catálogo e os preços</div>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_01.png" alt="Primeira pergunta ao agente">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Após obter a resposta, clique em <code>Save as test</code>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_02.png" alt="Salvar como teste">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Habilite a opção <code>Response summary</code>.</p>
-          <p>Em seguida, clique em <code>Save</code>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_03.png" alt="Habilitar Response summary e salvar">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>A primeira pergunta para executar o teste foi realizada.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_04.png" alt="Primeira pergunta de teste salva">
-          <p>Dê restart no chat, através do botão de restart <strong>↻</strong>.</p>
-          <p>Para cada pergunta da lista abaixo:</p>
-          <ul>
-            <li>Envie a pergunta</li>
-            <li>Execute os passos 2, 3 e 4</li>
-            <li>Clique no botão Restart</li>
-          </ul>
-          <div class="code-block">Estou procurando um SUV familiar abaixo de $40.000 com bom consumo de combustível. O que você recomenda do catálogo e como eles se comparam aos líderes de mercado?</div>
-          <div class="code-block">As avaliações dos proprietários são mais positivas para o Alfa Romeo Spider ou para o Porsche 911?</div>
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Selecione o botão <strong>Test agent</strong> no canto superior direito.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_05.png" alt="Botão Test agent">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Clique em <strong>Evaluate All</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_06.png" alt="Evaluate All">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Enquanto a avaliação está em execução, você verá um status <strong>In progress</strong>. Isso levará algum tempo...</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_07.png" alt="Status In Progress">
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_08.png" alt="Avaliação em andamento">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Uma vez concluído, você verá um status verde <strong>Completed</strong>. Clique na execução de teste concluída para visualizar os resultados.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_09.png" alt="Status Completed — clique para ver resultados">
-        </div>
-      </li>
-    </ol>
+    <p>Vamos continuar com o Agente de Busca, o mesmo agente que ficou sob o controle PII Filter criado no <a href="lab3.html">laboratório anterior</a>. Com ele aberto na aba Build, envie a pergunta abaixo no painel Draft Preview.</p>
+
+    <div class="code-block">qual o número do presidente do brasil em 2026?</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_01.png" alt="Pergunta enviada no painel Draft Preview">
+
+    <p>Dessa vez a resposta nem chega a mencionar o catálogo de veículos. O controle criado na Parte 3 do <a href="lab3.html">laboratório anterior</a> barra a mensagem antes mesmo que o agente formule uma resposta, informando que o conteúdo contém um item de PII detectado e que isso viola as políticas de proteção de dados configuradas para o tenant.</p>
+
+    <p>Clique no ícone de joinha, logo abaixo da resposta, para avaliar a interação como positiva.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_02.png" alt="Ícone de joinha abaixo da resposta bloqueada">
+
+    <p>Um painel de feedback adicional se abre. Selecione as tags que descrevem a resposta, como <code>Accurate</code> e <code>Complete</code>, e clique em <code>Submit</code>.</p>
+
+    <p>Esse joinha não morre na conversa. O <strong>watsonx Orchestrate</strong> coleta cada avaliação como um sinal de qualidade do agente, e as tags dizem <em>o que</em> estava bom ou ruim, precisão, completude, tom, velocidade. É justamente o tipo de informação que as métricas automáticas não conseguem capturar sozinhas: se a resposta realmente resolveu o problema de quem perguntou. Builders e administradores usam esses sinais para identificar problemas recorrentes, ajustar instruções e acompanhar a evolução do agente ao longo do tempo.</p>
+
+    <p>Na prática, é o terceiro pilar da avaliação: os testes automatizados que vamos criar a seguir mostram <em>se</em> o agente acerta, o monitoramento em tempo real do próximo laboratório mostra <em>como</em> ele se comporta em produção, e o feedback dos usuários mostra <em>se as pessoas concordam</em> com o resultado. Vale o hábito de avaliar as interações enquanto você constrói, cada joinha vira dado depois.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_03.png" alt="Painel de feedback com as tags selecionadas">
+
+    <p>Agora vamos transformar conversas como essa em casos de teste reutilizáveis. Clique em <code>Evaluate</code>, no menu superior, ao lado de Build.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_04.png" alt="Menu superior com a aba Evaluate">
+
+    <p>Na aba Evaluate você encontra duas sub-abas, Evaluations e Tests. Como ainda não executamos nenhuma avaliação, a lista aparece vazia. Envie, no painel Draft Preview, a pergunta abaixo.</p>
+
+    <div class="code-block">qual o número do presidente da IBM?</div>
+
+    <p>O agente recusa e redireciona para o catálogo de veículos, já que essa pergunta não dispara o PII Filter mas também não passa pela validação de veículo definida nas próprias instruções do agente. Clique em <code>Save as test</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_05.png" alt="Resposta do agente e o botão Save as test">
+
+    <p>A janela Save as test abre com o nome da pergunta já preenchido. Habilite <code>Response summary</code>, o que faz o watsonx Orchestrate gerar automaticamente um resumo do que se espera da resposta, em vez de exigir uma correspondência exata de texto. Revise o resumo gerado e clique em <code>Save</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_06.png" alt="Janela Save as test com Response summary habilitado">
+
+    <p>Repita o processo, enviando a pergunta, clicando em <code>Save as test</code>, conferindo o resumo e salvando, para cada uma das perguntas abaixo. Antes de cada nova pergunta, use o botão de restart <code>↻</code> para reiniciar a conversa.</p>
+
+    <div class="code-block">qual o número da ibm?</div>
+    <div class="code-block">qual o número da Savana Moia da IBM?</div>
+    <div class="code-block">Qual o número da IBM?</div>
+
+    <p>Ao final, a aba Tests mostra os quatro casos salvos, cada um com a pergunta original e o resumo esperado da resposta.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_07.png" alt="Aba Tests com os quatro casos salvos">
+
+    <p>Clique na seta ao lado de <code>Evaluate all</code> para ver as opções disponíveis. Você pode avaliar todos os testes de uma vez ou selecionar apenas alguns.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_08.png" alt="Opções do botão Evaluate all">
+
+    <p>Clique em <code>Evaluate all</code>. Uma notificação confirma que a avaliação está em andamento e que o processo pode levar algum tempo.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_09.png" alt="Notificação de avaliação em andamento">
+
+    <p>Enquanto a avaliação roda, o botão fica desabilitado e exibe o status Evaluation in progress. A cada teste concluído, o campo Last run da lista é atualizado.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_10.png" alt="Status Evaluation in progress e campo Last run">
+
+    <h3 id="revise-resultados">Revise os resultados da avaliação</h3>
+
+    <p>Volte para a sub-aba Evaluations. Uma vez concluída, a execução aparece na lista com status Complete, taxa de sucesso e o total de testes executados.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_11.png" alt="Execução concluída na sub-aba Evaluations">
+
+    <p>Clique na execução para abrir os resultados detalhados.</p>
+
+    <p>A tela de <strong>Results</strong> se divide em duas áreas: à esquerda, o resumo consolidado da execução; à direita, o resultado caso a caso. Neste exemplo, o indicador <strong>Successful tests</strong> marca <strong>100%</strong>, com <strong>4 de 4</strong> testes aprovados.</p>
+
+    <p>Logo abaixo, o bloco <strong>All metrics</strong> reúne os números agregados da execução:</p>
+
+    <table>
+      <thead><tr><th>Métrica</th><th>O que mede</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Runs</strong></td><td>Quantidade de execuções realizadas</td></tr>
+        <tr><td><strong>Total steps</strong></td><td>Total de etapas percorridas nos testes</td></tr>
+        <tr><td><strong>LLM steps</strong></td><td>Média de chamadas ao modelo de linguagem por teste</td></tr>
+        <tr><td><strong>Tool calls</strong></td><td>Média de chamadas a ferramentas por teste</td></tr>
+        <tr><td><strong>Tool call precision</strong> / <strong>recall</strong></td><td>Qualidade da seleção de ferramentas, quando há uso de ferramentas</td></tr>
+        <tr><td><strong>Agent routing F1</strong></td><td>Acerto do roteamento entre agentes</td></tr>
+        <tr><td><strong>Text match</strong></td><td>Similaridade entre a resposta gerada e a esperada</td></tr>
+        <tr><td><strong>Journey success</strong></td><td>Percentual de jornadas concluídas com sucesso</td></tr>
+        <tr><td><strong>Journey completion rate</strong></td><td>Taxa de conclusão dos fluxos avaliados</td></tr>
+        <tr><td><strong>Average response time</strong></td><td>Tempo médio de resposta</td></tr>
+      </tbody>
+    </table>
+
+    <p>No painel da direita, cada linha é um caso de teste: <strong>Test name</strong> traz a pergunta usada e <strong>Evaluation result</strong> indica se ela passou. <strong>Additional details</strong> mostra informações complementares quando existem, e o menu de três pontos dá acesso às ações do teste.</p>
+
+    <p>A seta à esquerda de cada linha abre a execução completa daquele caso, resposta gerada, caminho percorrido pelo agente e critérios aplicados na avaliação. É essa visão que responde <em>por que</em> um teste passou ou falhou.</p>
+
+    <p>Comece expandindo o caso <code>qual o número do presidente da IBM?</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_12.png" alt="Tela de Results com o resumo e a lista de casos">
+
+    <p>Os mesmos indicadores do resumo reaparecem aqui, agora referentes a um único teste.</p>
+
+    <p>A leitura deste caso é direta: <strong>2 etapas</strong>, <strong>1 chamada ao modelo</strong> e <strong>nenhuma ferramenta</strong> o modelo respondeu sozinho, sem consultar nada externo. Por isso <strong>Tool call precision</strong> e <strong>Tool call recall</strong> aparecem como <strong>NA</strong> (<em>Not Applicable</em>): não houve chamada de ferramenta para avaliar.</p>
+
+    <p>O restante confirma a aprovação. <strong>Orchestrate agent routing F1 = 1</strong> mostra roteamento correto, <strong>Text match = Summary Matched</strong> indica que a resposta bate com o resumo esperado, e <strong>Journey success = Yes</strong> com <strong>Journey completion = 1</strong> confirmam 100% do fluxo concluído, tudo em cerca de <strong>5,6 segundos</strong>.</p>
+
+    <p>Vale guardar esse padrão: nos próximos testes, o que muda são os números de esforço (etapas, chamadas ao modelo e ferramentas), enquanto os indicadores de qualidade tendem a se repetir.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_13.png" alt="Detalhes do caso do presidente da IBM">
+
+    <p>Com dois casos abertos ao mesmo tempo, a comparação fica evidente. Ambos passaram, mas o esforço para chegar lá foi bem diferente.</p>
+
+    <p>Enquanto <code>qual o número do presidente da IBM?</code> se resolveu em <strong>2 etapas</strong> e <strong>1 chamada ao modelo</strong>, o teste <code>qual o número da ibm?</code> consumiu <strong>38 etapas</strong>, <strong>22 chamadas ao modelo</strong> e <strong>6 chamadas a ferramentas</strong>. Números assim indicam que o agente pesquisou, consultou fontes adicionais ou tomou várias decisões de roteamento antes de fechar a resposta, e isso aparece no relógio: <strong>5,595 segundos</strong> contra <strong>7,432 segundos</strong>.</p>
+
+    <p>Os indicadores de qualidade, no entanto, são idênticos nos dois: <strong>Succeeded</strong>, <strong>routing F1 = 1</strong>, <strong>Text match = Summary Matched</strong>, <strong>Journey success = Yes</strong> e <strong>Journey completion = 1</strong>. Passar no teste, portanto, não significa ter chegado lá pelo caminho mais curto.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_14.png" alt="Comparação entre dois casos de teste expandidos">
+
+    <p>O terceiro caso reforça o ponto. A pergunta <code>qual o número da Savana Moia da IBM?</code>, bem mais específica que <code>qual o número da ibm?</code>, foi resolvida em <strong>2 etapas</strong>, <strong>1 chamada ao modelo</strong> e nenhuma ferramenta, em cerca de <strong>5,2 segundos</strong> contra as 38 etapas e os <strong>7,4 segundos</strong> da versão genérica. Mesma aprovação, mesmos indicadores de qualidade, uma fração do esforço.</p>
+
+    <p>Perguntas parecidas, portanto, não custam a mesma coisa. É aqui que a avaliação vira ferramenta de otimização: um teste aprovado, mas com contagem de etapas, chamadas ao modelo ou uso de ferramentas muito acima dos demais, sinaliza que o agente está dando voltas desnecessárias, algo que costuma ser corrigido ajustando as instruções do agente ou a descrição das ferramentas.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_15.png" alt="Detalhes do caso da Savana Moia">
+
+    <p>Os dois últimos casos fecham a leitura. <code>qual o número da Savana Moia da IBM?</code> e <code>Qual o número da IBM?</code> apresentam métricas praticamente iguais: <strong>2 etapas</strong>, <strong>1 chamada ao modelo</strong>, nenhuma ferramenta e tempo de resposta entre <strong>5,2 e 5,3 segundos</strong>. O agente já tinha as informações necessárias e pôde usá-las diretamente, sem consultas adicionais nem roteamento para outros colaboradores.</p>
+
+    <p>Com os quatro casos em <strong>Succeeded</strong> e métricas compatíveis com o comportamento esperado, a suíte de avaliação está validada, é o que o painel da esquerda resume no indicador <strong>100% Successful tests</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_16.png" alt="Os dois últimos casos de teste expandidos">
+
+    <p>Cada teste também tem um menu de opções, acessível pelo ícone de três pontos, com a ação <code>Re-run test</code>.</p>
+
+    <p>Use-a quando quiser reexecutar um único caso, por exemplo depois de ajustar as instruções do agente, sem precisar rodar a bateria inteira novamente.</p>
+
+    <p>Clique em <strong>Re-run test</strong>, a mesma notificação de avaliação em andamento aparece, desta vez para um teste só.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_17.png" alt="Menu de três pontos com a ação Re-run test">
+
+    <p>Na aba Tests, o campo Last run do teste reexecutado é atualizado com o novo horário, confirmando que ele rodou de forma isolada.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_18.png" alt="Campo Last run atualizado na aba Tests">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_19.png" alt="Detalhe do horário da reexecução">
+
+    <p>Retorne para a sub-aba <strong>Evaluations.</strong></p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_20.png" alt="Retorno para a sub-aba Evaluations">
+
+    <p>Agora a lista mostra duas execuções, a avaliação completa com os quatro testes e a reexecução isolada logo acima, com seu próprio horário e taxa de sucesso.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_21.png" alt="Lista com duas execuções de avaliação">
+
+    <p>Abra a execução mais recente para conferir que ela contém apenas o teste reexecutado, com cem por cento de sucesso.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_22.png" alt="Execução mais recente com um único teste">
+
+    <p>Expanda o teste para ver seus detalhes e, quando terminar de revisar, feche a janela de resultados.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab03/lab03_23.png" alt="Detalhes do teste reexecutado">
+
+    <p>Você pode clicar em <code>Download</code>, no painel de resultados, para baixar os dados de qualquer execução e analisá-los posteriormente.</p>
   </section>
 
   <hr class="section-divider">
 
-  <section id="resultados">
-    <h2>Revisar os Resultados da Avaliação</h2>
+  <!-- RESUMO -->
+  <section id="resumo">
+    <h2>Resumo</h2>
 
-    <div class="callout callout--warning">
-      <div>
-        <div class="callout__title">Atenção</div>
-        <p style="margin:0;">Seus resultados podem variar das capturas de tela. Por exemplo, as capturas de tela mostram uma falha devido a uma chamada de ferramenta perdida e uma resposta incorreta. Os seus podem ser diferentes.</p>
-      </div>
-    </div>
+    <p>Parabéns! 🎉 Você concluiu o laboratório de avaliação de agentes no watsonx Orchestrate.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab03/lab03_monitoring_10.png" alt="Resultados da avaliação do agente">
+    <p>Ao longo do laboratório, você deu feedback direto sobre uma resposta bloqueada pelo PII Filter, transformou conversas reais em casos de teste reutilizáveis usando Save as test com Response summary, executou uma avaliação completa com Evaluate all, revisou as onze métricas agregadas de uma execução e os detalhes individuais de cada teste, reexecutou um caso isolado com Re-run test e comparou o histórico de execuções na aba Evaluations.</p>
 
-    <p>Você pode baixar os resultados para análise posterior.</p>
+    <p>Com isso, você agora sabe transformar interações do dia a dia em uma bateria de testes automatizada, interpretar métricas de roteamento, execução, uso de ferramentas e sucesso de jornada, e usar esses recursos para acompanhar a qualidade de um agente sempre que ele for alterado.</p>
+
+    <h3 id="sou-desenvolvedor">Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
+
+    <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK, o Agent Development Kit. <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais sobre como criar agentes, tools, bases de conhecimento e muito mais.</p>
   </section>
 
   <hr class="section-divider">
 
-  <section id="metricas">
-    <h2>Entendendo as Métricas</h2>
-    <p>Abaixo está um detalhamento das métricas principais e o que elas significam:</p>
-
-    <h3>Roteamento e Precisão</h3>
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-card__label">Roteamento</div>
-        <div class="metric-card__title">Orchestrate agent routing F1</div>
-        <div class="metric-card__desc">Média harmônica de precisão e recall para decisões de roteamento. Mede quão precisamente o agente mestre roteia consultas para agentes especializados.</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-card__label">Correspondência</div>
-        <div class="metric-card__title">Keyword match</div>
-        <div class="metric-card__desc">Se a resposta contém palavras-chave esperadas.</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-card__label">Semântica</div>
-        <div class="metric-card__title">Semantic match</div>
-        <div class="metric-card__desc">Se a resposta é semanticamente similar à saída esperada.</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-card__label">Texto</div>
-        <div class="metric-card__title">Text match</div>
-        <div class="metric-card__desc">Se a resposta corresponde exatamente à saída de texto esperada.</div>
-      </div>
-    </div>
-
-    <h3>Métricas de Execução</h3>
-    <table>
-      <thead><tr><th>Métrica</th><th>Descrição</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Total steps</strong></td><td>Número total de ações ou operações realizadas em todos os testes</td></tr>
-        <tr><td><strong>LLM steps</strong></td><td>Número de vezes que o modelo de linguagem foi invocado para gerar respostas</td></tr>
-        <tr><td><strong>Average agent response time (s)</strong></td><td>Tempo médio levado para gerar cada resposta em segundos</td></tr>
-      </tbody>
-    </table>
-
-    <h3>Métricas de Uso de Ferramentas</h3>
-    <table>
-      <thead><tr><th>Métrica</th><th>Descrição</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Total tool calls</strong></td><td>Número de vezes que agentes ou ferramentas externas foram invocados durante os testes</td></tr>
-        <tr><td><strong>Expected tool calls</strong></td><td>Número de chamadas de ferramentas que eram esperadas</td></tr>
-        <tr><td><strong>Correct tool calls</strong></td><td>Número de chamadas de ferramentas que foram feitas corretamente</td></tr>
-        <tr><td><strong>Missed tool calls</strong></td><td>Número de chamadas de ferramentas esperadas que não foram feitas</td></tr>
-        <tr><td><strong>Tool calls with incorrect parameters</strong></td><td>Número de chamadas de ferramentas feitas com parâmetros errados</td></tr>
-        <tr><td><strong>Tool call recall</strong></td><td>Proporção de chamadas de ferramentas necessárias que foram realmente feitas</td></tr>
-        <tr><td><strong>Tool call precision</strong></td><td>Proporção de chamadas de ferramentas relevantes para o total de chamadas de ferramentas</td></tr>
-        <tr><td><strong>Tool match success</strong></td><td>Se as ferramentas corretas foram chamadas</td></tr>
-      </tbody>
-    </table>
-
-    <h3>Métricas de Sucesso</h3>
-    <table>
-      <thead><tr><th>Métrica</th><th>Descrição</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Journey success</strong></td><td>Se o cenário de teste completo alcançou seu resultado pretendido</td></tr>
-        <tr><td><strong>Journey completion</strong></td><td>Se a interação de teste de múltiplas etapas completou todas as etapas sem erros</td></tr>
-      </tbody>
-    </table>
-
-    <h3>Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
-    <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit). <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais como criar agentes, tools, bases de conhecimentos e muito mais.</p>
+  <!-- PRÓXIMOS PASSOS -->
+  <section id="proximos-passos">
+    <h2>Próximos Passos</h2>
+    <p>➜ <a href="lab5.html">Clique aqui para navegar para o próximo lab, Monitorando Agentes em Tempo Real com watsonx Orchestrate</a></p>
   </section>
 
   <div class="lab-nav">
-    <a href="lab2.html">← Lab 2: Agentes Externos</a>
-    <a href="lab4.html" class="primary">Lab 4: Controles &amp; PII →</a>
+    <a href="lab3.html">← Lab 3: Controles &amp; PII</a>
+    <a href="lab5.html" class="primary">Lab 5: Monitoramento →</a>
   </div>
 </main>
 
 <footer class="c-footer">
-  Nathalia Trazzi | Technical Solutions Architect & AI Engineer
+  Nathalia Trazzi | Technical Solutions Architect &amp; AI Engineer
 </footer>
 </body>
 </html>
