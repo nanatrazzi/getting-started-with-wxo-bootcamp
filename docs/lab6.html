@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lab 6 — Control Plane · watsonx Orchestrate</title>
+<title>Lab 6 · Monitoramento em Tempo Real e Control Plane · watsonx Orchestrate</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -50,14 +50,10 @@
   .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
   .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
   .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
-  .callout--tip { border-color: var(--carbon-teal-60); background: #d9fbfb; }
-  .callout--success { border-color: var(--carbon-green-60); background: var(--carbon-green-10); }
   .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
   .callout--note .callout__title { color: var(--carbon-blue-60); }
   .callout--warning .callout__title { color: #a4780a; }
-  .callout--tip .callout__title { color: var(--carbon-teal-60); }
-  .callout--success .callout__title { color: var(--carbon-green-60); }
-  .callout p:last-child, .callout ul:last-child { margin: 0; }
+  .callout p:last-child { margin: 0; }
   .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
   .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
   .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
@@ -66,46 +62,22 @@
   code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
   .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
   .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
-  /* Node legend */
-  .node-legend { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin: 16px 0; }
-  .node-item { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 10px 14px; display: flex; gap: 10px; align-items: center; font-size: 13px; }
-  .node-icon { font-size: 18px; flex-shrink: 0; }
-  /* Debug numbered items */
-  .debug-item { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 12px 16px; margin: 8px 0; display: flex; gap: 12px; align-items: flex-start; }
-  .debug-num { display: flex; align-items: center; justify-content: center; min-width: 24px; height: 24px; background: var(--carbon-gray-80); color: white; font-size: 12px; font-weight: 700; border-radius: 50%; flex-shrink: 0; }
-  .debug-body { flex: 1; font-size: 13px; line-height: 1.5; color: var(--carbon-gray-100); }
-  /* Alert type tiles */
-  .alert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
-  .alert-tile { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 16px; }
-  .alert-tile__type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
-  .alert-tile--ops .alert-tile__type { color: var(--carbon-yellow-30); }
-  .alert-tile--inc .alert-tile__type { color: var(--carbon-red-60); }
-  .alert-tile--ins .alert-tile__type { color: var(--carbon-blue-60); }
-  .alert-tile__title { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
-  .alert-tile__desc { font-size: 12px; color: var(--carbon-gray-70); line-height: 1.5; }
-  /* Analytics metric cards */
-  .analytics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
-  .analytics-card { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 16px; text-align: center; }
-  .analytics-card__label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .32px; color: var(--carbon-gray-70); margin-bottom: 8px; }
-  .analytics-card__value { font-size: 24px; font-weight: 300; color: var(--carbon-blue-60); }
-  /* Controls table */
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .metric-card { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 14px 16px; }
+  .metric-card__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; color: var(--carbon-gray-70); margin-bottom: 4px; }
+  .metric-card__title { font-size: 14px; font-weight: 600; color: var(--carbon-gray-100); margin-bottom: 4px; }
+  .metric-card__desc { font-size: 12px; color: var(--carbon-gray-70); line-height: 1.5; }
   table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
   th { background: var(--carbon-gray-80); color: var(--carbon-white); padding: 10px 14px; text-align: left; font-weight: 600; }
   td { padding: 10px 14px; border-bottom: 1px solid var(--carbon-gray-20); vertical-align: top; }
   tr:nth-child(even) td { background: var(--carbon-gray-10); }
-  /* Resource links table */
-  .resource-section { margin: 24px 0; }
-  .resource-section h4 { font-size: 13px; font-weight: 700; color: var(--carbon-white); background: var(--carbon-gray-80); padding: 10px 14px; margin: 0; }
-  .resource-section table { margin-top: 0; }
-  .resource-section td a { word-break: break-all; }
-  /* Nav */
   .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
   .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
   .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
   .lab-nav a:hover { background: var(--carbon-blue-10); }
   .lab-nav a.primary:hover { background: var(--carbon-blue-70); }
   .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--carbon-gray-70); background: var(--carbon-white); }
-  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .alert-grid, .analytics-row { grid-template-columns: 1fr; } }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .metrics-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -128,7 +100,7 @@
   <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
   <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Avaliação de Agentes</a>
   <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Controles &amp; PII</a>
-  <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Monitoramento</a>
+  <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Debug de Agentes</a>
   <a class="c-sidenav__item active" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
 </nav>
 
@@ -141,483 +113,294 @@
 
   <div class="page-header">
     <div class="page-header__eyebrow">Laboratório 6 · Agentic Control Plane</div>
-    <h1 class="page-header__h1">Control Plane Lab do watsonx Orchestrate</h1>
-    <p class="page-header__subtitle">Explore o Agentic Control Plane (ACP) para gerenciar, observar e otimizar agentes de forma centralizada em diferentes equipes, ferramentas, modelos e runtimes.</p>
+    <h1 class="page-header__h1">Monitoramento em Tempo Real e Control Plane do watsonx Orchestrate</h1>
+    <p class="page-header__subtitle">Navegue pelas abas do dashboard do Agentic Control Plane e crie um Controle de Content Guardrails para bloquear conteúdo impróprio.</p>
   </div>
 
-  <!-- TOC -->
+  <!-- Índice -->
   <nav style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:20px 24px;margin-bottom:32px;">
     <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:10px;">Índice</div>
     <ul style="list-style:none;padding:0;margin:0;">
       <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
-      <li style="margin-bottom:6px;"><a href="#dashboard">Explorando o Control Plane — Dashboard</a></li>
-      <li style="margin-bottom:6px;"><a href="#needs-attention">Sessão: Needs Attention</a></li>
-      <li style="margin-bottom:6px;"><a href="#alertas">Sessão: Alertas Operacionais</a></li>
-      <li style="margin-bottom:6px;"><a href="#agent-analytics">Sessão: Agent Analytics</a></li>
-      <li style="margin-bottom:6px;"><a href="#debug">Debugging — Tela de Debug</a></li>
-      <li style="margin-bottom:6px;"><a href="#controles">Controles</a></li>
-      <li style="margin-bottom:6px;"><a href="#enterprise-controls">Enterprise Controls</a></li>
-      <li style="margin-bottom:6px;"><a href="#resumo">Resumo</a></li>
-      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos Passos &amp; Links</a></li>
+      <li style="margin-bottom:6px;"><a href="#dashboard">Explorando o Dashboard do Control Plane</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#overview">Overview: visão geral do ambiente</a></li>
+          <li><a href="#adoption">Adoption: engajamento e uso dos agentes</a></li>
+          <li><a href="#finops">FinOps: consumo de tokens</a></li>
+          <li><a href="#quality">Quality: qualidade das respostas</a></li>
+          <li><a href="#reliability">Reliability: confiabilidade e desempenho</a></li>
+          <li><a href="#security">Security and Risk: controles de segurança</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#metricas">Entendendo as Métricas</a></li>
+      <li style="margin-bottom:6px;"><a href="#content-guardrails">Criando um Controle de Content Guardrails</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#select-control">Selecionando o tipo de controle</a></li>
+          <li><a href="#configure-control">Configurando o controle</a></li>
+          <li><a href="#assign-assets">Atribuindo o controle a um agente</a></li>
+          <li><a href="#review">Revisando e criando o controle</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#testando">Testando o Controle Criado</a></li>
+      <li style="margin-bottom:6px;"><a href="#resumo">Resumo</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#sou-desenvolvedor">Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos Passos</a></li>
     </ul>
   </nav>
 
   <!-- VISÃO GERAL -->
   <section id="visao-geral">
     <h2>Visão Geral</h2>
-    <p>O <strong>Control Plane</strong> do <strong>watsonx Orchestrate</strong> oferece às empresas uma forma centralizada de gerenciar, observar e otimizar agents em diferentes equipes, ferramentas, modelos e runtimes — sejam eles construídos no Orchestrate ou executados em outros ambientes.</p>
-    <p>Neste lab, vamos experimentar em primeira mão o <strong>Agentic Control Plane (ACP)</strong>. Tenha em mente que os benefícios do ACP ficam mais evidentes quanto mais agentes e ferramentas você tiver construído e implementado, tanto no watsonx Orchestrate quanto externamente, e quanto mais você tiver interagido com eles para obter dados reais.</p>
-    <p>Caso tenha seu próprio ambiente dedicado do watsonx Orchestrate, você poderá ver apenas alguns agents no dashboard do ACP. De qualquer forma, você poderá experimentar e aprender sobre os benefícios do Agentic Control Plane na prática!</p>
 
-    <div class="callout callout--note">
-      <div>
-        <div class="callout__title">Nota</div>
-        <p style="margin:0;">Estamos trabalhando em uma atualização deste laboratório para incluir scripts para os instrutores importarem agents e ferramentas, de forma que o dashboard contenha uma variedade de dados suficiente para executar este lab do Agentic Control Plane de forma independente. O laboratório é vivo e será atualizado ao decorrer dos próximos dias...</p>
-      </div>
-    </div>
+    <p>Este laboratório apresenta os recursos de monitoramento em tempo real disponíveis no watsonx Orchestrate.</p>
+
+    <p>Ao longo das atividades, você vai aprender a acompanhar o desempenho dos agentes e consultar as métricas por linguagem natural através do assistente integrado ao painel de controle.</p>
+
+    <p>O monitoramento contínuo é essencial para garantir a eficiência dos agentes em produção, identificar comportamentos inesperados e agir proativamente na resolução de problemas antes que eles impactem a experiência dos usuários.</p>
+
+    <p>Este laboratório apresenta o Agentic Control Plane do watsonx Orchestrate, um conjunto de painéis e ferramentas que reúne, em um só lugar, a visão de adoção, custos, qualidade, confiabilidade e segurança dos seus agentes.</p>
+
+    <p>Ao longo das atividades, você vai navegar pelas diferentes abas do dashboard e criar um Controle de Content Guardrails para bloquear conteúdo impróprio nas interações de um agente.</p>
+
+    <p>Conhecer essas ferramentas é essencial para operar agentes de IA com confiança, permitindo identificar rapidamente pontos de atenção, investigar comportamentos inesperados e aplicar salvaguardas antes que um agente seja exposto a usuários reais.</p>
   </section>
 
   <hr class="section-divider">
 
   <!-- DASHBOARD -->
   <section id="dashboard">
-    <h2>Explorando o Control Plane — Dashboard</h2>
-    <p>Clique em <strong>IBM watsonx Orchestrate</strong> no canto superior esquerdo para ir à tela inicial/dashboard, caso ainda não esteja lá.</p>
-    <p>O dashboard é a experiência inicial do Control Plane, o ponto de partida para gerenciar seu ecossistema de agents. A partir daqui, podemos visualizar rapidamente métricas de desempenho e a saúde geral do ambiente de AI Agents.</p>
+    <h2>Explorando o Dashboard do Control Plane</h2>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_01.png" alt="Tela inicial do Control Plane — dashboard de métricas e saúde do ambiente">
+    <p>Vamos conhecer o painel de controle de monitoramento do watsonx Orchestrate. Ao acessar o ambiente da sua instância do watsonx Orchestrate, você pode ver um aviso apresentando os novos dashboards do Agentic Control Plane, que reúnem em um só lugar as métricas de mensagens, implantação, avaliação, agentes e controles referentes à sua instância.</p>
 
-    <p>Na parte superior, podemos criar novos agents, explorar o catálogo de agents ou retomar trabalhos recentes.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_02.png" alt="Parte superior do dashboard — opções para criar agentes, explorar catálogo e trabalhos recentes">
+    <p>Feche o aviso clicando em <strong>Maybe later</strong>, para ver o dashboard completo.</p>
 
-    <p>A seção <strong>Needs Attention</strong> destaca problemas no ambiente de AI agents que podem exigir atenção:</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_03.png" alt="Seção Needs Attention — problemas no ambiente que requerem atenção">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_01.png" alt="Control plane welcome screen">
 
-    <p>Aqui podemos monitorar alertas operacionais, incidentes e insights, como credenciais ausentes, pontos de sobrecarga de desempenho ou lacunas de avaliação, e navegar rapidamente para as ações necessárias para manter os agents saudáveis e confiáveis.</p>
+    <p>Ao acessar o ambiente da sua instância do watsonx Orchestrate, você chega diretamente ao dashboard do Agentic Control Plane, com uma saudação personalizada e um resumo de quantos agentes estão em produção (Live) e quantos usuários interagiram com eles nos últimos 30 dias.</p>
 
-    <p>Na seção <strong>Platform Analytics</strong>, você pode inspecionar resumos de modelos e controles: total de modelos, modelos em uso e controles por asset.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_04.png" alt="Seção Platform Analytics — resumo de modelos e controles por asset">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_01.png" alt="Overview dashboard">
 
-    <p>Você também pode visualizar todos os controles existentes para seus modelos, agents e ferramentas, além de adicionar novos controles. Veremos como adicionar controles mais adiante neste lab.</p>
+    <p>Clique no ícone circular de IA, no canto inferior esquerdo, para abrir o assistente do painel de controle. Ele oferece sugestões prontas, como identificar pontos de atenção de performance, lacunas de cobertura de testes e investigar feedback negativo, além de um campo para perguntas livres em linguagem natural.</p>
 
-    <p>A seção <strong>Agent Analytics</strong> permite revisar agents ativos, mensagens, mensagens com falha e métricas de latência para identificar regressões ou picos recentes:</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_05.png" alt="Seção Agent Analytics — agentes ativos, mensagens, falhas e métricas de latência">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_02.png" alt="Assistente do dashboard">
 
-    <p>Vamos voltar à seção <strong>Needs Attention</strong> para observar os diferentes tipos de alertas.</p>
-  </section>
+    <h3 id="overview">Overview: visão geral do ambiente</h3>
 
-  <hr class="section-divider">
+    <p>A aba <strong>Overview</strong>, selecionada por padrão, reúne seis cartões de resumo: Messages, Feedback, Deployment status, Evaluation status, Agents e Controls, cada um com a taxa de sucesso ou a distribuição relevante da última semana. À direita, o painel <strong>Needs attention</strong> já aponta o que precisa da sua atenção, agrupado por categoria (Evaluation, Adoption, Credentials, Execution e Quality), sem que você precise procurar manualmente.</p>
 
-  <!-- NEEDS ATTENTION -->
-  <section id="needs-attention">
-    <h2>Sessão: Needs Attention (Atenção Necessária)</h2>
-    <p>Vamos examinar os diferentes tipos de alertas disponíveis na seção <strong>Needs Attention</strong>: Operations, Incidents e Insights.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_03.png" alt="Métricas da aba Overview">
 
-    <div class="alert-grid">
-      <div class="alert-tile alert-tile--ops">
-        <div class="alert-tile__type">Operations</div>
-        <div class="alert-tile__title">Bloqueios Operacionais</div>
-        <div class="alert-tile__desc">São bloqueios operacionais com uma solução conhecida, como por exemplo credenciais de conexão ausentes.</div>
-      </div>
-      <div class="alert-tile alert-tile--inc">
-        <div class="alert-tile__type">Incidents</div>
-        <div class="alert-tile__title">Alertas de Produção</div>
-        <div class="alert-tile__desc">São alertas de produção que requerem investigação. Ex: agente com taxa de falha de 9% nas últimas 24 horas.</div>
-      </div>
-      <div class="alert-tile alert-tile--ins">
-        <div class="alert-tile__type">Insights</div>
-        <div class="alert-tile__title">Recomendações</div>
-        <div class="alert-tile__desc">São recomendações para melhorar a qualidade e a prontidão dos agents. Ajudam a entender causas raiz e evidências relacionadas a agents e ferramentas com falhas.</div>
-      </div>
-    </div>
+    <p>Role a página para baixo para ver as seções <strong>Usage trends</strong> e <strong>Operational trends</strong>, com gráficos de usuários ativos, agentes ativos, mensagens, uso de tokens, taxa de falha, conversas com erro e latência P50 ao longo dos últimos sete dias.</p>
 
-    <p>Primeiro, temos os alertas de <em>Operations</em>. São bloqueios operacionais com uma solução conhecida:</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_06.png" alt="Needs Attention — alertas de Operations com bloqueios operacionais conhecidos">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_04.png" alt="Usage e Operational trends">
 
-    <p>Em seguida, temos os alertas de <em>Incidents</em>. Selecione o tile de contagem de Incidents para filtrar a lista de alertas por itens de nível de incidente:</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_07.png" alt="Needs Attention — alertas de Incidents com taxa de falha do agente nas últimas 24h">
+    <p>Em seguida, digite a pergunta abaixo no campo de mensagem do assistente.</p>
 
-    <p>Observe como a lista de alertas mudou. Agora você pode ver que há um alerta indicando que um dos nossos AI agents teve uma taxa de falha de 9% nas últimas 24 horas.</p>
+    <div class="code-block">Mostre os agentes com a menor taxa de sucesso desta semana</div>
 
-    <p>Em seguida, temos os alertas de <em>Insights</em>. Clique em Insights agora para visualizá-los:</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_08.png" alt="Needs Attention — alertas de Insights com recomendações para melhorar qualidade dos agentes">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_05.png" alt="Control plane welcome screen">
 
-    <p><strong>Os Insights ajudam a entender causas raiz e evidências relacionadas a agents e ferramentas com falhas.</strong></p>
-  </section>
+    <p>O assistente responde diretamente, sem que você precise navegar por gráficos. Nesse caso, ele identificou o AskOrchestrate como o agente com a menor taxa de sucesso da semana, zero por cento, detalhando o total de conversas e quantas delas falharam. Clique em <code>Show Reasoning</code> caso queira ver como o assistente chegou a essa conclusão, e use os ícones de joinha para avaliar a resposta.</p>
 
-  <hr class="section-divider">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab05/lab05_06.png" alt="Conversation analysis">
 
-  <!-- ALERTAS OPERACIONAIS -->
-  <section id="alertas">
-    <h2>Sessão: Alertas Operacionais</h2>
-    <p>Vamos tentar abrir um dos alertas para ver o que acontece.</p>
-    <p>Como seu ambiente é novo, não possui muitos agentes e ainda não passou por muitos testes e interações, vamos continuar na aba <code>Insights</code>.</p>
-    <p>Clique no link na coluna <code>Actions</code> para detalhar o problema:</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_09.png" alt="Alertas operacionais — link de ação na coluna Actions para detalhar o problema">
+    <h3 id="adoption">Adoption: engajamento e uso dos agentes</h3>
 
-    <p>Observe que o Orchestrate enviou para a página utilizada no laboratório de <em>Realizando avaliação de Agente</em>.</p>
+    <p>Volte ao topo da página e clique na aba <strong>Adoption</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_05.png" alt="Navegando para Adoption">
+
+    <p>A seção <strong>Engagement depth</strong> mostra a relação entre usuários, conversas e chamadas de modelo, como usuários por agente, conversas por usuário, mensagens por conversa e chamadas de LLM por conversa. Logo abaixo, a tabela <strong>Agent analytics</strong> detalha, por agente, o número de conversas, usuários únicos, duração média, tokens consumidos, chamadas de LLM, taxa de erro e latência P95.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_06.png" alt="Engagement depth e Agent analytics">
+
+    <p>A tabela também traz uma legenda de cores para interpretar rapidamente a taxa de erro e a latência de cada agente, além de paginação para instâncias com muitos agentes.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_07.png" alt="Legenda da tabela de agentes">
+
+    <p>Role a página para ver o gráfico <strong>Adoption trends</strong>, que compara conversas, usuários ativos e agentes ativos ao longo do tempo, e o painel <strong>Model usage distribution</strong>, que mostra quantos modelos estão em uso e quantos agentes utilizam cada um deles.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_08.png" alt="Adoption trends e Model usage distribution">
+
+    <h3 id="finops">FinOps: consumo de tokens</h3>
+
+    <p>Volte ao topo e clique na aba <strong>FinOps</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_09.png" alt="Navegando para FinOps">
+
+    <p>O <strong>Token summary</strong> resume o total de tokens consumidos na semana, com a divisão entre tokens de entrada e saída e o número de chamadas de LLM. Logo abaixo, <strong>Token usage</strong> permite alternar a visão <strong>By agent</strong> ou <strong>By model</strong> e traz um gráfico de rosca com a distribuição percentual de tokens entre os agentes, complementado por uma tabela detalhada.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_10.png" alt="Token summary e Token usage">
+
+    <p>Role a página para ver <strong>Token trends</strong>, com pílulas de alternância para Total, Input e Output tokens ao longo dos últimos sete dias.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_11.png" alt="Token trends">
+
+    <h3 id="quality">Quality: qualidade das respostas</h3>
+
+    <p>Volte ao topo e clique na aba <strong>Quality</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_12.png" alt="Navegando para Quality">
+
+    <p>A seção <strong>Insights</strong> mostra quantos agentes já possuem avaliações configuradas, o total de feedback de usuários (positivo e negativo) e as métricas de Helpfulness score e Hallucination score. A tabela <strong>Agent feedback</strong> detalha, por agente, o total de mensagens, mensagens com falha, feedback positivo e negativo, e a proporção de feedback positivo.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_13.png" alt="Insights e Agent feedback">
+
+    <p>Role a página para ver três painéis lado a lado: <strong>Top agents by positive feedback</strong>, <strong>Top agents by negative feedback</strong> e <strong>Tool call success</strong>, seguidos pelo gráfico <strong>Feedback trends</strong>, que permite alternar entre mensagens totais, bem-sucedidas, com falha, feedback positivo e negativo.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_14.png" alt="Rankings de feedback e Tool call success">
+
+    <h3 id="reliability">Reliability: confiabilidade e desempenho</h3>
+
+    <p>Volte ao topo e clique na aba <strong>Reliability</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_15.png" alt="Navegando para Reliability">
+
+    <p>A seção <strong>Utilization</strong> mostra, na janela de sete dias, quantos modelos estão ativos, a média de mensagens por conversa, mensagens por agente ativo e quantos agentes estão sob carga com falhas de trace. A tabela <strong>Agent latency</strong> detalha, por agente, mensagens, mensagens com falha, taxa de erro e as latências P50, P95 e P99.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_16.png" alt="Utilization e Agent latency">
+
+    <p>Role a página para ver <strong>Deployment readiness</strong> (total de chamadas de ferramenta, conversas com falha e latência P95), <strong>Runtime inventory</strong> (contagem de agentes, toolkits, tools e bases de conhecimento) e os gráficos <strong>Latency trends</strong> e <strong>Failed messages over time</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_17.png" alt="Deployment readiness, Runtime inventory e Latency trends">
+
+    <p>O painel <strong>Runtime inventory</strong> dá um retrato rápido de tudo o que está publicado na sua instância: agentes, toolkits, tools e bases de conhecimento.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_18.png" alt="Runtime inventory em destaque">
+
+    <p>Já o gráfico <strong>Latency trends</strong> permite alternar entre os percentis P50, P95 e P99 para identificar picos de latência ao longo da semana.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_19.png" alt="Latency trends em destaque">
+
+    <h3 id="security">Security and Risk: controles de segurança</h3>
+
+    <p>Volte ao topo e clique na aba <strong>Security and Risk</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_20.png" alt="Navegando para Security and Risk">
+
+    <p>Essa aba resume o painel <strong>Controls summary</strong>, com o total de controles configurados na instância e sua divisão entre Agent controls, Tool controls e Model controls, além da lista <strong>Recent controls</strong>. Como você ainda não criou nenhum controle, todos os contadores aparecem zerados; isso muda na última parte deste laboratório, quando você criar seu primeiro controle.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_21.png" alt="Security and Risk sem controles">
+
     <div class="callout callout--note">
       <div>
         <div class="callout__title">Nota</div>
-        <p style="margin:0;">Não é necessária nenhuma ação, apenas se quiser realizar novos testes conforme visto no laboratório <em>Realizando avaliação de Agente</em>.</p>
+        <p style="margin:0;">Ao voltar para a aba Overview, um tour guiado pode aparecer sugerindo navegar pelas demais abas usando a seta <code>&gt;</code> ao final da barra de abas. Sinta-se à vontade para explorar as abas adicionais por conta própria.</p>
       </div>
     </div>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_10.png" alt="Página de avaliação de agente aberta a partir do alerta operacional">
 
-    <p>Retorne para página inicial do <strong>Orchestrate</strong>.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_22.png" alt="Tour guiado no dashboard">
   </section>
 
   <hr class="section-divider">
 
-  <!-- AGENT ANALYTICS -->
-  <section id="agent-analytics">
-    <h2>Sessão: Agent Analytics</h2>
-    <p>Na seção <strong>Agent Analytics</strong>, podemos passar de insights no nível do ambiente para investigação específica por agent.</p>
+  <!-- ENTENDENDO AS MÉTRICAS -->
+  <section id="metricas">
+    <h2>Entendendo as Métricas:</h2>
 
-    <p><strong>À esquerda — Assistente de IA (chat):</strong> esse assistente conversacional ajuda a interpretar os dados de monitoramento. Em vez de você ter que ler tabela por tabela, você pode simplesmente perguntar em linguagem natural. Ele já sugere três "atalhos" de análise:</p>
-    <ul>
-      <li><strong>Performance hotspots</strong> — quais agentes tiveram maior duração média de conversa ou maior volume de conversas nas últimas 24h.</li>
-      <li><strong>Coverage gaps</strong> — quais agentes ativos estão sem avaliações (evaluations) ou com cobertura de testes fraca.</li>
-      <li><strong>Feedback investigation</strong> — listar os agentes com mais feedback negativo e detalhar esse feedback.</li>
-    </ul>
+    <p>Métricas de Feedback do Usuário:</p>
 
-    <p><strong>À direita — Painel Agent Analytics:</strong> é o painel de métricas propriamente dito, onde você acompanha a saúde e o uso dos agentes.</p>
+    <p><code>Thumbs up</code>: Número de respostas de feedback positivo dos usuários indicando satisfação com a resposta do agente.</p>
 
-    <h3>Métricas do Inventário de Agentes</h3>
-    <div class="analytics-row">
-      <div class="analytics-card">
-        <div class="analytics-card__label">Total agents</div>
-        <div class="analytics-card__value">Total de agentes criados</div>
-      </div>
-      <div class="analytics-card">
-        <div class="analytics-card__label">Draft / Live</div>
-        <div class="analytics-card__value">Proporção entre rascunho e publicados</div>
-      </div>
-      <div class="analytics-card">
-        <div class="analytics-card__label">Origem</div>
-        <div class="analytics-card__value">Native / Imported / External</div>
-      </div>
-    </div>
+    <p><code>Thumbs down</code>: Número de respostas de feedback negativo dos usuários indicando insatisfação com a resposta do agente.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_11.png" alt="Painel Agent Analytics — inventário de agentes com tabela de conversas e métricas por agente">
+    <p><code>Not rated</code>: Número de interações onde os usuários não forneceram feedback.</p>
 
-    <p>Clique em <strong>View agent analytics</strong>.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_12.png" alt="Tela de Agent Analytics completa com filtros de período e gráfico de tendência por agente">
+    <p><code>Toxicity</code>: Pontuação indicando o nível de conteúdo tóxico, ofensivo ou inapropriado na resposta (0.00 = nenhuma toxicidade detectada).</p>
 
-    <p>Aqui o Orchestrate permite ter visão detalhada de como os agentes e workflows estão se comportando.</p>
+    <p><code>Input PII</code>: Pontuação indicando se informações pessoalmente identificáveis foram detectadas na entrada do usuário (0.00 = nenhuma PII detectada).</p>
 
-    <p>Na linha de filtros, é possível controlar o que aparece no painel:</p>
-    <ul>
-      <li><strong>All agents:</strong> Seletor para escolher se você quer ver todos os agentes ou um específico.</li>
-      <li><strong>Last 24 hrs:</strong> O período analisado (aqui, últimas 24 horas).</li>
-      <li>O ícone de atualizar (recarregar os dados) à direita.</li>
-    </ul>
-
-    <h3>Métricas Principais (cards do topo)</h3>
-    <div class="analytics-row">
-      <div class="analytics-card">
-        <div class="analytics-card__label">Total conversations</div>
-        <div class="analytics-card__value">Total de conversas realizadas</div>
-      </div>
-      <div class="analytics-card">
-        <div class="analytics-card__label">Unique users</div>
-        <div class="analytics-card__value">Usuários distintos que interagiram</div>
-      </div>
-      <div class="analytics-card">
-        <div class="analytics-card__label">Avg conversation duration</div>
-        <div class="analytics-card__value">Duração média de cada conversa</div>
-      </div>
-    </div>
-
-    <h3>Agent Trend</h3>
-    <p>Gráfico de barras para comparação dos agentes entre si. No topo há dois seletores: <strong>Top 5</strong> (mostra os 5 principais) e <strong>Conversations</strong> (a métrica usada para ordenar). Os ícones no canto do gráfico permitem ver os dados em formato de tabela, expandir o gráfico e acessar mais opções.</p>
-
-    <h3>User Feedback</h3>
-    <p>Para acompanhar o feedback dos usuários para cada agente:</p>
-    <ul>
-      <li><strong>Agents</strong> — nome do agente (em azul, clicável para ver detalhes).</li>
-      <li><strong>Thumbs down 👎</strong> — quantidade de avaliações negativas.</li>
-      <li><strong>Thumbs up 👍</strong> — quantidade de avaliações positivas.</li>
-    </ul>
-
-    <p>Selecione o último agente criado por você.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_13.png" alt="Seleção de agente específico na tabela de Agent Analytics">
-
-    <p>Ao selecionar um agent específico, você abrirá a visualização do agent builder e poderá inspecionar sua configuração. Ao fazer isso, você passa dos insights do Control Plane para o próprio agent.</p>
-    <p>Essa é a página de análise de um agente específico. O <em>breadcrumb</em> agora mostra três níveis: <strong>Home / Analytics / Assistente de Compra de Veículos</strong>, deixando claro o caminho percorrido até o detalhe do agente.</p>
-
-    <p>Logo em seguida há duas abas:</p>
-    <ul>
-      <li><strong>Overview</strong> (selecionada) — a visão geral com todas as métricas.</li>
-      <li><strong>Conversations</strong> — onde você pode inspecionar as conversas individuais desse agente.</li>
-    </ul>
-
-    <h3>Métricas Detalhadas por Agente (Overview)</h3>
-    <div class="analytics-row" style="grid-template-columns: repeat(3, 1fr);">
-      <div class="analytics-card"><div class="analytics-card__label">Total conversations</div><div class="analytics-card__value" style="font-size:14px;">Total de conversas desse agente</div></div>
-      <div class="analytics-card"><div class="analytics-card__label">Input token count</div><div class="analytics-card__value" style="font-size:14px;">Tokens recebidos pelo agente</div></div>
-      <div class="analytics-card"><div class="analytics-card__label">Output token count</div><div class="analytics-card__value" style="font-size:14px;">Tokens gerados nas respostas</div></div>
-      <div class="analytics-card"><div class="analytics-card__label">Unique users</div><div class="analytics-card__value" style="font-size:14px;">Usuários distintos</div></div>
-      <div class="analytics-card"><div class="analytics-card__label">Avg conversation duration</div><div class="analytics-card__value" style="font-size:14px;">Duração média</div></div>
-      <div class="analytics-card"><div class="analytics-card__label">Avg message latency</div><div class="analytics-card__value" style="font-size:14px;">Tempo médio para responder</div></div>
-    </div>
-
-    <div class="callout callout--tip">
-      <div>
-        <div class="callout__title">Dica</div>
-        <p style="margin:0;">Os tokens e a latência ajudam a avaliar eficiência e custo do agente, não só uso.</p>
-      </div>
-    </div>
-
-    <p><strong>Usage trend (gráfico à esquerda):</strong> Mostra a tendência de uso ao longo do tempo, medida em número de mensagens por dia.</p>
-    <p><strong>User feedback (painel central):</strong> Feedback dos usuários em forma de gráfico, com a legenda Thumbs up (roxo) e Thumbs down (azul).</p>
-    <p><strong>Evaluation (painel à direita):</strong> Funcionalidade que serve para avaliar a qualidade das respostas do agente segundo critérios automáticos, como <em>Toxicity</em> (toxicidade), que verifica se o agente gerou conteúdo inadequado/ofensivo.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_14.png" alt="Aba Overview do agente selecionado — métricas de conversas, tokens, usuários, latência e feedback">
-
-    <p>Clique na aba <code>Conversations</code>.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_15.png" alt="Aba Conversations do agente — lista de conversas individuais com transcrição e detalhes">
-
-    <p>Essa é a aba Conversations do mesmo agente — é o nível mais granular do monitoramento. Aqui você não vê mais números agregados, mas sim cada conversa individual, mensagem por mensagem.</p>
-
-    <h4>Coluna da esquerda — Lista de conversas</h4>
-    <p>É a lista de todas as conversas do agente no período. Cada item mostra um ID único da conversa e há quando aconteceu. Clicando em qualquer uma delas, o conteúdo aparece na coluna central. É como uma <em>caixa de entrada de e-mails</em> de todas as interações que os usuários tiveram com esse agente.</p>
-
-    <h4>Coluna central — A transcrição da conversa</h4>
-    <p>Aqui aparece o diálogo completo da conversa selecionada, no formato de chat. No topo indica o usuário que participou, e o histórico de mensagens. Você consegue ler exatamente o que o usuário perguntou e como o agente respondeu, verificando se a resposta foi correta, completa e bem formatada.</p>
-
-    <h4>Coluna da direita — Detalhes</h4>
-    <ul>
-      <li><strong>Conversation ID:</strong> o identificador único completo.</li>
-      <li><strong>User ID:</strong> Quem interagiu.</li>
-      <li><strong>Started:</strong> Quando começou.</li>
-      <li><strong>User Feedback:</strong> Thumbs up / Thumbs down.</li>
-    </ul>
+    <p><code>Output PII</code>: Pontuação indicando se informações pessoalmente identificáveis foram detectadas na resposta do agente (0.00 = nenhuma PII detectada).</p>
   </section>
 
   <hr class="section-divider">
 
-  <!-- DEBUG -->
-  <section id="debug">
-    <h2>Debugging — Tela de Debug</h2>
-    <p>Clique no ícone da <em>joaninha</em>, como indicado na imagem abaixo:</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_16.png" alt="Ícone de debug (joaninha) para acessar a tela de depuração da conversa">
+  <!-- CONTENT GUARDRAILS -->
+  <section id="content-guardrails">
+    <h2>Criando um Controle de Content Guardrails</h2>
 
-    <p><strong>Essa é a tela de Debug de um agente.</strong></p>
+    <p>Abra o menu lateral e, em <strong>Manage</strong>, selecione <strong>Controls</strong> para acessar a área de criação de controles.</p>
 
-    <h3>Componentes do Fluxo de Debug</h3>
-    <div class="node-legend">
-      <div class="node-item"><div class="node-icon">📥</div><div>User input — ponto de entrada, onde a mensagem do usuário chega.</div></div>
-      <div class="node-item"><div class="node-icon">🤖</div><div>Agent — O agente que orquestra as tarefas.</div></div>
-      <div class="node-item"><div class="node-icon">💬</div><div>LLM — chamada a um modelo de linguagem.</div></div>
-      <div class="node-item"><div class="node-icon">🔧</div><div>Tool — Função externa que o agente pode acionar.</div></div>
-      <div class="node-item"><div class="node-icon">🌐</div><div>API — endpoint HTTP/REST.</div></div>
-      <div class="node-item"><div class="node-icon">📚</div><div>Knowledge base — Busca por informação em uma base de conhecimento.</div></div>
-      <div class="node-item"><div class="node-icon">🔄</div><div>Workflow — Processo de várias etapas.</div></div>
-      <div class="node-item"><div class="node-icon">✅</div><div>Answer — Nó de resposta final.</div></div>
-    </div>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_43.png" alt="Navegando para Manage &gt; Controls">
 
-    <h3>Controles da Interface de Debug</h3>
-    <div class="debug-item"><div class="debug-num">1</div><div class="debug-body">Diferentes componentes que podem aparecer no fluxo, cada um com seu próprio ícone (listados acima).</div></div>
-    <div class="debug-item"><div class="debug-num">2</div><div class="debug-body">Para retornar para o node anterior.</div></div>
-    <div class="debug-item"><div class="debug-num">3</div><div class="debug-body">Para avançar para o próximo node.</div></div>
-    <div class="debug-item"><div class="debug-num">4</div><div class="debug-body">ID único da conversa.</div></div>
-    <div class="debug-item"><div class="debug-num">5</div><div class="debug-body">Executar novamente para recarregar/reexecutar o trace. / Alternar a visualização do fluxo, mudando o layout do gráfico e realçando o caminho que foi realmente percorrido na execução.</div></div>
-    <div class="debug-item"><div class="debug-num">6</div><div class="debug-body">Reorganiza o diagrama num layout de árvore horizontal (da esquerda para a direita), exibindo a hierarquia dos nós de forma mais limpa e alinhada.</div></div>
-    <div class="debug-item"><div class="debug-num">7</div><div class="debug-body">Mostra uma visão geral do nó selecionado, com os principais dados de forma resumida.</div></div>
-    <div class="debug-item"><div class="debug-num">8</div><div class="debug-body">Input — Mostra os dados de entrada que o nó recebeu, ou seja, o que chegou até ele para ser processado.</div></div>
-    <div class="debug-item"><div class="debug-num">9</div><div class="debug-body">Output — Mostra os dados de saída que o nó gerou, ou seja, o resultado do processamento. / Logs (Node logs) — Mostra os registros técnicos detalhados daquele nó.</div></div>
+    <p>Como nenhum controle foi criado ainda, a página <strong>Controls</strong> aparece vazia, com uma mensagem de boas-vindas explicando que os controles ajudam a impor regras sobre o comportamento de agentes, modelos e ferramentas MCP. Clique em <code>Create Control</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_17.png" alt="Tela de Debug — fluxo de execução com nós User input, Agent, LLM, Tool, Knowledge base e Answer">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_44.png" alt="Página Controls vazia">
 
-    <h3>Visualização com Caminho Ativo Destacado</h3>
-    <p>Clique no ícone de alterar a visualização do fluxo (item 6 na imagem anterior).</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_18.png" alt="Debug — visualização com caminho ativo destacado em azul mostrando o trajeto real da execução">
+    <h3 id="select-control">Selecionando o tipo de controle</h3>
 
-    <p>Ao ativar esse ícone, o diagrama passa a realçar em azul apenas o caminho que a execução realmente percorreu, enquanto os nós e conexões que não foram usados ficam apagados.</p>
-    <p>No exemplo vemos isso claramente: o caminho ativo, em azul forte, vai de: <code>User input → Assistente de Compra → Agente de suporte</code>, que então aciona o LLM, a base de conhecimento (Catálogo de Carros) e o nó de Answer. Já o ramo do Agente de Busca e seus nós filhos aparecem quase transparentes, indicando que aquele caminho não foi seguido nesta execução.</p>
+    <p>A janela <strong>Create Control</strong> se abre com um assistente de quatro etapas: <code>Select Control</code>, <code>Configure Control</code>, <code>Assign Assets</code> e <code>Review</code>. Na primeira etapa, os controles disponíveis são organizados por tipo de ativo: <strong>Agents</strong> (Content Guardrails, Output Length Guard, Regex Pattern, Secrets Detector e PII Filter) e <strong>Tools</strong> (Content Guardrails, Output Length Guard, Rate Limiter, SQLSanitizer e Secrets Detector).</p>
 
-    <h3>Layout em Árvore Horizontal</h3>
-    <p>Clique no ícone de reorganização (item 7 na imagem explicativa).</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_19.png" alt="Debug — layout em árvore horizontal reorganizando o diagrama de execução da esquerda para a direita">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_45.png" alt="Etapa Select Control">
 
-    <p>Ao ativar esse ícone, o diagrama é reorganizado num layout de árvore horizontal, com os nós dispostos da esquerda para a direita em colunas bem alinhadas. O fluxo aparece mais limpo e hierárquico, seguindo uma sequência clara:</p>
-    <div class="code-block">User input → Assistente de Compra → Agente de suporte → LLM / Catálogo de Carros / Answer</div>
-    <p><strong>O layout em árvore é especial quando o diagrama tem muitos nós, porque distribui os elementos de maneira mais ordenada e evita que as conexões fiquem confusas ou sobrepostas.</strong></p>
+    <p>Selecione <strong>Content Guardrails</strong>, na seção Agents. Essa opção aplica um serviço externo de detecção de conteúdo para identificar conteúdo sexual, violência, discurso de ódio, conteúdo prejudicial, tentativas de jailbreak e viés social. Clique em <code>Next</code>.</p>
 
-    <h3>Aba Input do nó User input</h3>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_20.png" alt="Debug — aba Input do nó User input exibindo a mensagem enviada pelo usuário">
-    <p>Ao clicar na aba <code>Input</code> (com o passo User input selecionado), o painel abaixo passa a mostrar os dados de entrada que aquele nó recebeu: os campos Request e Message com o texto exato que chegou até o nó para ser processado.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_46.png" alt="Content Guardrails selecionado">
 
-    <h3>Expandindo o nó Agent — sub-passos internos</h3>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21.png" alt="Debug — nó Agent expandido mostrando sub-passos de raciocínio, colaboração, processamento e resposta">
-    <p>Quando o passo <code>Agent</code> é clicado, ele se expande e revela os sub-passos internos que o agente executou:</p>
-    <ul>
-      <li><strong>Agent reasoning</strong> (raciocínio)</li>
-      <li><strong>Collaborator: Agente de suporte ao revendedor</strong> (a chamada ao colaborador)</li>
-      <li><strong>Agent processing</strong> (processamento)</li>
-      <li><strong>Answer</strong> (preparando a resposta) — cada um com seu tempo de execução.</li>
-    </ul>
+    <h3 id="configure-control">Configurando o controle</h3>
 
-    <p>Ao clicar na aba <code>LLM Model</code> (em Node properties), o painel mostra qual modelo de linguagem está por trás desse agente.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21-b.png" alt="Debug — aba LLM Model em Node properties exibindo o modelo de linguagem utilizado pelo agente">
+    <p>Na etapa <strong>Configure Control</strong>, dê um nome ao controle no campo <code>Control instance name</code>, como no exemplo abaixo. Em <code>Enforcement type</code>, marque <code>Input</code>, para que o controle analise as mensagens enviadas pelos usuários antes de chegarem ao agente.</p>
 
-    <p>Com o passo Agent ainda selecionado, ao clicar em <code>About</code> (em Node properties), o painel mostra os dados de identificação do agente: Name, Display name e Description.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_21-c.png" alt="Debug — aba About em Node properties com nome, display name e descrição do agente">
+    <div class="code-block">Controle_de_palavras_de_baixo_calão</div>
 
-    <p>Clique no ícone de <code>X</code> da interface do Orchestrate para retornar à página inicial.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_47.png" alt="Nome e tipo de enforcement do controle">
 
-    <p>Navegue até a seção de <code>Platform analytics</code>. Na seção <code>Control</code>, clique em <code>View all</code>.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_22.png" alt="Seção Platform Analytics — Controls com opção View all na área de controles">
+    <p>Role para baixo até a seção <code>Toggle detection for each content type</code>. Por padrão, todos os tipos de conteúdo: Sexual Content, Violence, HAP (Hate, Abuse and Profanity), Harm, Jailbreak e Social Bias, vêm desativados (<code>Off</code>).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_48.png" alt="Tipos de conteúdo desativados">
+
+    <p>Ative todos os toggles, deixando-os em <code>On</code>, e revise o campo <code>Block message</code>, que já vem preenchido com uma mensagem padrão explicando ao usuário por que o conteúdo foi bloqueado. Você pode personalizar esse texto como preferir, ou usar o texto sugerido abaixo. Clique em <code>Next</code>.</p>
+
+    <div class="code-block">Esse conteúdo não é apropriado para esta conversa. Peço que mantenhamos uma comunicação respeitosa e construtiva. Estou aqui para ajudar da melhor forma possível e fornecer suporte adequado às suas necessidades.</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_49.png" alt="Todos os tipos de conteúdo ativados e Block message preenchido">
+
+    <h3 id="assign-assets">Atribuindo o controle a um agente</h3>
+
+    <p>Na etapa <strong>Assign Assets</strong>, clique em <code>Add Agent</code> para escolher a quais agentes esse controle será aplicado.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_50.png" alt="Etapa Assign Assets">
+
+    <p>Na janela <strong>Add Agent</strong>, marque a caixa de seleção ao lado de um agente criado por você (no exemplo, <code>Assistente de Compra de Veiculos</code>) e clique em <code>Select</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_51.png" alt="Selecionando o agente na janela Add Agent">
+
+    <p>O agente selecionado aparece na tabela, junto com sua descrição. Clique em <code>Next</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_52.png" alt="Agente atribuído ao controle">
+
+    <h3 id="review">Revisando e criando o controle</h3>
+
+    <p>A etapa <strong>Review</strong> resume toda a configuração: o tipo de controle, o nome da instância, o tipo de ativo, o hook configurado (<code>Input</code>) e, logo abaixo, os detalhes de configuração com cada tipo de conteúdo habilitado. Revise as informações e clique em <code>Create control</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_53.png" alt="Etapa Review">
+
+    <p>Uma notificação confirma que o controle foi criado com sucesso. Na página <strong>Asset Controls</strong>, o total de controles e o número de agentes com controles passam a mostrar <code>1</code>, e o novo controle aparece listado, com a informação de que está aplicado a <code>1 agent</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_54.png" alt="Controle criado com sucesso">
   </section>
 
   <hr class="section-divider">
 
-  <!-- CONTROLES -->
-  <section id="controles">
-    <h2>Controles</h2>
-    <p>Essa é a página de Controls (controles) do Orchestrate. Os controles servem para definir e governar o comportamento dos seus ativos de IA Agêntica.</p>
-    <p>Você pode aplicá-los no nível de ativo (para agentes, modelos e ferramentas MCP) ou no nível empresarial (afetando toda a instância, através de políticas, guardrails e comportamentos da plataforma).</p>
+  <!-- TESTANDO -->
+  <section id="testando">
+    <h2>Testando o Controle Criado</h2>
 
-    <div class="callout callout--note">
-      <div>
-        <div class="callout__title">Observação</div>
-        <p style="margin:0;">A criação de controles já foi abordada no <a href="lab4.html">Laboratório 4</a>. No entanto, neste laboratório exploraremos um tipo diferente de controle que, por também fazer parte dos recursos de <strong>Control Planning</strong> do watsonx Orchestrate, merece uma abordagem mais detalhada.</p>
-      </div>
-    </div>
+    <p>Abra o menu lateral novamente e selecione <strong>Build</strong> para voltar à área de agentes.</p>
 
-    <p>Há duas abas:</p>
-    <ul>
-      <li><strong>Asset Controls</strong> (selecionada — controles por ativo)</li>
-      <li><strong>Enterprise Controls</strong> (controles empresariais)</li>
-    </ul>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_55.png" alt="Menu lateral com Build em destaque">
 
-    <p>O Orchestrate também permite visualizar:</p>
-    <ul>
-      <li><strong>Total number of controls:</strong> Número total de controles criados na instância.</li>
-      <li><strong>Agents with Controls:</strong> Quantos agentes têm algum controle aplicado.</li>
-      <li><strong>Models with Controls:</strong> Quantos modelos têm algum controle aplicado.</li>
-      <li><strong>MCP Tools with Controls:</strong> Quantas tools MCP têm algum controle aplicado.</li>
-    </ul>
+    <p>Na página <strong>Build agents and tools</strong>, clique no agente que você acabou de vincular ao controle.</p>
 
-    <p>Clique no botão <code>Create Control</code>.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_23.png" alt="Página de Controls — Asset Controls e Enterprise Controls sem nenhum controle criado ainda">
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_56.png" alt="Selecionando o agente com o controle aplicado">
 
-    <p>Nessa janela <em>pop-up</em> vamos criar um controle. Temos diversos tipos de controles disponíveis para aplicar tanto em agentes, tools e modelos.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_24.png" alt="Pop-up de criação de controle — tipos disponíveis para agentes, tools e modelos">
+    <p>No painel <strong>Preview</strong>, à direita, envie uma mensagem com palavras de baixo calão para testar o controle. O agente não chega a processar o conteúdo ofensivo: a resposta é bloqueada antes mesmo de chegar ao modelo, e o agente retorna a mensagem de bloqueio configurada na etapa de configuração, pedindo que a comunicação seja mantida respeitosa e construtiva.</p>
 
-    <ol class="step-list">
-      <li>
-        <div class="step-content">
-          <p>Selecione <code>Content Guardrails</code> para testar uma das opções disponíveis.</p>
-          <p>Em seguida, clique em <code>Next</code>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_25.png" alt="Seleção de Content Guardrails como tipo de controle e clique em Next">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Dê um nome ao controle. No exemplo foi usado <code>Controle_de_palavras_de_baixo_calão</code>.</p>
-          <p>(Opcional) Adicione uma descrição no campo <em>Control instance description</em>.</p>
-          <p>Escolha o tipo de aplicação (Enforcement type) — marque onde o controle deve atuar.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_26.png" alt="Configure Control — nome, descrição e Enforcement type do controle Content Guardrails">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Ainda na etapa Configure Control, ao rolar a tela para baixo você encontra a seção <strong>"Toggle detection for each content type"</strong>.</p>
-          <p>Aqui aparecem os tipos de conteúdo que o controle Content Guardrails pode detectar:</p>
-          <table>
-            <thead><tr><th>Tipo</th><th>Descrição</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Sexual Content</strong></td><td>Conteúdo sexual explícito ou implícito</td></tr>
-              <tr><td><strong>Violence</strong></td><td>Conteúdo que descreve ou promove violência</td></tr>
-              <tr><td><strong>HAP</strong></td><td>Conteúdo de ódio, abuso e palavrões (Hate, Abuse and Profanity)</td></tr>
-              <tr><td><strong>Harm</strong></td><td>Conteúdo nocivo ao usuário ou terceiros</td></tr>
-              <tr><td><strong>Jailbreak</strong></td><td>Tentativas de burlar as regras do modelo</td></tr>
-              <tr><td><strong>Social Bias</strong></td><td>Viés social / preconceito</td></tr>
-            </tbody>
-          </table>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_27.png" alt="Configure Control — toggles de detecção por tipo de conteúdo: sexual, violência, HAP, harm, jailbreak e viés social">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Ative os tipos de conteúdo desejados.</p>
-          <p>Em <strong>Block message</strong>, você digita o texto que o usuário verá quando o conteúdo dele for bloqueado. No exemplo foi usado:</p>
-          <div class="code-block">Esse conteúdo não é apropriado para esta conversa. Peço que mantenhamos uma comunicação respeitosa e construtiva. Estou aqui para ajudar da melhor forma possível e fornecer suporte adequado às suas necessidades</div>
-          <p>Utilize a mesma mensagem copiando e colando no campo, ou escreva uma de sua preferência. Clique em <code>Next</code>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_28.png" alt="Configure Control — tipos de conteúdo ativados e mensagem de bloqueio personalizada definida">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Clique em <code>Add agent</code> para criar o guardrail em um agente.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_29.png" alt="Assign asset — clique em Add agent para vincular o controle a um agente">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Selecione um agente criado por você, como por exemplo, o agente orquestrador criado no último laboratório de criação de agentes. Clique em <code>Select</code>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_30.png" alt="Janela Add agent — seleção do agente orquestrador para aplicar o controle">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Clique em <code>Next</code>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_31.png" alt="Assign asset — confirmação dos agentes selecionados antes de prosseguir">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Você chegou à última etapa. Aqui o objetivo é conferir toda a configuração antes de criar o controle. Revise tudo que foi criado e em seguida, clique em <code>Create control</code>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_32.png" alt="Review — resumo completo da configuração do controle antes de criar">
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>De volta à página de Controle, note a notificação verde <strong>"Control created successfully"</strong> (controle criado com sucesso). Repare que agora os cards de resumo no topo foram atualizados com a nova criação do controle.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_33.png" alt="Página de Controls com notificação de controle criado com sucesso e cards de resumo atualizados">
-        </div>
-      </li>
-    </ol>
-  </section>
-
-  <hr class="section-divider">
-
-  <!-- ENTERPRISE CONTROLS -->
-  <section id="enterprise-controls">
-    <h2>Enterprise Controls</h2>
-    <p>Clique na aba <strong>Enterprise Controls</strong>. Há também uma série de enterprise controls disponíveis. Não entraremos em detalhes sobre eles neste lab, mas você pode dar uma rápida olhada para ver o que está disponível!</p>
-
-    <table>
-      <thead><tr><th>Controle</th><th>Descrição</th></tr></thead>
-      <tbody>
-        <tr>
-          <td><strong>Data retention</strong></td>
-          <td>Permite gerenciar a retenção de dados, especificando por quanto tempo o histórico de chats dos usuários neste tenant do wxO deve ser mantido (o padrão é 30 dias), após o qual será automaticamente excluído. Todo o histórico de chats será excluído após 365 dias.</td>
-        </tr>
-        <tr>
-          <td><strong>Network</strong></td>
-          <td>Você pode definir o acesso à rede especificando quais endereços IP podem acessar seu sistema (restrições de rede de entrada) e quais destinos externos seu sistema pode se conectar (restrições de rede de saída).</td>
-        </tr>
-        <tr>
-          <td><strong>Analytics</strong></td>
-          <td>Ajuda a gerenciar como o analytics é coletado e exibido para seu tenant em dashboards, logs ou relatórios. Você pode habilitar <em>Enable PII Masking</em> para proteger dados potencialmente sensíveis, mascarando informações de identificação pessoal (PII) comuns nos metadados de trace.</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p>Retorne à aba <code>Asset control</code>. Clique no ícone de hambúrguer ao lado esquerdo da tela, escolha <code>Build</code>.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_34.png" alt="Menu hambúrguer com opção Build selecionada para acessar o agente">
-
-    <p>Escolha o agente que teve o controle aplicado.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_35.png" alt="Lista de agentes no Build — seleção do agente com o controle aplicado">
-
-    <p>Envie uma pergunta extremamente ofensiva e de baixo calão para ver o guardrail recém-criado operando no agente.</p>
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab06/lab06_monitoring_36.png" alt="Preview do agente — guardrail de Content Guardrails bloqueando mensagem ofensiva">
-
-    <h3>Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
-    <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit). <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais como criar agentes, tools, bases de conhecimentos e muito mais.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab06/lab06_57.png" alt="Controle bloqueando conteúdo impróprio">
   </section>
 
   <hr class="section-divider">
@@ -625,199 +408,282 @@
   <!-- RESUMO -->
   <section id="resumo">
     <h2>Resumo</h2>
-    <p>Controlar agents de IA empresariais exige mais do que um único dashboard. Requer visibilidade, governança, observabilidade, depuração, analytics e investigação assistida por IA em todo o ambiente de agents.</p>
-    <p>Com o Control Plane, as equipes podem passar de sinais dispersos para um controle centralizado, ajudando as empresas a gerenciar agents com maior confiança, clareza e segurança em escala.</p>
 
-    <div class="callout callout--success">
-      <div>
-        <div class="callout__title">Parabéns!</div>
-        <p style="margin:0;">Você concluiu o lab do Agentic Control Plane e toda a série de laboratórios de Controle e Governança de Agentes de IA com watsonx Orchestrate!</p>
-      </div>
-    </div>
+    <p>Parabéns! 🎉 Você concluiu o Control Plane Lab do watsonx Orchestrate.</p>
+
+    <p>Ao longo deste laboratório, você navegou pelas seis abas do dashboard do Agentic Control Plane: Overview, Adoption, FinOps, Quality, Reliability e Security and Risk, entendendo como cada uma resume um aspecto diferente da operação dos seus agentes: uso geral, engajamento, custo de tokens, qualidade das respostas, confiabilidade e segurança.</p>
+
+    <p>Em seguida, usou o assistente de IA integrado a esse painel para fazer uma pergunta em linguagem natural sobre a taxa de sucesso dos agentes na semana e recebeu uma resposta direta, já com o raciocínio disponível para consulta.</p>
+
+    <p>Por fim, você criou um Controle de Content Guardrails, configurou os tipos de conteúdo a serem bloqueados, atribuiu o controle a um agente e testou seu funcionamento na prática.</p>
+
+    <p>Com isso, você agora sabe onde encontrar as principais métricas de adoção, custo, qualidade, confiabilidade e segurança dos seus agentes, e como aplicar controles de segurança para proteger seus agentes contra conteúdo impróprio antes que ele chegue aos usuários.</p>
+
+    <h3 id="sou-desenvolvedor">Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
+
+    <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK, o Agent Development Kit. <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais sobre como criar agentes, tools, bases de conhecimento e muito mais.</p>
   </section>
 
   <hr class="section-divider">
 
-  <!-- PRÓXIMOS PASSOS / LINKS -->
+  <!-- PRÓXIMOS PASSOS -->
   <section id="proximos-passos">
-    <h2>Próximos Passos &amp; Links de Referência</h2>
-    <p>Coletânea de links oficiais, documentação, tutoriais e novidades da IBM watsonx Orchestrate e do Agent Development Kit (ADK).</p>
-    <p style="font-size:12px;color:var(--carbon-gray-70);">Última atualização da coletânea: 15/07/2026.</p>
+    <h2>Próximos Passos</h2>
 
-    <div class="resource-section">
-      <h4>Portal ADK</h4>
-      <table>
-        <thead><tr><th>Recurso</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Portal oficial da ADK (Welcome)</td><td><a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">developer.watson-orchestrate.ibm.com</a></td></tr>
-          <tr><td>O que é a ADK</td><td><a href="https://developer.watson-orchestrate.ibm.com/getting_started/what_is" target="_blank">getting_started/what_is</a></td></tr>
-          <tr><td>Instalação / primeiros passos</td><td><a href="https://developer.watson-orchestrate.ibm.com/getting_started/installing" target="_blank">getting_started/installing</a></td></tr>
-          <tr><td>Comandos CLI úteis</td><td><a href="https://developer.watson-orchestrate.ibm.com/getting_started/cli" target="_blank">getting_started/cli</a></td></tr>
-          <tr><td>Exemplos</td><td><a href="https://developer.watson-orchestrate.ibm.com/getting_started/examples" target="_blank">getting_started/examples</a></td></tr>
-          <tr><td>Índice completo da doc (llms.txt)</td><td><a href="https://developer.watson-orchestrate.ibm.com/llms.txt" target="_blank">developer.watson-orchestrate.ibm.com/llms.txt</a></td></tr>
-        </tbody>
-      </table>
+    <p>Este é o último laboratório desta série. Abaixo está uma coletânea de links oficiais, documentação, tutoriais e novidades da IBM watsonx Orchestrate e do Agent Development Kit (ADK) para você continuar se aprofundando.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <p style="margin:0;">Última atualização da coletânea: 15/07/2026.</p>
+      </div>
     </div>
 
-    <div class="resource-section">
-      <h4>Repositórios e Pacotes</h4>
-      <table>
-        <thead><tr><th>Recurso</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>GitHub — IBM/ibm-watsonx-orchestrate-adk</td><td><a href="https://github.com/IBM/ibm-watsonx-orchestrate-adk" target="_blank">github.com/IBM/ibm-watsonx-orchestrate-adk</a></td></tr>
-          <tr><td>PyPI — ibm-watsonx-orchestrate</td><td><a href="https://pypi.org/project/ibm-watsonx-orchestrate/" target="_blank">pypi.org/project/ibm-watsonx-orchestrate</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead><tr><th>Recurso</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Portal oficial da ADK (Welcome)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">https://developer.watson-orchestrate.ibm.com/</a></td></tr>
+        <tr><td>O que é a ADK</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/getting_started/what_is" target="_blank">https://developer.watson-orchestrate.ibm.com/getting_started/what_is</a></td></tr>
+        <tr><td>Instalação / primeiros passos</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/getting_started/installing" target="_blank">https://developer.watson-orchestrate.ibm.com/getting_started/installing</a></td></tr>
+        <tr><td>Comandos CLI úteis</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/getting_started/cli" target="_blank">https://developer.watson-orchestrate.ibm.com/getting_started/cli</a></td></tr>
+        <tr><td>Exemplos</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/getting_started/examples" target="_blank">https://developer.watson-orchestrate.ibm.com/getting_started/examples</a></td></tr>
+        <tr><td>Índice completo da doc (<code>llms.txt</code>)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/llms.txt" target="_blank">https://developer.watson-orchestrate.ibm.com/llms.txt</a></td></tr>
+      </tbody>
+    </table>
 
-    <div class="resource-section">
-      <h4>Agentes</h4>
-      <table>
-        <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Visão geral de agentes</td><td><a href="https://developer.watson-orchestrate.ibm.com/agents/overview" target="_blank">agents/overview</a></td></tr>
-          <tr><td>Criando agentes nativos</td><td><a href="https://developer.watson-orchestrate.ibm.com/agents/build_agent" target="_blank">agents/build_agent</a></td></tr>
-          <tr><td>Escolhendo o estilo do agente (ReAct, Flows, etc.)</td><td><a href="https://developer.watson-orchestrate.ibm.com/agents/agent_styles" target="_blank">agents/agent_styles</a></td></tr>
-          <tr><td>Conectar agentes externos (LangGraph, A2A)</td><td><a href="https://developer.watson-orchestrate.ibm.com/agents/connect_agent" target="_blank">agents/connect_agent</a></td></tr>
-          <tr><td>Importar e implantar agentes</td><td><a href="https://developer.watson-orchestrate.ibm.com/agents/import_agent" target="_blank">agents/import_agent</a></td></tr>
-          <tr><td>Descrições e instruções de agentes</td><td><a href="https://developer.watson-orchestrate.ibm.com/agents/descriptions" target="_blank">agents/descriptions</a></td></tr>
-          <tr><td>Gerenciar agentes</td><td><a href="https://developer.watson-orchestrate.ibm.com/agents/manage_agent" target="_blank">agents/manage_agent</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <hr class="section-divider">
 
-    <div class="resource-section">
-      <h4>Ferramentas (Tools) e Toolkits</h4>
-      <table>
-        <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Visão geral de tools</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/overview" target="_blank">tools/overview</a></td></tr>
-          <tr><td>Tools em Python</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/create_tool" target="_blank">tools/create_tool</a></td></tr>
-          <tr><td>Tools baseadas em OpenAPI</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/create_openapi_tool" target="_blank">tools/create_openapi_tool</a></td></tr>
-          <tr><td>Toolkits MCP remotos</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/toolkits/remote_mcp_toolkits" target="_blank">tools/toolkits/remote_mcp_toolkits</a></td></tr>
-          <tr><td>Toolkits MCP locais</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/toolkits/local_mcp_toolkits" target="_blank">tools/toolkits/local_mcp_toolkits</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <p><b>Repositórios e pacotes</b></p>
 
-    <div class="resource-section">
-      <h4>Agentic Workflows (Flows)</h4>
-      <table>
-        <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Entendendo agentic workflows</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/overview" target="_blank">tools/flows/overview</a></td></tr>
-          <tr><td>Construindo um flow</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/building_flow" target="_blank">tools/flows/building_flow</a></td></tr>
-          <tr><td>Tratamento de erros</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/error_handling" target="_blank">tools/flows/error_handling</a></td></tr>
-          <tr><td>Mascaramento de dados sensíveis</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/masking_sensitive_data" target="_blank">tools/flows/masking_sensitive_data</a></td></tr>
-          <tr><td>Testando um flow</td><td><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/testing_flow" target="_blank">tools/flows/testing_flow</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead><tr><th>Recurso</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>GitHub: <code>IBM/ibm-watsonx-orchestrate-adk</code></td><td style="word-break:break-all;"><a href="https://github.com/IBM/ibm-watsonx-orchestrate-adk" target="_blank">https://github.com/IBM/ibm-watsonx-orchestrate-adk</a></td></tr>
+        <tr><td>PyPI: <code>ibm-watsonx-orchestrate</code></td><td style="word-break:break-all;"><a href="https://pypi.org/project/ibm-watsonx-orchestrate/" target="_blank">https://pypi.org/project/ibm-watsonx-orchestrate/</a></td></tr>
+      </tbody>
+    </table>
 
-    <div class="resource-section">
-      <h4>Avaliação (Evaluation) e Observabilidade</h4>
-      <table>
-        <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Visão geral de avaliação</td><td><a href="https://developer.watson-orchestrate.ibm.com/evaluate/overview" target="_blank">evaluate/overview</a></td></tr>
-          <tr><td>Avaliando agentes e tools</td><td><a href="https://developer.watson-orchestrate.ibm.com/evaluate/evaluate" target="_blank">evaluate/evaluate</a></td></tr>
-          <tr><td>Criando dataset de avaliação</td><td><a href="https://developer.watson-orchestrate.ibm.com/evaluate/create_data" target="_blank">evaluate/create_data</a></td></tr>
-          <tr><td>Avaliação rápida</td><td><a href="https://developer.watson-orchestrate.ibm.com/evaluate/quick_eval" target="_blank">evaluate/quick_eval</a></td></tr>
-          <tr><td>Rubric Evaluations</td><td><a href="https://developer.watson-orchestrate.ibm.com/evaluate/rubric" target="_blank">evaluate/rubric</a></td></tr>
-          <tr><td>Teste de vulnerabilidade de LLM</td><td><a href="https://developer.watson-orchestrate.ibm.com/evaluate/llm_vulnerability" target="_blank">evaluate/llm_vulnerability</a></td></tr>
-          <tr><td>Traces — visão geral</td><td><a href="https://developer.watson-orchestrate.ibm.com/traces/overview" target="_blank">traces/overview</a></td></tr>
-          <tr><td>Traces via CLI</td><td><a href="https://developer.watson-orchestrate.ibm.com/traces/traces_with_cli" target="_blank">traces/traces_with_cli</a></td></tr>
-          <tr><td>Traces via Python</td><td><a href="https://developer.watson-orchestrate.ibm.com/traces/traces_with_python" target="_blank">traces/traces_with_python</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <hr class="section-divider">
 
-    <div class="resource-section">
-      <h4>Modelos (LLMs)</h4>
-      <table>
-        <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Escolhendo o LLM</td><td><a href="https://developer.watson-orchestrate.ibm.com/llm/getting_started_llm" target="_blank">llm/getting_started_llm</a></td></tr>
-          <tr><td>Gerenciando modelos virtuais</td><td><a href="https://developer.watson-orchestrate.ibm.com/llm/managing_llm" target="_blank">llm/managing_llm</a></td></tr>
-          <tr><td>Políticas de modelo</td><td><a href="https://developer.watson-orchestrate.ibm.com/llm/model_policies" target="_blank">llm/model_policies</a></td></tr>
-          <tr><td>Observabilidade com Langfuse</td><td><a href="https://developer.watson-orchestrate.ibm.com/llm/observability" target="_blank">llm/observability</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <p><b>Agentes</b></p>
 
-    <div class="resource-section">
-      <h4>Knowledge Bases, Conexões e Canais</h4>
-      <table>
-        <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Knowledge bases — visão geral</td><td><a href="https://developer.watson-orchestrate.ibm.com/knowledge_base/overview" target="_blank">knowledge_base/overview</a></td></tr>
-          <tr><td>Criando knowledge bases</td><td><a href="https://developer.watson-orchestrate.ibm.com/knowledge_base/build_kb" target="_blank">knowledge_base/build_kb</a></td></tr>
-          <tr><td>Por que usar conexões</td><td><a href="https://developer.watson-orchestrate.ibm.com/connections/overview" target="_blank">connections/overview</a></td></tr>
-          <tr><td>Canais — visão geral (Teams, Slack, WhatsApp, SMS...)</td><td><a href="https://developer.watson-orchestrate.ibm.com/channels/overview" target="_blank">channels/overview</a></td></tr>
-          <tr><td>Plug-ins</td><td><a href="https://developer.watson-orchestrate.ibm.com/plugins/plugins" target="_blank">plugins/plugins</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Visão geral de agentes</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/agents/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/agents/overview</a></td></tr>
+        <tr><td>Criando agentes nativos</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/agents/build_agent" target="_blank">https://developer.watson-orchestrate.ibm.com/agents/build_agent</a></td></tr>
+        <tr><td>Escolhendo o estilo do agente (ReAct, Flows, etc.)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/agents/agent_styles" target="_blank">https://developer.watson-orchestrate.ibm.com/agents/agent_styles</a></td></tr>
+        <tr><td>Conectar agentes externos (LangGraph, A2A)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/agents/connect_agent" target="_blank">https://developer.watson-orchestrate.ibm.com/agents/connect_agent</a></td></tr>
+        <tr><td>Importar e implantar agentes</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/agents/import_agent" target="_blank">https://developer.watson-orchestrate.ibm.com/agents/import_agent</a></td></tr>
+        <tr><td>Descrições e instruções de agentes</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/agents/descriptions" target="_blank">https://developer.watson-orchestrate.ibm.com/agents/descriptions</a></td></tr>
+        <tr><td>Gerenciar agentes</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/agents/manage_agent" target="_blank">https://developer.watson-orchestrate.ibm.com/agents/manage_agent</a></td></tr>
+        <tr><td>Skills specifications (Public Preview)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/agents/skills" target="_blank">https://developer.watson-orchestrate.ibm.com/agents/skills</a></td></tr>
+      </tbody>
+    </table>
 
-    <div class="resource-section">
-      <h4>Tutoriais e Guias</h4>
-      <table>
-        <thead><tr><th>Tutorial</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Seu primeiro agente (Hello World)</td><td><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_1_hello_world" target="_blank">tutorial_1_hello_world</a></td></tr>
-          <tr><td>Agente Empower</td><td><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_2_arrows_internal_employees" target="_blank">tutorial_2_arrows_internal_employees</a></td></tr>
-          <tr><td>Suporte multilíngue</td><td><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_3_multi_language_support" target="_blank">tutorial_3_multi_language_support</a></td></tr>
-          <tr><td>Usando watsonx Orchestrate + BeeAI Framework</td><td><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_beeai_framework" target="_blank">tutorial_beeai_framework</a></td></tr>
-          <tr><td>Usando watsonx Orchestrate + Langflow</td><td><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_langflow" target="_blank">tutorial_langflow</a></td></tr>
-          <tr><td>CI/CD — Parte 1</td><td><a href="https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-1" target="_blank">ci_cd/deployment-cicd-approach-1</a></td></tr>
-          <tr><td>CI/CD — Parte 2</td><td><a href="https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-2" target="_blank">ci_cd/deployment-cicd-approach-2</a></td></tr>
-          <tr><td>Guia de Performance</td><td><a href="https://developer.watson-orchestrate.ibm.com/tutorials/performance/performance-guide-v2" target="_blank">performance/performance-guide-v2</a></td></tr>
-          <tr><td>Getting Started (IBM Developer)</td><td><a href="https://developer.ibm.com/tutorials/getting-started-with-watsonx-orchestrate/" target="_blank">developer.ibm.com — Getting Started</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <hr class="section-divider">
 
-    <div class="resource-section">
-      <h4>Documentação Oficial do Produto</h4>
-      <table>
-        <thead><tr><th>Recurso</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Página de desenvolvedores do watsonx Orchestrate</td><td><a href="https://www.ibm.com/products/watsonx-orchestrate/developers" target="_blank">ibm.com/products/watsonx-orchestrate/developers</a></td></tr>
-          <tr><td>Construindo agentes com a ADK</td><td><a href="https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=agents-building-using-adk" target="_blank">ibm.com/docs — agents-building-using-adk</a></td></tr>
-          <tr><td>Release notes (SaaS)</td><td><a href="https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=release-notes" target="_blank">ibm.com/docs — release-notes</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <p><b>Ferramentas (Tools) e Toolkits</b></p>
 
-    <div class="resource-section">
-      <h4>Novidades / "Coisas Novas" (2026)</h4>
-      <table>
-        <thead><tr><th>Item</th><th>Link</th></tr></thead>
-        <tbody>
-          <tr><td>Troubleshooting</td><td><a href="https://developer.watson-orchestrate.ibm.com/release/troubleshooting" target="_blank">release/troubleshooting</a></td></tr>
-          <tr><td>Agentic Control Plane (anúncio, jun/2026)</td><td><a href="https://www.ibm.com/new/announcements/introducing-the-agentic-control-plane" target="_blank">ibm.com/new — agentic-control-plane</a></td></tr>
-          <tr><td>What's new — comunidade (mar/2026)</td><td><a href="https://community.ibm.com/community/user/blogs/daiane-camila-bizari2/2026/04/02/whats-new-in-ibm-watsonx-orchestrate" target="_blank">community.ibm.com — whats-new</a></td></tr>
-          <tr><td>Newsletter técnica (jun/2026)</td><td><a href="https://community.ibm.com/community/user/blogs/gustavo-villegas/2026/05/28/watsonx-orchestrate-news-a-touchpoint-june2026" target="_blank">community.ibm.com — june2026</a></td></tr>
-        </tbody>
-      </table>
-    </div>
+    <table>
+      <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Visão geral de tools</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/overview</a></td></tr>
+        <tr><td>Tools em Python</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/create_tool" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/create_tool</a></td></tr>
+        <tr><td>Tools baseadas em OpenAPI</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/create_openapi_tool" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/create_openapi_tool</a></td></tr>
+        <tr><td>Gerenciamento de dependências Python</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/python_dependency_management" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/python_dependency_management</a></td></tr>
+        <tr><td>Estrutura de resposta e anotações de tools</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/tool_response_structure" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/tool_response_structure</a></td></tr>
+        <tr><td>Logs de tools Python</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/log_behavior" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/log_behavior</a></td></tr>
+        <tr><td>Toolkits: visão geral</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/toolkits/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/toolkits/overview</a></td></tr>
+        <tr><td>Toolkits MCP remotos</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/toolkits/remote_mcp_toolkits" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/toolkits/remote_mcp_toolkits</a></td></tr>
+        <tr><td>Toolkits MCP locais</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/toolkits/local_mcp_toolkits" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/toolkits/local_mcp_toolkits</a></td></tr>
+        <tr><td>Toolkits Python</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/toolkits/python_toolkits" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/toolkits/python_toolkits</a></td></tr>
+      </tbody>
+    </table>
 
-    <div class="callout callout--tip">
+    <hr class="section-divider">
+
+    <p><b>Agentic Workflows (Flows)</b></p>
+
+    <table>
+      <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Entendendo agentic workflows</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/overview</a></td></tr>
+        <tr><td>Construindo um flow</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/building_flow" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/building_flow</a></td></tr>
+        <tr><td>Mapeamento de entrada/saída</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/data_map" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/data_map</a></td></tr>
+        <tr><td>Nó de decisões (Public Preview)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/decisions_node" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/decisions_node</a></td></tr>
+        <tr><td>Tratamento de erros</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/error_handling" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/error_handling</a></td></tr>
+        <tr><td>Atividades multiusuário</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/multi_user" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/multi_user</a></td></tr>
+        <tr><td>Mascaramento de dados sensíveis</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/masking_sensitive_data" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/masking_sensitive_data</a></td></tr>
+        <tr><td>Scheduler (Public Preview)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/scheduler" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/scheduler</a></td></tr>
+        <tr><td>Rodar workflows via MCP (Public Preview)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/mcp_workflows" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/mcp_workflows</a></td></tr>
+        <tr><td>Testando um flow</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tools/flows/testing_flow" target="_blank">https://developer.watson-orchestrate.ibm.com/tools/flows/testing_flow</a></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-divider">
+
+    <p><b>MCP Server (Model Context Protocol)</b></p>
+
+    <table>
+      <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Instalando o ADK MCP Server</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_installation" target="_blank">https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_installation</a></td></tr>
+        <tr><td>Configurando o ADK MCP Server</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_configuration" target="_blank">https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_configuration</a></td></tr>
+        <tr><td>Conectando clientes MCP</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_integration" target="_blank">https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_integration</a></td></tr>
+        <tr><td>Documentation MCP Server</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_docs_server" target="_blank">https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_docs_server</a></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-divider">
+
+    <p><b>Developer Edition (ambiente local)</b></p>
+
+    <table>
+      <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>O que é a Developer Edition</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/developer_edition/wxOde_overview" target="_blank">https://developer.watson-orchestrate.ibm.com/developer_edition/wxOde_overview</a></td></tr>
+        <tr><td>Instalando a Developer Edition</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/developer_edition/wxOde_setup" target="_blank">https://developer.watson-orchestrate.ibm.com/developer_edition/wxOde_setup</a></td></tr>
+        <tr><td>Gerenciando o servidor local</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/developer_edition/manage_local_server" target="_blank">https://developer.watson-orchestrate.ibm.com/developer_edition/manage_local_server</a></td></tr>
+        <tr><td>Gerenciando a UI local</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/developer_edition/manage_ui" target="_blank">https://developer.watson-orchestrate.ibm.com/developer_edition/manage_ui</a></td></tr>
+        <tr><td>Ambiente air-gapped</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/environment/air_gap_environment" target="_blank">https://developer.watson-orchestrate.ibm.com/environment/air_gap_environment</a></td></tr>
+        <tr><td>Boletins de segurança</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/developer_edition/security_bulletins" target="_blank">https://developer.watson-orchestrate.ibm.com/developer_edition/security_bulletins</a></td></tr>
+      </tbody>
+    </table>
+
+    <p><b>Modelos (LLMs)</b></p>
+
+    <table>
+      <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Escolhendo o LLM</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/llm/getting_started_llm" target="_blank">https://developer.watson-orchestrate.ibm.com/llm/getting_started_llm</a></td></tr>
+        <tr><td>Gerenciando modelos virtuais</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/llm/managing_llm" target="_blank">https://developer.watson-orchestrate.ibm.com/llm/managing_llm</a></td></tr>
+        <tr><td>Políticas de modelo (Public Preview)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/llm/model_policies" target="_blank">https://developer.watson-orchestrate.ibm.com/llm/model_policies</a></td></tr>
+        <tr><td>Observabilidade com Langfuse</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/llm/observability" target="_blank">https://developer.watson-orchestrate.ibm.com/llm/observability</a></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-divider">
+
+    <p><b>SDK (Python)</b></p>
+
+    <table>
+      <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Introdução ao SDK</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/sdk/sdk_intro" target="_blank">https://developer.watson-orchestrate.ibm.com/sdk/sdk_intro</a></td></tr>
+        <tr><td>Client</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/sdk/client" target="_blank">https://developer.watson-orchestrate.ibm.com/sdk/client</a></td></tr>
+        <tr><td>Context</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/sdk/context" target="_blank">https://developer.watson-orchestrate.ibm.com/sdk/context</a></td></tr>
+        <tr><td>Memory</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/sdk/memory" target="_blank">https://developer.watson-orchestrate.ibm.com/sdk/memory</a></td></tr>
+        <tr><td>Chat models</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/sdk/chat_wxo" target="_blank">https://developer.watson-orchestrate.ibm.com/sdk/chat_wxo</a></td></tr>
+        <tr><td>Embeddings</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/sdk/wxo_embeddings" target="_blank">https://developer.watson-orchestrate.ibm.com/sdk/wxo_embeddings</a></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-divider">
+
+    <p><b>Avaliação (Evaluation) e Observabilidade</b></p>
+
+    <table>
+      <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Visão geral de avaliação</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/evaluate/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/evaluate/overview</a></td></tr>
+        <tr><td>Avaliando agentes e tools</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/evaluate/evaluate" target="_blank">https://developer.watson-orchestrate.ibm.com/evaluate/evaluate</a></td></tr>
+        <tr><td>Criando dataset de avaliação</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/evaluate/create_data" target="_blank">https://developer.watson-orchestrate.ibm.com/evaluate/create_data</a></td></tr>
+        <tr><td>Avaliação rápida</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/evaluate/quick_eval" target="_blank">https://developer.watson-orchestrate.ibm.com/evaluate/quick_eval</a></td></tr>
+        <tr><td>Rubric Evaluations</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/evaluate/rubric" target="_blank">https://developer.watson-orchestrate.ibm.com/evaluate/rubric</a></td></tr>
+        <tr><td>Teste de vulnerabilidade de LLM</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/evaluate/llm_vulnerability" target="_blank">https://developer.watson-orchestrate.ibm.com/evaluate/llm_vulnerability</a></td></tr>
+        <tr><td>Traces: visão geral</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/traces/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/traces/overview</a></td></tr>
+        <tr><td>Traces via CLI</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/traces/traces_with_cli" target="_blank">https://developer.watson-orchestrate.ibm.com/traces/traces_with_cli</a></td></tr>
+        <tr><td>Traces via Python</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/traces/traces_with_python" target="_blank">https://developer.watson-orchestrate.ibm.com/traces/traces_with_python</a></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-divider">
+
+    <p><b>Knowledge Bases, Conexões e Canais</b></p>
+
+    <table>
+      <thead><tr><th>Tópico</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Knowledge bases: visão geral</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/knowledge_base/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/knowledge_base/overview</a></td></tr>
+        <tr><td>Criando knowledge bases</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/knowledge_base/build_kb" target="_blank">https://developer.watson-orchestrate.ibm.com/knowledge_base/build_kb</a></td></tr>
+        <tr><td>Por que usar conexões</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/connections/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/connections/overview</a></td></tr>
+        <tr><td>Criando conexões</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/connections/build_connections" target="_blank">https://developer.watson-orchestrate.ibm.com/connections/build_connections</a></td></tr>
+        <tr><td>Canais: visão geral (Teams, Slack, WhatsApp, SMS...)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/channels/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/channels/overview</a></td></tr>
+        <tr><td>Adicionando voz a um agente</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/voice/adding_voice_to_agent" target="_blank">https://developer.watson-orchestrate.ibm.com/voice/adding_voice_to_agent</a></td></tr>
+        <tr><td>Configuração de voz</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/voice/managing_voice" target="_blank">https://developer.watson-orchestrate.ibm.com/voice/managing_voice</a></td></tr>
+        <tr><td>Plug-ins</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/plugins/plugins" target="_blank">https://developer.watson-orchestrate.ibm.com/plugins/plugins</a></td></tr>
+        <tr><td>Workspaces</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/workspaces/overview" target="_blank">https://developer.watson-orchestrate.ibm.com/workspaces/overview</a></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-divider">
+
+    <p><b>Tutoriais e Guias</b></p>
+
+    <table>
+      <thead><tr><th>Tutorial</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Seu primeiro agente (Hello World)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_1_hello_world" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_1_hello_world</a></td></tr>
+        <tr><td>Agente Empower</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_2_arrows_internal_employees" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_2_arrows_internal_employees</a></td></tr>
+        <tr><td>Suporte multilíngue</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_3_multi_language_support" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_3_multi_language_support</a></td></tr>
+        <tr><td>Agente Healthcare Provider</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_4_healthcare_provider" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_4_healthcare_provider</a></td></tr>
+        <tr><td>Usando watsonx Orchestrate + BeeAI Framework</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_beeai_framework" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_beeai_framework</a></td></tr>
+        <tr><td>Usando watsonx Orchestrate + Langflow</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_langflow" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/tutorial_langflow</a></td></tr>
+        <tr><td>CI/CD: Parte 1</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-1" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-1</a></td></tr>
+        <tr><td>CI/CD: Parte 2</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-2" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-2</a></td></tr>
+        <tr><td>CI/CD: Parte 3</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-3" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-3</a></td></tr>
+        <tr><td>CI/CD: Parte 4</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-4" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/ci_cd/deployment-cicd-approach-4</a></td></tr>
+        <tr><td>Guia de Performance (geral)</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/performance/performance-guide-v2" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/performance/performance-guide-v2</a></td></tr>
+        <tr><td>Tutoriais avançados</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/tutorials/advanced_tutorials" target="_blank">https://developer.watson-orchestrate.ibm.com/tutorials/advanced_tutorials</a></td></tr>
+        <tr><td>Getting Started (IBM Developer)</td><td style="word-break:break-all;"><a href="https://developer.ibm.com/tutorials/getting-started-with-watsonx-orchestrate/" target="_blank">https://developer.ibm.com/tutorials/getting-started-with-watsonx-orchestrate/</a></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-divider">
+
+    <p><b>Documentação oficial do produto</b></p>
+
+    <table>
+      <thead><tr><th>Recurso</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Página de desenvolvedores do watsonx Orchestrate</td><td style="word-break:break-all;"><a href="https://www.ibm.com/products/watsonx-orchestrate/developers" target="_blank">https://www.ibm.com/products/watsonx-orchestrate/developers</a></td></tr>
+        <tr><td>Construindo agentes com a ADK</td><td style="word-break:break-all;"><a href="https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=agents-building-using-adk" target="_blank">https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=agents-building-using-adk</a></td></tr>
+        <tr><td>Release notes (SaaS)</td><td style="word-break:break-all;"><a href="https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=release-notes" target="_blank">https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=release-notes</a></td></tr>
+        <tr><td>Release notes (On-premises)</td><td style="word-break:break-all;"><a href="https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=notes-release-premises" target="_blank">https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=notes-release-premises</a></td></tr>
+      </tbody>
+    </table>
+
+    <hr class="section-divider">
+
+    <p><b>Novidades / "Coisas novas" (2026)</b></p>
+
+    <table>
+      <thead><tr><th>Item</th><th>Link</th></tr></thead>
+      <tbody>
+        <tr><td>Troubleshooting</td><td style="word-break:break-all;"><a href="https://developer.watson-orchestrate.ibm.com/release/troubleshooting" target="_blank">https://developer.watson-orchestrate.ibm.com/release/troubleshooting</a></td></tr>
+        <tr><td><strong>Agentic Control Plane</strong> (anúncio, jun/2026)</td><td style="word-break:break-all;"><a href="https://www.ibm.com/new/announcements/introducing-the-agentic-control-plane" target="_blank">https://www.ibm.com/new/announcements/introducing-the-agentic-control-plane</a></td></tr>
+        <tr><td>What's new: comunidade (mar/2026)</td><td style="word-break:break-all;"><a href="https://community.ibm.com/community/user/blogs/daiane-camila-bizari2/2026/04/02/whats-new-in-ibm-watsonx-orchestrate" target="_blank">https://community.ibm.com/community/user/blogs/daiane-camila-bizari2/2026/04/02/whats-new-in-ibm-watsonx-orchestrate</a></td></tr>
+        <tr><td>"Orchestrate More, Worry Less" (mar/2026)</td><td style="word-break:break-all;"><a href="https://community.ibm.com/community/user/blogs/alan-francis-cheeramvelil/2026/04/12/orchestrate-more-worry-less-whats-new-in-ibm-watso" target="_blank">https://community.ibm.com/community/user/blogs/alan-francis-cheeramvelil/2026/04/12/orchestrate-more-worry-less-whats-new-in-ibm-watso</a></td></tr>
+        <tr><td>Newsletter técnica (jun/2026)</td><td style="word-break:break-all;"><a href="https://community.ibm.com/community/user/blogs/gustavo-villegas/2026/05/28/watsonx-orchestrate-news-a-touchpoint-june2026" target="_blank">https://community.ibm.com/community/user/blogs/gustavo-villegas/2026/05/28/watsonx-orchestrate-news-a-touchpoint-june2026</a></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
       <div>
         <div class="callout__title">Dica</div>
-        <p style="margin:0;">Consulte sempre a página <strong>What's new</strong> para ver a versão mais recente, já que a ADK é atualizada com frequência.</p>
+        <p style="margin:0;">consulte sempre a página <strong>What's new</strong> para ver a versão mais recente, já que a ADK é atualizada com frequência.</p>
       </div>
     </div>
   </section>
 
   <div class="lab-nav">
-    <a href="lab5.html">← Lab 5: Monitoramento</a>
-    <a href="index.html" class="primary">Voltar ao Início →</a>
+    <a href="lab5.html">← Lab 5: Debug de Agentes</a>
+    <a href="index.html" class="primary">Voltar ao início →</a>
   </div>
 </main>
 
 <footer class="c-footer">
-  Nathalia Trazzi | Technical Solutions Architect & AI Engineer
+  Made by Nathalia Trazzi & Julia Almeida
 </footer>
 </body>
 </html>
