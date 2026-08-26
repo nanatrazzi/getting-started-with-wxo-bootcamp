@@ -52,7 +52,7 @@ Você chega à tela de edição do agente, com o painel **Behavior** já selecio
 
 **2.** Em **Model**, mantenha `GPT-OSS 120B da OpenAI (via Groq)`.
 
-**3.** Em **Description**, copie e cole o texto abaixo. É essa descrição que o modelo de roteamento vai ler mais adiante, na Parte 2, para decidir quando encaminhar uma pergunta a este agente:
+**3.** Em **Description**, copie e cole o texto abaixo.
 
 ```
 Este agente pesquisa no Google informações em tempo real, como avaliações de usuários, classificações e comparações de mercado, mas apenas para carros que estão em nosso catálogo. Não deve fornecer informações sobre veículos não vendidos pela nossa concessionária.
