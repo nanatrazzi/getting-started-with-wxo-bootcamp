@@ -1,3 +1,32 @@
+## Glossário de Termos Técnicos
+
+> Termos já definidos no [Laboratório 1](./Step_by_Step_Labworkflow-1.md#glossário-de-termos-técnicos) não são repetidos aqui.
+
+| Termo | Significado |
+|---|---|
+| **Branch** | Nó de controle de fluxo que divide a execução em caminhos condicionais (similar a um `if/else`); no Flow Builder possui um **Path 1** (condição `if`) e um **Path 2** (caminho padrão `else`). |
+| **Condition / Condição** | Expressão lógica que determina qual caminho o fluxo vai percorrer em um nó Branch. Pode ser criada visualmente ou por editor de código. |
+| **Default path** | Caminho de exceção (Path 2) de um Branch, executado quando nenhuma das condições definidas nos outros paths for satisfeita. |
+| **Done** | Botão que confirma e fecha o Flow Builder ou um painel de configuração, retornando ao editor do agente. |
+| **Edit condition** | Opção do painel do Branch que abre o editor visual ou de código para definir a condição de um path. |
+| **File download** | Opção do menu **Present to user** que disponibiliza um arquivo para download no chat. |
+| **HTML** | HyperText Markup Language — linguagem de marcação usada no campo Output message do nó Message para formatar a saída com quebras de linha (`<br>`) e outros elementos visuais. |
+| **Human-in-the-loop** | Padrão de automação em que um ser humano é inserido no processo para revisar, corrigir ou aprovar uma etapa antes que o fluxo continue. |
+| **List** | Opção do menu **Present to user** que apresenta uma lista de itens formatada no chat. |
+| **Message** | Nó do menu **Present to user** que exibe uma mensagem de texto formatada ao usuário no chat — sua saída é determinística, ao contrário do agente. |
+| **not in** | Operador lógico usado na condição do Branch para verificar se um valor **não está** presente ou está vazio. |
+| **Open flow builder** | Botão na aba Tools do editor de agente que reabre o Flow Builder de um workflow já criado. |
+| **Output message** | Campo de texto do nó Message onde se escreve o conteúdo a ser exibido ao usuário, com suporte a HTML e variáveis do fluxo. |
+| **Path** | Cada ramificação de execução criada por um nó Branch (ex.: Path 1 para o cenário feliz, Path 2 para o de exceção). |
+| **Path condition** | Expressão lógica configurada em cada path de um Branch que determina quando aquele caminho será executado. |
+| **Present to user** | Submenu do User activity com as opções de exibição de dados ao usuário: File download, List e Message. |
+| **Toggle** | Controle de interface de chave liga/desliga; neste laboratório é usado para ativar ou desativar o User Review. |
+| **User Review** | Funcionalidade do Document extractor que pausa o fluxo e envia os campos extraídos para revisão humana quando a confiança da extração fica abaixo de um limiar configurável (padrão: 95%). |
+| **Variable / Variável** | Valor nomeado gerado por um nó do fluxo (ex.: `cpf`, `nome`) que pode ser referenciado em outros nós, como o campo Output message do nó Message. |
+
+---
+
+
 # Construindo Workflows no watsonx Orchestrate — Parte 2
 
 - [Construindo Workflows no watsonx Orchestrate — Parte 2](#construindo-workflows-no-watsonx-orchestrate--parte-2)
