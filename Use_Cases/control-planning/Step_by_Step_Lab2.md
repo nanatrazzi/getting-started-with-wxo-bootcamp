@@ -262,7 +262,7 @@ Exemplos válidos:
 - "Kia Nero" → Kia Niro
 - "Kia Niro" → Kia Niro
 
-Se houver alta confiança de que o veículo mencionado corresponde a um item do catálogo, considere-o válido e prossiga normalmente.
+Se houver alta confiança de que o veículo mencionado corresponde a um item do catálogo, chame o agente **Agente de Buscas** para ele tratar da solicitação. Todas as solicitações do usuário devem ir para o **Agente de Buscas**, a pergunta deve ser enviada para ele, e retornada.
 
 Somente rejeite a solicitação quando não for possível associar o veículo informado a nenhum dos modelos do catálogo.
 
