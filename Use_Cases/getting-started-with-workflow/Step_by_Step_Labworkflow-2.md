@@ -54,6 +54,7 @@
     - [Abrindo a revisão](#abrindo-a-revisão)
     - [Resultado](#resultado)
   - [Boas práticas](#boas-práticas)
+- [Próximos passos](#próximos-passos)
 
 ## Descrição do Caso de Uso
 
@@ -255,7 +256,7 @@ CPF: 508.508.07/1967
 Data de Nascimento: 04/07/1967
 ```
 
-O JSON bruto ainda aparece logo abaixo, ele é a saída técnica do workflow, que o agente também repassa.
+O JSON cru ainda aparece logo abaixo, ele é a saída técnica do workflow, que o agente também repassa.
 
 ![](../../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-18.png)
 
@@ -296,7 +297,7 @@ No painel, o toggle **User Review** está desligado (item 2).
 
 ![](../../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-22.png)
 
-> A revisão humana **não conserta** o dado sozinha: ela só abre a porta para que alguém confirme ou corrija. O que acontece depois, aceitar, rejeitar, pedir novo envio é decisão do seu fluxo. É exatamente isso que vamos construir com o Branch.
+> A revisão humana **não conserta** o dado sozinha. Ela só abre a porta para que alguém confirme ou corrija. O que acontece depois, aceitar, rejeitar, pedir novo envio é decisão do seu fluxo. É exatamente isso que vamos construir com o Branch.
 
 ### Adicionando o controle Branch
 
@@ -484,3 +485,9 @@ Data de Nascimento: 04/07/1967
 5. **Todo fluxo precisa de um caminho de exceção.** Se você só desenhou o cenário feliz, seu fluxo está em menos da metade.
 6. “Documento ilegível” é apenas um diagnóstico e nada mais, “faça o envio novamente” é instrução. Um usuário em um mundo real precisa das duas.
 7. **Teste o caminho de exceção com a mesma seriedade do caminho principal.** Apagar um campo na revisão é a forma mais barata de validar um branch.
+
+# Próximos passos
+
+ Note que algumas coisas ficaram pendentes nesse laboratório e vamos melhorar ainda mais no próximo e ultimo laboratório de workflows dessa sessão.
+
+[Clique aqui](./Step_by_Step_Labworkflow-3.md) para seguir para a continuação desse laboratório
