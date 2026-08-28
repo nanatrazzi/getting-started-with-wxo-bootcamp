@@ -1,6 +1,8 @@
+
 # Construindo Workflows no watsonx Orchestrate
 
 - [Construindo Workflows no watsonx Orchestrate](#construindo-workflows-no-watsonx-orchestrate)
+  - [Glossário de Termos Técnicos](#glossário-de-termos-técnicos)
   - [Descrição do Caso de Uso](#descrição-do-caso-de-uso)
     - [O que você vai aprender](#o-que-você-vai-aprender)
 - [Parte 1 — Criando o agente](#parte-1--criando-o-agente)
@@ -36,6 +38,70 @@
     - [Resultados](#resultados)
   - [Boas práticas](#boas-práticas)
 - [Próximos passos](#próximos-passos)
+
+## Glossário de Termos Técnicos
+
+| Termo | Significado |
+|---|---|
+| **Agent / Agente** | Componente de IA que recebe instruções, raciocina sobre elas e aciona ferramentas ou outros agentes para completar uma tarefa. |
+| **Agentic Workflow** | Workflow orquestrado por um agente de IA, combinando lógica low-code com raciocínio autônomo para automatizar processos de negócio. |
+| **Auto-map chat history** | Funcionalidade que usa as últimas interações do chat para preencher automaticamente as entradas de um workflow. |
+| **Behavior** | Aba do editor de agente onde se configuram perfil, modelo, descrição e instruções de comportamento. |
+| **Branch** | Nó de controle de fluxo que cria caminhos condicionais (similar a um `if/else`). |
+| **Canvas** | Área de trabalho visual do Flow Builder onde os nós são posicionados e conectados. |
+| **Catalog** | Repositório de ferramentas e integrações prontas disponíveis para uso em agentes e workflows. |
+| **Data type** | Tipo de dado de um campo de extração (ex.: `String`, `Number`, `Date`). |
+| **Debug mode** | Modo de execução do Draft Preview que exibe informações detalhadas de raciocínio e chamadas de ferramentas do agente. |
+| **Decision** | Nó do Flow Builder que automatiza decisões de negócio complexas com base em regras. |
+| **Description** | Campo textual que descreve o propósito de um agente ou campo de extração, orientando o modelo sobre o que buscar. |
+| **Document classifier** | Nó que identifica e categoriza automaticamente o tipo de documento recebido. |
+| **Document extractor** | Nó do Flow Builder que usa um LLM para extrair campos específicos de documentos, com suporte a schema, descrições e exemplos. |
+| **Draft Preview** | Painel lateral do editor de agente que simula o chat com o agente antes da publicação. |
+| **Edit details** | Botão do Flow Builder para editar nome, descrição e parâmetros do workflow. |
+| **Examples** | Pares de entrada/saída fornecidos ao Document extractor para orientar o modelo sobre o formato e o conteúdo esperado de um campo. |
+| **Field name** | Nome atribuído a um campo no schema de extração do Document extractor. |
+| **File upload** | Nó de coleta dentro do User activity que solicita ao usuário o envio de um arquivo. |
+| **Flow Builder** | Editor visual low-code do watsonx Orchestrate para criação e configuração de Agentic Workflows. |
+| **Flow controls** | Nós que controlam a ordem e o caminho de execução do fluxo (Branch, For each, Loop, Parallel). |
+| **Flow inspector** | Ferramenta do Flow Builder que inspeciona a estrutura e o estado do fluxo em tempo real. |
+| **Flow settings** | Painel de configurações gerais de um workflow (auto-map, agendamento, mascaramento de dados etc.). |
+| **Flow variables** | Variáveis criadas e gerenciadas dentro de um workflow para armazenar e passar dados entre nós. |
+| **For each** | Nó de controle que itera sobre uma lista, executando um conjunto de ações para cada item. |
+| **Generative prompt** | Nó que invoca um LLM para gerar texto ou conteúdo estruturado como parte do fluxo. |
+| **Global workspace** | Workspace padrão e compartilhado de uma instância do watsonx Orchestrate. |
+| **Ground truth** | Conjunto de valores corretos e verificados manualmente, usado como referência para medir a acurácia de extração. |
+| **Instructions** | Campo do perfil do agente que define seu comportamento — como ele deve agir, raciocinar e responder. |
+| **JSON** | JavaScript Object Notation — formato leve de troca de dados estruturados, utilizado na saída do agente neste laboratório. |
+| **LangGraph** | Framework open-source da LangChain para construção de agentes stateful baseados em grafos; o watsonx Orchestrate permite importar agentes criados com ele. |
+| **LLM** | Large Language Model — modelo de linguagem de grande escala, como GPT ou Llama, que alimenta as capacidades de IA generativa da plataforma. |
+| **Logic block** | Nó do Flow Builder para implementar transformações de dados ou lógica de negócio simples. |
+| **Loop** | Nó de controle que repete uma ação até que uma condição seja satisfeita. |
+| **Low-code** | Abordagem de desenvolvimento em que a maior parte da lógica é construída visualmente, com mínima escrita de código. |
+| **Mask sensitive information** | Configuração do workflow que mascara variáveis e saídas contendo dados sensíveis (ex.: CPF, senhas, endereços). |
+| **MCP server** | Model Context Protocol server — servidor que expõe ferramentas externas para consumo por agentes de IA. |
+| **Metrics Summary / Overall accuracy** | Painel do Document extractor que exibe a acurácia geral da extração com base nos documentos verificados. |
+| **Model** | Campo de configuração do agente ou do Document extractor onde se escolhe o LLM que será utilizado. |
+| **Multimodal** | Capacidade de um modelo processar diferentes tipos de entrada, como texto e imagem simultaneamente. |
+| **Node / Nó** | Bloco funcional individual dentro de um workflow no Flow Builder (ex.: File upload, Document extractor). |
+| **OpenAPI** | Especificação padrão para descrever APIs REST; o watsonx Orchestrate permite importar ferramentas a partir de arquivos nesse formato. |
+| **Parallel** | Nó de controle que executa múltiplas ações simultaneamente para reduzir o tempo total de processamento. |
+| **Parameters** | Aba do Edit details onde se definem as entradas e saídas formais de um workflow. |
+| **Placeholder** | Elemento visual no canvas que indica onde o próximo nó pode ser inserido. |
+| **Prompt engineering** | Técnica de escrever instruções ou descrições em linguagem natural para orientar o comportamento de um LLM. |
+| **Schema** | Estrutura que define os campos a serem extraídos de um documento no Document extractor (nome, tipo de dado, descrição, exemplos). |
+| **Scheduling** | Configuração que permite ao usuário final agendar a execução de um workflow. |
+| **Structured** | Formato de documento com layout fixo e previsível (ex.: formulários, notas fiscais padronizadas). |
+| **Text extractor** | Nó do Flow Builder que extrai o texto bruto de um documento sem interpretar seu significado. |
+| **Tidy canvas** | Função do Flow Builder que reorganiza automaticamente o layout visual do fluxo no canvas. |
+| **Tools** | Ferramentas que podem ser adicionadas a um agente para ampliar suas capacidades (workflows, APIs, integrações). |
+| **Trigger Conditions** | Condições ou pedidos que ativam uma ferramenta, auxiliando o agente a decidir quando chamá-la. |
+| **Unstructured** | Formato de documento sem layout consistente (ex.: contratos, relatórios, e-mails, fotos de documentos). |
+| **URL assinada (Signed URL)** | URL temporária e autenticada que concede acesso a um arquivo armazenado em nuvem sem expor credenciais permanentes. |
+| **User activity** | Nó do Flow Builder que encapsula interações diretas com o usuário dentro do fluxo (coleta de dados, apresentação de resultados). |
+| **Verify document** | Ação do Document extractor pela qual o usuário confirma que os valores extraídos estão corretos, alimentando a métrica de acurácia. |
+| **Workspace** | Ambiente de trabalho isolado dentro do watsonx Orchestrate onde agentes, ferramentas e knowledge são organizados. |
+
+---
 
 
 ## Descrição do Caso de Uso
