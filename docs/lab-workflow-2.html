@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 2 — Mensagens e Ramificações · watsonx Orchestrate</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe; --carbon-blue-70: #0043ce; --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616; --carbon-gray-90: #262626; --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252; --carbon-gray-30: #c6c6c6; --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4; --carbon-white: #ffffff; --carbon-teal-60: #007d79;
+    --carbon-green-60: #198038; --carbon-green-10: #defbe6; --carbon-yellow-30: #f1c21b;
+    --carbon-red-60: #da1e28; --sidebar-width: 256px; --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--carbon-gray-100); background: var(--carbon-gray-10); line-height: 1.5; }
+  .c-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--carbon-gray-100); color: var(--carbon-white); display: flex; align-items: center; z-index: 9000; padding: 0 16px; gap: 16px; }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__logo svg { fill: var(--carbon-white); }
+  .c-header__name { font-size: 14px; font-weight: 400; letter-spacing: .1px; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; font-weight: 400; color: var(--carbon-white); }
+  .c-sidenav { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000; }
+  .c-sidenav__section-title { padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30); }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; transition: background .1s, color .1s; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 900px; }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--carbon-gray-70); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb span { color: var(--carbon-gray-30); }
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 28px; font-weight: 300; line-height: 1.25; color: var(--carbon-gray-100); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 14px; color: var(--carbon-gray-70); line-height: 1.5; max-width: 640px; }
+  h2 { font-size: 20px; font-weight: 400; margin: 40px 0 16px; color: var(--carbon-gray-100); border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; color: var(--carbon-gray-100); }
+  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--carbon-gray-100); }
+  p { margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; font-size: 14px; line-height: 1.6; }
+  strong { font-weight: 600; }
+  a { color: var(--carbon-blue-60); }
+  .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
+  .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
+  .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
+  .callout--tip { border-color: var(--carbon-teal-60); background: #d9fbfb; }
+  .callout--danger { border-color: var(--carbon-red-60); background: #fff1f1; }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
+  .callout--note .callout__title { color: var(--carbon-blue-60); }
+  .callout--warning .callout__title { color: #a4780a; }
+  .callout--tip .callout__title { color: var(--carbon-teal-60); }
+  .callout--danger .callout__title { color: var(--carbon-red-60); }
+  .callout p:last-child, .callout ul:last-child { margin: 0; }
+  /* steps */
+  .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
+  .step-list > li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+  .step-list > li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
+  .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .lab-img-caption { font-size: 12px; color: var(--carbon-gray-70); margin-top: -12px; margin-bottom: 16px; font-style: italic; }
+  /* nav */
+  .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
+  .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
+  .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
+  .lab-nav a:hover { background: var(--carbon-blue-10); }
+  .lab-nav a.primary:hover { background: var(--carbon-blue-70); }
+  .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-right: 6px; }
+  .tag--blue { background: var(--carbon-blue-10); color: var(--carbon-blue-60); }
+  .tag--red { background: #fff1f1; color: var(--carbon-red-60); }
+  .tag--green { background: var(--carbon-green-10); color: var(--carbon-green-60); }
+  .obj-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+  .obj-item { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 12px 14px 12px 34px; font-size: 13px; line-height: 1.5; position: relative; }
+  .obj-item::before { content: "✓"; position: absolute; left: 14px; top: 12px; color: var(--carbon-green-60); font-weight: 700; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--carbon-gray-80); color: var(--carbon-white); padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--carbon-gray-20); }
+  tr:nth-child(even) td { background: var(--carbon-gray-10); }
+  .link-box { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 16px 20px; margin: 16px 0; display: flex; align-items: center; gap: 16px; }
+  .link-box a { color: var(--carbon-blue-60); font-weight: 500; word-break: break-all; }
+  /* node grid */
+  .node-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .node-card { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 16px; }
+  .node-card__title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 6px; letter-spacing: .32px; }
+  .node-card p { margin: 0; font-size: 13px; }
+  .ui-quote { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); border-left: 4px solid var(--carbon-gray-30); padding: 12px 16px; margin: 16px 0; font-size: 13px; font-style: italic; color: var(--carbon-gray-70); }
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--carbon-gray-70); background: var(--carbon-white); }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .obj-list, .node-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="c-header">
+    <a class="c-header__logo" href="index.html">
+    <span style="display:inline-flex;align-items:center;justify-content:center;background:#0f62fe;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;padding:4px 9px;line-height:1;">IBM</span>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Construindo Workflows com Agentes de IA</span>
+</header>
+
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Laboratórios</div>
+  <a class="c-sidenav__item" href="lab-workflow-1.html"><span class="lab-num">Lab 1</span>Extração de Documentos</a>
+  <a class="c-sidenav__item active" href="lab-workflow-2.html"><span class="lab-num">Lab 2</span>Mensagens &amp; Ramificações</a>
+  <a class="c-sidenav__item" href="lab-workflow-3.html"><span class="lab-num">Lab 3</span>Tratamento de Exceções</a>
+</nav>
+
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+    <span>›</span>
+    <span>Laboratório 2</span>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">Laboratório 2 · Agentic Workflows</div>
+    <h1 class="page-header__h1">Construindo Workflows no watsonx Orchestrate — Parte 2</h1>
+    <p class="page-header__subtitle">Formate a resposta do workflow com o nó Message, entenda a revisão humana do Document extractor e crie caminhos condicionais com o controle Branch.</p>
+  </div>
+
+  <!-- toc -->
+  <nav style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:10px;">Índice</div>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:6px;"><a href="#glossario">Glossário de Termos Técnicos</a></li>
+      <li style="margin-bottom:6px;"><a href="#caso-de-uso">Descrição do Caso de Uso</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li style="margin-bottom:4px;"><a href="#o-que-vai-aprender">O que você vai aprender nesse laboratório</a></li>
+          <li style="margin-bottom:4px;"><a href="#pre-requisitos">Pré-requisitos</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#parte7">Parte 7 — Formatando a resposta com o nó Message</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li style="margin-bottom:4px;"><a href="#voltando-flow-builder">Voltando ao Flow Builder</a></li>
+          <li style="margin-bottom:4px;"><a href="#conhecendo-user-review">Conhecendo o User Review</a></li>
+          <li style="margin-bottom:4px;"><a href="#adicionando-message">Adicionando o nó Message</a></li>
+          <li style="margin-bottom:4px;"><a href="#escrevendo-texto">Escrevendo o texto da mensagem</a></li>
+          <li style="margin-bottom:4px;"><a href="#inserindo-variaveis">Inserindo as variáveis do Document extractor</a></li>
+          <li style="margin-bottom:4px;"><a href="#quebras-de-linha">Ajustando as quebras de linha</a></li>
+          <li style="margin-bottom:4px;"><a href="#concluindo-fluxo">Concluindo o fluxo</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#parte8">Parte 8 — Testando a saída formatada</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li style="margin-bottom:4px;"><a href="#enviando-documento">Enviando o documento</a></li>
+          <li style="margin-bottom:4px;"><a href="#conferindo-resultado">Conferindo o resultado</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#parte9">Parte 9 — Revisão humana e caminhos condicionais</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li style="margin-bottom:4px;"><a href="#reabrindo-flow-builder">Reabrindo o Flow Builder</a></li>
+          <li style="margin-bottom:4px;"><a href="#religando-user-review">Religando o User Review</a></li>
+          <li style="margin-bottom:4px;"><a href="#adicionando-branch">Adicionando o controle Branch</a></li>
+          <li style="margin-bottom:4px;"><a href="#condicao-path1">Configurando a condição do Path 1</a></li>
+          <li style="margin-bottom:4px;"><a href="#mensagem-erro">Criando a mensagem de erro no Path 2</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#parte10">Parte 10 — Testando o caminho de exceção</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li style="margin-bottom:4px;"><a href="#abrindo-revisao">Abrindo a revisão</a></li>
+          <li style="margin-bottom:4px;"><a href="#resultado">Resultado</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#boas-praticas">Boas práticas</a></li>
+      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos passos</a></li>
+    </ul>
+  </nav>
+
+  <!-- glossário -->
+  <section id="glossario">
+    <h2>Glossário de Termos Técnicos</h2>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">Termos já definidos no <a href="lab-workflow-1.html#glossario">Laboratório 1</a> não são repetidos aqui.</p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr><th style="width:26%;">Termo</th><th>Significado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Branch</strong></td><td>Nó de controle de fluxo que divide a execução em caminhos condicionais (similar a um <code>if/else</code>); no Flow Builder possui um <strong>Path 1</strong> (condição <code>if</code>) e um <strong>Path 2</strong> (caminho padrão <code>else</code>).</td></tr>
+        <tr><td><strong>Condition / Condição</strong></td><td>Expressão lógica que determina qual caminho o fluxo vai percorrer em um nó Branch. Pode ser criada visualmente ou por editor de código.</td></tr>
+        <tr><td><strong>Default path</strong></td><td>Caminho de exceção (Path 2) de um Branch, executado quando nenhuma das condições definidas nos outros paths for satisfeita.</td></tr>
+        <tr><td><strong>Done</strong></td><td>Botão que confirma e fecha o Flow Builder ou um painel de configuração, retornando ao editor do agente.</td></tr>
+        <tr><td><strong>Edit condition</strong></td><td>Opção do painel do Branch que abre o editor visual ou de código para definir a condição de um path.</td></tr>
+        <tr><td><strong>File download</strong></td><td>Opção do menu <strong>Present to user</strong> que disponibiliza um arquivo para download no chat.</td></tr>
+        <tr><td><strong>HTML</strong></td><td>HyperText Markup Language — linguagem de marcação usada no campo Output message do nó Message para formatar a saída com quebras de linha (<code>&lt;br&gt;</code>) e outros elementos visuais.</td></tr>
+        <tr><td><strong>Human-in-the-loop</strong></td><td>Padrão de automação em que um ser humano é inserido no processo para revisar, corrigir ou aprovar uma etapa antes que o fluxo continue.</td></tr>
+        <tr><td><strong>List</strong></td><td>Opção do menu <strong>Present to user</strong> que apresenta uma lista de itens formatada no chat.</td></tr>
+        <tr><td><strong>Message</strong></td><td>Nó do menu <strong>Present to user</strong> que exibe uma mensagem de texto formatada ao usuário no chat — sua saída é determinística, ao contrário do agente.</td></tr>
+        <tr><td><strong>not in</strong></td><td>Operador lógico usado na condição do Branch para verificar se um valor <strong>não está</strong> presente ou está vazio.</td></tr>
+        <tr><td><strong>Open flow builder</strong></td><td>Botão na aba Tools do editor de agente que reabre o Flow Builder de um workflow já criado.</td></tr>
+        <tr><td><strong>Output message</strong></td><td>Campo de texto do nó Message onde se escreve o conteúdo a ser exibido ao usuário, com suporte a HTML e variáveis do fluxo.</td></tr>
+        <tr><td><strong>Path</strong></td><td>Cada ramificação de execução criada por um nó Branch (ex.: Path 1 para o cenário feliz, Path 2 para o de exceção).</td></tr>
+        <tr><td><strong>Path condition</strong></td><td>Expressão lógica configurada em cada path de um Branch que determina quando aquele caminho será executado.</td></tr>
+        <tr><td><strong>Present to user</strong></td><td>Submenu do User activity com as opções de exibição de dados ao usuário: File download, List e Message.</td></tr>
+        <tr><td><strong>Toggle</strong></td><td>Controle de interface de chave liga/desliga; neste laboratório é usado para ativar ou desativar o User Review.</td></tr>
+        <tr><td><strong>User Review</strong></td><td>Funcionalidade do Document extractor que pausa o fluxo e envia os campos extraídos para revisão humana quando a confiança da extração fica abaixo de um limiar configurável (padrão: 95%).</td></tr>
+        <tr><td><strong>Variable / Variável</strong></td><td>Valor nomeado gerado por um nó do fluxo (ex.: <code>cpf</code>, <code>nome</code>) que pode ser referenciado em outros nós, como o campo Output message do nó Message.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- caso de uso -->
+  <section id="caso-de-uso">
+    <h2>Descrição do Caso de Uso</h2>
+
+    <p>Este laboratório é a <strong>continuação</strong> do laboratório <a href="lab-workflow-1.html">Construindo Workflows no watsonx Orchestrate</a>. Onde foi construído um agente capaz de receber uma CNH pelo chat, extrair Nome, Filiação, CPF e Data de Nascimento e devolver o resultado.</p>
+
+    <h3 id="o-que-vai-aprender">O que você vai aprender nesse laboratório</h3>
+    <div class="obj-list">
+      <div class="obj-item">Apresentar os dados extraídos em linguagem natural com o nó <strong>Message</strong></div>
+      <div class="obj-item">Injetar <strong>variáveis do fluxo</strong> dentro de uma mensagem e formatá-la com HTML</div>
+      <div class="obj-item">Entender o <strong>User Review</strong> do Document extractor (revisão humana / <em>human-in-the-loop</em>)</div>
+      <div class="obj-item">Usar o controle de fluxo <strong>Branch</strong> para criar caminhos condicionais</div>
+      <div class="obj-item">Configurar uma <strong>condição de path</strong> apoiada na saída do Document extractor</div>
+      <div class="obj-item">Tratar o caminho de exceção com uma mensagem de erro ao usuário</div>
+      <div class="obj-item">Testar o cenário de falha simulando um documento com campo ilegível</div>
+    </div>
+
+    <h3 id="pre-requisitos">Pré-requisitos</h3>
+    <div class="obj-list">
+      <div class="obj-item">Ter concluído a <a href="lab-workflow-1.html">Parte 1 deste laboratório</a></div>
+      <div class="obj-item">Ter o agente <strong>Agente leitor de documentos</strong> com a ferramenta <strong>Extração de documentos</strong> publicada</div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 7 -->
+  <section id="parte7">
+    <h2>Parte 7 — Formatando a resposta com o nó Message</h2>
+
+    <h3 id="voltando-flow-builder">Voltando ao Flow Builder</h3>
+
+    <p>No editor do agente, o <strong>Draft Preview</strong> ainda mostra o resultado do último teste da Parte 1.</p>
+
+    <p>Clique na aba <strong>Tools</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-01.png" alt="Editor do agente com a aba Tools destacada">
+
+    <p>A ferramenta <strong>Extração de documentos</strong> aparece listada, com o tipo <strong>Agentic Workflow</strong>.</p>
+
+    <p>Clique em <strong>Open flow builder</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-02.png" alt="Card da ferramenta com o link Open flow builder">
+
+    <h3 id="conhecendo-user-review">Conhecendo o User Review</h3>
+
+    <p>O canvas volta com o fluxo da Parte 1:</p>
+
+    <p>Clique no nó <strong>Document extractor</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-03.png" alt="Canvas do Flow Builder com o nó Document extractor destacado">
+
+    <p>O painel de propriedades abre à direita mostrando <strong>Fields (4)</strong> — <code>DATADENASCIMENTO</code>, <code>CPF</code>, <code>FILIAÇÃO</code> e <code>Nome</code> e, logo abaixo, o toggle <strong>User Review</strong>, ativo por padrão:</p>
+
+    <div class="ui-quote">If the extraction confidence is below <strong>95%</strong> for <strong>all fields</strong>, then send to <strong>flow initiator</strong></div>
+
+    <p>É esse recurso que gerou a tela de revisão no teste da Parte 1. Ele é a peça de <em>human-in-the-loop</em> do Document extractor, quando a confiança da extração fica abaixo do limiar, o fluxo <strong>pausa</strong> e devolve os campos para uma pessoa conferir antes de seguir.</p>
+
+    <p>Os valores em negrito são editáveis pelo ícone de lápis. Você pode alterar o percentual de confiança e escolher se a revisão vai para o iniciador do fluxo ou para outro destinatário.</p>
+
+    <p><strong>Desative o toggle</strong> (clique nele).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-04.png" alt="Toggle User Review ativo no painel do Document extractor">
+
+    <p>O texto da condição desaparece, o fluxo agora roda ponta a ponta sem pedir confirmação.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-05.png" alt="Toggle User Review desativado">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Por que desligar agora?</div>
+        <p style="margin:0;">Para enxergarmos o nó Message funcionando sem interrupção.</p>
+      </div>
+    </div>
+
+    <h3 id="adicionando-message">Adicionando o nó Message</h3>
+
+    <p>Feche o painel do Document extractor clicando em uma área vazia do canvas.</p>
+
+    <p>Passe o mouse sobre a conexão entre o <strong>Document extractor</strong> e o <strong>End</strong>: um botão <strong>+</strong> azul aparece sobre a seta.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-06.png" alt="Botão + azul sobre a conexão do canvas">
+
+    <p>Clique nesse <strong>+</strong> (item 1). O menu <strong>User activities</strong> abre. Vá em <strong>Present to user</strong> (item 2) e, no submenu, escolha <strong>Message</strong> (item 3).</p>
+
+    <p>O submenu <strong>Present to user</strong> oferece três formas de devolver algo ao usuário:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:28%;">Opção</th><th>Uso</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>File download</strong></td><td>Disponibiliza um arquivo para download no chat</td></tr>
+        <tr><td><strong>List</strong></td><td>Apresenta uma lista de itens</td></tr>
+        <tr><td><strong>Message</strong></td><td>Exibe uma mensagem de texto — <strong>é a que usaremos</strong></td></tr>
+      </tbody>
+    </table>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-07.png" alt="Menu User activities com Present to user e Message">
+
+    <p>O nó <strong>Message 1 — Display message</strong> é criado entre o Document extractor e o End, e o painel de propriedades abre com o campo <strong>Output message</strong> vazio (item 4)</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-08.png" alt="Nó Message 1 criado com o campo Output message vazio">
+
+    <h3 id="escrevendo-texto">Escrevendo o texto da mensagem</h3>
+
+    <p>Clique dentro do campo <strong>Output message</strong> (item 5) e digite o esqueleto da resposta <strong>sem os valores ainda</strong>:</p>
+
+    <div class="code-block">Os dados extraídos foram: &lt;br&gt;
+Nome:
+Nome dos pais:
+CPF:
+Data de Nascimento:</div>
+
+    <p>Repare no ícone <strong><code>{x}</code></strong> no canto superior direito do campo (item 6), é por ali uma das formas para inserimos variáveis do fluxo.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-09.png" alt="Campo Output message com o esqueleto da resposta">
+
+    <h3 id="inserindo-variaveis">Inserindo as variáveis do Document extractor</h3>
+
+    <p>Posicione o cursor logo após <code>Nome:</code> e clique em <strong><code>{x}</code></strong>.</p>
+
+    <p>No seletor <strong>Search for variables</strong>, com a árvore de origens do fluxo à esquerda:</p>
+
+    <ul>
+      <li><strong>Flow variables</strong></li>
+      <li><strong>Input</strong></li>
+      <li><strong>User activity 1</strong>
+        <ul>
+          <li><strong>File upload 1</strong></li>
+          <li><strong>Document extractor</strong></li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>Selecione <strong>Document extractor</strong> (item 6). À direita aparecem as quatro variáveis de saída do nó:</p>
+
+    <p><code>cpf</code> · <code>datadenascimento</code> · <code>filiação</code> · <code>nome</code></p>
+
+    <p>Clique em <strong>nome</strong> (item 7).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-10.png" alt="Seletor Search for variables com as saídas do Document extractor">
+
+    <p>A variável é inserida em azul dentro do texto:</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-11.png" alt="Variável nome inserida na mensagem">
+
+    <p>Repita a operação para as outras três linhas:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:40%;">Linha</th><th>Variável</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Nome:</code></td><td><code>nome</code></td></tr>
+        <tr><td><code>Nome dos pais:</code></td><td><code>filiação</code></td></tr>
+        <tr><td><code>CPF:</code></td><td><code>cpf</code></td></tr>
+        <tr><td><code>Data de Nascimento:</code></td><td><code>datadenascimento</code></td></tr>
+      </tbody>
+    </table>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-12.png" alt="Mensagem com as quatro variáveis inseridas">
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">Os nomes das variáveis vêm do schema que você criou na Parte 1, já normalizados em minúsculas. Se você tivesse nomeado os campos de outra forma, eles apareceriam aqui com esses outros nomes, mais um motivo para nomear campos de forma consistente desde o início.</p>
+      </div>
+    </div>
+
+    <h3 id="quebras-de-linha">Ajustando as quebras de linha</h3>
+
+    <p>O campo aceita HTML simples. Sem isso, tudo é renderizado em um parágrafo só no chat.</p>
+
+    <p>Acrescente <code>&lt;br&gt;</code> ao final de cada linha para o usuário ter uma visão mais bonita.</p>
+
+    <div class="code-block">Os dados extraídos foram: &lt;br&gt;
+Nome: [nome] &lt;br&gt;
+Nome dos pais: [filiação] &lt;br&gt;
+CPF: [cpf] &lt;br&gt;
+Data de Nascimento: [datadenascimento] &lt;br&gt;</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-13.png" alt="Mensagem com as quebras de linha em HTML">
+
+    <h3 id="concluindo-fluxo">Concluindo o fluxo</h3>
+
+    <p>Feche o painel.</p>
+
+    <p>Clique em <strong>Done</strong> (item 8).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-14.png" alt="Canvas com o nó Message 1 e o botão Done">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 8 -->
+  <section id="parte8">
+    <h2>Parte 8 — Testando a saída formatada</h2>
+
+    <p>De volta ao editor do agente, vamos reiniciar o chat.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-15.png" alt="Draft Preview reiniciado">
+
+    <p>Digite qualquer mensagem:</p>
+
+    <div class="code-block">oi</div>
+
+    <p>O agente aciona o workflow e apresenta o bloco <strong>File upload 1 Upload files</strong>.</p>
+
+    <p>Clique em <strong>Add files</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-16.png" alt="Bloco Upload files com o botão Add files">
+
+    <h3 id="enviando-documento">Enviando o documento</h3>
+
+    <p>Selecione <code>11837-41.jpg</code>. O arquivo aparece anexado no campo de mensagem e o botão de envio fica ativo. Envie.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-17.png" alt="Arquivo anexado no campo de mensagem">
+
+    <h3 id="conferindo-resultado">Conferindo o resultado</h3>
+
+    <p>Desta vez <strong>não há tela de revisão</strong> (desligamos o User Review) e o agente responde direto com o texto formatado pelo nó Message:</p>
+
+    <div class="code-block">Os dados extraídos foram:
+Nome: FERNANDO CAETANO
+Nome dos pais: SERGIO CAETANO E LENE MARIA CAETANO
+CPF: 508.508.07/1967
+Data de Nascimento: 04/07/1967</div>
+
+    <p>O JSON cru ainda aparece logo abaixo, ele é a saída técnica do workflow, que o agente também repassa.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-18.png" alt="Resposta formatada no Draft Preview">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">A diferença entre workflow e agente</div>
+        <p style="margin:0;">O nó <strong>Message</strong> é do <em>workflow</em>: ele escreve exatamente o que você mandou, sempre igual, sem depender do LLM. O texto que vem depois é do <em>agente</em>, que interpreta a saída da ferramenta. Quando o formato da resposta precisa ser previsível, comprovantes, protocolos, confirmações, coloque-o no workflow, não nas instruções do agente.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 9 -->
+  <section id="parte9">
+    <h2>Parte 9 — Revisão humana e caminhos condicionais</h2>
+
+    <p>Até aqui o fluxo é otimista, ele assume que todo documento é legível e que todos os campos vêm preenchidos. Vamos tratar o caso contrário.</p>
+
+    <p>O que vamos fazer agora:</p>
+
+    <ol>
+      <li>Religar o <strong>User Review</strong>, para que uma pessoa confira a extração</li>
+      <li>Adicionar um <strong>Branch</strong> logo após o Document extractor</li>
+      <li>Criar uma condição sobre o campo <strong>CPF</strong></li>
+      <li>Mandar o caminho de exceção para uma mensagem de erro</li>
+    </ol>
+
+    <h3 id="reabrindo-flow-builder">Reabrindo o Flow Builder</h3>
+
+    <p>Aba <strong>Tools → Open flow builder</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-19.png" alt="Aba Tools com o link Open flow builder">
+
+    <h3 id="religando-user-review">Religando o User Review</h3>
+
+    <p>Clique no nó <strong>Document extractor</strong> (item 1).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-20.png" alt="Nó Document extractor no canvas">
+
+    <p>No painel, o toggle <strong>User Review</strong> está desligado (item 2).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-21.png" alt="Toggle User Review desligado">
+
+    <p><strong>Ative-o</strong> (item 3). A condição volta a aparecer:</p>
+
+    <div class="ui-quote">If the extraction confidence is below <strong>95%</strong> for <strong>all fields</strong>, then send to <strong>flow initiator</strong></div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-22.png" alt="Toggle User Review religado">
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">A revisão humana <strong>não conserta</strong> o dado sozinha. Ela só abre a porta para que alguém confirme ou corrija. O que acontece depois, aceitar, rejeitar, pedir novo envio é decisão do seu fluxo. É exatamente isso que vamos construir com o Branch.</p>
+      </div>
+    </div>
+
+    <h3 id="adicionando-branch">Adicionando o controle Branch</h3>
+
+    <p>Feche o painel. Passe o mouse sobre a conexão entre o <strong>Document extractor</strong> e o <strong>Message 1</strong>: o botão <strong>+</strong> aparece (item 4).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-23.png" alt="Botão + entre o Document extractor e o Message 1">
+
+    <p>Em vez de usar o menu, vamos arrastar o nó.</p>
+
+    <p>Abra o painel de nós, vá em <strong>Flow controls</strong> e arraste o card <strong>Branch</strong> até essa posição (item 5).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-24.png" alt="Arrastando o card Branch do painel de nós">
+
+    <p>Clique e arrastre <strong>Branch</strong> para o canvas abaixo de <strong>Document extractor</strong></p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-25.png" alt="Nó Branch 1 criado no canvas com Path 1 e Path 2">
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Atenção</div>
+        <p style="margin:0;">Os dois caminhos <strong>convergem de volta</strong> para o Message 1. Guarde essa informação, ela explica o resultado do teste no final do laboratório.</p>
+      </div>
+    </div>
+
+    <h3 id="condicao-path1">Configurando a condição do Path 1</h3>
+
+    <p>Clique no nó <strong>Branch 1</strong>. O painel mostra:</p>
+
+    <h4>Path conditions</h4>
+
+    <table>
+      <thead>
+        <tr><th style="width:12%;"></th><th style="width:24%;">Path</th><th>Estado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>if</code></td><td><strong>Path 1</strong></td><td><em>No condition set</em> → <strong>Edit condition</strong></td></tr>
+        <tr><td><code>else</code></td><td><strong>Path 2</strong></td><td><em>Default path</em></td></tr>
+      </tbody>
+    </table>
+
+    <p>Clique em <strong>Edit condition</strong> (item 7).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-26.png" alt="Painel do Branch 1 com as path conditions">
+
+    <p>No edutor do <strong>Path 1</strong>, note que há dois modos de edição no topo, o construtor visual (ícone de painel) e o editor de código (<code>&lt;/&gt;</code>). Ficaremos no visual.</p>
+
+    <p>Clique no <strong>+</strong> da linha <code>if</code> (item 8).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-27.png" alt="Editor da condição do Path 1">
+
+    <p>O seletor de variáveis abre.</p>
+
+    <p>Navegue até <strong>User activity 1 → Document extractor</strong> e escolha <strong>cpf</strong> (item 9).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-28.png" alt="Seletor de variáveis com o campo cpf">
+
+    <p>Com a variável posicionada (item 10), escolha o operador <strong>not in</strong> e clique no <strong>+</strong> do lado direito para definir o valor de comparação (item 11).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-29.png" alt="Condição com a variável cpf e o operador not in">
+
+    <p>Agora vamos alterar o campo <strong>Enter a value</strong> (item 12).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-30.png" alt="Campo Enter a value vazio">
+
+    <p>Copie e cole a seguinte expressão</p>
+
+    <div class="code-block">not parent.document_extractor.output.cpf</div>
+
+    <p>A linha da condição fica assim:</p>
+
+    <div class="code-block">if   cpf   not in   not parent.document_extractor.output.cpf</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-31.png" alt="Condição do Path 1 preenchida">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">O que essa condição faz</div>
+        <p style="margin:0;">Ela avalia o campo <code>cpf</code> devolvido pelo Document extractor. Quando o CPF chega preenchido, o fluxo segue pelo <strong>Path 1</strong> e exibe os dados normalmente; quando o campo vem vazio, porque o documento estava ilegível ou porque o revisor apagou o valor, a condição não é satisfeita e o fluxo cai no <strong>Path 2 (default)</strong>, onde colocaremos a mensagem de erro.</p>
+      </div>
+    </div>
+
+    <h3 id="mensagem-erro">Criando a mensagem de erro no Path 2</h3>
+
+    <p>Feche o painel.</p>
+
+    <p>No <strong>Path 2 (default)</strong>, clique em <strong>Add +</strong> (item 13).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-32.png" alt="Placeholder Add no Path 2">
+
+    <p>No menu, vá em <strong>Present to user</strong> (item 14) e então <strong>Message</strong> (item 15).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-33.png" alt="Menu Present to user com a opção Message">
+
+    <p>O nó <strong>Message 2 — Display message</strong> é criado no Path 2, com o campo <strong>Output message</strong> vazio (item 16).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-34.png" alt="Nó Message 2 criado no Path 2">
+
+    <p>Copie e cole o seguinte texto no campo:</p>
+
+    <div class="code-block">Documento com informações inelegíveis, faça o envio novamente.</div>
+
+    <p>Clique em <strong>Done</strong> (item 17).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-35.png" alt="Mensagem de erro preenchida no Message 2">
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">O texto da mensagem é livre, adapte ao vocabulário da sua área de negócio. O que importa aqui é o padrão: <strong>todo caminho de exceção precisa dizer ao usuário o que aconteceu e o que ele deve fazer em seguida.</strong> Uma mensagem de erro que não orienta a próxima ação é quase tão ruim quanto erro nenhum.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 10 -->
+  <section id="parte10">
+    <h2>Parte 10 — Testando o caminho de exceção</h2>
+
+    <p>Agora vamos provocar a falha de propósito.</p>
+
+    <p>No <strong>Draft Preview</strong>, mande <code>oi</code>, clique em <strong>Add files</strong> e envie o documento (aqui usamos <code>11837-41 copy.jpg</code>).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-36.png" alt="Documento enviado no Draft Preview">
+
+    <p>O agente processa o arquivo.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-37.png" alt="Agente processando o arquivo">
+
+    <h3 id="abrindo-revisao">Abrindo a revisão</h3>
+
+    <p>Com o <strong>User Review</strong> religado, o agente responde:</p>
+
+    <p><em>“Vou precisar que você revise a extração do documento”</em> com o card <strong>Review document extraction</strong>.</p>
+
+    <p>Clique em <strong>View</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-38.png" alt="Card Review document extraction com o link View">
+
+    <p>Observe os campos extraídos ao lado da imagem do documento.</p>
+
+    <p><strong>Apague o conteúdo do campo <code>Cpf</code></strong> (item 1) — o rótulo abaixo muda para <em>“Updated by user.”</em>, indicando que o valor foi alterado manualmente.</p>
+
+    <p>Os demais campos permanecem preenchidos, cada um com o alerta <em>“Low confidence extraction. Confirm value.”</em>:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:34%;">Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Cpf</td><td><em>(vazio)</em></td></tr>
+        <tr><td>Datadenascimento</td><td><code>04/07/1967</code></td></tr>
+        <tr><td>Filiação</td><td><code>SERGIO CAETANO, LENE MARIA CAETANO</code></td></tr>
+        <tr><td>Nome</td><td><code>FERNANDO CAETANO</code></td></tr>
+      </tbody>
+    </table>
+
+    <p>Clique em <strong>Submit</strong> (item 2).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-39.png" alt="Painel Review document extraction com o CPF apagado">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">Estamos simulando, com um clique, o que na vida real seria uma foto tremida, um documento plastificado com reflexo ou uma digitalização cortada. O efeito no fluxo é exatamente o mesmo: um campo obrigatório que não chegou.</p>
+      </div>
+    </div>
+
+    <p>Na janela <strong>Confirm extraction</strong>:</p>
+
+    <div class="ui-quote">“One or more fields need to be reviewed for possible missing or low confidence values. Confirm the values in the document.”</div>
+
+    <p>Clique em <strong>Confirm and submit</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-40.png" alt="Janela Confirm extraction">
+
+    <h3 id="resultado">Resultado</h3>
+
+    <p>O chat exibe o selo verde <strong>Submitted</strong> e, na sequência, a mensagem do <strong>Path 2</strong>:</p>
+
+    <div class="code-block">Documento com informações inelegíveis, faça o envio novamente.</div>
+
+    <p>Logo depois vem o <strong>Message 1</strong>, os dois caminhos convergem e agora com o CPF em branco:</p>
+
+    <div class="code-block">Os dados extraídos foram:
+Nome: FERNANDO CAETANO
+Nome dos pais: SERGIO CAETANO, LENE MARIA CAETANO
+CPF:
+Data de Nascimento: 04/07/1967</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow-2/lab-workflow-2-41.png" alt="Resultado final com a mensagem de erro e os dados incompletos">
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Laboratório concluído</div>
+        <p style="margin:0;">O branch funcionou, a ausência do CPF desviou o fluxo e disparou a mensagem de erro.</p>
+      </div>
+    </div>
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Atenção</div>
+        <p>Note que a mensagem com os dados incompletos ainda é exibida depois do erro.</p>
+        <p style="margin-bottom:0;">E vamos resolver isso no próximo laboratório...</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- boas práticas -->
+  <section id="boas-praticas">
+    <h2>Boas práticas</h2>
+
+    <ol>
+      <li><strong>Formate a resposta no workflow, não no agente.</strong> O nó Message garante saída idêntica em toda execução. Instruções de agente são probabilísticas.</li>
+      <li><strong>O uso de HTML ou Markdown</strong> no Output message para manter a leitura organizada no chat.</li>
+      <li><strong>Ative o User Review nos campos que doem.</strong> Confiança abaixo do limiar em CPF, valor de contrato ou data de vencimento merece olho humano, em campos descritivos, muitas vezes não.</li>
+      <li><strong>Ajuste o limiar de confiança ao seu risco.</strong> 95% é o padrão, não uma verdade universal.</li>
+      <li><strong>Todo fluxo precisa de um caminho de exceção.</strong> Se você só desenhou o cenário feliz, seu fluxo está em menos da metade.</li>
+      <li>“Documento ilegível” é apenas um diagnóstico e nada mais, “faça o envio novamente” é instrução. Um usuário em um mundo real precisa das duas.</li>
+      <li><strong>Teste o caminho de exceção com a mesma seriedade do caminho principal.</strong> Apagar um campo na revisão é a forma mais barata de validar um branch.</li>
+    </ol>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- próximos passos -->
+  <section id="proximos-passos">
+    <h2>Próximos passos</h2>
+
+    <p>Note que algumas coisas ficaram pendentes nesse laboratório e vamos melhorar ainda mais no próximo e ultimo laboratório de workflows dessa sessão.</p>
+
+    <div class="link-box">
+      <div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:4px;">Continuação</div>
+        <a href="lab-workflow-3.html">Clique aqui para seguir para a continuação desse laboratório</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="lab-nav">
+    <a href="lab-workflow-1.html">← Lab 1: Extração de Documentos</a>
+    <a href="lab-workflow-3.html" class="primary">Lab 3: Tratamento de Exceções →</a>
+  </div>
+</main>
+
+<footer class="c-footer">
+ Made by Nathalia Trazzi &amp; Julia Almeida
+</footer>
+</body>
+</html>
