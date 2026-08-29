@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 1 — Construindo Workflows · watsonx Orchestrate</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe; --carbon-blue-70: #0043ce; --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616; --carbon-gray-90: #262626; --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252; --carbon-gray-30: #c6c6c6; --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4; --carbon-white: #ffffff; --carbon-teal-60: #007d79;
+    --carbon-green-60: #198038; --carbon-green-10: #defbe6; --carbon-yellow-30: #f1c21b;
+    --carbon-red-60: #da1e28; --sidebar-width: 256px; --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--carbon-gray-100); background: var(--carbon-gray-10); line-height: 1.5; }
+  .c-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--carbon-gray-100); color: var(--carbon-white); display: flex; align-items: center; z-index: 9000; padding: 0 16px; gap: 16px; }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__logo svg { fill: var(--carbon-white); }
+  .c-header__name { font-size: 14px; font-weight: 400; letter-spacing: .1px; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; font-weight: 400; color: var(--carbon-white); }
+  .c-sidenav { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000; }
+  .c-sidenav__section-title { padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30); }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; transition: background .1s, color .1s; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 900px; }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--carbon-gray-70); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb span { color: var(--carbon-gray-30); }
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 28px; font-weight: 300; line-height: 1.25; color: var(--carbon-gray-100); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 14px; color: var(--carbon-gray-70); line-height: 1.5; max-width: 640px; }
+  h2 { font-size: 20px; font-weight: 400; margin: 40px 0 16px; color: var(--carbon-gray-100); border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; color: var(--carbon-gray-100); }
+  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--carbon-gray-100); }
+  p { margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; font-size: 14px; line-height: 1.6; }
+  strong { font-weight: 600; }
+  a { color: var(--carbon-blue-60); }
+  .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
+  .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
+  .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
+  .callout--tip { border-color: var(--carbon-teal-60); background: #d9fbfb; }
+  .callout--danger { border-color: var(--carbon-red-60); background: #fff1f1; }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
+  .callout--note .callout__title { color: var(--carbon-blue-60); }
+  .callout--warning .callout__title { color: #a4780a; }
+  .callout--tip .callout__title { color: var(--carbon-teal-60); }
+  .callout--danger .callout__title { color: var(--carbon-red-60); }
+  .callout p:last-child, .callout ul:last-child { margin: 0; }
+  /* steps */
+  .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
+  .step-list > li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+  .step-list > li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
+  .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .lab-img-caption { font-size: 12px; color: var(--carbon-gray-70); margin-top: -12px; margin-bottom: 16px; font-style: italic; }
+  /* nav */
+  .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
+  .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
+  .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
+  .lab-nav a:hover { background: var(--carbon-blue-10); }
+  .lab-nav a.primary:hover { background: var(--carbon-blue-70); }
+  .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
+  .tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; margin-right: 6px; }
+  .tag--blue { background: var(--carbon-blue-10); color: var(--carbon-blue-60); }
+  .tag--red { background: #fff1f1; color: var(--carbon-red-60); }
+  .tag--green { background: var(--carbon-green-10); color: var(--carbon-green-60); }
+  .obj-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0; }
+  .obj-item { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 12px 14px 12px 34px; font-size: 13px; line-height: 1.5; position: relative; }
+  .obj-item::before { content: "✓"; position: absolute; left: 14px; top: 12px; color: var(--carbon-green-60); font-weight: 700; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--carbon-gray-80); color: var(--carbon-white); padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--carbon-gray-20); }
+  tr:nth-child(even) td { background: var(--carbon-gray-10); }
+  .link-box { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 16px 20px; margin: 16px 0; display: flex; align-items: center; gap: 16px; }
+  .link-box a { color: var(--carbon-blue-60); font-weight: 500; word-break: break-all; }
+  /* node grid */
+  .node-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .node-card { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); padding: 16px; }
+  .node-card__title { font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 6px; letter-spacing: .32px; }
+  .node-card p { margin: 0; font-size: 13px; }
+  .toolbar-item { display: flex; align-items: baseline; gap: 10px; margin: 24px 0 6px; }
+  .toolbar-item__num { display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; background: var(--carbon-gray-80); color: var(--carbon-white); font-size: 12px; font-weight: 600; border-radius: 2px; flex-shrink: 0; }
+  .toolbar-item__name { font-size: 14px; font-weight: 600; }
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--carbon-gray-70); background: var(--carbon-white); }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .obj-list, .node-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="c-header">
+    <a class="c-header__logo" href="index.html">
+    <span style="display:inline-flex;align-items:center;justify-content:center;background:#0f62fe;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;padding:4px 9px;line-height:1;">IBM</span>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Construindo Workflows com Agentes de IA</span>
+</header>
+
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Laboratórios</div>
+  <a class="c-sidenav__item active" href="lab-workflow-1.html"><span class="lab-num">Lab 1</span>Extração de Documentos</a>
+  <a class="c-sidenav__item" href="lab-workflow-2.html"><span class="lab-num">Lab 2</span>Mensagens &amp; Ramificações</a>
+  <a class="c-sidenav__item" href="lab-workflow-3.html"><span class="lab-num">Lab 3</span>Tratamento de Exceções</a>
+</nav>
+
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+    <span>›</span>
+    <span>Laboratório 1</span>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">Laboratório 1 · Agentic Workflows</div>
+    <h1 class="page-header__h1">Construindo Workflows no watsonx Orchestrate</h1>
+    <p class="page-header__subtitle">Construa, do zero, um agente capaz de receber um documento pelo chat, processá-lo através de um workflow agêntico low-code e devolver os dados extraídos de forma estruturada.</p>
+  </div>
+
+  <!-- toc -->
+  <nav style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:10px;">Índice</div>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:6px;"><a href="#glossario">Glossário de Termos Técnicos</a></li>
+      <li style="margin-bottom:6px;"><a href="#caso-de-uso">Descrição do Caso de Uso</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte1">Parte 1 — Criando o agente</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte2">Parte 2 — Criando o Agentic Workflow</a></li>
+      <li style="margin-bottom:6px;"><a href="#toolbar">Conhecendo a barra de ferramentas do Flow Builder</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte3">Parte 3 — Montando o fluxo: coleta do arquivo</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte4">Parte 4 — Configurando o Document extractor</a></li>
+      <li style="margin-bottom:6px;"><a href="#correcao">Corrigindo a extração com Description e Examples</a></li>
+      <li style="margin-bottom:6px;"><a href="#segundo-documento">Validando com um segundo documento</a></li>
+      <li style="margin-bottom:6px;"><a href="#idioma-modelo">Ajustando idioma e modelo</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte5">Parte 5 — Finalizando o fluxo e refinando o agente</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte6">Parte 6 — Testando o agente ponta a ponta</a></li>
+      <li style="margin-bottom:6px;"><a href="#boas-praticas">Boas práticas</a></li>
+      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos passos</a></li>
+    </ul>
+  </nav>
+
+  <!-- glossário -->
+  <section id="glossario">
+    <h2>Glossário de Termos Técnicos</h2>
+
+    <table>
+      <thead>
+        <tr><th style="width:30%;">Termo</th><th>Significado</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Agent / Agente</strong></td><td>Componente de IA que recebe instruções, raciocina sobre elas e aciona ferramentas ou outros agentes para completar uma tarefa.</td></tr>
+        <tr><td><strong>Agentic Workflow</strong></td><td>Workflow orquestrado por um agente de IA, combinando lógica low-code com raciocínio autônomo para automatizar processos de negócio.</td></tr>
+        <tr><td><strong>Auto-map chat history</strong></td><td>Funcionalidade que usa as últimas interações do chat para preencher automaticamente as entradas de um workflow.</td></tr>
+        <tr><td><strong>Behavior</strong></td><td>Aba do editor de agente onde se configuram perfil, modelo, descrição e instruções de comportamento.</td></tr>
+        <tr><td><strong>Branch</strong></td><td>Nó de controle de fluxo que cria caminhos condicionais (similar a um <code>if/else</code>).</td></tr>
+        <tr><td><strong>Canvas</strong></td><td>Área de trabalho visual do Flow Builder onde os nós são posicionados e conectados.</td></tr>
+        <tr><td><strong>Catalog</strong></td><td>Repositório de ferramentas e integrações prontas disponíveis para uso em agentes e workflows.</td></tr>
+        <tr><td><strong>Data type</strong></td><td>Tipo de dado de um campo de extração (ex.: <code>String</code>, <code>Number</code>, <code>Date</code>).</td></tr>
+        <tr><td><strong>Debug mode</strong></td><td>Modo de execução do Draft Preview que exibe informações detalhadas de raciocínio e chamadas de ferramentas do agente.</td></tr>
+        <tr><td><strong>Decision</strong></td><td>Nó do Flow Builder que automatiza decisões de negócio complexas com base em regras.</td></tr>
+        <tr><td><strong>Description</strong></td><td>Campo textual que descreve o propósito de um agente ou campo de extração, orientando o modelo sobre o que buscar.</td></tr>
+        <tr><td><strong>Document classifier</strong></td><td>Nó que identifica e categoriza automaticamente o tipo de documento recebido.</td></tr>
+        <tr><td><strong>Document extractor</strong></td><td>Nó do Flow Builder que usa um LLM para extrair campos específicos de documentos, com suporte a schema, descrições e exemplos.</td></tr>
+        <tr><td><strong>Draft Preview</strong></td><td>Painel lateral do editor de agente que simula o chat com o agente antes da publicação.</td></tr>
+        <tr><td><strong>Edit details</strong></td><td>Botão do Flow Builder para editar nome, descrição e parâmetros do workflow.</td></tr>
+        <tr><td><strong>Examples</strong></td><td>Pares de entrada/saída fornecidos ao Document extractor para orientar o modelo sobre o formato e o conteúdo esperado de um campo.</td></tr>
+        <tr><td><strong>Field name</strong></td><td>Nome atribuído a um campo no schema de extração do Document extractor.</td></tr>
+        <tr><td><strong>File upload</strong></td><td>Nó de coleta dentro do User activity que solicita ao usuário o envio de um arquivo.</td></tr>
+        <tr><td><strong>Flow Builder</strong></td><td>Editor visual low-code do watsonx Orchestrate para criação e configuração de Agentic Workflows.</td></tr>
+        <tr><td><strong>Flow controls</strong></td><td>Nós que controlam a ordem e o caminho de execução do fluxo (Branch, For each, Loop, Parallel).</td></tr>
+        <tr><td><strong>Flow inspector</strong></td><td>Ferramenta do Flow Builder que inspeciona a estrutura e o estado do fluxo em tempo real.</td></tr>
+        <tr><td><strong>Flow settings</strong></td><td>Painel de configurações gerais de um workflow (auto-map, agendamento, mascaramento de dados etc.).</td></tr>
+        <tr><td><strong>Flow variables</strong></td><td>Variáveis criadas e gerenciadas dentro de um workflow para armazenar e passar dados entre nós.</td></tr>
+        <tr><td><strong>For each</strong></td><td>Nó de controle que itera sobre uma lista, executando um conjunto de ações para cada item.</td></tr>
+        <tr><td><strong>Generative prompt</strong></td><td>Nó que invoca um LLM para gerar texto ou conteúdo estruturado como parte do fluxo.</td></tr>
+        <tr><td><strong>Global workspace</strong></td><td>Workspace padrão e compartilhado de uma instância do watsonx Orchestrate.</td></tr>
+        <tr><td><strong>Ground truth</strong></td><td>Conjunto de valores corretos e verificados manualmente, usado como referência para medir a acurácia de extração.</td></tr>
+        <tr><td><strong>Instructions</strong></td><td>Campo do perfil do agente que define seu comportamento — como ele deve agir, raciocinar e responder.</td></tr>
+        <tr><td><strong>JSON</strong></td><td>JavaScript Object Notation — formato leve de troca de dados estruturados, utilizado na saída do agente neste laboratório.</td></tr>
+        <tr><td><strong>LangGraph</strong></td><td>Framework open-source da LangChain para construção de agentes stateful baseados em grafos; o watsonx Orchestrate permite importar agentes criados com ele.</td></tr>
+        <tr><td><strong>LLM</strong></td><td>Large Language Model — modelo de linguagem de grande escala, como GPT ou Llama, que alimenta as capacidades de IA generativa da plataforma.</td></tr>
+        <tr><td><strong>Logic block</strong></td><td>Nó do Flow Builder para implementar transformações de dados ou lógica de negócio simples.</td></tr>
+        <tr><td><strong>Loop</strong></td><td>Nó de controle que repete uma ação até que uma condição seja satisfeita.</td></tr>
+        <tr><td><strong>Low-code</strong></td><td>Abordagem de desenvolvimento em que a maior parte da lógica é construída visualmente, com mínima escrita de código.</td></tr>
+        <tr><td><strong>Mask sensitive information</strong></td><td>Configuração do workflow que mascara variáveis e saídas contendo dados sensíveis (ex.: CPF, senhas, endereços).</td></tr>
+        <tr><td><strong>MCP server</strong></td><td>Model Context Protocol server — servidor que expõe ferramentas externas para consumo por agentes de IA.</td></tr>
+        <tr><td><strong>Metrics Summary / Overall accuracy</strong></td><td>Painel do Document extractor que exibe a acurácia geral da extração com base nos documentos verificados.</td></tr>
+        <tr><td><strong>Model</strong></td><td>Campo de configuração do agente ou do Document extractor onde se escolhe o LLM que será utilizado.</td></tr>
+        <tr><td><strong>Multimodal</strong></td><td>Capacidade de um modelo processar diferentes tipos de entrada, como texto e imagem simultaneamente.</td></tr>
+        <tr><td><strong>Node / Nó</strong></td><td>Bloco funcional individual dentro de um workflow no Flow Builder (ex.: File upload, Document extractor).</td></tr>
+        <tr><td><strong>OpenAPI</strong></td><td>Especificação padrão para descrever APIs REST; o watsonx Orchestrate permite importar ferramentas a partir de arquivos nesse formato.</td></tr>
+        <tr><td><strong>Parallel</strong></td><td>Nó de controle que executa múltiplas ações simultaneamente para reduzir o tempo total de processamento.</td></tr>
+        <tr><td><strong>Parameters</strong></td><td>Aba do Edit details onde se definem as entradas e saídas formais de um workflow.</td></tr>
+        <tr><td><strong>Placeholder</strong></td><td>Elemento visual no canvas que indica onde o próximo nó pode ser inserido.</td></tr>
+        <tr><td><strong>Prompt engineering</strong></td><td>Técnica de escrever instruções ou descrições em linguagem natural para orientar o comportamento de um LLM.</td></tr>
+        <tr><td><strong>Schema</strong></td><td>Estrutura que define os campos a serem extraídos de um documento no Document extractor (nome, tipo de dado, descrição, exemplos).</td></tr>
+        <tr><td><strong>Scheduling</strong></td><td>Configuração que permite ao usuário final agendar a execução de um workflow.</td></tr>
+        <tr><td><strong>Structured</strong></td><td>Formato de documento com layout fixo e previsível (ex.: formulários, notas fiscais padronizadas).</td></tr>
+        <tr><td><strong>Text extractor</strong></td><td>Nó do Flow Builder que extrai o texto bruto de um documento sem interpretar seu significado.</td></tr>
+        <tr><td><strong>Tidy canvas</strong></td><td>Função do Flow Builder que reorganiza automaticamente o layout visual do fluxo no canvas.</td></tr>
+        <tr><td><strong>Tools</strong></td><td>Ferramentas que podem ser adicionadas a um agente para ampliar suas capacidades (workflows, APIs, integrações).</td></tr>
+        <tr><td><strong>Trigger Conditions</strong></td><td>Condições ou pedidos que ativam uma ferramenta, auxiliando o agente a decidir quando chamá-la.</td></tr>
+        <tr><td><strong>Unstructured</strong></td><td>Formato de documento sem layout consistente (ex.: contratos, relatórios, e-mails, fotos de documentos).</td></tr>
+        <tr><td><strong>URL assinada (Signed URL)</strong></td><td>URL temporária e autenticada que concede acesso a um arquivo armazenado em nuvem sem expor credenciais permanentes.</td></tr>
+        <tr><td><strong>User activity</strong></td><td>Nó do Flow Builder que encapsula interações diretas com o usuário dentro do fluxo (coleta de dados, apresentação de resultados).</td></tr>
+        <tr><td><strong>Verify document</strong></td><td>Ação do Document extractor pela qual o usuário confirma que os valores extraídos estão corretos, alimentando a métrica de acurácia.</td></tr>
+        <tr><td><strong>Workspace</strong></td><td>Ambiente de trabalho isolado dentro do watsonx Orchestrate onde agentes, ferramentas e knowledge são organizados.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- caso de uso -->
+  <section id="caso-de-uso">
+    <h2>Descrição do Caso de Uso</h2>
+
+    <p>Ao final deste laboratório você terá construído um <strong>agente de Inteligência Artificial generativa capaz de receber um documento enviado pelo usuário no chat, processá-lo através de um workflow agêntico low-code e devolver os dados extraídos de forma estruturada.</strong></p>
+
+    <p>O caso de uso é a leitura de uma <strong>CNH (Carteira Nacional de Habilitação)</strong>, extraindo os campos Nome, Filiação, CPF e Data de Nascimento.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">A mesma técnica se aplica a contratos, notas fiscais, apólices, RGs, comprovantes e qualquer outro documento do seu processo.</p>
+      </div>
+    </div>
+
+    <h3>O que você vai aprender</h3>
+    <div class="obj-list">
+      <div class="obj-item">Criar um agente do zero e configurar perfil, modelo e instruções</div>
+      <div class="obj-item">Criar um <strong>Agentic workflow</strong> como ferramenta do agente</div>
+      <div class="obj-item">Navegar pelo <strong>Flow Builder</strong> e entender suas configurações</div>
+      <div class="obj-item">Coletar arquivos do usuário com o nó <strong>User activity → File upload</strong></div>
+      <div class="obj-item">Configurar o nó <strong>Document extractor</strong> e definir um schema de extração</div>
+      <div class="obj-item">Corrigir extrações imprecisas usando <strong>Description</strong> e <strong>Examples</strong></div>
+      <div class="obj-item">Verificar documentos e acompanhar a métrica de acurácia</div>
+      <div class="obj-item">Testar o agente ponta a ponta no <strong>Draft Preview</strong></div>
+    </div>
+
+    <p>Para utilizar o workflow, nesse laboratório, vamos criar um novo agente.</p>
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;"><strong>Embora nesse laboratório estamos utilizando Workflows com agentes, workflows podem ser acionados sem agentes e podem funcionar como um serviço a parte.</strong></p>
+      </div>
+    </div>
+
+    <p>Vamos começar!</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 1 -->
+  <section id="parte1">
+    <h2>Parte 1 — Criando o agente</h2>
+
+    <p>Na tela de <strong>Build agents and tools</strong>, você verá a lista de agentes do workspace (no laboratório, o <em>Global workspace</em>), com os contadores de <strong>All agents</strong>, <strong>All tools</strong> e <strong>All knowledge</strong>.</p>
+
+    <p>No canto superior direito, clique em <strong>Create agent</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-01.png" alt="Tela Build agents and tools com o botão Create agent">
+
+    <h3>Escolhendo o método de criação</h3>
+
+    <p>A janela <strong>Create an agent</strong> oferece três caminhos:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:32%;">Opção</th><th>Quando usar</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Create from scratch</strong></td><td>Você define manualmente perfil, instruções e ferramentas — <strong>usaremos esta</strong></td></tr>
+        <tr><td><strong>Build from template</strong></td><td>Partir de um modelo pronto da IBM</td></tr>
+        <tr><td><strong>Import langGraph agent</strong></td><td>Importar um agente já desenvolvido em LangGraph</td></tr>
+      </tbody>
+    </table>
+
+    <p>Confirme que o workspace selecionado é o <strong>Global workspace</strong> e clique em <strong>Create from scratch</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-02.png" alt="Janela Create an agent">
+
+    <h3>Conhecendo o editor do agente</h3>
+
+    <p>Na tela <strong>Edit agent</strong>, dividida em duas áreas:</p>
+
+    <ul>
+      <li><strong>Esquerda — construção:</strong> abas <code>Behavior</code>, <code>Knowledge</code>, <code>Tools</code> e <code>Agents</code></li>
+      <li><strong>Direita — Draft Preview:</strong> chat de teste rodando em <em>debug mode</em>, com o botão <strong>Save as test</strong></li>
+    </ul>
+
+    <p>No topo estão os três estágios do ciclo de vida do agente: <strong>Build → Evaluate → Deploy</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-03.png" alt="Editor do agente com Draft Preview">
+
+    <h3>Preenchendo o perfil do agente</h3>
+
+    <p>Ainda na aba <strong>Behavior</strong>, seção <strong>Profile</strong>, preencha os campos na ordem indicada:</p>
+
+    <ol class="step-list">
+      <li>
+        <div class="step-content">
+          <p><strong>Agent name</strong></p>
+          <div class="code-block">Agente leitor de documentos</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p><strong>Model</strong></p>
+          <div class="code-block">GPT-OSS 120B — OpenAI (via Groq)</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p><strong>Description</strong> é o que ajuda outros agentes e o roteador a saberem <em>quando</em> acionar este agente.</p>
+          <p>Copie e cole o seguinte texto no campo:</p>
+          <div class="code-block">Agente inteligente responsável por receber documentos de novos contratos,
+processá-los utilizando o workflow definido e realizar a extração automatizada
+dos dados relevantes, garantindo agilidade e precisão no tratamento das informações</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p><strong>Instructions</strong> é o comportamento que o agente deve seguir.</p>
+          <p>Copie e cole o seguinte texto no campo:</p>
+          <div class="code-block">Receba o documento do contrato enviado pelo usuário e valide se o arquivo está
+acessível e legível. Em seguida, execute o workflow de processamento disponível
+para analisar o documento e extrair todas as informações relevantes. Organize os
+dados extraídos de forma estruturada e retorne os resultados ao usuário. Caso o
+documento esteja corrompido, ilegível ou não contenha as informações esperadas,
+informe o usuário.</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique na aba <strong>Tools</strong>.</p>
+          <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-04.png" alt="Perfil do agente preenchido">
+        </div>
+      </li>
+    </ol>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Description × Instructions</div>
+        <p>A <em>Description</em> responde “para que serve este agente”; as <em>Instructions</em> respondem “como ele deve se comportar”.</p>
+        <p style="margin-bottom:0;">Voltaremos às instruções na Parte 5 desse laboratório, elas ainda serão refinadas.</p>
+      </div>
+    </div>
+
+    <p>Agora vamos criar nosso workflow.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 2 -->
+  <section id="parte2">
+    <h2>Parte 2 — Criando o Agentic Workflow</h2>
+
+    <p>Na aba <strong>Tools</strong>, clique em <strong>Add Tool</strong> (item 6).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-05.png" alt="Aba Tools com o botão Add Tool">
+
+    <p>A janela <strong>Add a tool</strong> apresenta duas seções:</p>
+
+    <h4>Create</h4>
+    <ul>
+      <li><strong>Agentic workflow</strong> — automatiza processos de negócio repetíveis com workflows low-code que integram extração de documentos e entrada humana ← <strong>é o que vamos usar</strong></li>
+      <li><strong>Build with Bob</strong> — parceiro de codificação com IA (Preview)</li>
+    </ul>
+
+    <h4>Add from</h4>
+    <ul>
+      <li><strong>Catalog</strong> — catálogo de ferramentas existentes</li>
+      <li><strong>Local instance</strong> — ferramentas já disponíveis na instância</li>
+      <li><strong>MCP server</strong> — importar ferramentas externas de um servidor MCP</li>
+      <li><strong>OpenAPI</strong> — importar ferramentas a partir de um arquivo OpenAPI</li>
+    </ul>
+
+    <p>Clique em <strong>Agentic workflow → Start Building</strong> (item 7).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-06.png" alt="Janela Add a tool">
+
+    <p>Na janela <strong>Name your agentic workflow</strong>, clique em <strong>Start building</strong> (item 8).</p>
+
+    <p>O nome padrão <em>Agentic workflow 1</em> será ajustado no próximo passo.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-07.png" alt="Janela Name your agentic workflow">
+
+    <h3>Nomeando o workflow</h3>
+
+    <p>Você está agora no <strong>Flow builder</strong>.</p>
+
+    <p>Use <strong>Edit details</strong> no topo e altere o nome para:</p>
+
+    <div class="code-block">Extração de documentos</div>
+
+    <p>O indicador <strong>Saved</strong> confirma o salvamento automático.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-08.png" alt="Flow builder com o workflow renomeado">
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Atenção</div>
+        <p style="margin:0;"><strong>Guarde esse nome.</strong> Ele será citado literalmente nas instruções do agente na Parte 5.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- toolbar -->
+  <section id="toolbar">
+    <h2>Conhecendo a barra de ferramentas do Flow Builder</h2>
+
+    <p>Antes de montar o fluxo, familiarize-se com os controles do canto superior esquerdo.</p>
+
+    <p>Passe o mouse sobre cada ícone:</p>
+
+    <div class="toolbar-item">
+      <span class="toolbar-item__num">1</span>
+      <span class="toolbar-item__name"><code>+</code> — Add activities, controls, tools, or agents (<code>⌘K</code>)</span>
+    </div>
+    <p>Abre o painel de nós disponíveis.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-09.png" alt="Botão Add activities, controls, tools, or agents">
+
+    <div class="toolbar-item">
+      <span class="toolbar-item__num">2</span>
+      <span class="toolbar-item__name"><code>{x}</code> — Flow variables</span>
+    </div>
+    <p>Gerencia as variáveis do fluxo.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-10.png" alt="Botão Flow variables">
+
+    <div class="toolbar-item">
+      <span class="toolbar-item__num">3</span>
+      <span class="toolbar-item__name">🧹 — Tidy canvas</span>
+    </div>
+    <p>Reorganiza automaticamente o layout do canvas.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-11.png" alt="Botão Tidy canvas">
+
+    <div class="toolbar-item">
+      <span class="toolbar-item__num">4</span>
+      <span class="toolbar-item__name">🔍 — Open flow inspector</span>
+    </div>
+    <p>Inspeciona a estrutura e o estado do fluxo.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-12.png" alt="Botão Open flow inspector">
+
+    <div class="toolbar-item">
+      <span class="toolbar-item__num">5</span>
+      <span class="toolbar-item__name">⚙️ — Flow settings</span>
+    </div>
+    <p>Configurações gerais do fluxo.</p>
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-14.png" alt="Botão Flow settings">
+
+    <h3>Edit details — Overview e Parameters</h3>
+
+    <p>Ao abrir <strong>Edit details</strong>, há duas abas: <strong>Overview</strong> (Name e Description) e <strong>Parameters</strong>.</p>
+
+    <p>O campo <strong>Description</strong> é opcional, mas altamente recomendado.</p>
+
+    <p>A própria interface sugere três pilares para uma boa descrição:</p>
+
+    <ul>
+      <li><strong>Functionality</strong> — o que a ferramenta faz e quais tarefas suporta; deixe claras capacidades e limitações</li>
+      <li><strong>Use Cases</strong> — quando usar a ferramenta, com palavras-chave, ações do usuário e tipos de solicitação</li>
+      <li><strong>Trigger Conditions</strong> — situações ou pedidos que ativam a ferramenta, para o agente decidir o momento certo de chamá-la</li>
+    </ul>
+
+    <p>Não faremos nada nessa sessão, clique em <strong>Done</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-13.png" alt="Painel Edit details">
+
+    <h3>Flow settings</h3>
+
+    <p>Abra <strong>Flow settings</strong> e conheça as opções:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:30%;">Configuração</th><th>O que faz</th><th style="width:16%;">Estado no lab</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Auto-map chat history to inputs</strong></td><td>Tenta mapear automaticamente as entradas dos nós usando as últimas cinco interações do chat</td><td>Ligado</td></tr>
+        <tr><td><strong>Scheduling</strong></td><td>Define se o usuário final pode agendar a execução do fluxo</td><td>Ligado</td></tr>
+        <tr><td><strong>Agent summarization</strong></td><td>Permite que o agente resuma e raciocine ao final do fluxo</td><td>Desligado</td></tr>
+        <tr><td><strong>Custom summarization instructions</strong></td><td>Personaliza como grandes volumes de dados são resumidos antes do auto-mapping</td><td>—</td></tr>
+        <tr><td><strong>Mask sensitive information</strong></td><td>Mascara variáveis e saídas com dados sensíveis (ex.: senha, endereço)</td><td>—</td></tr>
+        <tr><td><strong>Translate user activities</strong></td><td>Escolhe os idiomas para tradução das atividades do usuário</td><td>—</td></tr>
+        <tr><td><strong>Configure external system notifications</strong></td><td>Configura notificações de fluxo e tarefas para sistemas externos</td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <p>Feche o painel em <strong>Close</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-15.png" alt="Painel Flow settings">
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;"><strong>Mask sensitive information</strong> é especialmente relevante quando o documento contém CPF, endereço ou dados bancários. Avalie ativá-lo em cenários produtivos.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 3 -->
+  <section id="parte3">
+    <h2>Parte 3 — Montando o fluxo: coleta do arquivo</h2>
+
+    <h3>Abrindo o painel de nós</h3>
+
+    <p>Clique no botão <code>+</code> (<strong>Add activities, controls, tools, or agents</strong>). O painel abre com três abas: <strong>Flow nodes</strong>, <strong>Tools</strong> e <strong>Agents</strong>.</p>
+
+    <p>Em <strong>Flow nodes</strong> você encontra:</p>
+
+    <h4>Flow activities</h4>
+
+    <table>
+      <thead>
+        <tr><th style="width:30%;">Nó</th><th>Descrição</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Decision</strong></td><td>Automatiza decisões de negócio complexas</td></tr>
+        <tr><td><strong>Document classifier</strong></td><td>Identifica documentos com base em classes</td></tr>
+        <tr><td><strong>Document extractor</strong></td><td>Extrai informações de documentos</td></tr>
+        <tr><td><strong>Generative prompt</strong></td><td>Usa um LLM para gerar texto ou conteúdo estruturado</td></tr>
+        <tr><td><strong>Logic block</strong></td><td>Implementa transformação de dados ou lógica de negócio simples</td></tr>
+        <tr><td><strong>Text extractor</strong></td><td>Extrai texto bruto de documentos</td></tr>
+        <tr><td><strong>User activity</strong></td><td>Coleta entradas do usuário e apresenta dados dentro do chat</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Flow controls</h4>
+
+    <p>Flow controls são os nós que controlam o fluxo da automação. Eles não processam dados diretamente, apenas definem o caminho, a repetição e a ordem de execução das atividades.</p>
+
+    <div class="node-grid">
+      <div class="node-card">
+        <div class="node-card__title">Branch</div>
+        <p>Cria caminhos diferentes com base em uma condição. Funciona como um if/else.<br><em>Exemplo: se o CPF estiver preenchido, segue por um caminho; se não, segue por outro.</em></p>
+      </div>
+      <div class="node-card">
+        <div class="node-card__title">For each</div>
+        <p>Repete um conjunto de ações para cada item de uma lista.<br><em>Exemplo: processar vários arquivos enviados, um por vez.</em></p>
+      </div>
+      <div class="node-card">
+        <div class="node-card__title">Loop</div>
+        <p>Repete uma ação até que uma condição seja atendida.<br><em>Exemplo: solicitar o envio do documento novamente até que o CPF seja informado ou até atingir o limite de tentativas.</em></p>
+      </div>
+      <div class="node-card">
+        <div class="node-card__title">Parallel</div>
+        <p>Executa várias ações ao mesmo tempo.<br><em>Exemplo: extrair dados do documento, consultar o CPF e verificar restrições simultaneamente, reduzindo o tempo total de processamento.</em></p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-16.png" alt="Painel de nós do Flow Builder">
+
+    <h3>Adicionando o nó User activity</h3>
+
+    <p>Arraste o card <strong>User activity</strong> do painel para o placeholder <strong>Add your first step</strong> no canvas.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-18.png" alt="Arrastando o card User activity para o canvas">
+
+    <p>O nó <strong>User activity 1</strong> é criado como um contêiner delimitado por linha tracejada verde, contendo <strong>Start → Add → End</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-19.png" alt="Nó User activity 1 criado no canvas">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">O <strong>User activity</strong> é um bloco de interação: tudo o que estiver dentro dele acontece em diálogo com o usuário no chat.</p>
+      </div>
+    </div>
+
+    <h3>Adicionando o File upload</h3>
+
+    <p>Clique em <strong>Add</strong> dentro do User activity.</p>
+
+    <p>O menu <strong>User activities</strong> exibe:</p>
+
+    <ul>
+      <li><code>Collect from user</code> ›</li>
+      <li><code>Present to user</code> ›</li>
+      <li><code>Add a form</code></li>
+      <li><code>Add a flow activity</code> ›</li>
+      <li><code>Add a flow control</code> ›</li>
+      <li><code>Call a tool</code></li>
+      <li><code>Call an agent</code></li>
+    </ul>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-20.png" alt="Menu User activities">
+
+    <p>Escolha <strong>Collect from user</strong> (item 1). O submenu mostra os tipos de coleta: <code>Boolean choice</code>, <code>Date</code>, <strong><code>File upload</code></strong>, <code>Number</code>, <code>Single choice</code>, <code>Text</code>.</p>
+
+    <p>Selecione <strong>File upload</strong> (item 2).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-21.png" alt="Submenu Collect from user com File upload">
+
+    <p>O nó <strong>File upload 1</strong> aparece dentro do User activity 1, entre Start e End.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-22.png" alt="Nó File upload 1 no canvas">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 4 -->
+  <section id="parte4">
+    <h2>Parte 4 — Configurando o Document extractor</h2>
+
+    <h3>Adicionando o nó de extração</h3>
+
+    <p>Arraste o card <strong>Document extractor</strong> do painel para a posição <strong>imediatamente após o File upload 1</strong>, ainda dentro do bloco <strong>User activity</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-23.png" alt="Arrastando o Document extractor para o canvas">
+
+    <h3>Selecionando o formato do documento</h3>
+
+    <p>O painel <strong>Select a document format</strong> com duas opções:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:26%;">Formato</th><th>Quando usar</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Structured</strong></td><td>Documentos com layout sempre igual — notas fiscais, formulários fiscais, carteiras de identidade</td></tr>
+        <tr><td><strong>Unstructured</strong></td><td>Documentos sem layout consistente — contratos, relatórios, e-mails</td></tr>
+      </tbody>
+    </table>
+
+    <p>Selecione <strong>Unstructured</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-24.png" alt="Painel Select a document format">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Por que Unstructured para uma CNH?</div>
+        <p style="margin:0;">Apesar de a CNH ter layout padronizado, as fotos enviadas por usuários variam muito em enquadramento, rotação, iluminação e versão do documento. O modo <em>Unstructured</em> usa um LLM multimodal com descrição semântica dos campos, sendo mais tolerante a essa variação.</p>
+      </div>
+    </div>
+
+    <h3>Fazendo upload dos documentos de exemplo</h3>
+
+    <p>O editor do <strong>Document extractor</strong> abre em tela cheia. À direita, o painel <strong>Upload documents</strong> informa:</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Limites de upload</div>
+        <p>Faça upload de até 100 documentos de exemplo.</p>
+        <p>Tamanho máximo por arquivo: 10 MB.</p>
+        <p style="margin-bottom:0;">Tipos de arquivo suportados: .pdf, .docx, .pptx, .jpg, .png, .tiff, .xlsx e .heic.</p>
+      </div>
+    </div>
+
+    <p>Arraste sua primeira CNH (<code>11837-41.jpg</code>) para a área <code>Drag and drop files here or upload</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-25.png" alt="Área de upload de documentos de exemplo">
+
+    <p>Aguarde enquanto a imagem é processada...</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-26.png" alt="Documento processado no Document extractor">
+
+    <p>Note os elementos da tela:</p>
+
+    <ul>
+      <li><strong>Metrics Summary</strong> (esquerda) — <em>Overall accuracy</em> começa em <code>0% (0/1)</code></li>
+      <li><strong>Define your schema</strong> (centro) — onde criaremos os campos</li>
+      <li><strong>Visualizador</strong> (direita) — pré-visualização do documento com zoom e navegação de páginas</li>
+      <li><strong>Model</strong> (topo) — modelo de extração, inicialmente <code>llama-4-maverick-17b-128e-instruct</code></li>
+      <li><strong>Idioma</strong> (topo) — inicialmente <code>EN</code></li>
+    </ul>
+
+    <h3>Criando o primeiro campo: Nome</h3>
+
+    <p>Clique em <strong>Add field +</strong>, digite o nome do campo e pressione Enter:</p>
+
+    <div class="code-block">Nome</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-27.png" alt="Criando o campo Nome">
+
+    <p>O modelo processa o documento e a tabela ganha três colunas: <strong>Field Name</strong>, <strong>Extracted Value</strong> (com selo <em>AI</em>) e <strong>Correct Value</strong>.</p>
+
+    <p>Resultado esperado: <code>FERNANDO CAETANO</code>, com o valor destacado em azul sobre o documento à direita.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-28.png" alt="Campo Nome extraído corretamente">
+
+    <h3>Criando o campo FILIAÇÃO</h3>
+
+    <p>Clique em <strong>Add field +</strong></p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-29.png" alt="Botão Add field">
+
+    <p>Agora o nome do campo será:</p>
+
+    <div class="code-block">FILIAÇÃO</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-30.png" alt="Criando o campo FILIAÇÃO">
+
+    <p>Resultado esperado: <code>SERGIO CAETANO, LENE MARIA CAETANO</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-31.png" alt="Campo FILIAÇÃO extraído corretamente">
+
+    <h3>Criando o campo CPF</h3>
+
+    <p>Clique em <strong>Add field +</strong> novamente.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-32.png" alt="Botão Add field novamente">
+
+    <p>O nome do novo campo será:</p>
+
+    <div class="code-block">CPF</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-33.png" alt="Criando o campo CPF">
+
+    <p>Aguarde o processamento...</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-34.png" alt="Processamento do campo CPF">
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Atenção</div>
+        <p><strong>Note que alguns contratempos quando estamos lidando com modelos de inteligência artificial generativa podem ocorrer.</strong></p>
+        <p>O valor extraído vem como <code>12000125749</code>, que é o número de registro no rodapé do documento, não o CPF.</p>
+        <p style="margin-bottom:0;"><strong>E é nosso dever dizer para o modelo o que esperamos dele e não simplesmente esperar que ele advinhe.</strong></p>
+      </div>
+    </div>
+
+    <p>Este é um dos momentos mais importantes desse laboratório: <strong>Ensinar o modelo onde olhar</strong>.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- fix: extração -->
+  <section id="correcao">
+    <h2>Corrigindo a extração com Description e Examples</h2>
+
+    <p>Clique no ícone <code>(⋮)</code> da linha do CPF (item 1), escolha <strong>Edit</strong> (item 2).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-35.png" alt="Menu de contexto do campo CPF">
+
+    <p>Essa tela é a configuração de um campo de extração no nó Document Extractor do IBM watsonx Orchestrate. Nela, você ensina o modelo a identificar e extrair uma informação específica do documento. No exemplo da imagem, o campo configurado é CPF.</p>
+
+    <p>Preencha assim:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:6%;">#</th><th style="width:24%;">Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Field name</strong></td><td><code>CPF</code></td></tr>
+        <tr><td>2</td><td><strong>Data type</strong></td><td><code>String</code></td></tr>
+        <tr><td>3</td><td><strong>Description</strong></td><td>Ative o toggle</td></tr>
+        <tr><td>4</td><td><strong>Descrição</strong></td><td><code>O CPF é uma sequência númerica, ele está presente abaixo do campo CPF, ao lado da linha de data de nascimento.</code></td></tr>
+        <tr><td>5</td><td><strong>Examples</strong></td><td>Ative o toggle</td></tr>
+        <tr><td>6</td><td><strong>Input</strong></td><td><code>"CPF"</code></td></tr>
+        <tr><td>7</td><td><strong>Output</strong></td><td><code>508.50807/1967</code></td></tr>
+        <tr><td>8</td><td>—</td><td>Clique em <strong>Submit</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p>O <em>Document extractor</em> não é uma caixa-preta. Quando o modelo confunde campos, você não muda o modelo, você <strong>descreve o campo em linguagem natural</strong> (onde ele fica, como se parece, qual o padrão) e <strong>dá exemplos concretos</strong>.</p>
+        <p style="margin-bottom:0;">Aqui estamos fazendo o papel de prompt engineering aplicado no que queremos processar, nesse caso, documentos.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-36.png" alt="Painel Configure CPF preenchido">
+
+    <p>A dica exibida na própria interface: <em>“Adicione 3-5 examples para ajudar o LLM a entender qual é a saída que você está esperando”</em></p>
+
+    <p>Após o envio, o modelo reprocessa e agora extrai o valor correto.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-37.png" alt="CPF extraído corretamente após a configuração">
+
+    <p>Clique em <strong>Add field +</strong></p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-38.png" alt="Botão Add field">
+
+    <p>Adicione o último campo:</p>
+
+    <div class="code-block">DATADENASCIMENTO</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-39.png" alt="Criando o campo DATADENASCIMENTO">
+
+    <p>Aguarde o processamento...</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-40.png" alt="Processamento do campo DATADENASCIMENTO">
+
+    <p>Resultado esperado: <code>04/07/1967</code></p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-41.png" alt="Campo DATADENASCIMENTO extraído corretamente">
+
+    <p>Note que no exemplo anterior, haviamos configurado um número errado e isso foi de próposito. <strong>O modelo identificou que o número digitado não era o mesmo que estava no documento e corrigiu sozinho.</strong></p>
+
+    <p>Reabra <strong>Configure ‘CPF’</strong> e ajuste o campo <strong>Output</strong> do exemplo correto:</p>
+
+    <div class="code-block">508.508.07/1967</div>
+
+    <p>Clique em <strong>Submit</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-42.png" alt="Ajuste do Output do exemplo do CPF">
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">O valor do <strong>Output</strong> no exemplo ensina o modelo tanto <em>o que</em> extrair quanto <em>como formatar</em>. Use isso para padronizar máscaras (datas, documentos, moedas).</p>
+      </div>
+    </div>
+
+    <p>Clique no botão azul <strong>Verify document</strong> no rodapé.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-43.png" alt="Botão Verify document">
+
+    <p>O documento muda de <code>Unverified</code> para <strong><code>Verified</code></strong>, a mensagem passa a ser <em>“All documents have been verified successfully”</em> e o <strong>Overall accuracy</strong> sobe para <strong>100% (1/1)</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-44.png" alt="Documento verificado com 100% de acurácia">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">O que é a verificação?</div>
+        <p style="margin:0;">Ao verificar, você declara que os valores da coluna <em>Correct Value</em> são a verdade absoluta (ground truth) daquele documento. Isso alimenta a métrica de acurácia e serve de baseline para comparar modelos e ajustes de schema.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- segundo doc -->
+  <section id="segundo-documento">
+    <h2>Validando com um segundo documento</h2>
+
+    <p>Um único documento não prova nada.</p>
+
+    <p>Clique em <strong>Add documents</strong> e suba a segunda CNH (<code>cnh1.jpg</code>).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-46.png" alt="Adicionando o segundo documento">
+
+    <p>O painel de métricas passa a exibir <em>“1 document requires verification”</em> e a acurácia vira <code>(1/2)</code>.</p>
+
+    <p>Selecione <code>cnh1.jpg</code> na lista à esquerda. O modelo extrai automaticamente os quatro campos do novo documento:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:34%;">Campo</th><th>Valor extraído</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>DATADENASCIMENTO</td><td><code>18/01/2020</code></td></tr>
+        <tr><td>CPF</td><td><code>20605204/0001-63</code></td></tr>
+        <tr><td>FILIAÇÃO</td><td><code>NOME DO SEU PAI E MÃE AQUI...</code></td></tr>
+        <tr><td>Nome</td><td><code>MASTER LASER MAQUINAS</code></td></tr>
+      </tbody>
+    </table>
+
+    <p>Revise, corrija o que for necessário e clique em <strong>Verify document</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-47.png" alt="Segundo documento com os campos extraídos">
+
+    <p>Agora a acurácia é <strong>100% (2/2)</strong> e ambos os documentos aparecem verificados com 100%.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-48.png" alt="Acurácia de 100% com dois documentos verificados">
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">Este segundo documento é de um modelo de CNH diferente (novo padrão, com layout distinto). Se o schema funciona nos dois, ele generaliza bem. <strong>Sempre teste com variações reais</strong> antes de colocar em produção.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- idioma / modelo -->
+  <section id="idioma-modelo">
+    <h2>Ajustando idioma e modelo</h2>
+
+    <h3>Idioma</h3>
+
+    <p>Clique no seletor de idioma (🌐 <code>EN</code>) no topo direito. A lista traz dezenas de opções: <em>Afrikaans, Albanian, Aymara, Basque, Belarusian, Bengali, Bislama, Bulgarian, Catalan, Chinese (Simplified), Chinese (Traditional), Cree, Danish, Dutch, English, English with Handwriting</em> e muitos outros.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-49.png" alt="Seletor de idioma do Document extractor">
+
+    <p>Selecione <strong>Portuguese</strong> (<code>PT</code>). O extrator reprocessa os documentos com o novo idioma.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-50.png" alt="Idioma alterado para Portuguese">
+
+    <h3>Modelo</h3>
+
+    <p>Clique no campo <strong>Model</strong>.</p>
+
+    <p>As opções recomendadas incluem:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:52%;">Modelo</th><th>Observação</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>llama-4-maverick-17b-128e-instruct-fp8</code></td><td>Recomendado: Padrão do laboratório</td></tr>
+        <tr><td><code>granite-4-h-small</code></td><td>Recomendado</td></tr>
+        <tr><td><code>mistral-small-3-1-24b-instruct-2503</code></td><td>Recomendado</td></tr>
+        <tr><td><code>mistral-medium-2505</code></td><td>Recomendado ⚠️</td></tr>
+      </tbody>
+    </table>
+
+    <p>Mantenha o <code>llama-4-maverick-17b-128e-instruct-fp8</code> para este laboratório.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-51.png" alt="Seletor de modelo do Document extractor">
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">Como você já tem documentos verificados, pode trocar o modelo e comparar a acurácia resultante. Esse é o método para escolher o modelo mais adequado ao <em>seu</em> tipo de documento, em vez de escolher pelo tamanho ou pela popularidade.</p>
+      </div>
+    </div>
+
+    <h3>Fechando o extrator</h3>
+
+    <p>Clique no <strong>X</strong> no canto superior direito para voltar ao <strong>Flow Builder</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-52.png" alt="Fechando o editor do Document extractor">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 5 -->
+  <section id="parte5">
+    <h2>Parte 5 — Finalizando o fluxo e refinando o agente</h2>
+
+    <h3>Concluindo o workflow</h3>
+
+    <p>O canvas agora mostra o fluxo completo:</p>
+
+    <div class="code-block">0 inputs → User activity 1 [ Start → File upload 1 → Document extractor → End ] → 0 outputs</div>
+
+    <p>Clique em <strong>Done</strong> no canto superior direito.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-53.png" alt="Fluxo completo no canvas com o botão Done">
+
+    <p>Ao retornar no editor do agente, o workflow já está registrado como tool.</p>
+
+    <h3>Refinando as instruções do agente</h3>
+
+    <p>Volte à aba <strong>Behavior</strong> e edite o campo <strong>Instructions</strong>.</p>
+
+    <p>Substitua o texto da Parte 1 por:</p>
+
+    <div class="code-block">Após qualquer mensagem, execute o workflow de processamento **Extração de documentos**
+disponível para analisar o documento e extrair todas as informações relevantes.
+Organize os dados extraídos de forma estruturada e retorne os resultados ao usuário.
+Caso o documento esteja corrompido, ilegível ou não contenha as informações esperadas,
+informe o usuário.</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-54.png" alt="Instruções do agente refinadas">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">A instrução original dizia “receba o documento enviado pelo usuário”, mas o usuário ainda não tem como enviar nada antes de o workflow rodar, porque é o próprio workflow que abre o campo de upload. A nova instrução (“<strong>após qualquer mensagem</strong>, execute o workflow”) inverte a ordem e cita o workflow <strong>pelo nome exato</strong>, garantindo o acionamento correto.</p>
+      </div>
+    </div>
+
+    <p><strong>Quando um agente não chama a ferramenta esperada, o problema quase sempre está nas instruções, não no modelo.</strong></p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- parte 6 -->
+  <section id="parte6">
+    <h2>Parte 6 — Testando o agente ponta a ponta</h2>
+
+    <p>No painel <strong>Draft Preview</strong> (rodando em <em>debug mode</em>), digite qualquer mensagem, por exemplo:</p>
+
+    <div class="code-block">oi</div>
+
+    <p>O agente responde acionando o workflow: aparece o bloco <strong>File upload 1 → Upload files</strong>, listando os formatos suportados (CSV, DOC, DOCX, GO, HTML, JAVA, JPEG, JPG, JS, JSON, MD, MP3, MP4, PDF, PNG, PPT, PPTX, PY, SVG, TIFF, TS, TXT, WAV, XLS, XLSM, XLSX, XML, YAML, YML — máximo 30 MB).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-55.png" alt="Agente acionando o workflow no Draft Preview">
+
+    <p>Clique em <strong>Add files</strong> (item 2), selecione <code>11837-41.jpg</code> e envie (item 3).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-56.png" alt="Anexando o arquivo no Draft Preview">
+
+    <p>O agente processa o arquivo.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-57.png" alt="Agente processando o arquivo">
+
+    <p>O agente responde:</p>
+
+    <p><em>“Preciso que você revise a extração do documento”</em> com um card <strong>Review document extraction</strong> contendo o nome do arquivo e o link <strong>View</strong>. Clique em <strong>View</strong> (item 4).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-58.png" alt="Card Review document extraction">
+
+    <p>No painel <strong>Review document extraction</strong>, observe que os quatro campos aparecem preenchidos, cada um com o alerta: <em>“Low confidence extraction. Confirm value.”</em>:</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:34%;">Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Cpf</td><td><code>508.508.07/1967</code></td></tr>
+        <tr><td>Datadenascimento</td><td><code>04/07/1967</code></td></tr>
+        <tr><td>Filiação</td><td><code>SERGIO CAETANO E LENE MARIA CAETANO</code></td></tr>
+        <tr><td>Nome</td><td><code>FERNANDO CAETANO</code></td></tr>
+      </tbody>
+    </table>
+
+    <p>Revise os valores e clique em <strong>Submit</strong> (item 6).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-59.png" alt="Painel Review document extraction">
+
+    <p>Na <strong>Confirm extraction</strong>, clique em <strong>Confirm and submit</strong> (item 7).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-60.png" alt="Janela Confirm extraction">
+
+    <p>O chat exibe o selo verde <strong>Submitted</strong> e o agente segue processando.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-61.png" alt="Selo Submitted no chat">
+
+    <h3>Resultados</h3>
+
+    <p>O agente devolve o JSON estruturado com os dados extraídos e a URL assinada do documento armazenado:</p>
+
+    <div class="code-block">{
+  "value": "https://s3.us-south.cloud-object-storage.appdomain.cloud/wo-archer-prod-us-south-cos/uploaded_files/.../11837-41.jpg?X-Amz-Algorithm=...",
+  "cpf": "508.508.07/1967",
+  "datadenascimento": "04/07/1967",
+  "filiação": "SERGIO CAETANO E LENE MARIA CAETANO",
+  "nome": "FERNANDO CAETANO"
+}</div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab-workflow/lab-workflow-1-62.png" alt="Resultado final com o JSON estruturado">
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Laboratório concluído</div>
+        <p style="margin:0;">Você construiu um agente funcional de leitura e extração de documentos.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- boas práticas -->
+  <section id="boas-praticas">
+    <h2>Boas práticas</h2>
+
+    <ol>
+      <li><strong>O produto é watsonx Orchestrate, não watsonx Crystall Ball.</strong> Toda vez que a extração falhar, escreva uma descrição em linguagem natural explicando onde o dado está e como ele se parece.</li>
+      <li><strong>De 3 a 5 exemplos por campo problemático.</strong> É o número recomendado pela própria interface e o que melhor equilibra precisão e custo.</li>
+      <li><strong>Verifique com variação real.</strong> Dois documentos do mesmo layout não validam nada. Use versões antigas e novas, fotos tortas, digitalizações ruins.</li>
+      <li><strong>Nomeie o workflow de forma única e cite-o nas instruções.</strong> Ambiguidade no nome gera falha de roteamento.</li>
+      <li><strong>Ative o Mask sensitive information</strong> quando o documento contiver CPF, endereço ou dados bancários.</li>
+      <li><strong>Compare modelos com dados verificados.</strong> A métrica de acurácia existe justamente para transformar a escolha do modelo em decisão baseada em evidência.</li>
+    </ol>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- próximos passos -->
+  <section id="proximos-passos">
+    <h2>Próximos passos</h2>
+
+    <p>Note que algumas coisas ficaram pendentes nesse laboratório como:</p>
+
+    <ul>
+      <li>Uma boa resposta estruturada e user-friendly</li>
+      <li>E se o documento enviado não contém todos os campos?</li>
+    </ul>
+
+    <p>E algumas outras que podemos melhorar ainda mais, e é por isso que esse laboratório tem continuação.</p>
+
+    <div class="link-box">
+      <div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:4px;">Continuação</div>
+        <a href="lab-workflow-2.html">Clique aqui para seguir para a continuação desse laboratório</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="lab-nav">
+    <a href="index.html">← Introdução</a>
+    <a href="lab-workflow-2.html" class="primary">Lab 2: Mensagens &amp; Ramificações →</a>
+  </div>
+</main>
+
+<footer class="c-footer">
+ Made by Nathalia Trazzi &amp; Julia Almeida
+</footer>
+</body>
+</html>
