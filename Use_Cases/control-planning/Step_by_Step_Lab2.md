@@ -102,7 +102,7 @@ Você chega à etapa **Register**, onde ficam os detalhes técnicos da conexão.
 
 **11.** Em **External agent's URL**, cole o endereço público do agente externo que o seu instrutor compartilhou. É por essa URL que o watsonx Orchestrate busca o *Agent Card*, o documento que descreve as capacidades do agente no padrão A2A, e envia as requisições em tempo de execução.
 
-**12.** Em **Display name**, na seção **Define new agent**, informe `Agente de Buscas`. Esse é o nome pelo qual o agente vai aparecer dentro do Orchestrate, independente de como foi construído externamente.
+**12.** Em **Display name**, na seção **Define new agent**, informe `Agente Langflow` ou um nome de sua prefêrencia. Esse é o nome pelo qual o agente vai aparecer dentro do Orchestrate, independente de como foi construído externamente.
 
 ![URL do agente e display name](../../Assets_for_BuildBooks/labs/lab02/lab02_08.png)
 
@@ -220,11 +220,11 @@ A notificação **New Connection added!** confirma que a conexão foi criada. Ob
 
 **26.** Clique em **Done**
 
-![Agente de Buscas listado como colaborador](../../Assets_for_BuildBooks/labs/lab02/lab02_22.png)
+![Agente Langflow listado como colaborador](../../Assets_for_BuildBooks/labs/lab02/lab02_22.png)
 
-De volta à tela de edição do **Agente de Busca**, na aba **Agents**, o agente externo **Agente de Buscas** já aparece na lista de colaboradores, junto com a descrição que você definiu ao importá lo.
+De volta à tela de edição do **Agente de Busca**, na aba **Agents**, o agente externo **Agente Langflow** já aparece na lista de colaboradores, junto com a descrição que você definiu ao importá lo.
 
-Com o agente externo importado, o **Agente de Busca** ganhou um especialista à disposição. O **watsonx Orchestrate** passa a atuar como orquestrador: interpreta o pedido do usuário, identifica que a tarefa é de busca na web e delega ao Agente de Buscas, de forma transparente, mesmo esse agente tendo sido construído em outra plataforma.
+Com o agente externo importado, o **Agente de Busca** ganhou um especialista à disposição. O **watsonx Orchestrate** passa a atuar como orquestrador: interpreta o pedido do usuário, identifica que a tarefa é de busca na web e delega ao **Agente Langflow**, de forma transparente, mesmo esse agente tendo sido construído em outra plataforma.
 
 Vamos agora ensinar ao agente quando e como usar esse novo colaborador.
 
@@ -262,7 +262,7 @@ Exemplos válidos:
 - "Kia Nero" → Kia Niro
 - "Kia Niro" → Kia Niro
 
-Se houver alta confiança de que o veículo mencionado corresponde a um item do catálogo, chame o agente **Agente de Buscas** para ele tratar da solicitação. Todas as solicitações do usuário devem ir para o **Agente de Buscas**, a pergunta deve ser enviada para ele, e retornada.
+Se houver alta confiança de que o veículo mencionado corresponde a um item do catálogo, chame o agente **Agente Langflow** para ele tratar da solicitação. Todas as solicitações do usuário devem ir para o **Agente Langflow**, a pergunta deve ser enviada para ele, e retornada.
 
 Somente rejeite a solicitação quando não for possível associar o veículo informado a nenhum dos modelos do catálogo.
 
@@ -282,7 +282,7 @@ pesquisa sobre o Alfa Romeo Spider
 
 O agente reconhece o veículo, delega a busca ao colaborador externo e devolve um resumo completo, com histórico do modelo, características técnicas e as diferentes gerações lançadas ao longo dos anos.
 
-![Resposta detalhada do Agente de Buscas](../../Assets_for_BuildBooks/labs/lab02/lab02_25.png)
+![Resposta detalhada do Agente Langflow](../../Assets_for_BuildBooks/labs/lab02/lab02_25.png)
 
 ![Histórico e características do Alfa Romeo Spider](../../Assets_for_BuildBooks/labs/lab02/lab02_26.png)
 
@@ -312,7 +312,7 @@ O agente confirma que esse tipo de comparação existe em fóruns e sites especi
 
 ## Parte 2: Criar o Agente Orquestrador
 
-Agora que o **Agente de Busca** já delega tarefas de pesquisa externa para o **Agente de Buscas**, vamos criar um terceiro agente: um orquestrador que recebe a pergunta do usuário e decide, sozinho, qual dos dois especialistas (o agente de catálogo do laboratório 1 ou o agente de busca externa que você acabou de configurar) deve responder, ou se os dois precisam ser consultados juntos.
+Agora que o **Agente de Busca** já delega tarefas de pesquisa externa para o **Agente Langflow**, vamos criar um terceiro agente: um orquestrador que recebe a pergunta do usuário e decide, sozinho, qual dos dois especialistas (o agente de catálogo do laboratório 1 ou o agente de busca externa que você acabou de configurar) deve responder, ou se os dois precisam ser consultados juntos.
 
 Retorne à página de gerenciamento de agentes clicando no ícone de voltar `<` na interface do watsonx Orchestrate ao topo da página. 
 
@@ -348,7 +348,7 @@ Assistente inteligente de compra de carros que roteia consultas para agentes esp
 
 ![Add Agents, Local instance](../../Assets_for_BuildBooks/labs/lab02/lab02_36.png)
 
-**7.** Marque os dois agentes que você criou até aqui: o agente responsável pelo catálogo (criado no laboratório 1) e o **Agente de Buscas**, o colaborador externo importado na Parte 1 deste laboratório. Não se preocupe se os nomes exibidos na sua tela forem ligeiramente diferentes dos mostrados aqui, o importante é selecionar os agentes que você mesmo construiu ao longo do bootcamp. Clique em **Add to agent**.
+**7.** Marque os dois agentes que você criou até aqui: o agente responsável pelo catálogo (criado no laboratório 1) e o **Agente Langflow**, o colaborador externo importado na Parte 1 deste laboratório. Não se preocupe se os nomes exibidos na sua tela forem ligeiramente diferentes dos mostrados aqui, o importante é selecionar os agentes que você mesmo construiu ao longo do bootcamp. Clique em **Add to agent**.
 
 ![Seleção dos dois agentes especializados](../../Assets_for_BuildBooks/labs/lab02/lab02_37.png)
 
@@ -461,7 +461,7 @@ No **Step 2**, dentro dessa mesma consulta, a ferramenta `Catálogo_de_Carro_com
 
 No **Step 3**, o orquestrador aciona `chat_with_collaborator_Agente_de_Buscas`, o colaborador externo configurado na Parte 1, pedindo reviews de proprietários e uma comparação entre os dois modelos. É esse encadeamento de chamadas, catálogo interno e busca externa, que caracteriza uma consulta híbrida.
 
-![Step 3, chamada ao Agente de Buscas externo](../../Assets_for_BuildBooks/labs/lab02/lab02_46.png)
+![Step 3, chamada ao Agente Langflow](../../Assets_for_BuildBooks/labs/lab02/lab02_46.png)
 
 Agora teste uma pergunta puramente de catálogo:
 
