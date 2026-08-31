@@ -114,7 +114,7 @@ A lista de exemplos válidos mostra os apelidos aceitos para cada carro do catá
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_11.png)
 
-Em seguida vem a regra de roteamento. Havendo alta confiança de que o veículo pertence ao catálogo, a solicitação deve ser encaminhada ao Agente Langflow de Buscass. A recusa só é permitida quando não houver como associar o pedido a nenhum modelo, e a mensagem de rejeição está escrita literalmente nas instruções. É por isso que a resposta saiu palavra por palavra igual ao texto configurado.
+Em seguida vem a regra de roteamento. Havendo alta confiança de que o veículo pertence ao catálogo, a solicitação deve ser encaminhada ao **Agente Langflow de Buscas.** A recusa só é permitida quando não houver como associar o pedido a nenhum modelo, e a mensagem de rejeição está escrita literalmente nas instruções. É por isso que a resposta saiu palavra por palavra igual ao texto configurado.
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_12.png)
 
