@@ -49,14 +49,15 @@ Temos o seguinte cenário: Um usuário faz uma pergunta simples e, por trás del
 
 Vamos reaproveitar o agente orquestrador criado no [Laboratório 2](./Step_by_Step_Lab2.md), o **Assistente de Compra de Veículos**. Ele é o agente que recebe a pergunta do usuário e decide, com base nas próprias instruções, se deve responder diretamente ou encaminhar a consulta para um agente especializado, como o Agente de Busca.
 
-Abra o agente na aba Build e confira, na sessão Behavior, o campo Instructions. Nele está o comando que faz o roteamento funcionar:
+No campo Instructions vamos fazer uma alteração, copie e cole o seguinte texto:
 
 ```
-Utilize o agente **agente de buscas** para localizar as informações solicitadas pelo usuário.
+Utilize o agente **Agente Langflow de Buscas** para localizar as informações solicitadas pelo usuário.
 
 Em seguida apresente o resultado de forma clara, objetiva e completa, preservando os detalhes relevantes encontrados.
 ```
-Essa é a instrução que vamos colocar à prova na próxima parte. Ela diz ao Assistente de Compra de Veículos para sempre delegar a busca de informações ao agente especializado, sem qualquer ressalva sobre o tipo de dado que pode voltar dessa busca.
+
+Ela diz ao Assistente de Compra de Veículos para sempre delegar a busca de informações ao agente especializado, sem qualquer ressalva sobre o tipo de dado que pode voltar dessa busca.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_01.png)
 
