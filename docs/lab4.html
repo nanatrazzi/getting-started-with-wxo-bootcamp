@@ -202,7 +202,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Essa é a instrução que vamos colocar à prova na próxima parte. Ela diz ao Assistente de Compra de Veículos para sempre delegar a busca de informações ao agente especializado, sem qualquer ressalva sobre o tipo de dado que pode voltar dessa busca.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__01.png" alt="Campo Instructions do Assistente de Compra de Veículos">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__01.png" alt="Campo Instructions do Assistente de Compra de Veículos">
 
     <h3 id="parte2">Parte 2: Testando sem Asset Controls</h3>
 
@@ -212,19 +212,19 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <div class="code-block">Qual o número da IBM?</div>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__02.png" alt="Pergunta enviada no Draft Preview">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__02.png" alt="Pergunta enviada no Draft Preview">
 
     <p>Essa é uma informação que qualquer pessoa consegue encontrar em segundos com uma busca simples no Google, que retorna o número público de atendimento da IBM no Brasil.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__03.png" alt="Busca no Google pelo número da IBM">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__03.png" alt="Busca no Google pelo número da IBM">
 
     <p>O Assistente de Compra de Veículos responde com uma lista de números de telefone da IBM em diferentes países, incluindo Estados Unidos, Brasil, Portugal e Espanha.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__04.png" alt="Resposta do agente com telefones da IBM">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__04.png" alt="Resposta do agente com telefones da IBM">
 
     <p>Clique em <code>Show Reasoning</code>, ao lado da resposta, para entender de onde esses dados vieram. O primeiro passo do raciocínio mostra que o agente acionou a ferramenta <code>chat_with_collaborator_Agente_de_Buscas</code>, repassando a pergunta original, e o resultado foi transferido para o agente especializado <code>Agente_de_Buscas_48414t</code>, que é quem de fato pesquisa na internet.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__05.png" alt="Show Reasoning com a chamada ao agente de buscas">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__05.png" alt="Show Reasoning com a chamada ao agente de buscas">
 
     <p>O ponto de atenção aqui não é o dado em si, já que um telefone institucional público é uma informação de baixo risco. O ponto de atenção é o mecanismo. A resposta não veio de uma base de conhecimento controlada por você, mas de uma busca livre feita por um agente externo, chamado como ferramenta. Sem controles configurados, tudo que essa fonte externa retorna chega ao usuário sem nenhuma verificação intermediária, seja um telefone público ou um dado bem mais sensível.</p>
 
@@ -234,17 +234,17 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Clique no menu hambúrguer, no canto superior esquerdo da tela.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__06.png" alt="Menu hambúrguer no canto superior esquerdo">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__06.png" alt="Menu hambúrguer no canto superior esquerdo">
 
     <p>Clique em <code>Manage</code> para expandir a sessão.</p>
 
     <p>Em seguida, clique em <code>Controls</code>.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__07.png" alt="Menu Manage expandido com a opção Controls">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__07.png" alt="Menu Manage expandido com a opção Controls">
 
     <p>Nesse momento o painel de controles está vazio, sem nenhum controle criado. Clique em <code>Create Control</code>.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__08.png" alt="Painel de controles vazio">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__08.png" alt="Painel de controles vazio">
 
     <p>A tela Select Control lista os tipos de controle disponíveis, organizados por onde eles atuam.</p>
 
@@ -260,7 +260,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <li>PII Filter, que identifica e mascara informações pessoalmente identificáveis (PII) em argumentos, entradas e saídas do agente.</li>
     </ul>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__09.png" alt="Controles disponíveis para Agents">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__09.png" alt="Controles disponíveis para Agents">
 
     <p><strong>Tools</strong> os controles protegem chamadas para ferramentas externas e integrações:</p>
 
@@ -272,7 +272,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <li>Secrets Detector, que impede o vazamento acidental de credenciais ou segredos durante o uso das ferramentas.</li>
     </ul>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__10.png" alt="Controles disponíveis para Tools">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__10.png" alt="Controles disponíveis para Tools">
 
     <p><strong>Models</strong> os controles aumentam a resiliência e a disponibilidade dos modelos utilizados pelos agentes:</p>
 
@@ -284,11 +284,11 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Esses controles podem ser combinados para implementar diferentes estratégias de governança, segurança e confiabilidade em agentes de IA, reduzindo riscos operacionais e ajudando a atender requisitos de conformidade e proteção de dados.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__11.png" alt="Controles disponíveis para Models">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__11.png" alt="Controles disponíveis para Models">
 
     <p>Para este laboratório, em <code>Agents</code> selecione <code>PII Filter</code> e clique em <code>Next</code>.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__12.png" alt="Seleção do PII Filter">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__12.png" alt="Seleção do PII Filter">
 
     <p>Na etapa Configure Control, comece pelo nome e pela descrição da instância. Use:</p>
 
@@ -296,15 +296,15 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <div class="code-block">Com esse controle, o agente bloqueia solicitações de pedidos de número de telefones.</div>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__13.png" alt="Nome e descrição do controle">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__13.png" alt="Nome e descrição do controle">
 
     <p>Em Enforcement type, marque tanto <code>Input</code> quanto <code>Output</code>. Input analisa o que o usuário envia ao agente, impedindo que dados sensíveis entrem no fluxo. Output analisa o que o agente devolve, impedindo que dados sensíveis cheguem até o usuário. Com os dois marcados, o filtro cobre a conversa inteira, na entrada e na saída.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__14.png" alt="Enforcement type com Input e Output marcados">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__14.png" alt="Enforcement type com Input e Output marcados">
 
     <p>Em Detection Type você define o escopo do filtro, ou seja, quais categorias de dado o controle vai procurar em cada mensagem. Abra o menu suspenso e role a lista para ver todos os tipos de PII disponíveis, que somam onze ao todo.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__15.png" alt="Menu suspenso de Detection Type">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__15.png" alt="Menu suspenso de Detection Type">
 
     <table>
       <thead><tr><th>Tipo</th><th>O que detecta</th></tr></thead>
@@ -323,12 +323,12 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       </tbody>
     </table>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__16.png" alt="Lista de tipos de PII, parte 1">
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__17.png" alt="Lista de tipos de PII, parte 2">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__16.png" alt="Lista de tipos de PII, parte 1">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__17.png" alt="Lista de tipos de PII, parte 2">
 
     <p>Para este laboratório, marque <code>Select all</code>. O campo passa a exibir o indicador 11, confirmando que todos os tipos de PII estão ativos, mesmo que o foco do teste seja o número de telefone.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__18.png" alt="Select all com o indicador 11">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__18.png" alt="Select all com o indicador 11">
 
     <p>Em <strong>Default mask strategy</strong>, você define qual ação será tomada quando um dado sensível for identificado:</p>
 
@@ -342,11 +342,11 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>A escolha da estratégia depende do caso de uso. Em cenários onde a informação não deve ser exibida de forma alguma, <strong>Redact</strong> e <strong>Remove</strong> costumam ser as opções mais seguras. Já <strong>Partial</strong>, <strong>Hash</strong> e <strong>Tokenize</strong> são úteis quando parte da informação ou sua rastreabilidade ainda precisa ser preservada.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__19.png" alt="Opções de Default mask strategy">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__19.png" alt="Opções de Default mask strategy">
 
     <p>Para esse laboratório, selecione <code>Remove</code>.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__20.png" alt="Estratégia Remove selecionada">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__20.png" alt="Estratégia Remove selecionada">
 
     <p>Em <strong>Enforcement Mode</strong>, você define qual ação o controle deve tomar quando uma informação sensível for detectada.</p>
 
@@ -358,7 +358,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <li><strong>Log Detections</strong>: registra as detecções para fins de auditoria, monitoramento e rastreabilidade. Essa configuração não altera o conteúdo exibido ao usuário, apenas gera registros para análise posterior.</li>
     </ul>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__21.png" alt="Opções de Enforcement Mode">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__21.png" alt="Opções de Enforcement Mode">
 
     <p>Para este laboratório, marque as três opções: <code>Block On Detection</code>, <code>Include Detection Details</code> e <code>Log Detections</code></p>
 
@@ -374,7 +374,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Para este laboratório, mantenha os valores padrão, que oferecem um equilíbrio adequado entre cobertura da inspeção e desempenho.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__22.png" alt="Parâmetros numéricos com os valores padrão">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__22.png" alt="Parâmetros numéricos com os valores padrão">
 
     <p>Os dois últimos campos desta etapa são <strong>Custom patterns</strong> e <strong>Allowlist patterns</strong>, que permitem personalizar o comportamento da detecção de PII.</p>
 
@@ -387,11 +387,11 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Clique em <code>Next</code>.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__23.png" alt="Custom patterns e Allowlist patterns em branco">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__23.png" alt="Custom patterns e Allowlist patterns em branco">
 
     <p>A etapa Assign Assets define a quais agentes o controle será aplicado. Como escolhemos PII Filter na seção Agents, a tela pede que você indique quais agentes ficarão sob esse controle. Clique em <code>Add Agent</code>.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__24.png" alt="Etapa Assign Assets">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__24.png" alt="Etapa Assign Assets">
 
     <p>A janela <strong>Add Agent</strong> exibe todos os agentes disponíveis no ambiente que podem receber o controle que está sendo criado.</p>
 
@@ -401,7 +401,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Ao aplicar o controle a esses agentes, todas as respostas geradas por eles passarão a ser inspecionadas antes de serem retornadas ao usuário, reduzindo o risco de exposição de informações sensíveis provenientes de fontes externas.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__25.png" alt="Janela Add Agent com os agentes selecionados">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__25.png" alt="Janela Add Agent com os agentes selecionados">
 
     <p>A etapa <strong>Review</strong> apresenta um resumo completo de todas as configurações realizadas até o momento. As informações ficam organizadas em blocos e cada um deles possui um link <strong>Edit</strong>, que permite retornar diretamente à etapa correspondente caso seja necessário revisar ou alterar alguma configuração antes da criação do controle.</p>
 
@@ -414,23 +414,23 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Como este laboratório tem o objetivo de impedir que informações sensíveis sejam expostas ao usuário, confirme que o hook <strong>Output</strong> está habilitado. O hook <strong>Input</strong> pode permanecer habilitado ou desabilitado conforme</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__26.png" alt="Bloco Control details na etapa Review">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__26.png" alt="Bloco Control details na etapa Review">
 
     <p>Role a página para ver o restante da configuração, incluindo os valores de Max text bytes, Max nested depth e Max collection items, além da tabela Applies to, que lista os agentes selecionados com suas respectivas descrições. Confirme que está tudo correto e clique em <code>Create control</code>.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__27.png" alt="Restante da revisão e botão Create control">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__27.png" alt="Restante da revisão e botão Create control">
 
     <p>Uma notificação confirma que o controle foi criado com sucesso. O painel de controles passa a mostrar um controle ativo, do tipo PII Filter, chamado Números de telefone, aplicado a cinco agentes. A partir deste momento, toda mensagem que entra ou sai desses agentes passa pelo filtro antes de chegar ao destino.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__28.png" alt="Controle criado e listado no painel">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__28.png" alt="Controle criado e listado no painel">
 
     <p>No menu lateral, clique em <code>Build</code> para voltar à lista de agentes.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__29.png" alt="Menu lateral com a opção Build">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__29.png" alt="Menu lateral com a opção Build">
 
     <p>Na tela Build agents and tools, abra o <code>Agente de Busca</code>, um dos agentes que acabamos de colocar sob o controle recém-criado.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__30.png" alt="Tela Build agents and tools">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__30.png" alt="Tela Build agents and tools">
 
     <h3 id="parte4">Parte 4: Testando com Asset Controls</h3>
 
@@ -442,7 +442,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>O agente recusa, informando que só pode fornecer informações sobre os veículos do catálogo, Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__31.png" alt="Recusa do agente ao pedido de telefone da IBM">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__31.png" alt="Recusa do agente ao pedido de telefone da IBM">
 
     <p>Troque o alvo do pedido por uma figura pública, para verificar se um nome de maior perfil muda o resultado.</p>
 
@@ -450,7 +450,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>A resposta é a mesma recusa, redirecionando para o escopo de veículos. Trocar quem é o dono do número não muda nada, porque o controle age sobre a categoria do dado solicitado, não sobre a identidade de quem ele pertence.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__32.png" alt="Mesma recusa para uma figura pública">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__32.png" alt="Mesma recusa para uma figura pública">
 
     <p>Por fim, tente uma busca por uma pessoa específica, como se estivesse procurando um contato dentro da própria organização.</p>
 
@@ -458,7 +458,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Novamente o agente recusa e permanece restrito ao catálogo de veículos.</p>
 
-    <img class="lab-img" src="../Assets_for_BuildBooks/labs/lab04/lab04__33.png" alt="Recusa do agente na busca por uma pessoa">
+    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab04/lab04__33.png" alt="Recusa do agente na busca por uma pessoa">
 
     <p>Nas três tentativas, nenhum número de telefone chega ao usuário. Note que a recusa vem acompanhada da mesma mensagem que já limitava o agente ao catálogo de veículos, o que mostra como guidelines e controles trabalham em conjunto. Mesmo antes de qualquer dado sensível ser encontrado, o próprio agente já nega qualquer solicitação fora do seu escopo declarado. E, por trás dessa camada, o PII Filter garante que, caso uma busca externa chegasse a retornar um número de telefone, ele seria bloqueado antes de alcançar o usuário, exatamente como visto na Parte 2 antes do controle existir.</p>
   </section>
