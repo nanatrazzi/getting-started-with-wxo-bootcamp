@@ -164,19 +164,19 @@
 
     <p>Vamos continuar com o Agente de Busca, o mesmo agente do <a href="lab4.html">laboratório anterior</a>. Com ele aberto na aba Build, olhe para o topo do painel Draft Preview: a faixa azul com a mensagem <code>Running in debug mode</code> avisa que o Orchestrate está gravando o rastreamento completo de tudo que acontece ali. É esse registro que alimenta a janela de depuração.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_01.png" alt="Faixa Running in debug mode no Draft Preview">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_01.png" alt="Faixa Running in debug mode no Draft Preview">
 
     <p>Envie a pergunta abaixo no Draft Preview.</p>
 
     <div class="code-block">qual o número da ibm?</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_02.png" alt="Pergunta enviada no Draft Preview">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_02.png" alt="Pergunta enviada no Draft Preview">
 
     <p>O agente responde que só pode falar sobre os veículos do catálogo, já que a pergunta não passa pela validação de veículo definida nas instruções.</p>
 
     <p>Logo abaixo da resposta aparecem quatro ícones: positivo, negativo, copiar e uma joaninha. A joaninha abre a depuração daquela mensagem específica. Clique nela.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_03.png" alt="Ícones abaixo da resposta, incluindo a joaninha">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_03.png" alt="Ícones abaixo da resposta, incluindo a joaninha">
   </section>
 
   <hr class="section-divider">
@@ -204,11 +204,11 @@
 
     <p>Logo abaixo vêm os estados, que dizem se cada nó foi executado (<code>Not yet executed</code>, <code>Used in the execution</code> e <code>Current active node</code>), e os tipos de conexão, que diferenciam a ligação estrutural do agente (<code>Agent flow</code>) do caminho realmente percorrido nesta execução (<code>Current taken path</code>) e das ligações que ficaram de fora (<code>Not used in this execution</code>). Por último, as etiquetas: <code>COLLAB</code> marca um agente colaborador e o ícone de camadas indica que aquele nó tem nós filhos.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_04-a.png" alt="Seletor Legends aberto com os tipos de nó">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_04-a.png" alt="Seletor Legends aberto com os tipos de nó">
 
     <p>Feche a legenda e olhe para o painel da direita. O bloco <code>Execution timeline</code> resume a conversa inteira em três passos e 1ms de duração: <code>User input</code>, <code>Agent</code> com a etiqueta <code>Model invoked</code> e <code>Answer</code>. Repare que os 0.66ms do passo <code>Agent</code> concentram praticamente todo o tempo, o que já indica onde vale investigar primeiro. Clique no primeiro passo, <code>User input</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_04-b.png" alt="Execution timeline com os três passos da execução">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_04-b.png" alt="Execution timeline com os três passos da execução">
   </section>
 
   <hr class="section-divider">
@@ -221,21 +221,21 @@
 
     <p>Abra a aba <code>Input</code>. Os campos <code>Request</code> e <code>Message</code> carregam a mesma pergunta, porque nesse ponto ainda não houve nenhum processamento: o que entrou foi exatamente o que o usuário digitou.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_05.png" alt="Aba Input do passo User input">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_05.png" alt="Aba Input do passo User input">
 
     <p>Em <code>Output</code> aparece a mensagem <code>No output information available for this step</code>. Isso é esperado. O nó de entrada apenas recebe a mensagem e a repassa adiante, sem produzir nada por conta própria.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_06.png" alt="Aba Output sem informação disponível">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_06.png" alt="Aba Output sem informação disponível">
 
     <p>A aba <code>Node logs</code> mostra o span, que é o registro bruto do passo. O cabeçalho traz a identificação: <code>stepIndex</code> em zero marca o primeiro passo, <code>spanId</code> com o valor <code>__user_input__</code> identifica o nó, <code>parentAgentId</code> guarda o identificador do Agente de Busca e <code>depth</code> em zero indica que tudo aconteceu no nível principal, sem aninhamento em nenhum colaborador. O botão <code>Raw</code>, no canto direito, alterna entre a versão formatada e o JSON puro.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_07.png" alt="Aba Node logs com o cabeçalho do span">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_07.png" alt="Aba Node logs com o cabeçalho do span">
 
     <p>Clique em <code>Show more</code> para ver o span inteiro.</p>
 
     <p>A parte de baixo cobre a execução: <code>duration</code> em zero confirma um passo instantâneo, <code>hasModelCall</code> como false mostra que nenhuma chamada ao modelo saiu daqui, <code>input</code> guarda a mensagem original, <code>output</code> está nulo e <code>status</code> marca <code>success</code>. Os campos <code>childSpanIds</code> vazio e <code>hasChildren</code> como false completam o quadro, este passo não gerou nenhum passo filho.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_08.png" alt="Span completo do passo User input">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_08.png" alt="Span completo do passo User input">
   </section>
 
   <hr class="section-divider">
@@ -250,23 +250,23 @@
 
     <p>O bloco <code>Node properties</code> também muda e ganha três abas, <code>About</code>, <code>Guidelines</code> e <code>LLM Model</code>. Em <code>About</code> estão o nome interno do agente, o nome de exibição, a descrição e as instruções vigentes.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_09.png" alt="Caminho percorrido no canvas e aba About">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_09.png" alt="Caminho percorrido no canvas e aba About">
 
     <p>Role o painel para ler as instruções na íntegra. Essa é a leitura mais valiosa da depuração, porque coloca lado a lado o que você escreveu e o que o agente fez. O bloco de validação de veículo pede que o agente identifique o modelo mencionado antes de atender qualquer solicitação, tolerando nomes incompletos, variações de escrita, erros de digitação, apelidos e omissão da marca.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_10.png" alt="Instruções do agente no painel Node properties">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_10.png" alt="Instruções do agente no painel Node properties">
 
     <p>A lista de exemplos válidos mostra os apelidos aceitos para cada carro do catálogo, de "Versa" a "Carrera GTS". Nenhum deles se parece com a pergunta enviada, o que explica o desfecho.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_11.png" alt="Lista de exemplos válidos nas instruções">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_11.png" alt="Lista de exemplos válidos nas instruções">
 
     <p>Em seguida vem a regra de roteamento. Havendo alta confiança de que o veículo pertence ao catálogo, a solicitação deve ser encaminhada ao Agente de Buscas. A recusa só é permitida quando não houver como associar o pedido a nenhum modelo, e a mensagem de rejeição está escrita literalmente nas instruções. É por isso que a resposta saiu palavra por palavra igual ao texto configurado.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_12.png" alt="Regra de roteamento e mensagem de recusa">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_12.png" alt="Regra de roteamento e mensagem de recusa">
 
     <p>No fim do painel ficam as configurações do nó: <code>Chat with doc</code> e <code>Memory enabled</code> desabilitados, <code>Agent style</code> em <code>Default</code> e <code>Node type</code> como <code>Agent</code>. Quando um agente parece ignorar o contexto de mensagens anteriores, é aqui que se descobre que a memória simplesmente não estava ligada.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_13.png" alt="Configurações do nó no fim do painel">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_13.png" alt="Configurações do nó no fim do painel">
   </section>
 
   <hr class="section-divider">
@@ -277,31 +277,31 @@
 
     <p>Selecione o terceiro passo da linha do tempo. O nó <code>Answer</code> acende no fim do caminho tracejado e a aba <code>Summary</code> mostra <code>Input request</code> e <code>Output response</code> com exatamente o mesmo texto. Essa igualdade é o ponto central: o nó de resposta não reescreve nada, ele entrega o que o passo anterior produziu.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_14.png" alt="Aba Summary do passo Answer">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_14.png" alt="Aba Summary do passo Answer">
 
     <p>A aba <code>Input</code> acrescenta o contexto da chamada. <code>Async flag</code> como false e <code>In async execution</code> em zero indicam execução síncrona, <code>Is Collaborator</code> como false confirma que quem responde é o agente principal, <code>Use supervisor interrupt handoff</code> como false mostra que não houve transferência para um supervisor e <code>Agent depth</code> em um informa o nível do agente na hierarquia.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_15.png" alt="Aba Input do passo Answer">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_15.png" alt="Aba Input do passo Answer">
 
     <p>Em <code>Output</code>, o campo <code>Response</code> traz a resposta final, a mesma que o usuário viu no Draft Preview.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_16.png" alt="Aba Output com a resposta final">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_16.png" alt="Aba Output com a resposta final">
 
     <p>Abra <code>Node logs</code>. O cabeçalho do span identifica o passo com <code>stepIndex</code> em um, <code>displayIndex</code> em dois, um <code>spanId</code> próprio e <code>operationName</code> igual a <code>answer</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_17.png" alt="Cabeçalho do span do passo Answer">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_17.png" alt="Cabeçalho do span do passo Answer">
 
     <p>Clique em <code>Show more</code>.</p>
 
     <p>A primeira parte do span cobre a execução e o contexto da conversa. Os valores <code>duration</code> em três, <code>tokenUsage</code> em zero e <code>hasModelCall</code> como false confirmam de novo que este nó não conversa com o modelo. Logo abaixo vem o bloco <code>context</code>, com os identificadores que amarram tudo: <code>wxo_thread_id</code> para a conversa, <code>wxo_run_id</code> para esta execução, além do usuário e do tenant. Vale guardar o <code>wxo_thread_id</code>, é ele que permite reencontrar a mesma conversa nas ferramentas de observabilidade.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_18.png" alt="Bloco context do span">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_18.png" alt="Bloco context do span">
 
     <p>O bloco <code>messages</code> traz o diálogo como o modelo o enxergou. A primeira mensagem é a do usuário, marcada com <code>type</code> igual a <code>human</code>.</p>
 
     <p>A segunda é a resposta, e dentro dela o campo <code>reasoning</code> guarda a justificativa do modelo em uma linha: o usuário perguntou algo sem relação com veículos, então a solicitação precisa ser recusada com a mensagem especificada. É a prova direta de que a instrução foi lida e seguida.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_19.png" alt="Bloco messages com o campo reasoning">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_19.png" alt="Bloco messages com o campo reasoning">
 
     <p>Em seguida aparecem os metadados do modelo. Os campos <code>model_provider</code>, <code>actual_model</code> e <code>configured_model</code> mostram qual modelo respondeu e confirmam que ele é o mesmo configurado no agente; uma divergência aí explicaria comportamentos estranhos. O <code>finish_reason</code> igual a <code>stop</code> indica encerramento normal, <code>retry_count</code> em zero mostra que não houve nova tentativa e <code>tool_calls</code> vazio confirma que nenhuma ferramenta foi chamada.</p>
 
@@ -316,46 +316,46 @@
       </div>
     </div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_20.png" alt="Metadados do modelo e usage_metadata">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_20.png" alt="Metadados do modelo e usage_metadata">
 
     <p>A sequência seguinte descreve o estado interno do agente no momento da resposta. <code>reflection_enabled</code> como true, com <code>reflection_retry_count</code> em zero e limite em um, significa que a revisão automática estava disponível mas não precisou ser usada. <code>step_count</code> em um conta os ciclos de raciocínio e <code>is_collaborator</code> como false reforça que nenhum colaborador entrou na conversa.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_21.png" alt="Estado interno do agente no span">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_21.png" alt="Estado interno do agente no span">
 
     <p>Mais abaixo ficam os campos de planejamento.</p>
 
     <p>Com <code>plan</code> vazio, <code>current_task</code> sem tarefa ativa e <code>is_planning</code> como false, fica claro que o agente respondeu direto, sem quebrar a solicitação em etapas. O campo <code>citations</code> vazio mostra que nenhuma base de conhecimento foi consultada.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_22.png" alt="Campos de planejamento do span">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_22.png" alt="Campos de planejamento do span">
 
     <p>O trecho final reúne o resultado. O campo <code>output</code> repete a resposta entregue e <code>status</code> marca <code>success</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_23.png" alt="Trecho final com output e status">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_23.png" alt="Trecho final com output e status">
 
     <p>Depois vem o bloco <code>tags</code>, com os identificadores de rastreamento: a sessão, a transação, o <code>thread_id</code>, o workspace, o nome do nó e o fluxo interno que executou a resposta. São eles que conectam este passo aos painéis de monitoramento.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_24.png" alt="Bloco tags com os identificadores de rastreamento">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_24.png" alt="Bloco tags com os identificadores de rastreamento">
 
     <p>Os logs guardam as entradas e as saídas de nó em blocos separados, então a conversa, os metadados do modelo e o estado do agente aparecem uma segunda vez, agora dentro de <code>langchain.chain.input</code>. Use essa divisão a seu favor quando estiver procurando algo específico: o que está em <code>langchain.chain.input</code> descreve o que o nó recebeu, e o que está em <code>langchain.chain.output</code> descreve o que ele devolveu.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_25.png" alt="Bloco langchain.chain.input, parte 1">
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_26.png" alt="Bloco langchain.chain.input, parte 2">
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_27.png" alt="Bloco langchain.chain.input, parte 3">
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_28.png" alt="Bloco langchain.chain.input, parte 4">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_25.png" alt="Bloco langchain.chain.input, parte 1">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_26.png" alt="Bloco langchain.chain.input, parte 2">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_27.png" alt="Bloco langchain.chain.input, parte 3">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_28.png" alt="Bloco langchain.chain.input, parte 4">
 
     <p>Passado o bloco, vem a identificação técnica do passo dentro do motor de execução.</p>
 
     <p>O campo <code>openinference.span.kind</code> classifica o span como <code>CHAIN</code>, e os campos de <code>langgraph</code> marcam a posição exata do nó no grafo, incluindo a etapa, o nome do nó e o gatilho que levou até ele. Esses valores são úteis para reconstruir a ordem de execução em fluxos maiores.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_29.png" alt="Identificação técnica do span no motor de execução">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_29.png" alt="Identificação técnica do span no motor de execução">
 
     <p>O bloco <code>langchain.chain.output</code> fecha o ciclo com a resposta final do assistente, novamente acompanhada do campo <code>reasoning</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_30.png" alt="Bloco langchain.chain.output">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_30.png" alt="Bloco langchain.chain.output">
 
     <p>A última linha, <code>isWorkflow</code> como false, confirma que a execução seguiu o caminho de um agente comum e não de um workflow. Clique em <code>Show less</code> para recolher o span.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_31.png" alt="Campo isWorkflow e botão Show less">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_31.png" alt="Campo isWorkflow e botão Show less">
   </section>
 
   <hr class="section-divider">
@@ -366,15 +366,15 @@
 
     <p>Os dois últimos ícones da barra superior controlam como o <code>Agent flow</code> é desenhado. O primeiro deles destaca o caminho percorrido dentro do diagrama completo: os nós usados ficam realçados e os demais continuam visíveis, porém apagados. É a visão indicada para comparar o que o agente poderia ter feito com o que ele de fato fez.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_32.png" alt="Visão com o caminho percorrido destacado">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_32.png" alt="Visão com o caminho percorrido destacado">
 
     <p>O segundo ícone vai além e remove do canvas tudo que não participou da execução. Sobram apenas <code>User input</code>, <code>Agente de Busca</code>, o nó do modelo e <code>Answer</code>, em tamanho maior. Em agentes com muitos colaboradores e ferramentas, essa visão elimina o ruído e deixa o caminho real evidente.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_33.png" alt="Visão apenas com os nós executados">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_33.png" alt="Visão apenas com os nós executados">
 
     <p>As setas à esquerda da barra percorrem os passos em ordem, sem precisar clicar na linha do tempo, o que ajuda a acompanhar a execução como uma sequência contínua. O ícone de recarregar atualiza o rastreamento e o <code>X</code>, no canto superior direito, fecha a depuração e devolve você à aba Build.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/labs/lab05/lab05_debug_34.png" alt="Controles da barra superior da janela de Debug">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_34.png" alt="Controles da barra superior da janela de Debug">
   </section>
 
   <hr class="section-divider">
