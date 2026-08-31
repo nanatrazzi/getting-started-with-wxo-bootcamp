@@ -1,344 +1,206 @@
-# Controles no watsonx Orchestrate
-
-## Índice
-
-- [Controles no watsonx Orchestrate](#controles-no-watsonx-orchestrate)
-  - [Índice](#índice)
-  - [Visão Geral](#visão-geral)
-    - [O que é PII (Personal Identifiable Information)?](#o-que-é-pii-personal-identifiable-information)
-  - [Pré-requisitos](#pré-requisitos)
-  - [Descrição do Caso de Uso](#descrição-do-caso-de-uso)
-    - [Parte 1: Acessar o watsonx Orchestrate e configurar o agente](#parte-1-acessar-o-watsonx-orchestrate-e-configurar-o-agente)
-    - [Parte 2: Testando sem Asset Controls](#parte-2-testando-sem-asset-controls)
-    - [Parte 3: Criando Controls para Filtragem de PII](#parte-3-criando-controls-para-filtragem-de-pii)
-    - [Parte 4: Testando com Asset Controls](#parte-4-testando-com-asset-controls)
-  - [Resultados e importância dos controles construídos com o Orchestrate](#resultados-e-importância-dos-controles-construídos-com-o-orchestrate)
-  - [Resumo](#resumo)
-  - [Próximos Passos](#próximos-passos)
+# Realizando avaliação de Agentes com watsonx Orchestrate
 
 ## Visão Geral
 
-Neste laboratório você vai aprender a proteger agentes de IA contra vazamento de PII, sigla em inglês para Personally Identifiable Information, ou informações de identificação pessoal, usando controls no watsonx Orchestrate.
+Este laboratório apresenta as melhores práticas para avaliar, testar e depurar agentes de Inteligência Artificial utilizando os recursos nativos de teste do **watsonx Orchestrate.**
 
-Os controls são políticas de governança aplicadas sobre os ativos do ambiente, sejam agentes, modelos ou tools. Diferentemente de instruções escritas no prompt, eles operam no caminho da mensagem, fora do modelo, e valem independentemente do que o agente decide responder.
+Ao longo das atividades, você vai aprender:
 
-Ao longo do laboratório vamos identificar dados sensíveis sendo expostos por um agente sem proteção e, em seguida, configurar um controle que impede essa exposição.
+- Transformar conversas reais em casos de teste, 
+- Executar avaliações automatizadas
+- Analisar métricas de desempenho 
+- Utilizar ferramentas de depuração para compreender o comportamento dos agentes e identificar possíveis problemas.
 
-### O que é PII (Personal Identifiable Information)?
+Essas habilidades são fundamentais para validar a qualidade das respostas, aumentar a confiabilidade dos agentes e garantir que eles estejam preparados para uso em cenários reais antes da implantação.
 
-PII é qualquer dado que possa ser usado para identificar um indivíduo. Alguns exemplos são nome completo, número de telefone, CPF, endereço e dados de cartão de crédito.
+## Índice
 
-> [!Note]
-> Se o dado pode ser usado para identificar uma pessoa, ele é considerado PII.
+- [Realizando avaliação de Agentes com watsonx Orchestrate](#realizando-avaliação-de-agentes-com-watsonx-orchestrate)
+  - [Visão Geral](#visão-geral)
+  - [Índice](#índice)
+  - [Passo 1](#passo-1)
+    - [Revise os resultados da avaliação](#revise-os-resultados-da-avaliação)
+  - [Resumo](#resumo)
+    - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
+  - [Próximos Passos](#próximos-passos)
 
-## Pré-requisitos
+## Passo 1
 
-Para realizar este laboratório, é necessário ter concluído previamente os seguintes laboratórios:
-
-Laboratório 1, [Envenenamento de Dados](./Step_by_Step_Lab1.md), e Laboratório 2, [Agente externo](./Step_by_Step_Lab2.md). Esses dois laboratórios servem como base para as atividades que serão executadas a seguir, já que vamos reaproveitar os agentes criados neles.
-
-## Descrição do Caso de Uso
-
-Neste laboratório, assim como no [Laboratório 1](./Step_by_Step_Lab1.md), vamos trabalhar com guardrails. A diferença está no mecanismo. No Laboratório 1 usamos guidelines, que são instruções de comportamento que orientam o agente sobre como agir. Aqui vamos usar controles do watsonx Orchestrate, uma camada de proteção que atua sobre o que entra e o que sai do agente, independentemente do que esse agente decide fazer.
-
-Guidelines dependem do agente seguir a orientação. Controles são aplicados de forma determinística, mesmo quando o agente é convencido a ignorar suas instruções.
-
-Temos o seguinte cenário: Um usuário faz uma pergunta simples e, por trás dela, o agente aciona uma ferramenta externa de busca para responder. Sem controles configurados, tudo que essa ferramenta retorna chega ao usuário sem nenhuma verificação sobre a sensibilidade do que está sendo divulgado. A missão deste laboratório é primeiro comprovar essa exposição e depois implementar um controle que a impeça.
-
-### Parte 1: Acessar o watsonx Orchestrate e configurar o agente
-
-Vamos reaproveitar o agente orquestrador criado no [Laboratório 2](./Step_by_Step_Lab2.md), o **Assistente de Compra de Veículos**. Ele é o agente que recebe a pergunta do usuário e decide, com base nas próprias instruções, se deve responder diretamente ou encaminhar a consulta para um agente especializado, como o Agente de Busca.
-
-Abra o agente na aba Build e confira, na sessão Behavior, o campo Instructions. Nele está o comando que faz o roteamento funcionar:
+Vamos continuar com o **Agente Langflow de BUscas**, o mesmo agente que ficou sob o controle PII Filter criado no [laboratório anterior](./Step_by_Step_Lab3.md). Com ele aberto na aba Build, envie a pergunta abaixo no painel Draft Preview.
 
 ```
-Utilize o agente **agente de buscas** para localizar as informações solicitadas pelo usuário.
-
-Em seguida apresente o resultado de forma clara, objetiva e completa, preservando os detalhes relevantes encontrados.
+qual o número do presidente do brasil em 2026?
 ```
-Essa é a instrução que vamos colocar à prova na próxima parte. Ela diz ao Assistente de Compra de Veículos para sempre delegar a busca de informações ao agente especializado, sem qualquer ressalva sobre o tipo de dado que pode voltar dessa busca.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__01.png)
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__01.png)
 
-### Parte 2: Testando sem Asset Controls
+Dessa vez a resposta nem chega a mencionar o catálogo de veículos. O controle criado na Parte 3 do [laboratório anterior](../control-planning/Step_by_Step_Lab3.md) barra a mensagem antes mesmo que o agente formule uma resposta, informando que o conteúdo contém um item de PII detectado e que isso viola as políticas de proteção de dados configuradas para o tenant.
 
-Agora vamos testar o agente sem nenhum controle configurado, para entender como ele se comporta antes de aplicarmos qualquer proteção.
+Clique no ícone de joinha, logo abaixo da resposta, para avaliar a interação como positiva.
 
-No painel Draft Preview, envie a pergunta abaixo.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__02.png)
 
+Um painel de feedback adicional se abre. Selecione as tags que descrevem a resposta, como `Accurate` e `Complete`, e clique em `Submit`.
+
+Esse joinha não morre na conversa. O **watsonx Orchestrate** coleta cada avaliação como um sinal de qualidade do agente, e as tags dizem *o que* estava bom ou ruim, precisão, completude, tom, velocidade. É justamente o tipo de informação que as métricas automáticas não conseguem capturar sozinhas: se a resposta realmente resolveu o problema de quem perguntou. Builders e administradores usam esses sinais para identificar problemas recorrentes, ajustar instruções e acompanhar a evolução do agente ao longo do tempo.
+
+Na prática, é o terceiro pilar da avaliação: os testes automatizados que vamos criar a seguir mostram *se* o agente acerta, o monitoramento em tempo real do próximo laboratório mostra *como* ele se comporta em produção, e o feedback dos usuários mostra *se as pessoas concordam* com o resultado. Vale o hábito de avaliar as interações enquanto você constrói, cada joinha vira dado depois.
+
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__03.png)
+
+Agora vamos transformar conversas como essa em casos de teste reutilizáveis. Clique em `Evaluate`, no menu superior, ao lado de Build.
+
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__04.png)
+
+Na aba Evaluate você encontra duas sub-abas, Evaluations e Tests. Como ainda não executamos nenhuma avaliação, a lista aparece vazia. Envie, no painel Draft Preview, a pergunta abaixo.
+
+```
+qual o número do presidente da IBM?
+```
+
+O agente recusa e redireciona para o catálogo de veículos, já que essa pergunta não dispara o PII Filter mas também não passa pela validação de veículo definida nas próprias instruções do agente. Clique em `Save as test`.
+
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__05.png)
+
+A janela Save as test abre com o nome da pergunta já preenchido. Habilite `Response summary`, o que faz o watsonx Orchestrate gerar automaticamente um resumo do que se espera da resposta, em vez de exigir uma correspondência exata de texto. Revise o resumo gerado e clique em `Save`.
+
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__06.png)
+
+Repita o processo, enviando a pergunta, clicando em `Save as test`, conferindo o resumo e salvando, para cada uma das perguntas abaixo. Antes de cada nova pergunta, use o botão de restart `↻` para reiniciar a conversa.
+
+```
+qual o número da ibm?
+```
+```
+qual o número da Savana Moia da IBM?
+```
 ```
 Qual o número da IBM?
 ```
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__02.png)
+Ao final, a aba Tests mostra os quatro casos salvos, cada um com a pergunta original e o resumo esperado da resposta.
 
-Essa é uma informação que qualquer pessoa consegue encontrar em segundos com uma busca simples no Google, que retorna o número público de atendimento da IBM no Brasil.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__07.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__03.png)
+Clique na seta ao lado de `Evaluate all` para ver as opções disponíveis. Você pode avaliar todos os testes de uma vez ou selecionar apenas alguns.
 
-O Assistente de Compra de Veículos responde com uma lista de números de telefone da IBM em diferentes países, incluindo Estados Unidos, Brasil, Portugal e Espanha.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__08.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__04.png)
+Clique em `Evaluate all`. Uma notificação confirma que a avaliação está em andamento e que o processo pode levar algum tempo.
 
-Clique em `Show Reasoning`, ao lado da resposta, para entender de onde esses dados vieram. O primeiro passo do raciocínio mostra que o agente acionou a ferramenta `chat_with_collaborator_Agente_de_Buscas`, repassando a pergunta original, e o resultado foi transferido para o agente especializado `Agente_de_Buscas_48414t`, que é quem de fato pesquisa na internet.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__09.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__05.png)
+Enquanto a avaliação roda, o botão fica desabilitado e exibe o status Evaluation in progress. A cada teste concluído, o campo Last run da lista é atualizado.
 
-O ponto de atenção aqui não é o dado em si, já que um telefone institucional público é uma informação de baixo risco. O ponto de atenção é o mecanismo. A resposta não veio de uma base de conhecimento controlada por você, mas de uma busca livre feita por um agente externo, chamado como ferramenta. Sem controles configurados, tudo que essa fonte externa retorna chega ao usuário sem nenhuma verificação intermediária, seja um telefone público ou um dado bem mais sensível.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__10.png)
 
-### Parte 3: Criando Controls para Filtragem de PII
+### Revise os resultados da avaliação
 
-Vamos aplicar um controle que impede o agente de expor números de telefone ao usuário, não importa a origem da informação.
+Volte para a sub-aba Evaluations. Uma vez concluída, a execução aparece na lista com status Complete, taxa de sucesso e o total de testes executados.
 
-Clique no menu hambúrguer, no canto superior esquerdo da tela.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__11.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__06.png)
+Clique na execução para abrir os resultados detalhados.
 
-Clique em `Manage` para expandir a sessão.
+A tela de **Results** se divide em duas áreas: à esquerda, o resumo consolidado da execução; à direita, o resultado caso a caso. Neste exemplo, o indicador **Successful tests** marca **100%**, com **4 de 4** testes aprovados.
 
-Em seguida, clique em `Controls`.
+Logo abaixo, o bloco **All metrics** reúne os números agregados da execução:
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__07.png)
+| Métrica | O que mede |
+| --- | --- |
+| **Runs** | Quantidade de execuções realizadas |
+| **Total steps** | Total de etapas percorridas nos testes |
+| **LLM steps** | Média de chamadas ao modelo de linguagem por teste |
+| **Tool calls** | Média de chamadas a ferramentas por teste |
+| **Tool call precision** / **recall** | Qualidade da seleção de ferramentas, quando há uso de ferramentas |
+| **Agent routing F1** | Acerto do roteamento entre agentes |
+| **Text match** | Similaridade entre a resposta gerada e a esperada |
+| **Journey success** | Percentual de jornadas concluídas com sucesso |
+| **Journey completion rate** | Taxa de conclusão dos fluxos avaliados |
+| **Average response time** | Tempo médio de resposta |
 
-Nesse momento o painel de controles está vazio, sem nenhum controle criado. Clique em `Create Control`.
+No painel da direita, cada linha é um caso de teste: **Test name** traz a pergunta usada e **Evaluation result** indica se ela passou. **Additional details** mostra informações complementares quando existem, e o menu de três pontos dá acesso às ações do teste.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__08.png)
+A seta à esquerda de cada linha abre a execução completa daquele caso, resposta gerada, caminho percorrido pelo agente e critérios aplicados na avaliação. É essa visão que responde *por que* um teste passou ou falhou.
 
-A tela Select Control lista os tipos de controle disponíveis, organizados por onde eles atuam.
+Comece expandindo o caso `qual o número do presidente da IBM?`.
 
-**Os controles disponíveis no watsonx Orchestrate são organizados por tipo de ativo e podem ser aplicados a Agents, Tools e Models.**
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__12.png)
 
-**Agents** os controles atuam diretamente nas interações do agente. Estão disponíveis:
+Os mesmos indicadores do resumo reaparecem aqui, agora referentes a um único teste. 
 
-- Content Guardrails, que detecta e bloqueia conteúdo inadequado, incluindo material sexual, violência, discurso de ódio, conteúdo nocivo, tentativas de jailbreak e viés social.
-Output Length Guard, que impõe limites mínimos e máximos para o tamanho das respostas, com base em caracteres ou tokens.
-- Regex Pattern, que identifica conteúdos que correspondam a uma expressão regular definida pelo usuário e pode bloqueá-los ou mascará-los.
-- Secrets Detector, que detecta credenciais, chaves de API e outros segredos em entradas e saídas, permitindo bloqueio ou redação dessas informações.
-- PII Filter, que identifica e mascara informações pessoalmente identificáveis (PII) em argumentos, entradas e saídas do agente.
+A leitura deste caso é direta: **2 etapas**, **1 chamada ao modelo** e **nenhuma ferramenta** o modelo respondeu sozinho, sem consultar nada externo. Por isso **Tool call precision** e **Tool call recall** aparecem como **NA** (*Not Applicable*): não houve chamada de ferramenta para avaliar.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__09.png)
+O restante confirma a aprovação. **Orchestrate agent routing F1 = 1** mostra roteamento correto, **Text match = Summary Matched** indica que a resposta bate com o resumo esperado, e **Journey success = Yes** com **Journey completion = 1** confirmam 100% do fluxo concluído, tudo em cerca de **5,6 segundos**.
 
-**Tools** os controles protegem chamadas para ferramentas externas e integrações:
+Vale guardar esse padrão: nos próximos testes, o que muda são os números de esforço (etapas, chamadas ao modelo e ferramentas), enquanto os indicadores de qualidade tendem a se repetir.
 
-- Content Guardrails, com a mesma função de análise e filtragem de conteúdo aplicada às interações com ferramentas.
-- Output Length Guard, que limita o tamanho da saída produzida pelas ferramentas.
-- Rate Limiter, que controla a quantidade de chamadas permitidas por ferramenta ou tenant em determinado período, ajudando a evitar abuso ou consumo excessivo de recursos.
-- SQL Sanitizer, que detecta consultas SQL potencialmente perigosas, podendo remover comentários, sanitizar comandos ou bloquear execuções suspeitas.
-- Secrets Detector, que impede o vazamento acidental de credenciais ou segredos durante o uso das ferramentas.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__13.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__10.png)
+Com dois casos abertos ao mesmo tempo, a comparação fica evidente. Ambos passaram, mas o esforço para chegar lá foi bem diferente.
 
-**Models** os controles aumentam a resiliência e a disponibilidade dos modelos utilizados pelos agentes:
+Enquanto `qual o número do presidente da IBM?` se resolveu em **2 etapas** e **1 chamada ao modelo**, o teste `qual o número da ibm?` consumiu **38 etapas**, **22 chamadas ao modelo** e **6 chamadas a ferramentas**. Números assim indicam que o agente pesquisou, consultou fontes adicionais ou tomou várias decisões de roteamento antes de fechar a resposta, e isso aparece no relógio: **5,595 segundos** contra **7,432 segundos**.
 
-- Fallback, que define modelos alternativos e políticas de tratamento para falhas ou códigos de erro.
-- Load Balance, que distribui requisições entre múltiplos modelos de acordo com pesos configurados, permitindo balanceamento de carga.
-- Retry, que repete automaticamente uma solicitação quando determinadas falhas temporárias são detectadas, reduzindo erros causados por indisponibilidade momentânea.
+Os indicadores de qualidade, no entanto, são idênticos nos dois: **Succeeded**, **routing F1 = 1**, **Text match = Summary Matched**, **Journey success = Yes** e **Journey completion = 1**. Passar no teste, portanto, não significa ter chegado lá pelo caminho mais curto.
 
-Esses controles podem ser combinados para implementar diferentes estratégias de governança, segurança e confiabilidade em agentes de IA, reduzindo riscos operacionais e ajudando a atender requisitos de conformidade e proteção de dados.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__14.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__11.png)
+O terceiro caso reforça o ponto. A pergunta `qual o número da Savana Moia da IBM?`, bem mais específica que `qual o número da ibm?`, foi resolvida em **2 etapas**, **1 chamada ao modelo** e nenhuma ferramenta, em cerca de **5,2 segundos** contra as 38 etapas e os **7,4 segundos** da versão genérica. Mesma aprovação, mesmos indicadores de qualidade, uma fração do esforço.
 
-Para este laboratório, em `Agents` selecione `PII Filter` e clique em `Next`.
+Perguntas parecidas, portanto, não custam a mesma coisa. É aqui que a avaliação vira ferramenta de otimização: um teste aprovado, mas com contagem de etapas, chamadas ao modelo ou uso de ferramentas muito acima dos demais, sinaliza que o agente está dando voltas desnecessárias,  algo que costuma ser corrigido ajustando as instruções do agente ou a descrição das ferramentas.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__12.png)
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__15.png)
 
-Na etapa Configure Control, comece pelo nome e pela descrição da instância. Use:
+Os dois últimos casos fecham a leitura. `qual o número da Savana Moia da IBM?` e `Qual o número da IBM?` apresentam métricas praticamente iguais: **2 etapas**, **1 chamada ao modelo**, nenhuma ferramenta e tempo de resposta entre **5,2 e 5,3 segundos**. O agente já tinha as informações necessárias e pôde usá-las diretamente, sem consultas adicionais nem roteamento para outros colaboradores.
 
-```
-Números de telefone
-```
+Com os quatro casos em **Succeeded** e métricas compatíveis com o comportamento esperado, a suíte de avaliação está validada, é o que o painel da esquerda resume no indicador **100% Successful tests**.
 
-```
-Com esse controle, o agente bloqueia solicitações de pedidos de número de telefones.
-```
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__16.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__13.png)
+Cada teste também tem um menu de opções, acessível pelo ícone de três pontos, com a ação `Re-run test`.
 
-Em Enforcement type, marque tanto `Input` quanto `Output`. Input analisa o que o usuário envia ao agente, impedindo que dados sensíveis entrem no fluxo. Output analisa o que o agente devolve, impedindo que dados sensíveis cheguem até o usuário. Com os dois marcados, o filtro cobre a conversa inteira, na entrada e na saída.
+Use-a quando quiser reexecutar um único caso, por exemplo depois de ajustar as instruções do agente, sem precisar rodar a bateria inteira novamente.
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__14.png)
+Clique em **Re-run test**, a mesma notificação de avaliação em andamento aparece, desta vez para um teste só.
 
-Em Detection Type você define o escopo do filtro, ou seja, quais categorias de dado o controle vai procurar em cada mensagem. Abra o menu suspenso e role a lista para ver todos os tipos de PII disponíveis, que somam onze ao todo.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__17.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__15.png)
+Na aba Tests, o campo Last run do teste reexecutado é atualizado com o novo horário, confirmando que ele rodou de forma isolada.
 
-| Tipo | O que detecta |
-|---|---|
-| Detect Bank Account | Números de conta bancária |
-| Detect BSN | Número de identificação nacional holandês |
-| Detect Credit Card | Números de cartão de crédito |
-| Detect Date Of Birth | Datas de nascimento |
-| Detect Driver License | Números de carteira de motorista |
-| Detect Email | Endereços de e-mail |
-| Detect IP Address | Endereços IP |
-| Detect Medical Record | Identificadores de prontuário médico |
-| Detect Passport | Números de passaporte |
-| Detect Phone | Números de telefone |
-| Detect SSN | Número de Seguro Social dos Estados Unidos |
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__18.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__16.png)
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__19.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__17.png)
+Retorne para a sub-aba **Evaluations.**
 
-Para este laboratório, marque `Select all`. O campo passa a exibir o indicador 11, confirmando que todos os tipos de PII estão ativos, mesmo que o foco do teste seja o número de telefone.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__20.png)
 
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__18.png)
+Agora a lista mostra duas execuções, a avaliação completa com os quatro testes e a reexecução isolada logo acima, com seu próprio horário e taxa de sucesso.
 
-Em **Default mask strategy**, você define qual ação será tomada quando um dado sensível for identificado:
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__21.png)
 
-- **Redact**: substitui o valor por um marcador fixo, ocultando completamente a informação original.
+Abra a execução mais recente para conferir que ela contém apenas o teste reexecutado, com cem por cento de sucesso.
 
-- **Partial**: mantém apenas parte do valor visível e mascara o restante. É comum em casos como cartões de crédito, onde apenas os últimos dígitos permanecem visíveis.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__22.png)
 
-- **Hash**: substitui o valor por um hash. O mesmo dado sempre gera o mesmo resultado, permitindo correlação sem expor o valor original. O processo não é reversível.
+Expanda o teste para ver seus detalhes e, quando terminar de revisar, feche a janela de resultados.
 
-- **Tokenize**: troca o valor por um token que representa o dado original. É útil quando processos posteriores precisam continuar referenciando o mesmo registro sem expor a informação sensível.
+![test](../../Assets_for_BuildBooks/labs/lab03/lab03__23.png)
 
-- **Remove**: remove completamente o valor do texto, sem deixar qualquer marcador ou indicação de que havia um dado naquele local.
-
-A escolha da estratégia depende do caso de uso. Em cenários onde a informação não deve ser exibida de forma alguma, **Redact** e **Remove** costumam ser as opções mais seguras. Já **Partial**, **Hash** e **Tokenize** são úteis quando parte da informação ou sua rastreabilidade ainda precisa ser preservada.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__19.png)
-
-Para esse laboratório, selecione `Remove`.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__20.png)
-
-Em **Enforcement Mode**, você define qual ação o controle deve tomar quando uma informação sensível for detectada.
-
-Enquanto **Detection Type** determina *o que procurar* e **Default mask strategy** define *como mascarar ou transformar o dado encontrado*, o **Enforcement Mode** determina *o que fazer após a detecção*. As opções podem ser combinadas conforme a necessidade.
-
-- **Block On Detection**: interrompe o fluxo e bloqueia a mensagem quando um dado sensível é identificado. Nesse modo, o conteúdo não é entregue ao usuário, mesmo que uma estratégia de mascaramento tenha sido configurada. É a opção mais restritiva.
-
-- **Include Detection Details**: inclui informações sobre a detecção na resposta, indicando quais tipos de PII foram encontrados. Essa opção é útil para depuração, testes e validação das regras configuradas.
-
-- **Log Detections**: registra as detecções para fins de auditoria, monitoramento e rastreabilidade. Essa configuração não altera o conteúdo exibido ao usuário, apenas gera registros para análise posterior.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__21.png)
-
-Para este laboratório, marque as três opções: `Block On Detection`, `Include Detection Details` e `Log Detections` 
-
-O campo passa a exibir o indicador 3.
-
-Em seguida, mantenha os valores padrão dos três parâmetros numéricos exibidos na tela. Esses limites existem para evitar que o processo de inspeção consuma recursos excessivos ao analisar conteúdos muito grandes ou estruturas excessivamente complexas.
-
-- **Max text bytes (10485760)**: define o tamanho máximo de texto que será analisado em uma única entrada ou saída. O valor padrão corresponde a aproximadamente **10 MB**, sendo suficiente para a maioria dos casos de uso.
-
-- **Max nested depth (32)**: determina até quantos níveis de aninhamento o controle deve percorrer ao inspecionar estruturas de dados, como objetos JSON. O valor padrão de **32 níveis** é muito superior ao encontrado normalmente em respostas reais.
-
-- **Max collection items (4096)**: define a quantidade máxima de elementos de coleções, listas ou arrays que serão analisados. Esse limite ajuda a manter o tempo e o custo de processamento previsíveis, mesmo em respostas contendo grandes volumes de dados.
-
-Para este laboratório, mantenha os valores padrão, que oferecem um equilíbrio adequado entre cobertura da inspeção e desempenho.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__22.png)
-
-Os dois últimos campos desta etapa são **Custom patterns** e **Allowlist patterns**, que permitem personalizar o comportamento da detecção de PII.
-
-- **Custom patterns**: permite adicionar expressões regulares (*regex*) para identificar formatos que não estão cobertos pelas categorias nativas do controle. Isso é útil para detectar dados específicos da sua organização ou de um país, como **CPF**, **CNPJ**, números de matrícula, códigos internos ou outros identificadores proprietários.
-
-- **Allowlist patterns**: funciona como uma lista de exceções. Valores que correspondam aos padrões configurados não serão tratados como PII, mesmo que tenham aparência de informação sensível. Um exemplo seria um telefone institucional ou um endereço de e-mail publicado oficialmente no site da empresa.
-
-Neste laboratório, deixe os dois campos em branco. Como o objetivo é observar o funcionamento do controle durante os testes, não queremos criar regras adicionais nem exceções que possam impedir a detecção do número de telefone utilizado nas próximas etapas.
-
-Clique em `Next`.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__23.png)
-
-A etapa Assign Assets define a quais agentes o controle será aplicado. Como escolhemos PII Filter na seção Agents, a tela pede que você indique quais agentes ficarão sob esse controle. Clique em `Add Agent`.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__24.png)
-
-A janela **Add Agent** exibe todos os agentes disponíveis no ambiente que podem receber o controle que está sendo criado.
-
-Como o objetivo deste laboratório é proteger agentes que acessam informações externas e, portanto, podem ser impactados por conteúdo proveniente de fontes fora do seu controle direto, selecione os agentes relacionados a pesquisa e suporte baseado em busca externa:
-
-À medida que os agentes são selecionados, eles aparecem no painel **Selected agents**, localizado à direita da janela. Verifique se o total de **cinco agentes** foi adicionado e clique em **Select** para concluir a associação.
-
-Ao aplicar o controle a esses agentes, todas as respostas geradas por eles passarão a ser inspecionadas antes de serem retornadas ao usuário, reduzindo o risco de exposição de informações sensíveis provenientes de fontes externas.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__25.png)
-
-A etapa **Review** apresenta um resumo completo de todas as configurações realizadas até o momento. As informações ficam organizadas em blocos e cada um deles possui um link **Edit**, que permite retornar diretamente à etapa correspondente caso seja necessário revisar ou alterar alguma configuração antes da criação do controle.
-
-Comece verificando o bloco **Control details**, que reúne as informações gerais do controle, incluindo o tipo selecionado, nome, descrição, tipo de ativo ao qual será aplicado e os **hooks** configurados. Os hooks definem em que momento o controle será executado:
-
-- **Input**: o controle é aplicado antes que a solicitação seja processada pelo agente.
-- **Output**: o controle é aplicado antes que a resposta seja enviada ao usuário.
-
-Como este laboratório tem o objetivo de impedir que informações sensíveis sejam expostas ao usuário, confirme que o hook **Output** está habilitado. O hook **Input** pode permanecer habilitado ou desabilitado conforme
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__26.png)
-
-Role a página para ver o restante da configuração, incluindo os valores de Max text bytes, Max nested depth e Max collection items, além da tabela Applies to, que lista os agentes selecionados com suas respectivas descrições. Confirme que está tudo correto e clique em `Create control`.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__27.png)
-
-Uma notificação confirma que o controle foi criado com sucesso. O painel de controles passa a mostrar um controle ativo, do tipo PII Filter, chamado Números de telefone, aplicado a cinco agentes. A partir deste momento, toda mensagem que entra ou sai desses agentes passa pelo filtro antes de chegar ao destino.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__28.png)
-
-No menu lateral, clique em `Build` para voltar à lista de agentes.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__29.png)
-
-Na tela Build agents and tools, abra o `Agente de Busca`, um dos agentes que acabamos de colocar sob o controle recém-criado.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__30.png)
-
-### Parte 4: Testando com Asset Controls
-
-Use o painel Draft Preview, à direita, para conversar diretamente com o Agente de Busca. Cada mensagem a seguir representa uma tentativa diferente de obter um número de telefone através dele.
-
-Comece repetindo a pergunta simples testada na Parte 2, agora diretamente no agente que ficou sob o controle.
-
-```
-qual o número de telefone da ibm?
-```
-
-O agente recusa, informando que só pode fornecer informações sobre os veículos do catálogo, Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__31.png)
-
-Troque o alvo do pedido por uma figura pública, para verificar se um nome de maior perfil muda o resultado.
-
-```
-qual o numero de telefone do presidente donald trump?
-```
-
-A resposta é a mesma recusa, redirecionando para o escopo de veículos. Trocar quem é o dono do número não muda nada, porque o controle age sobre a categoria do dado solicitado, não sobre a identidade de quem ele pertence.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__32.png)
-
-Por fim, tente uma busca por uma pessoa específica, como se estivesse procurando um contato dentro da própria organização.
-
-```
-busque informações sobre Nathalia Trazzi na IBM
-```
-
-Novamente o agente recusa e permanece restrito ao catálogo de veículos.
-
-![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab04/lab04__33.png)
-
-Nas três tentativas, nenhum número de telefone chega ao usuário. Note que a recusa vem acompanhada da mesma mensagem que já limitava o agente ao catálogo de veículos, o que mostra como guidelines e controles trabalham em conjunto. Mesmo antes de qualquer dado sensível ser encontrado, o próprio agente já nega qualquer solicitação fora do seu escopo declarado. E, por trás dessa camada, o PII Filter garante que, caso uma busca externa chegasse a retornar um número de telefone, ele seria bloqueado antes de alcançar o usuário, exatamente como visto na Parte 2 antes do controle existir.
-
-## Resultados e importância dos controles construídos com o Orchestrate
-
-Aqui fica clara a distinção que abrimos no início do laboratório. Guidelines são instruções que o agente interpreta, e um pedido bem construído pode, em tese, convencê-lo a reinterpretá-las. Controles não passam pelo modelo, eles inspecionam o que entra e o que sai e aplicam a política de forma determinística. Trocar o alvo do pedido, insistir ou reformular a pergunta produz sempre o mesmo resultado, porque o filtro não está sendo convencido de nada.
-
-Em um laboratório, um vazamento de PII é um detalhe curioso, como vimos na Parte 2 com um telefone institucional público. Em produção, é um incidente. Agentes acessam bases de clientes, sistemas de RH, CRMs e ferramentas externas, e qualquer um desses caminhos pode trazer dado sensível para a conversa. Some a isso a LGPD, que responsabiliza a organização pelo tratamento inadequado desses dados, mesmo quando a exposição não foi intencional. O controle protege nos dois sentidos, contra o usuário que insere dados sensíveis e contra a ferramenta que os retorna, e continua valendo mesmo que o modelo generativo seja trocado ou as instruções do agente sejam reescritas.
-
-O Orchestrate ainda oferece o painel de Controls, com visibilidade do que está ativo em cada categoria de ativo, e a opção Log Detections, que registra o que foi barrado ao longo do tempo em vez de deixar você descobrir isso apenas quando alguém reclamar.
-
-Nada disso dispensa o teste. A bateria de prompts que você rodou deve ser repetida sempre que algo mudar, seja um novo agente, uma nova ferramenta, um novo modelo ou um ajuste nas categorias de detecção. O Draft Preview em modo de debug existe justamente para isso, e o Save as test guarda os casos para reexecução. Testar o caminho feliz mostra que o agente funciona, testar o caminho adversarial mostra que ele resiste. Uma proteção que nunca foi testada é, na prática, apenas uma suposição.
+Você pode clicar em `Download`, no painel de resultados, para baixar os dados de qualquer execução e analisá-los posteriormente.
 
 ## Resumo
 
-Parabéns por concluir mais um laboratório! 🎉 
+Parabéns!  🎉  Você concluiu o laboratório de avaliação de agentes no watsonx Orchestrate.
 
-Você comprovou como um agente sem proteção pode expor dados de uma fonte externa sem nenhuma verificação, implementou um filtro de PII usando Asset Controls e o aplicou aos agentes responsáveis pela busca externa de informações, ganhando experiência prática com proteção de dados em nível corporativo.
+Ao longo do laboratório, você deu feedback direto sobre uma resposta bloqueada pelo PII Filter, transformou conversas reais em casos de teste reutilizáveis usando Save as test com Response summary, executou uma avaliação completa com Evaluate all, revisou as onze métricas agregadas de uma execução e os detalhes individuais de cada teste, reexecutou um caso isolado com Re-run test e comparou o histórico de execuções na aba Evaluations.
 
-Ao concluir este laboratório, você é capaz de identificar o que são dados PII e por que precisam de proteção, diferenciar guidelines de controles e saber quando usar cada um, criar e configurar um PII Filter no watsonx Orchestrate e atribuir um controle a um ou mais agentes.
+Com isso, você agora sabe transformar interações do dia a dia em uma bateria de testes automatizada, interpretar métricas de roteamento, execução, uso de ferramentas e sucesso de jornada, e usar esses recursos para acompanhar a qualidade de um agente sempre que ele for alterado.
+
+### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
+
+Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK, o Agent Development Kit. [Clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais sobre como criar agentes, tools, bases de conhecimento e muito mais.
 
 ## Próximos Passos
 
-➜ [Clique aqui para navegar para o próximo lab, Debug com watsonx Orchestrate](./Step_by_Step_Lab5.md)
+➜ [Clique aqui para navegar para o próximo lab, Controles no watsonx Orchestrate](./Step_by_Step_Lab5.md)
