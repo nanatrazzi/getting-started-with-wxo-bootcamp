@@ -32,13 +32,13 @@ Vamos continuar com o **Agente Langflow de BUscas**, o mesmo agente que ficou so
 qual o número do presidente do brasil em 2026?
 ```
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__01.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_01.png)
 
 Dessa vez a resposta nem chega a mencionar o catálogo de veículos. O controle criado na Parte 3 do [laboratório anterior](../control-planning/Step_by_Step_Lab3.md) barra a mensagem antes mesmo que o agente formule uma resposta, informando que o conteúdo contém um item de PII detectado e que isso viola as políticas de proteção de dados configuradas para o tenant.
 
 Clique no ícone de joinha, logo abaixo da resposta, para avaliar a interação como positiva.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__02.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_02.png)
 
 Um painel de feedback adicional se abre. Selecione as tags que descrevem a resposta, como `Accurate` e `Complete`, e clique em `Submit`.
 
@@ -46,11 +46,11 @@ Esse joinha não morre na conversa. O **watsonx Orchestrate** coleta cada avalia
 
 Na prática, é o terceiro pilar da avaliação: os testes automatizados que vamos criar a seguir mostram *se* o agente acerta, o monitoramento em tempo real do próximo laboratório mostra *como* ele se comporta em produção, e o feedback dos usuários mostra *se as pessoas concordam* com o resultado. Vale o hábito de avaliar as interações enquanto você constrói, cada joinha vira dado depois.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__03.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_03.png)
 
 Agora vamos transformar conversas como essa em casos de teste reutilizáveis. Clique em `Evaluate`, no menu superior, ao lado de Build.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__04.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_04.png)
 
 Na aba Evaluate você encontra duas sub-abas, Evaluations e Tests. Como ainda não executamos nenhuma avaliação, a lista aparece vazia. Envie, no painel Draft Preview, a pergunta abaixo.
 
@@ -60,11 +60,11 @@ qual o número do presidente da IBM?
 
 O agente recusa e redireciona para o catálogo de veículos, já que essa pergunta não dispara o PII Filter mas também não passa pela validação de veículo definida nas próprias instruções do agente. Clique em `Save as test`.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__05.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_05.png)
 
 A janela Save as test abre com o nome da pergunta já preenchido. Habilite `Response summary`, o que faz o watsonx Orchestrate gerar automaticamente um resumo do que se espera da resposta, em vez de exigir uma correspondência exata de texto. Revise o resumo gerado e clique em `Save`.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__06.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_06.png)
 
 Repita o processo, enviando a pergunta, clicando em `Save as test`, conferindo o resumo e salvando, para cada uma das perguntas abaixo. Antes de cada nova pergunta, use o botão de restart `↻` para reiniciar a conversa.
 
@@ -80,25 +80,25 @@ Qual o número da IBM?
 
 Ao final, a aba Tests mostra os quatro casos salvos, cada um com a pergunta original e o resumo esperado da resposta.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__07.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_07.png)
 
 Clique na seta ao lado de `Evaluate all` para ver as opções disponíveis. Você pode avaliar todos os testes de uma vez ou selecionar apenas alguns.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__08.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_08.png)
 
 Clique em `Evaluate all`. Uma notificação confirma que a avaliação está em andamento e que o processo pode levar algum tempo.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__09.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_09.png)
 
 Enquanto a avaliação roda, o botão fica desabilitado e exibe o status Evaluation in progress. A cada teste concluído, o campo Last run da lista é atualizado.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__10.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_10.png)
 
 ### Revise os resultados da avaliação
 
 Volte para a sub-aba Evaluations. Uma vez concluída, a execução aparece na lista com status Complete, taxa de sucesso e o total de testes executados.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__11.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_11.png)
 
 Clique na execução para abrir os resultados detalhados.
 
@@ -125,7 +125,7 @@ A seta à esquerda de cada linha abre a execução completa daquele caso, respos
 
 Comece expandindo o caso `qual o número do presidente da IBM?`.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__12.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_12.png)
 
 Os mesmos indicadores do resumo reaparecem aqui, agora referentes a um único teste. 
 
@@ -135,7 +135,7 @@ O restante confirma a aprovação. **Orchestrate agent routing F1 = 1** mostra r
 
 Vale guardar esse padrão: nos próximos testes, o que muda são os números de esforço (etapas, chamadas ao modelo e ferramentas), enquanto os indicadores de qualidade tendem a se repetir.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__13.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_13.png)
 
 Com dois casos abertos ao mesmo tempo, a comparação fica evidente. Ambos passaram, mas o esforço para chegar lá foi bem diferente.
 
@@ -143,19 +143,19 @@ Enquanto `qual o número do presidente da IBM?` se resolveu em **2 etapas** e **
 
 Os indicadores de qualidade, no entanto, são idênticos nos dois: **Succeeded**, **routing F1 = 1**, **Text match = Summary Matched**, **Journey success = Yes** e **Journey completion = 1**. Passar no teste, portanto, não significa ter chegado lá pelo caminho mais curto.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__14.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_14.png)
 
 O terceiro caso reforça o ponto. A pergunta `qual o número da Savana Moia da IBM?`, bem mais específica que `qual o número da ibm?`, foi resolvida em **2 etapas**, **1 chamada ao modelo** e nenhuma ferramenta, em cerca de **5,2 segundos** contra as 38 etapas e os **7,4 segundos** da versão genérica. Mesma aprovação, mesmos indicadores de qualidade, uma fração do esforço.
 
 Perguntas parecidas, portanto, não custam a mesma coisa. É aqui que a avaliação vira ferramenta de otimização: um teste aprovado, mas com contagem de etapas, chamadas ao modelo ou uso de ferramentas muito acima dos demais, sinaliza que o agente está dando voltas desnecessárias,  algo que costuma ser corrigido ajustando as instruções do agente ou a descrição das ferramentas.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__15.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_15.png)
 
 Os dois últimos casos fecham a leitura. `qual o número da Savana Moia da IBM?` e `Qual o número da IBM?` apresentam métricas praticamente iguais: **2 etapas**, **1 chamada ao modelo**, nenhuma ferramenta e tempo de resposta entre **5,2 e 5,3 segundos**. O agente já tinha as informações necessárias e pôde usá-las diretamente, sem consultas adicionais nem roteamento para outros colaboradores.
 
 Com os quatro casos em **Succeeded** e métricas compatíveis com o comportamento esperado, a suíte de avaliação está validada, é o que o painel da esquerda resume no indicador **100% Successful tests**.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__16.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_16.png)
 
 Cada teste também tem um menu de opções, acessível pelo ícone de três pontos, com a ação `Re-run test`.
 
@@ -163,29 +163,29 @@ Use-a quando quiser reexecutar um único caso, por exemplo depois de ajustar as 
 
 Clique em **Re-run test**, a mesma notificação de avaliação em andamento aparece, desta vez para um teste só.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__17.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_17.png)
 
 Na aba Tests, o campo Last run do teste reexecutado é atualizado com o novo horário, confirmando que ele rodou de forma isolada.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__18.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_18.png)
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__19.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_19.png)
 
 Retorne para a sub-aba **Evaluations.**
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__20.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_20.png)
 
 Agora a lista mostra duas execuções, a avaliação completa com os quatro testes e a reexecução isolada logo acima, com seu próprio horário e taxa de sucesso.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__21.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_21.png)
 
 Abra a execução mais recente para conferir que ela contém apenas o teste reexecutado, com cem por cento de sucesso.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__22.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_22.png)
 
 Expanda o teste para ver seus detalhes e, quando terminar de revisar, feche a janela de resultados.
 
-![test](../../Assets_for_BuildBooks/labs/lab03/lab03__23.png)
+![test](../../Assets_for_BuildBooks/labs/lab04/lab04_23.png)
 
 Você pode clicar em `Download`, no painel de resultados, para baixar os dados de qualquer execução e analisá-los posteriormente.
 
