@@ -100,7 +100,7 @@ A parte de baixo cobre a execução: `duration` em zero confirma um passo instan
 
 Volte para a linha do tempo e clique no segundo passo. A etiqueta `Model invoked` avisa que foi aqui que o modelo de linguagem entrou em ação.
 
-No canvas, o caminho percorrido aparece tracejado saindo de `User input`, passando pelo `Agente de Busca` e chegando ao nó do modelo `groq/openai/gpt-oss`. O `Agente de Buscas`, colaborador identificado pela etiqueta `COLLAB`, continua apagado, porque não foi acionado nesta conversa. Esse detalhe visual já responde à primeira pergunta de qualquer investigação de roteamento: o agente resolveu sozinho, sem repassar a solicitação.
+No canvas, o caminho percorrido aparece tracejado saindo de `User input`, passando pelo `Agente de Busca` e chegando ao nó do modelo `groq/openai/gpt-oss`. O `Agente Langflow de Buscas`, colaborador identificado pela etiqueta `COLLAB`, continua apagado, porque não foi acionado nesta conversa. Esse detalhe visual já responde à primeira pergunta de qualquer investigação de roteamento: o agente resolveu sozinho, sem repassar a solicitação.
 
 O bloco `Node properties` também muda e ganha três abas, `About`, `Guidelines` e `LLM Model`. Em `About` estão o nome interno do agente, o nome de exibição, a descrição e as instruções vigentes.
 
@@ -114,7 +114,7 @@ A lista de exemplos válidos mostra os apelidos aceitos para cada carro do catá
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_11.png)
 
-Em seguida vem a regra de roteamento. Havendo alta confiança de que o veículo pertence ao catálogo, a solicitação deve ser encaminhada ao Agente de Buscas. A recusa só é permitida quando não houver como associar o pedido a nenhum modelo, e a mensagem de rejeição está escrita literalmente nas instruções. É por isso que a resposta saiu palavra por palavra igual ao texto configurado.
+Em seguida vem a regra de roteamento. Havendo alta confiança de que o veículo pertence ao catálogo, a solicitação deve ser encaminhada ao Agente Langflow de Buscass. A recusa só é permitida quando não houver como associar o pedido a nenhum modelo, e a mensagem de rejeição está escrita literalmente nas instruções. É por isso que a resposta saiu palavra por palavra igual ao texto configurado.
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_12.png)
 
