@@ -59,8 +59,6 @@ Um funcionário descontente fez upload de dados envenenados que incluem um códi
 
 **Ataques de data poisoning tipicamente utilizam uma combinação das diferentes técnicas cobertas. Neste laboratório usaremos uma tática única (e comum) de atores maliciosos: os dados envenenados parecem corretos ao olho humano, mas na realidade foram envenenados com texto branco invisível, contendo um código de cupom que nenhum vendedor jamais autorizou.**
 
-> Uma visão lado a lado de um ataque de data poisoning. Os dados envenenados (lado esquerdo da imagem) parecem corretos ao olho humano, mas na realidade, foram envenenados com texto branco invisível. O lado direito da imagem mostra os dados reais, com a informação maliciosa em texto preto.
-
 ### Por que Sistemas RAG são Vulneráveis?
 
 Sistemas RAG (Retrieval Augmented Generation) são particularmente vulneráveis porque confiam no contexto recuperado de bases de conhecimento, não validam inerentemente a precisão factual, não conseguem distinguir entre dados legítimos e envenenados, e apresentam confiantemente informações recuperadas como verdade.
