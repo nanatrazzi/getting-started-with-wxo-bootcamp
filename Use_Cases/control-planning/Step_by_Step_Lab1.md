@@ -8,7 +8,7 @@
     - [Parte 1: Acessando o watsonx Orchestrate](#parte-1-acessando-o-watsonx-orchestrate)
     - [Parte 2: Criar Agente de Pesquisa de Carros com Base de Conhecimento Envenenada](#parte-2-criar-agente-de-pesquisa-de-carros-com-base-de-conhecimento-envenenada)
       - [Conectando a base de conhecimento envenenada](#conectando-a-base-de-conhecimento-envenenada)
-      - [Entendendo as configurações a base de conhecimento.](#entendendo-as-configurações-a-base-de-conhecimento)
+      - [Entendendo as configurações a base de conhecimento](#entendendo-as-configurações-a-base-de-conhecimento)
       - [Configurando o comportamento (Behavior) do agente](#configurando-o-comportamento-behavior-do-agente)
     - [Parte 3: Testar o Agente Vulnerável](#parte-3-testar-o-agente-vulnerável)
     - [Parte 4: Entendendo o Ataque de Data Poisoning](#parte-4-entendendo-o-ataque-de-data-poisoning)
@@ -181,47 +181,45 @@ Assim como a descrição do agente, a **descrição da base de conhecimento** é
 
 ![Fonte de conhecimento adicionada](../../Assets_for_BuildBooks/labs/lab01/lab01_17.png)
 
-#### Entendendo as configurações a base de conhecimento.
+#### Entendendo as configurações a base de conhecimento
 
-**16.** Clique em **Edit details** para abrir as configurações avançadas da fonte de conhecimento.
+**16.** Clique em **Edit details** para abrir as configurações da fonte de conhecimento.
 
 ![Edit details](../../Assets_for_BuildBooks/labs/lab01/lab01_18.png)
 
-**17.** Em **Edit knowledge settings**, você encontra o modo de resposta:
+**17.** Clique em **Edit knowledge settings**. É aqui que você define **como** o agente usa os trechos que a Knowledge recupera.
 
-O modo **Dynamic** faz com que a Knowledge apenas recupere a informação, deixando o *agente* decidir o que fazer com ela: Gerar uma resposta direta ou usá-la como contexto para uma tarefa maior. É o modo padrão e mais flexível. 
+Primeiro temos o **Response mode**, e ele muda bastante o comportamento do agente.
+
+No modo **Dynamic**, a busca na base de conhecimento vira uma ferramenta que o agente consulta. A recuperação acontece igual: A pergunta é comparada com os documentos e os trechos mais relevantes são selecionados. 
+
+O que muda é o destino desses trechos. Em vez de alimentarem um gerador de resposta fechado, eles entram no contexto do agente, ao lado das instruções dele e das outras ferramentas disponíveis. Quem redige a resposta final é o agente.
+
+Por oferecer maior flexibilidade, esse também é o modo com menos controle sobre o conteúdo que chega ao usuário. Por isso, as configurações disponíveis são limitadas a Maximum Search Results, que define quantos resultados serão retornados, e Citations, que permite exibir as fontes utilizadas na resposta.
 
 ![Response mode: Dynamic](../../Assets_for_BuildBooks/labs/lab01/lab01_19.png)
 
-Já o modo **Classic** funciona como um pipeline linear, recuperando e já gerando a resposta final que vai direto para o usuário, com parâmetros configuráveis:
+Já o modo **Classic** funciona como um pipeline linear e fechado: Recupera o trecho, gera a resposta final e entrega direto ao usuário, sem o agente interferir no meio do caminho.
+
+Os parâmetros do modo Classic são:
+
+- **Retrieval confidence threshold**: o quão parecido o trecho recuperado precisa ser da pergunta para ser considerado. Em `Off` quase tudo passa; em `Highest` só entram correspondências muito fortes. Quanto mais alto, menor a chance de o agente responder com base em um trecho irrelevante, e maior a chance de ele simplesmente não responder.
+- **Generated response length**: o tamanho da resposta gerada (`Concise`, `Moderate` ou `Verbose`).
+- **Response confidence threshold**: o quão confiante o modelo precisa estar na resposta que acabou de gerar para poder entregá-la. É o último filtro antes do usuário; se a confiança ficar abaixo do limite, aparece a mensagem de "sem resposta" no lugar.
+- **Message when no answer is found**: o texto exibido quando nada passa por esses filtros.
 
 ![Response mode: Classic](../../Assets_for_BuildBooks/labs/lab01/lab01_20.png)
 
-Nesse modo você configura o **Retrieval confidence threshold** (o quão parecido o trecho recuperado precisa ser da pergunta para ser considerado), o **Generated response length** (conciso, moderado ou detalhado), o **Response confidence threshold** (o quão confiante o modelo precisa estar antes de responder com base no que recuperou) e a **Message when no answer is found** (a mensagem exibida quando nada relevante é encontrado).
 
-![Configurações do modo Classic](../../Assets_for_BuildBooks/labs/lab01/lab01_21.png)
+**18.** Nesse momento vamos escolher o **Response** como **Dynamic**
 
-Vale notar que nenhum desses controles substitui uma diretriz explícita, que veremos na Parte 5, mas aumentar os limiares de confiança já funciona como uma camada adicional de defesa: um trecho de texto branco invisível, mal formatado ou fora de contexto tende a ter uma pontuação de confiança mais baixa, então elevar esses limiares pode reduzir, ainda que não eliminar, a chance de conteúdo envenenado ser usado.
+E em `Maxinum Search Results` vamos colocar aumentar para `20`
 
-**Nesse momento não é necessário fazer nenhuma mudança.**
+**19.** Clique em `Save`
 
-**18.** Role para baixo para ver **Maximum Search Results** (quantos trechos recuperados alimentam a resposta) e **Citations** (se as fontes usadas serão mostradas ao usuário final).
+![Response mode: Dynamic](../../Assets_for_BuildBooks/labs/lab01/lab01_23-2.png)
 
-![Maximum Search Results e Citations](../../Assets_for_BuildBooks/labs/lab01/lab01_22.png)
-
-Manter **Citations** ativado (`All`) é uma boa prática de transparência: se o agente citar a fonte de cada afirmação, fica mais fácil para um humano perceber que uma informação suspeita, como um "cupom de 20% off", veio de um documento específico e investigar.
-
-**19.** Em **Message when no answer is found**, altere o texto para:
-
-```
-Desculpe, essa informação não está disponível.
-```
-
-Clique em **Save**.
-
-![Mensagem customizada e Save](../../Assets_for_BuildBooks/labs/lab01/lab01_23.png)
-
-**20.** Use a trilha de navegação (*breadcrumb*) no topo para voltar à página do agente.
+**20.** Use a trilha de navegação (*breadcrumb*) no topo, em **Agente de suporte ao revendedor**, para voltar à página do agente.
 
 ![Voltar ao agente](../../Assets_for_BuildBooks/labs/lab01/lab01_24.png)
 
