@@ -38,6 +38,12 @@ Nesta parte, você vai conectar um agente externo que realiza buscas na web sobr
 
 > Este agente usa o protocolo A2A para se comunicar com o watsonx Orchestrate. Para ter acesso a ele, utilize as credenciais e o link que o seu instrutor vai fornecer.
 
+Nesse momento será necessário a criação de outro agente para isso, é necessário retornar a página de gerenciamento.
+
+Utilize a seta de voltar conforme ilustrado na imagem abaixo:
+
+![watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab02/lab01.png)
+
 Clique no link **Manage Agents**, no menu do canto superior esquerdo, e em seguida no botão **Create agent**, no canto superior direito da tela.
 
 ![Build agents and tools](../../Assets_for_BuildBooks/labs/lab02/lab02_01.png)
