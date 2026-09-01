@@ -177,7 +177,7 @@ Clique em **Save**.
 
 Assim como a descrição do agente, a **descrição da base de conhecimento** é usada para decidir *quando* consultar essa fonte: uma descrição vaga ou ausente faz o agente ignorar a base em situações onde ela seria útil ou, pior, consultá-la em contextos errados.
 
-**15.** Após salvar, a fonte de conhecimento é processada e vinculada ao agente. Você verá uma notificação de upload e, na lista, o card **Catálogo de Carro com preços** já **Used by 1 agent**.
+**15.** Após salvar, a fonte de conhecimento é processada e vinculada ao agente. 
 
 ![Fonte de conhecimento adicionada](../../Assets_for_BuildBooks/labs/lab01/lab01_17.png)
 
@@ -187,11 +187,13 @@ Assim como a descrição do agente, a **descrição da base de conhecimento** é
 
 ![Edit details](../../Assets_for_BuildBooks/labs/lab01/lab01_18.png)
 
-**17.** Clique em **Edit knowledge settings**. É aqui que você define **como** o agente usa os trechos que a Knowledge recupera.
+**17.** Clique em **Edit knowledge settings**. 
 
-Primeiro temos o **Response mode**, e ele muda bastante o comportamento do agente.
+É aqui que você define **como** o agente usa os trechos que a Knowledge recupera.
 
-No modo **Dynamic**, a busca na base de conhecimento vira uma ferramenta que o agente consulta. A recuperação acontece igual: A pergunta é comparada com os documentos e os trechos mais relevantes são selecionados. 
+**Response**: Importante pois pode mudar o comportamento do agente, temos 2 modos aqui.
+
+**Dynamic**, a busca na base de conhecimento vira uma ferramenta que o agente consulta. A recuperação acontece igual: A pergunta é comparada com os documentos e os trechos mais relevantes são selecionados. 
 
 O que muda é o destino desses trechos. Em vez de alimentarem um gerador de resposta fechado, eles entram no contexto do agente, ao lado das instruções dele e das outras ferramentas disponíveis. Quem redige a resposta final é o agente.
 
@@ -199,7 +201,7 @@ Por oferecer maior flexibilidade, esse também é o modo com menos controle sobr
 
 ![Response mode: Dynamic](../../Assets_for_BuildBooks/labs/lab01/lab01_19.png)
 
-Já o modo **Classic** funciona como um pipeline linear e fechado: Recupera o trecho, gera a resposta final e entrega direto ao usuário, sem o agente interferir no meio do caminho.
+**Classic** Funciona como um pipeline linear e fechado: Recupera o trecho, gera a resposta final e entrega direto ao usuário, sem o agente interferir no meio do caminho.
 
 Os parâmetros do modo Classic são:
 
@@ -211,9 +213,9 @@ Os parâmetros do modo Classic são:
 ![Response mode: Classic](../../Assets_for_BuildBooks/labs/lab01/lab01_20.png)
 
 
-**18.** Nesse momento vamos escolher o **Response** como **Dynamic**
+**18.** Nesse momento vamos escolher o **Response** como ``Dynamic``
 
-E em `Maxinum Search Results` vamos colocar aumentar para `20`
+ `Maximum Search Results` aumente o valor de resultados de busca para `20`
 
 **19.** Clique em `Save`
 
