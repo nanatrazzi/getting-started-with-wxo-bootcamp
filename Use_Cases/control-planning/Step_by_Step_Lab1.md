@@ -316,17 +316,26 @@ Na próxima etapa tomararemos uma ação para proteger o agente contra data pois
 
 Vamos analisar o que acabou de acontecer.
 
-**O Vetor de Ataque**:
+O agente sofreu um ataque de Data Poisoning.
 
-1. Um ator malicioso obteve acesso ao PDF do catálogo de carros.
-2. Ele inseriu um código de cupom fictício (`ALFA20OFF`, 20% de desconto) usando texto branco sobre fundo branco, invisível para quem revisa o documento visualmente.
-3. O PDF foi carregado na base de conhecimento do agente sem nenhuma checagem automatizada.
-4. O sistema RAG recuperou esse trecho de texto quando a conversa "deu o gancho certo" (mencionar o código).
-5. O LLM apresentou essa informação confiantemente como fato, inclusive calculando o valor final com desconto.
+_Como o ataque funcionou?_
+Um código promocional falso (ALFA20OFF) foi inserido no PDF do catálogo. O documento foi carregado na base de conhecimento sem validação.
 
-**Por que Isso é Perigoso**: isso é perigoso por diversos motivos. Em termos de **confiança do cliente**, clientes recebem informações falsas sobre preços e promoções. Em termos de **responsabilidade legal**, anunciar descontos falsos pode violar leis de proteção ao consumidor. Em termos de **dano à reputação**, a empresa passa a parecer incompetente ou fraudulenta. Em termos de **perda financeira**, clientes podem exigir o preço anunciado. E, em termos de **caos operacional**, a equipe de vendas passa a lidar com clientes confusos e reclamações.
+-> O sistema RAG recuperou essa informação durante uma consulta.
 
-**Por que o Agente Não Detectou**: o agente não detectou o problema porque nenhuma regra de validação foi implementada nas instruções, porque há confiança cega no conteúdo retornado pela base de conhecimento, e porque o texto invisível é tratado exatamente como qualquer outro texto pelo mecanismo de extração e indexação do PDF.
+-> O agente tratou o conteúdo como verdadeiro e apresentou o desconto ao cliente.
+
+_Por que isso é perigoso?_
+
+Quando clientes recebem informações incorretas, a empresa pode sofrer danos à sua reputação e perder a confiança do público. Além disso, a divulgação de promoções inexistentes pode gerar problemas legais e reclamações por parte dos consumidores. Como consequência, a equipe de vendas precisa lidar com dúvidas, retrabalho e um aumento no volume de reclamações, impactando a eficiência da operação.
+
+_Por que o agente não detectou?_
+
+-> Não havia regras para validar promoções ou descontos. <br>
+-> O agente confiou no conteúdo retornado pela base de conhecimento. <br>
+-> O texto oculto no PDF foi indexado normalmente pelo sistema. <br>
+
+Este exemplo mostra que agentes RAG dependem da qualidade dos dados que recuperam. Se a base de conhecimento estiver comprometida, o agente poderá propagar informações falsas com confiança.
 
 ### Parte 5: Criar Diretrizes para Proteger Contra Data Poisoning
 
