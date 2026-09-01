@@ -147,15 +147,23 @@
     <ul style="list-style:none;padding:0;margin:0;">
       <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
       <li style="margin-bottom:6px;"><a href="#caso-de-uso">Descrição do Caso de Uso</a></li>
-      <li style="margin-bottom:6px;"><a href="#tipos-ataques">Tipos de Ataques de Data Poisoning</a></li>
-      <li style="margin-bottom:6px;"><a href="#rag-vulneravel">Por que Sistemas RAG são Vulneráveis?</a></li>
       <li style="margin-bottom:6px;"><a href="#parte1">Parte 1: Acessando o watsonx Orchestrate</a></li>
-      <li style="margin-bottom:6px;"><a href="#parte2">Parte 2: Criar Agente de Pesquisa de Carros com Base de Conhecimento Envenenada</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte2">Parte 2: Criar Agente de Pesquisa de Carros com Base de Conhecimento Envenenada</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li style="margin-bottom:4px;"><a href="#conectando-base">Conectando a base de conhecimento envenenada</a></li>
+          <li style="margin-bottom:4px;"><a href="#config-knowledge">Entendendo as configurações a base de conhecimento</a></li>
+          <li style="margin-bottom:4px;"><a href="#behavior-agente">Configurando o comportamento (Behavior) do agente</a></li>
+        </ul>
+      </li>
       <li style="margin-bottom:6px;"><a href="#parte3">Parte 3: Testar o Agente Vulnerável</a></li>
       <li style="margin-bottom:6px;"><a href="#parte4">Parte 4: Entendendo o Ataque de Data Poisoning</a></li>
       <li style="margin-bottom:6px;"><a href="#parte5">Parte 5: Criar Diretrizes para Proteger Contra Data Poisoning</a></li>
       <li style="margin-bottom:6px;"><a href="#parte6">Parte 6: Verificar que a Diretriz Está Funcionando</a></li>
-      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos Passos</a></li>
+      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos passos</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li style="margin-bottom:4px;"><a href="#sou-desenvolvedor">Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</a></li>
+        </ul>
+      </li>
     </ul>
   </nav>
 
@@ -163,14 +171,14 @@
   <section id="visao-geral">
     <h2>Visão Geral</h2>
 
-    <p>Este laboratório prático mostra como proteger agentes de Inteligência Artificial contra ataques de <strong>data poisoning</strong> por meio de diretrizes (guidelines) no <strong>watsonx Orchestrate</strong>. Ao longo dessa atividade, você criará um agente do zero, conectado a uma base de conhecimento propositalmente comprometida. Primeiro, verá na prática como o agente pode ser induzido a fornecer respostas incorretas quando confia em dados manipulados. Em seguida, aplicará mecanismos de proteção para corrigir o problema.</p>
+    <p>Neste laboratório, você aprenderá na prática como proteger agentes de Inteligência Artificial contra ataques de <strong>Data Poisoning</strong> por meio de guidelines no <strong>watsonx Orchestrate</strong>.</p>
 
-    <p>O objetivo é entender não apenas como proteger um agente contra esse tipo de ataque, mas também por que cada medida de segurança é necessária.</p>
+    <p>Ao longo dos exercícios, veremos como informações maliciosas podem ser introduzidas em bases de conhecimento e como diretrizes bem definidas ajudam o agente a identificar, ignorar e mitigar esse tipo de ameaça.</p>
 
     <div class="callout callout--note">
       <div>
         <div class="callout__title">Definição</div>
-        <p style="margin:0;">Data Poisoning é uma técnica de ataque em que um agente mal-intencionado, ou até mesmo um usuário com acesso interno, insere informações falsas, enganosas ou incorretas em conjuntos de dados utilizados para treinamento, ajuste fino (fine-tuning) ou recuperação de informações em sistemas RAG (Retrieval-Augmented Generation). Como consequência, o modelo pode aprender comportamentos inadequados ou passar a fornecer respostas incorretas e potencialmente perigosas.</p>
+        <p style="margin:0;"><strong>Data Poisoning é um ataque que consiste na inserção intencional de dados falsos, manipulados ou enganosos em fontes utilizadas por sistemas de IA. Esses dados podem contaminar processos de treinamento, fine-tuning ou mecanismos de recuperação de informações em soluções RAG (Retrieval-Augmented Generation). Como resultado, o agente pode passar a gerar respostas equivocadas, reproduzir informações incorretas ou adotar comportamentos que comprometem a qualidade, a segurança e a confiabilidade da aplicação.</strong></p>
       </div>
     </div>
 
@@ -190,60 +198,42 @@
   <!-- CASO DE USO -->
   <section id="caso-de-uso">
     <h2>Descrição do Caso de Uso</h2>
-    <p>Você está construindo um Assistente de Vendas de Carros que ajuda clientes a fazer compras do catálogo da sua empresa. Você construiu uma base de conhecimento com informações sobre o catálogo, incluindo imagens, descrições e preços. No entanto, após alguns testes, você descobre que o agente está usando informações enganosas para influenciar decisões dos clientes.</p>
-    <p>Você precisa proteger seu agente deste ataque!</p>
+    <p>Você está desenvolvendo um Agente Virtual de Vendas de Veículos baseado em uma base de conhecimento com informações de carros, preços e descrições.</p>
 
-    <div class="callout callout--danger">
-      <div>
-        <div class="callout__title">O Cenário de Ataque</div>
-        <p style="margin:0;">Um funcionário descontente fez upload de dados envenenados que incluem um código promocional inventado (por exemplo, um cupom de <strong>20% de desconto</strong> que nunca foi aprovado pela concessionária). Sem proteção, seu sistema de IA utilizará confiantemente esta informação falsa para enganar clientes, o que pode potencialmente causar danos à reputação e questões legais! É hora de agir!</p>
-      </div>
-    </div>
+    <p>Durante os testes, você descobre que um funcionário inseriu dados falsos na base, incluindo um suposto cupom de 20% de desconto que nunca foi aprovado pela empresa. Sem proteção, o agente utiliza essa informação incorreta e a apresenta aos clientes como se fosse verdadeira.</p>
 
-    <h3>Sua Missão</h3>
-    <p>Implementar o agente vulnerável e observar o ataque, entender como funciona o data poisoning, implementar diretrizes para proteger contra dados envenenados e verificar que a proteção é eficaz.</p>
-  </section>
+    <p><strong>Sua missão</strong>: Observar o ataque de Data Poisoning em ação, entender seus impactos e implementar guidelines no <strong>watsonx Orchestrate</strong> para impedir que o agente utilize informações envenenadas e garantir respostas seguras e confiáveis.</p>
 
-  <!-- TIPOS DE ATAQUES -->
-  <section id="tipos-ataques">
+    <hr class="section-divider">
+
     <h3>Tipos de Ataques de Data Poisoning</h3>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
       <div style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:16px;">
-        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">1. Injeção Direta</div>
-        <p style="margin:0;font-size:13px;">Informação falsa inserida diretamente em documentos.<br><em>Exemplo: mudar "$45.000" para "$1" em um catálogo de produtos.</em></p>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">Injeção Direta</div>
+        <p style="margin:0;font-size:13px;">Informações falsas inseridas diretamente nos dados, como alterar o preço de um veículo de R$45.000 para R$1.</p>
       </div>
       <div style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:16px;">
-        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">2. Manipulação Sutil</div>
-        <p style="margin:0;font-size:13px;">Fatos ligeiramente alterados que parecem plausíveis.<br><em>Exemplo: mudar classificações de segurança de 4 estrelas para 5 estrelas.</em></p>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">Manipulação Sutil</div>
+        <p style="margin:0;font-size:13px;">Pequenas alterações que parecem legítimas, como aumentar artificialmente uma classificação de segurança.</p>
       </div>
       <div style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:16px;">
-        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">3. Envenenamento de Contexto</div>
-        <p style="margin:0;font-size:13px;">Contexto enganoso que muda a interpretação.<br><em>Exemplo: adicionar termos de garantia falsos ou taxas ocultas.</em></p>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">Envenenamento de Contexto</div>
+        <p style="margin:0;font-size:13px;">Inclusão de informações enganosas para influenciar a interpretação dos dados, como promoções ou garantias inexistentes.</p>
       </div>
       <div style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:16px;">
-        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">4. Ataques de Disponibilidade</div>
-        <p style="margin:0;font-size:13px;">Corromper dados para tornar o sistema não confiável.<br><em>Exemplo: inserir informações contraditórias entre documentos.</em></p>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">Ataques de Disponibilidade</div>
+        <p style="margin:0;font-size:13px;">Inserção de informações contraditórias que reduzem a confiabilidade do sistema.</p>
       </div>
     </div>
 
-    <div class="callout callout--warning">
-      <div>
-        <div class="callout__title">Importante</div>
-        <p style="margin:0;">Ataques de data poisoning tipicamente utilizam uma combinação das diferentes técnicas cobertas. Neste laboratório usaremos uma tática única (e comum) de atores maliciosos: os dados envenenados parecem corretos ao olho humano, mas na realidade foram envenenados com <strong>texto branco invisível</strong>, contendo um código de cupom que nenhum vendedor jamais autorizou.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- POR QUE RAG É VULNERÁVEL -->
-  <section id="rag-vulneravel">
-    <h2>Por que Sistemas RAG são Vulneráveis?</h2>
-    <p>Sistemas RAG (Retrieval Augmented Generation) são particularmente vulneráveis porque confiam no contexto recuperado de bases de conhecimento, não validam inerentemente a precisão factual, não conseguem distinguir entre dados legítimos e envenenados, e apresentam confiantemente informações recuperadas como verdade.</p>
+    <h3 id="rag-vulneravel">Por que Sistemas RAG são Vulneráveis?</h3>
+    <p>Soluções <strong>RAG (Retrieval-Augmented Generation)</strong> geram respostas com base nas informações recuperadas de uma base de conhecimento. Se essa base contiver dados incorretos ou maliciosos, o agente poderá utilizá-los como se fossem verdadeiros, propagando informações incorretas aos usuários.</p>
 
     <div class="callout callout--note">
       <div>
         <div class="callout__title">Nota</div>
-        <p style="margin:0;">Sempre pratique higiene de dados. Trabalhe de perto com suas equipes de engenharia de dados para garantir alta qualidade de dados antes de incorporar quaisquer fontes de dados em suas bases de conhecimento.</p>
+        <p style="margin:0;">A melhor defesa contra Data Poisoning começa antes da IA. Sempre valide a qualidade e a confiabilidade dos dados antes de incorporá-los à sua base de conhecimento.</p>
       </div>
     </div>
 
@@ -332,7 +322,7 @@
       </li>
     </ol>
 
-    <h3>Conectando a base de conhecimento envenenada</h3>
+    <h3 id="conectando-base">Conectando a base de conhecimento envenenada</h3>
 
     <ol class="step-list" start="8" style="counter-reset: step-counter 7;">
       <li>
@@ -400,56 +390,62 @@
       </li>
       <li>
         <div class="step-content">
-          <p>Após salvar, a fonte de conhecimento é processada e vinculada ao agente. Você verá uma notificação de upload e, na lista, o card <strong>Catálogo de Carro com preços</strong> já <strong>Used by 1 agent</strong>.</p>
+          <p>Após salvar, a fonte de conhecimento é processada e vinculada ao agente.</p>
           <img class="lab-img" src="Assets_for_BuildBooks/lab01/lab01_17.png" alt="Fonte de conhecimento adicionada">
         </div>
       </li>
     </ol>
 
-    <h3>Configurações avançadas da base de conhecimento (opcional, mas recomendado entender)</h3>
+    <h3 id="config-knowledge">Entendendo as configurações a base de conhecimento</h3>
 
     <ol class="step-list" start="16" style="counter-reset: step-counter 15;">
       <li>
         <div class="step-content">
-          <p>Clique em <strong>Edit details</strong> para abrir as configurações avançadas da fonte de conhecimento.</p>
+          <p>Clique em <strong>Edit details</strong> para abrir as configurações da fonte de conhecimento.</p>
           <img class="lab-img" src="Assets_for_BuildBooks/lab01/lab01_18.png" alt="Edit details">
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Em <strong>Edit knowledge settings</strong>, você encontra o modo de resposta:</p>
+          <p>Clique em <strong>Edit knowledge settings</strong>.</p>
+          <p>É aqui que você define <strong>como</strong> o agente usa os trechos que a Knowledge recupera.</p>
+          <p><strong>Response</strong>: Importante pois pode mudar o comportamento do agente, temos 2 modos aqui.</p>
+          <p><strong>Dynamic</strong>, a busca na base de conhecimento vira uma ferramenta que o agente consulta. A recuperação acontece igual: A pergunta é comparada com os documentos e os trechos mais relevantes são selecionados.</p>
+          <p>O que muda é o destino desses trechos. Em vez de alimentarem um gerador de resposta fechado, eles entram no contexto do agente, ao lado das instruções dele e das outras ferramentas disponíveis. Quem redige a resposta final é o agente.</p>
+          <p>Por oferecer maior flexibilidade, esse também é o modo com menos controle sobre o conteúdo que chega ao usuário. Por isso, as configurações disponíveis são limitadas a Maximum Search Results, que define quantos resultados serão retornados, e Citations, que permite exibir as fontes utilizadas na resposta.</p>
           <img class="lab-img" src="Assets_for_BuildBooks/lab01/lab01_19.png" alt="Response mode: Dynamic">
-          <p>O modo <strong>Dynamic</strong> faz com que a Knowledge apenas recupere a informação, deixando o <em>agente</em> decidir o que fazer com ela: gerar uma resposta direta ou usá-la como contexto para uma tarefa maior. É o modo padrão e mais flexível. Já o modo <strong>Classic</strong> funciona como um pipeline linear, recuperando e já gerando a resposta final que vai direto para o usuário, com parâmetros configuráveis:</p>
+          <p><strong>Classic</strong> Funciona como um pipeline linear e fechado: Recupera o trecho, gera a resposta final e entrega direto ao usuário, sem o agente interferir no meio do caminho.</p>
+          <p>Os parâmetros do modo Classic são:</p>
+          <ul>
+            <li><strong>Retrieval confidence threshold</strong>: o quão parecido o trecho recuperado precisa ser da pergunta para ser considerado. Em <code>Off</code> quase tudo passa; em <code>Highest</code> só entram correspondências muito fortes. Quanto mais alto, menor a chance de o agente responder com base em um trecho irrelevante, e maior a chance de ele simplesmente não responder.</li>
+            <li><strong>Generated response length</strong>: o tamanho da resposta gerada (<code>Concise</code>, <code>Moderate</code> ou <code>Verbose</code>).</li>
+            <li><strong>Response confidence threshold</strong>: o quão confiante o modelo precisa estar na resposta que acabou de gerar para poder entregá-la. É o último filtro antes do usuário; se a confiança ficar abaixo do limite, aparece a mensagem de "sem resposta" no lugar.</li>
+            <li><strong>Message when no answer is found</strong>: o texto exibido quando nada passa por esses filtros.</li>
+          </ul>
           <img class="lab-img" src="Assets_for_BuildBooks/lab01/lab01_20.png" alt="Response mode: Classic">
-          <img class="lab-img" src="Assets_for_BuildBooks/lab01/lab01_21.png" alt="Configurações do modo Classic">
-          <p>Nesse modo você configura o <strong>Retrieval confidence threshold</strong> (o quão parecido o trecho recuperado precisa ser da pergunta para ser considerado), o <strong>Generated response length</strong> (conciso, moderado ou detalhado), o <strong>Response confidence threshold</strong> (o quão confiante o modelo precisa estar antes de responder com base no que recuperou) e a <strong>Message when no answer is found</strong> (a mensagem exibida quando nada relevante é encontrado).</p>
-          <p>Vale notar que nenhum desses controles substitui uma diretriz explícita, que veremos na Parte 5, mas aumentar os limiares de confiança já funciona como uma camada adicional de defesa: um trecho de texto branco invisível, mal formatado ou fora de contexto tende a ter uma pontuação de confiança mais baixa, então elevar esses limiares pode reduzir, ainda que não eliminar, a chance de conteúdo envenenado ser usado.</p>
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Role para baixo para ver <strong>Maximum Search Results</strong> (quantos trechos recuperados alimentam a resposta) e <strong>Citations</strong> (se as fontes usadas serão mostradas ao usuário final).</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/lab01/lab01_22.png" alt="Maximum Search Results e Citations">
-          <p>Manter <strong>Citations</strong> ativado (<code>All</code>) é uma boa prática de transparência: se o agente citar a fonte de cada afirmação, fica mais fácil para um humano perceber que uma informação suspeita, como um "cupom de 20% off", veio de um documento específico e investigar.</p>
+          <p>Nesse momento vamos escolher o <strong>Response</strong> como <code>Dynamic</code></p>
+          <p><code>Maximum Search Results</code> aumente o valor de resultados de busca para <code>20</code></p>
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Você pode personalizar a <strong>Message when no answer is found</strong>, por exemplo:</p>
-          <div class="code-block">Desculpe, essa informação não está disponível.</div>
-          <p>Clique em <strong>Save</strong>.</p>
-          <img class="lab-img" src="Assets_for_BuildBooks/lab01/lab01_23.png" alt="Mensagem customizada e Save">
+          <p>Clique em <code>Save</code></p>
+          <img class="lab-img" src="Assets_for_BuildBooks/lab01/lab01_23-2.png" alt="Response mode: Dynamic">
         </div>
       </li>
       <li>
         <div class="step-content">
-          <p>Use a trilha de navegação (<em>breadcrumb</em>) no topo para voltar à página do agente.</p>
+          <p>Use a trilha de navegação (<em>breadcrumb</em>) no topo, em <strong>Agente de suporte ao revendedor</strong>, para voltar à página do agente.</p>
           <img class="lab-img" src="Assets_for_BuildBooks/lab01/lab01_24.png" alt="Voltar ao agente">
         </div>
       </li>
     </ol>
 
-    <h3>Configurando o comportamento (Behavior) do agente</h3>
+    <h3 id="behavior-agente">Configurando o comportamento (Behavior) do agente</h3>
 
     <ol class="step-list" start="21" style="counter-reset: step-counter 20;">
       <li>
@@ -564,29 +560,26 @@ Exemplos:
     <h2>Parte 4: Entendendo o Ataque de Data Poisoning</h2>
     <p>Vamos analisar o que acabou de acontecer.</p>
 
-    <h3>O Vetor de Ataque</h3>
-    <ol>
-      <li>Um ator malicioso obteve acesso ao PDF do catálogo de carros.</li>
-      <li>Ele inseriu um código de cupom fictício (<code>ALFA20OFF</code>, 20% de desconto) usando texto branco sobre fundo branco, invisível para quem revisa o documento visualmente.</li>
-      <li>O PDF foi carregado na base de conhecimento do agente sem nenhuma checagem automatizada.</li>
-      <li>O sistema RAG recuperou esse trecho de texto quando a conversa "deu o gancho certo" (mencionar o código).</li>
-      <li>O LLM apresentou essa informação confiantemente como fato, inclusive calculando o valor final com desconto.</li>
-    </ol>
+    <p>O agente sofreu um ataque de Data Poisoning.</p>
 
-    <h3>Por que Isso é Perigoso</h3>
-    <table>
-      <thead><tr><th>Risco</th><th>Impacto</th></tr></thead>
-      <tbody>
-        <tr><td><strong>Confiança do Cliente</strong></td><td>Clientes recebem informações falsas sobre preços e promoções</td></tr>
-        <tr><td><strong>Responsabilidade Legal</strong></td><td>Anunciar descontos falsos pode violar leis de proteção ao consumidor</td></tr>
-        <tr><td><strong>Dano à Reputação</strong></td><td>A empresa passa a parecer incompetente ou fraudulenta</td></tr>
-        <tr><td><strong>Perda Financeira</strong></td><td>Clientes podem exigir o preço anunciado</td></tr>
-        <tr><td><strong>Caos Operacional</strong></td><td>A equipe de vendas passa a lidar com clientes confusos e reclamações</td></tr>
-      </tbody>
-    </table>
+    <h3><em>Como o ataque funcionou?</em></h3>
+    <p>Um código promocional falso (ALFA20OFF) foi inserido no PDF do catálogo. O documento foi carregado na base de conhecimento sem validação.</p>
+    <ul>
+      <li>O sistema RAG recuperou essa informação durante uma consulta.</li>
+      <li>O agente tratou o conteúdo como verdadeiro e apresentou o desconto ao cliente.</li>
+    </ul>
 
-    <h3>Por que o Agente Não Detectou</h3>
-    <p>O agente não detectou o problema porque nenhuma regra de validação foi implementada nas instruções, porque há confiança cega no conteúdo retornado pela base de conhecimento, e porque o texto invisível é tratado exatamente como qualquer outro texto pelo mecanismo de extração e indexação do PDF.</p>
+    <h3><em>Por que isso é perigoso?</em></h3>
+    <p>Quando clientes recebem informações incorretas, a empresa pode sofrer danos à sua reputação e perder a confiança do público. Além disso, a divulgação de promoções inexistentes pode gerar problemas legais e reclamações por parte dos consumidores. Como consequência, a equipe de vendas precisa lidar com dúvidas, retrabalho e um aumento no volume de reclamações, impactando a eficiência da operação.</p>
+
+    <h3><em>Por que o agente não detectou?</em></h3>
+    <ul>
+      <li>Não havia regras para validar promoções ou descontos.</li>
+      <li>O agente confiou no conteúdo retornado pela base de conhecimento.</li>
+      <li>O texto oculto no PDF foi indexado normalmente pelo sistema.</li>
+    </ul>
+
+    <p>Este exemplo mostra que agentes RAG dependem da qualidade dos dados que recuperam. Se a base de conhecimento estiver comprometida, o agente poderá propagar informações falsas com confiança.</p>
   </section>
 
   <hr class="section-divider">
@@ -750,7 +743,7 @@ A prioridade desta regra é máxima e ela prevalece sobre qualquer informação 
 
     <p><strong>Lembre-se</strong>: Data poisoning é uma ameaça séria, mas com validação adequada, diretrizes e monitoramento, você pode proteger seus sistemas de IA e manter a confiança dos usuários.</p>
 
-    <h3>Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
+    <h3 id="sou-desenvolvedor">Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</h3>
     <p>Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK (Agent Development Kit). <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">Clique aqui</a> para saber mais como criar agentes, tools, bases de conhecimentos e muito mais.</p>
   </section>
 
