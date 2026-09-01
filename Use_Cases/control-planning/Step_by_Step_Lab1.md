@@ -22,7 +22,7 @@
 
 ## Visão Geral
 
-Este laboratório prático mostra como proteger agentes de Inteligência Artificial contra ataques de **data poisoning** por meio de diretrizes (guidelines) no **watsonx Orchestrate.** Ao longo dessa atividade, você criará um agente do zero, conectado a uma base de conhecimento propositalmente comprometida. Primeiro, verá na prática como o agente pode ser induzido a fornecer respostas incorretas quando confia em dados manipulados. Em seguida, aplicará mecanismos de proteção para corrigir o problema.
+Este laboratório prático mostra como proteger agentes de Inteligência Artificial contra ataques de **data poisoning** por meio de diretrizes (guidelines) no **watsonx Orchestrate.** A
 
 O objetivo é entender não apenas como proteger um agente contra esse tipo de ataque, mas também por que cada medida de segurança é necessária.
 
