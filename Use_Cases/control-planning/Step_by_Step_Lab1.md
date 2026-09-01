@@ -5,8 +5,6 @@
   - [Índice](#índice)
   - [Visão Geral](#visão-geral)
   - [Descrição do Caso de Uso](#descrição-do-caso-de-uso)
-    - [Tipos de Ataques de Data Poisoning](#tipos-de-ataques-de-data-poisoning)
-    - [Por que Sistemas RAG são Vulneráveis?](#por-que-sistemas-rag-são-vulneráveis)
     - [Parte 1: Acessando o watsonx Orchestrate](#parte-1-acessando-o-watsonx-orchestrate)
     - [Parte 2: Criar Agente de Pesquisa de Carros com Base de Conhecimento Envenenada](#parte-2-criar-agente-de-pesquisa-de-carros-com-base-de-conhecimento-envenenada)
       - [Conectando a base de conhecimento envenenada](#conectando-a-base-de-conhecimento-envenenada)
@@ -22,11 +20,11 @@
 
 ## Visão Geral
 
-Este laboratório prático mostra como proteger agentes de Inteligência Artificial contra ataques de **data poisoning** por meio de diretrizes (guidelines) no **watsonx Orchestrate.** A
+Neste laboratório, você aprenderá na prática como proteger agentes de Inteligência Artificial contra ataques de **Data Poisoning** por meio de guidelines no **watsonx Orchestrate.**
 
-O objetivo é entender não apenas como proteger um agente contra esse tipo de ataque, mas também por que cada medida de segurança é necessária.
+Ao longo dos exercícios, veremos como informações maliciosas podem ser introduzidas em bases de conhecimento e como diretrizes bem definidas ajudam o agente a identificar, ignorar e mitigar esse tipo de ameaça. 
 
-> Data Poisoning é uma técnica de ataque em que um agente mal-intencionado, ou até mesmo um usuário com acesso interno, insere informações falsas, enganosas ou incorretas em conjuntos de dados utilizados para treinamento, ajuste fino (fine-tuning) ou recuperação de informações em sistemas RAG (Retrieval-Augmented Generation). Como consequência, o modelo pode aprender comportamentos inadequados ou passar a fornecer respostas incorretas e potencialmente perigosas.
+***Data Poisoning é um ataque que consiste na inserção intencional de dados falsos, manipulados ou enganosos em fontes utilizadas por sistemas de IA. Esses dados podem contaminar processos de treinamento, fine-tuning ou mecanismos de recuperação de informações em soluções RAG (Retrieval-Augmented Generation). Como resultado, o agente pode passar a gerar respostas equivocadas, reproduzir informações incorretas ou adotar comportamentos que comprometem a qualidade, a segurança e a confiabilidade da aplicação.**
 
 Ao final deste laboratório, você será capaz de:
 
@@ -40,32 +38,29 @@ Ao final deste laboratório, você será capaz de:
 
 ## Descrição do Caso de Uso
 
-Você está construindo um Assistente de Vendas de Carros que ajuda clientes a fazer compras do catálogo da sua empresa. Você construiu uma base de conhecimento com informações sobre o catálogo, incluindo imagens, descrições e preços. No entanto, após alguns testes, você descobre que o agente está usando informações enganosas para influenciar decisões dos clientes. 
+Você está desenvolvendo um Agente Virtual de Vendas de Veículos baseado em uma base de conhecimento com informações de carros, preços e descrições.
 
-Você precisa proteger seu agente deste ataque!
+Durante os testes, você descobre que um funcionário inseriu dados falsos na base, incluindo um suposto cupom de 20% de desconto que nunca foi aprovado pela empresa. Sem proteção, o agente utiliza essa informação incorreta e a apresenta aos clientes como se fosse verdadeira.
 
-**O Cenário de Ataque**:
+Sua missão: Observar o ataque de Data Poisoning em ação, entender seus impactos e implementar guidelines no **watsonx Orchestrate** para impedir que o agente utilize informações envenenadas e garantir respostas seguras e confiáveis.
 
-Um funcionário descontente fez upload de dados envenenados que incluem um código promocional inventado (por exemplo, um cupom de **20% de desconto** que nunca foi aprovado pela concessionária). Sem proteção, seu sistema de IA utilizará confiantemente esta informação falsa para enganar clientes, o que pode potencialmente causar danos à reputação e questões legais! É hora de agir!
+----------
 
-**Sua Missão**: implementar o agente vulnerável e observar o ataque, entender como funciona o data poisoning, implementar diretrizes para proteger contra dados envenenados e verificar que a proteção é eficaz.
+**Tipos de Ataques de Data Poisoning**
 
-### Tipos de Ataques de Data Poisoning
+-> Injeção Direta: Informações falsas inseridas diretamente nos dados, como alterar o preço de um veículo de R$45.000 para R$1.
 
-1. **Injeção Direta**: informação falsa inserida diretamente em documentos, como mudar "$45.000" para "$1" em um catálogo de produtos.
-2. **Manipulação Sutil**: fatos ligeiramente alterados que parecem plausíveis, como mudar classificações de segurança de 4 estrelas para 5 estrelas.
-3. **Envenenamento de Contexto**: contexto enganoso que muda a interpretação, como adicionar termos de garantia falsos ou taxas ocultas.
-4. **Ataques de Disponibilidade**: corromper dados para tornar o sistema não confiável, como inserir informações contraditórias entre documentos.
+-> Manipulação Sutil: Pequenas alterações que parecem legítimas, como aumentar artificialmente uma classificação de segurança.
 
-**Ataques de data poisoning tipicamente utilizam uma combinação das diferentes técnicas cobertas. Neste laboratório usaremos uma tática única (e comum) de atores maliciosos: os dados envenenados parecem corretos ao olho humano, mas na realidade foram envenenados com texto branco invisível, contendo um código de cupom que nenhum vendedor jamais autorizou.**
+-> Envenenamento de Contexto: Inclusão de informações enganosas para influenciar a interpretação dos dados, como promoções ou garantias inexistentes.
 
-### Por que Sistemas RAG são Vulneráveis?
+-> Ataques de Disponibilidade: inserção de informações contraditórias que reduzem a confiabilidade do sistema.
 
-Sistemas RAG (Retrieval Augmented Generation) são particularmente vulneráveis porque confiam no contexto recuperado de bases de conhecimento, não validam inerentemente a precisão factual, não conseguem distinguir entre dados legítimos e envenenados, e apresentam confiantemente informações recuperadas como verdade.
+**Por que Sistemas RAG são Vulneráveis?**
 
-> [!NOTE]
-> Sempre pratique higiene de dados. Trabalhe de perto com suas equipes de engenharia de dados para garantir alta qualidade de dados antes de incorporar quaisquer fontes de dados em suas bases de conhecimento.
->
+Soluções **RAG (Retrieval-Augmented Generation)** geram respostas com base nas informações recuperadas de uma base de conhecimento. Se essa base contiver dados incorretos ou maliciosos, o agente poderá utilizá-los como se fossem verdadeiros, propagando informações incorretas aos usuários.
+
+>[!NOTE] A melhor defesa contra Data Poisoning começa antes da IA. Sempre valide a qualidade e a confiabilidade dos dados antes de incorporá-los à sua base de conhecimento.
 
 Vamos começar!
 
