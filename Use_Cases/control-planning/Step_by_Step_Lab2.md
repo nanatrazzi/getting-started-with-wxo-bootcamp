@@ -44,7 +44,7 @@ Utilize a seta de voltar conforme ilustrado na imagem abaixo:
 
 ![watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab02/lab01.png)
 
-Clique no link **Manage Agents**, no menu do canto superior esquerdo, e em seguida no botão **Create agent**, no canto superior direito da tela.
+Clique no botão **Create agent +**, no canto superior direito da tela.
 
 ![Build agents and tools](../../Assets_for_BuildBooks/labs/lab02/lab02_01.png)
 
