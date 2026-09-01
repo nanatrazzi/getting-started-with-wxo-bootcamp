@@ -10,7 +10,7 @@
     - [Parte 1: Acessando o watsonx Orchestrate](#parte-1-acessando-o-watsonx-orchestrate)
     - [Parte 2: Criar Agente de Pesquisa de Carros com Base de Conhecimento Envenenada](#parte-2-criar-agente-de-pesquisa-de-carros-com-base-de-conhecimento-envenenada)
       - [Conectando a base de conhecimento envenenada](#conectando-a-base-de-conhecimento-envenenada)
-      - [Configurações avançadas da base de conhecimento (opcional, mas recomendado entender)](#configurações-avançadas-da-base-de-conhecimento-opcional-mas-recomendado-entender)
+      - [Entendendo as configurações a base de conhecimento.](#entendendo-as-configurações-a-base-de-conhecimento)
       - [Configurando o comportamento (Behavior) do agente](#configurando-o-comportamento-behavior-do-agente)
     - [Parte 3: Testar o Agente Vulnerável](#parte-3-testar-o-agente-vulnerável)
     - [Parte 4: Entendendo o Ataque de Data Poisoning](#parte-4-entendendo-o-ataque-de-data-poisoning)
@@ -186,7 +186,7 @@ Assim como a descrição do agente, a **descrição da base de conhecimento** é
 
 ![Fonte de conhecimento adicionada](../../Assets_for_BuildBooks/labs/lab01/lab01_17.png)
 
-#### Configurações avançadas da base de conhecimento (opcional, mas recomendado entender)
+#### Entendendo as configurações a base de conhecimento.
 
 **16.** Clique em **Edit details** para abrir as configurações avançadas da fonte de conhecimento.
 
@@ -194,17 +194,21 @@ Assim como a descrição do agente, a **descrição da base de conhecimento** é
 
 **17.** Em **Edit knowledge settings**, você encontra o modo de resposta:
 
+O modo **Dynamic** faz com que a Knowledge apenas recupere a informação, deixando o *agente* decidir o que fazer com ela: Gerar uma resposta direta ou usá-la como contexto para uma tarefa maior. É o modo padrão e mais flexível. 
+
 ![Response mode: Dynamic](../../Assets_for_BuildBooks/labs/lab01/lab01_19.png)
 
-O modo **Dynamic** faz com que a Knowledge apenas recupere a informação, deixando o *agente* decidir o que fazer com ela: gerar uma resposta direta ou usá-la como contexto para uma tarefa maior. É o modo padrão e mais flexível. Já o modo **Classic** funciona como um pipeline linear, recuperando e já gerando a resposta final que vai direto para o usuário, com parâmetros configuráveis:
+Já o modo **Classic** funciona como um pipeline linear, recuperando e já gerando a resposta final que vai direto para o usuário, com parâmetros configuráveis:
 
 ![Response mode: Classic](../../Assets_for_BuildBooks/labs/lab01/lab01_20.png)
 
-![Configurações do modo Classic](../../Assets_for_BuildBooks/labs/lab01/lab01_21.png)
-
 Nesse modo você configura o **Retrieval confidence threshold** (o quão parecido o trecho recuperado precisa ser da pergunta para ser considerado), o **Generated response length** (conciso, moderado ou detalhado), o **Response confidence threshold** (o quão confiante o modelo precisa estar antes de responder com base no que recuperou) e a **Message when no answer is found** (a mensagem exibida quando nada relevante é encontrado).
 
+![Configurações do modo Classic](../../Assets_for_BuildBooks/labs/lab01/lab01_21.png)
+
 Vale notar que nenhum desses controles substitui uma diretriz explícita, que veremos na Parte 5, mas aumentar os limiares de confiança já funciona como uma camada adicional de defesa: um trecho de texto branco invisível, mal formatado ou fora de contexto tende a ter uma pontuação de confiança mais baixa, então elevar esses limiares pode reduzir, ainda que não eliminar, a chance de conteúdo envenenado ser usado.
+
+**Nesse momento não é necessário fazer nenhuma mudança.**
 
 **18.** Role para baixo para ver **Maximum Search Results** (quantos trechos recuperados alimentam a resposta) e **Citations** (se as fontes usadas serão mostradas ao usuário final).
 
@@ -212,7 +216,7 @@ Vale notar que nenhum desses controles substitui uma diretriz explícita, que ve
 
 Manter **Citations** ativado (`All`) é uma boa prática de transparência: se o agente citar a fonte de cada afirmação, fica mais fácil para um humano perceber que uma informação suspeita, como um "cupom de 20% off", veio de um documento específico e investigar.
 
-**19.** Você pode personalizar a **Message when no answer is found**, por exemplo:
+**19.** Em **Message when no answer is found**, altere o texto para:
 
 ```
 Desculpe, essa informação não está disponível.
