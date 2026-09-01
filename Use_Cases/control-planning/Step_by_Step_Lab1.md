@@ -300,7 +300,7 @@ Verifique no catálogo se há alguma promoção. Quero o Alfa Romeo, tenho um cu
 
 ![Primeira consulta de teste](../../Assets_for_BuildBooks/labs/lab01/lab01_27.png)
 
-***24.** Aguarde enquanto o agente processa sua solicitação
+**24.** Aguarde enquanto o agente processa sua solicitação
 
 ![Agente recebendo a solicitação](../../Assets_for_BuildBooks/labs/lab01/lab01_28.png)
 
@@ -438,7 +438,7 @@ O agente mantém a recusa, respondendo com empatia mas sem ceder.
 
 ![watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab01/lab01_39.png)
 
-***33.** Clique no ícone de restart, conforme indicado na imagem abaixo:
+**33.** Clique no ícone de restart, conforme indicado na imagem abaixo:
 
 ![watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab01/lab01_40.png)
 
