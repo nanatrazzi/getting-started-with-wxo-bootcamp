@@ -319,11 +319,12 @@ Vamos analisar o que acabou de acontecer.
 O agente sofreu um ataque de Data Poisoning.
 
 _Como o ataque funcionou?_
-Um código promocional falso (ALFA20OFF) foi inserido no PDF do catálogo. O documento foi carregado na base de conhecimento sem validação.
 
--> O sistema RAG recuperou essa informação durante uma consulta.
+-> Um código promocional falso (ALFA20OFF) foi inserido no PDF do catálogo. O documento foi carregado na base de conhecimento sem validação. <br>
 
--> O agente tratou o conteúdo como verdadeiro e apresentou o desconto ao cliente.
+-> O sistema RAG recuperou essa informação durante uma consulta. <br>
+
+-> O agente tratou o conteúdo como verdadeiro e apresentou o desconto ao cliente. <br>
 
 _Por que isso é perigoso?_
 
