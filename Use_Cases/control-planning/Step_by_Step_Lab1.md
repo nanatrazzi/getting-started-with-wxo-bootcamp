@@ -84,11 +84,11 @@ A área **Build** é onde agentes, ferramentas (*tools*) e bases de conhecimento
 
 ![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_03.png)
 
-**4.** Na tela **Build agents and tools**, clique no botão **Create agent**.
+**4.** Na tela **Build agents and tools**, clique no botão **Create agent +**.
 
 ![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_04.png)
 
-**5.** No modal **Create an agent**, escolha a opção **Create from scratch** (em vez de usar IA generativa, um template ou importar um agente LangGraph).
+**5.** No modal **Create an agent +**, escolha a opção **Create from scratch** (em vez de usar IA generativa, um template ou importar um agente LangGraph).
 
 ![Watsonx Orchestrate service](../../Assets_for_BuildBooks/labs/lab01/lab01_05.png)
 
