@@ -45,7 +45,9 @@ Neste laboratório, assim como no [Laboratório 1](./Step_by_Step_Lab1.md), vamo
 
 **E qual a diferença dos dois?**
 
-Guidelines dependem do agente seguir a orientação. Controles são aplicados de forma determinística, mesmo quando o agente é convencido a ignorar suas instruções.
+**Guidelines** dependem do agente seguir a orientação. 
+
+**Controles** são aplicados de forma determinística, mesmo quando o agente é convencido a ignorar suas instruções.
 
 Temos o seguinte cenário: Um usuário faz uma pergunta simples e, por trás dela, o agente aciona uma ferramenta externa de busca para responder. Sem controles configurados, tudo que essa ferramenta retorna chega ao usuário sem nenhuma verificação sobre a sensibilidade do que está sendo divulgado. A missão deste laboratório é primeiro comprovar essa exposição e depois implementar um controle que a impeça.
 
@@ -53,7 +55,7 @@ Temos o seguinte cenário: Um usuário faz uma pergunta simples e, por trás del
 
 Vamos reaproveitar o agente orquestrador criado no [Laboratório 2](./Step_by_Step_Lab2.md), o **Assistente de Compra de Veículos**. Ele é o agente que recebe a pergunta do usuário e decide, com base nas próprias instruções, se deve responder diretamente ou encaminhar a consulta para um agente especializado, como o Agente de Busca.
 
-No campo Instructions vamos fazer uma alteração, copie e cole o seguinte texto:
+No campo **Instructions** vamos fazer uma alteração, copie e cole o seguinte texto:
 
 ```
 Utilize o agente **Agente Langflow de Buscas** para localizar as informações solicitadas pelo usuário.
