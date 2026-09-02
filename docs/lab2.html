@@ -64,6 +64,11 @@
   .step-content p:last-child { margin-bottom: 0; }
   .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
   code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--carbon-gray-80); color: var(--carbon-white); padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--carbon-gray-20); }
+  tr:nth-child(even) td { background: var(--carbon-gray-10); }
+  .table-wrap { overflow-x: auto; }
   .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
   .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
   .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
@@ -122,7 +127,12 @@
     <ul style="list-style:none;padding:0;margin:0;">
       <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
       <li style="margin-bottom:6px;"><a href="#parte1">Parte 1: Conectar Agente de Busca de Terceiros</a></li>
-      <li style="margin-bottom:6px;"><a href="#parte2">Parte 2: Criar o Agente Orquestrador</a></li>
+      <li style="margin-bottom:6px;"><a href="#parte2">Parte 2: Criar o Agente Orquestrador</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li style="margin-bottom:4px;"><a href="#testando-orquestrador">Testando o agente orquestrador</a></li>
+          <li style="margin-bottom:4px;"><a href="#teste2">Teste 2: quando o agente decide <em>não</em> buscar na web</a></li>
+        </ul>
+      </li>
       <li style="margin-bottom:6px;"><a href="#resumo">Resumo</a>
         <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
           <li><a href="#sou-desenvolvedor">Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</a></li>
@@ -147,7 +157,7 @@
       </div>
     </div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab2.PNG" alt="watsonx Orchestrate">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab-external-agents-orchestrator.PNG" alt="watsonx Orchestrate">
 
     <div class="callout callout--warning">
       <div>
@@ -180,7 +190,7 @@
     <p> Utilize a seta de voltar conforme ilustrado na imagem abaixo:</p>
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab01.png" alt="watsonx Orchestrate">
 
-    <p>Clique em <strong>Create agent +</strong>, no canto superior direito da tela.</p>
+    <p>Clique no botão <strong>Create agent +</strong>, no canto superior direito da tela.</p>
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_01.png" alt="Build agents and tools">
 
     <p>Uma janela se abre com as opções de criação. Escolha <strong>Create from scratch</strong>, a mesma opção usada no laboratório anterior para montar um agente do zero.</p>
@@ -232,9 +242,12 @@
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_07.png" alt="Register, protocolo A2A">
 
     <div class="step-item"><div class="step-badge">11</div><div class="step-content"><p>Em <strong>External agent's URL</strong>, cole o endereço público do agente externo que o seu instrutor compartilhou. É por essa URL que o watsonx Orchestrate busca o <em>Agent Card</em>, o documento que descreve as capacidades do agente no padrão A2A, e envia as requisições em tempo de execução.</p></div></div>
-    <div class="step-item"><div class="step-badge">12</div><div class="step-content"><p>Em <strong>Display name</strong>, na seção <strong>Define new agent</strong>, informe <code>Agente Langflow de Buscas</code>. Esse é o nome pelo qual o agente vai aparecer dentro do Orchestrate, independente de como foi construído externamente.</p></div></div>
+    <div class="step-item"><div class="step-badge">12</div><div class="step-content"><p>Em <strong>Display name</strong>, na seção <strong>Define new agent</strong>, informe <code>Agente Langflow de Buscas</code> ou um nome de sua prefêrencia. Esse é o nome pelo qual o agente vai aparecer dentro do Orchestrate, independente de como foi construído externamente.</p></div></div>
 
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_08.png" alt="URL do agente e display name">
+
+    <p>Ainda na seção <strong>Define new agent</strong>, em <strong>Description of agent capabilities</strong>, cole o texto abaixo. Assim como a descrição do próprio agente, é este texto que o modelo de IA vai usar para decidir quando encaminhar uma solicitação a este colaborador:</p>
+    <div class="code-block">Este agente se conecta ao serviço Tavily para realizar uma busca na web e retornar os principais resultados</div>
 
     <div class="step-item"><div class="step-badge">13</div><div class="step-content">
       <p>Ainda na seção <strong>Define new agent</strong>, localize o campo <strong>Description of agent capabilities</strong> e cole o texto abaixo.</p>
@@ -318,20 +331,17 @@
 
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_15.png" alt="Credential type">
 
-    <div class="step-item"><div class="step-badge">20</div><div class="step-content"><p>Selecione <strong>Team credentials</strong>, já que todos vão usar a mesma chave do serviço de busca.</p></div></div>
+    <p>Selecione <strong>Team credentials</strong>, já que todos vão usar a mesma chave do serviço de busca.</p>
 
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_16.png" alt="API Key preenchida">
 
-    <div class="step-item"><div class="step-badge">21</div><div class="step-content"><p>No campo <strong>API Key</strong>, cole a chave usada para autenticar as requisições ao agente externo. O valor é mascarado assim que você segue para a próxima etapa.</p></div></div>
-      
-      
-    <div class="step-item"><div class="step-badge">22</div><div class="step-content"></div><p>Clique em <strong>Next</strong>.</p></div></section>
+    <div class="step-item"><div class="step-badge">21</div><div class="step-content"><p>No campo <strong>API Key</strong>, cole a chave usada para autenticar as requisições ao agente externo. O valor é mascarado assim que você segue para a próxima etapa. Clique em <strong>Next</strong>.</p></div></div>
 
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_17.png" alt="Paste draft configuration">
 
     <p><strong>Configure live environment</strong></p>
 
-    <div class="step-item"><div class="step-badge">23</div><div class="step-content"><p>Para não repetir todo o preenchimento, clique em <strong>Paste draft configuration</strong>. Isso copia as definições do draft (tipo de autenticação, localização da chave e credenciais) para o ambiente live.</p></div></div>
+    <div class="step-item"><div class="step-badge">22</div><div class="step-content"><p>Para não repetir todo o preenchimento, clique em <strong>Paste draft configuration</strong>. Isso copia as definições do draft (tipo de autenticação, localização da chave e credenciais) para o ambiente live.</p></div></div>
 
     <div class="callout callout--warning">
       <div>
@@ -443,7 +453,7 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
     <p>Agora que o <strong>Agente de Busca</strong> já delega tarefas de pesquisa externa para o <strong>Agente Langflow de Buscas</strong>, vamos criar um terceiro agente: um orquestrador que recebe a pergunta do usuário e decide, sozinho, qual dos dois especialistas (o agente de catálogo do laboratório 1 ou o agente de busca externa que você acabou de configurar) deve responder, ou se os dois precisam ser consultados juntos.</p>
 
     <p>Retorne à página de gerenciamento de agentes clicando no ícone de voltar <code>&lt;</code> na interface do watsonx Orchestrate ao topo da página.</p>
-    
+
     <p>Clique em <strong>Create agent</strong>.</p>
 
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_32.png" alt="Lista de agentes com Create agent em destaque">
@@ -472,17 +482,26 @@ Se o veículo NÃO pertencer ao catálogo, responda exatamente:
 
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_36.png" alt="Add Agents, Local instance">
 
-    <div class="step-item"><div class="step-badge">7</div><div class="step-content"><p>Marque os dois agentes que você criou até aqui: o agente responsável pelo catálogo (criado no laboratório 1) e o <strong>Agente Langflow de Buscas</strong>, o colaborador externo importado na Parte 1 deste laboratório. Não se preocupe se os nomes exibidos na sua tela forem ligeiramente diferentes dos mostrados aqui, o importante é selecionar os agentes que você mesmo construiu ao longo do bootcamp. Clique em <strong>Add to agent</strong>.</p></div></div>
+    <div class="step-item"><div class="step-badge">7</div><div class="step-content"><p>Nessa tela é possível escolher os agentes disponíveis no catalogo na sua instância do <strong>watsonx Orchestrate.</strong></p></div></div>
 
     <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_37.png" alt="Seleção dos dois agentes especializados">
 
-    <div class="step-item"><div class="step-badge">8</div><div class="step-content"><p>A aba <strong>Agents</strong> agora lista os dois colaboradores, cada um com sua descrição.</p></div></div>
+    <div class="step-item"><div class="step-badge">7</div><div class="step-content">
+      <p>Marque os dois agentes criados até aqui.</p>
+      <p>Em seguida, clique em <strong>Add to agent</strong></p>
+    </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_38.png" alt="Dois agentes conectados ao orquestrador">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_38.png" alt="Seleção dos dois agentes especializados">
 
-    <p>Vamos ensinar ao orquestrador como decidir, a cada pergunta, para qual colaborador encaminhar a solicitação.</p>
+    <p>A aba <strong>Agents</strong> agora lista os dois colaboradores, cada um com sua descrição.</p>
 
-    <div class="step-item"><div class="step-badge">9</div><div class="step-content">
+    <p>Vamos ensinar ao agente orquestrador como decidir, a cada pergunta, para qual colaborador encaminhar a solicitação.</p>
+
+    <p>Navegue até a aba <strong>Behaviour</strong></p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_39.png" alt="Aba Behaviour do agente orquestrador">
+
+    <div class="step-item"><div class="step-badge">8</div><div class="step-content">
       <p>Na aba <strong>Behavior</strong>, no campo <strong>Instructions</strong>, copie e cole a lógica de roteamento abaixo. Ela cobre três cenários: consultas que dependem só do catálogo, consultas que dependem só de pesquisa externa e consultas híbridas, que precisam dos dois agentes ao mesmo tempo:</p>
       <div class="code-block">Você é o Assistente de Compra de Veículos. Sua função é identificar a intenção do usuário e encaminhar a solicitação para o agente especializado correto.
 
@@ -509,7 +528,7 @@ Exemplos:
 
 ## 2. PESQUISA EXTERNA → Agente de Busca
 
-Encaminhe para o agente **Agente de Busca** quando o usuário pedir:
+Encaminhe para o agente **Agente de Buscas** quando o usuário pedir:
 
 - Avaliações de proprietários
 - Reviews
@@ -554,59 +573,191 @@ Fluxo:
 - Para pesquisas externas, utilize exclusivamente o agente **Agente de Busca**</div>
     </div></div>
 
-    <p>Teste com uma consulta híbrida, que combina uma pergunta de mercado com um pedido de comparação:</p>
+    <h3 id="testando-orquestrador">Testando o agente orquestrador</h3>
+
+    <p>Com o <strong>Assistente de Compra de Veículos</strong> já conectado aos seus colaboradores, agora vamos verificar se eles realmente conversam entre si.</p>
+
+    <p>O objetivo desta parte é responder a três perguntas:</p>
+    <ul>
+      <li>O agente orquestrador consegue identificar sozinho <strong>qual</strong> especialista deve atender cada trecho de uma pergunta?</li>
+      <li>Ele consegue <strong>combinar</strong> dados internos (catálogo da concessionária) com dados externos (pesquisa na web) em uma única resposta?</li>
+      <li>E, quando a pergunta não exige busca externa, ele tem juízo de <strong>não</strong> acionar o agente de buscas à toa?</li>
+    </ul>
+
+    <p>No painel <code>Draft Preview</code>, envie a consulta abaixo.</p>
     <div class="code-block">Busque sobre o Kia Niro com o Hyundai Kona Electric e faça uma comparação</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_39.png" alt="Instruções de roteamento e teste de consulta híbrida">
+    <p>Repare que essa pergunta é propositalmente ambígua quanto à origem da informação. Ela não diz "consulte o catálogo" nem "pesquise na internet". Quem precisa tomar essa decisão é o agente orquestrador, com base nas regras de roteamento definidas no campo <code>Instructions</code>.</p>
 
-    <p>O orquestrador reconhece que a pergunta pede tanto reviews de proprietários quanto uma análise comparativa, consulta os dois agentes especializados e devolve uma resposta única: características de cada modelo segundo avaliações de donos, seguidas de uma comparação direta entre eles.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_40.png" alt="Consulta híbrida enviada no Draft Preview">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_40.png" alt="Resposta consolidada sobre Kia Niro e Hyundai Kona Electric">
+    <p>A resposta chega organizada em quatro blocos. O primeiro traz as <strong>especificações técnicas</strong> e já vem rotulado pelo próprio agente como <em>dados internos do catálogo</em>: tipo de motorização, potência, torque, bateria, autonomia EPA, câmbio, tração, capacidade de passageiros e recarga.</p>
 
-    <p>Para entender o que aconteceu por trás dessa resposta, clique em <strong>Show Reasoning</strong>, ao lado do nome do agente.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_41.png" alt="Primeiro bloco da resposta, com especificações técnicas">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_42.png" alt="Botão Show Reasoning">
+    <p>Ainda no primeiro bloco aparecem os itens de segurança, o preço praticado no Brasil e a disponibilidade. Vale guardar esses dois valores, porque eles voltam a aparecer mais adiante:</p>
 
-    <p>O painel se expande em três etapas.</p>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Modelo</th><th>Preço (catálogo)</th></tr></thead>
+      <tbody>
+        <tr><td>Kia Niro</td><td>R$ 168.324,10</td></tr>
+        <tr><td>Hyundai Kona Electric</td><td>R$ 139.834,10</td></tr>
+      </tbody>
+    </table>
+    </div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_43.png" alt="Três etapas do raciocínio do orquestrador">
+    <p>O campo <strong>Disponibilidade</strong> aparece como <em>"Sem informação de estoque no catálogo"</em> para os dois modelos. Esse é um comportamento desejável: em vez de inventar um dado que não existe na base, o agente declara a ausência dele.</p>
 
-    <p>No <strong>Step 1</strong>, o orquestrador aciona a ferramenta <code>chat_with_collaborator_agente_de_suporte_ao_revendedor</code>, pedindo especificações técnicas, versões disponíveis, preço médio e disponibilidade para os dois veículos, exatamente o papel que a regra 1 de roteamento define para o agente de catálogo.</p>
+    <p>O segundo bloco muda de fonte. Sob o título <strong>Avaliações de usuários e especialistas (pesquisa externa)</strong>, o agente lista pontos positivos, pontos negativos e a opinião de especialistas para cada veículo — informação que não está no catálogo da concessionária e só poderia ter vindo de uma busca na web.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_44.png" alt="Step 1, chamada ao agente de suporte ao revendedor">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_42.png" alt="Segundo bloco, avaliações de usuários e especialistas">
 
-    <p>No <strong>Step 2</strong>, dentro dessa mesma consulta, a ferramenta <code>Catálogo_de_Carro_com_preços</code> é usada para trazer os dados internos do catálogo.</p>
+    <p>O terceiro bloco é um <strong>resumo rápido</strong> em tabela e o quarto traz <strong>recomendações</strong> práticas, incluindo a sugestão de test-drive e a checagem de estoque e promoções na concessionária. A resposta termina com uma pergunta de continuidade, oferecendo agendar um test-drive.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_45.png" alt="Step 2, ferramenta de catálogo com preços">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_43.png" alt="Terceiro bloco, resumo rápido em tabela">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_44.png" alt="Quarto bloco, recomendações práticas">
 
-    <p>No <strong>Step 3</strong>, o orquestrador aciona <code>chat_with_collaborator_Agente_de_Buscas</code>, o colaborador externo configurado na Parte 1, pedindo reviews de proprietários e uma comparação entre os dois modelos. É esse encadeamento de chamadas, catálogo interno e busca externa, que caracteriza uma consulta híbrida.</p>
+    <p>Antes de seguir, role a conversa de volta para o topo e leia a resposta inteira. Ela mistura duas origens de dados em um texto só, e é exatamente isso que vamos rastrear a seguir.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_46.png" alt="Step 3, chamada ao Agente externo">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_45.png" alt="Resposta completa da consulta híbrida">
 
-    <p>Agora teste uma pergunta puramente de catálogo:</p>
+    <h4>Rastreando o caminho da resposta</h4>
+
+    <p>A resposta ficou boa, mas ainda é uma caixa-preta. Para entender quem foi acionado, clique em <code>Show Reasoning</code>, ao lado do nome do agente e do horário da mensagem.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_46.png" alt="Botão Show Reasoning">
+
+    <p>O painel se expande e mostra quatro passos numerados. Cada passo traz a ferramenta chamada, o <strong>Input</strong> que o agente enviou e o <strong>Output</strong> que recebeu de volta.</p>
+
+    <p><strong>Step 1 — o orquestrador chama o especialista interno</strong></p>
+
+    <p>O primeiro passo aciona a ferramenta <code>chat_with_collaborator_agente_de_suporte_ao_revendedor</code>. Repare no conteúdo do Input:</p>
+
+    <div class="code-block">{
+  "message": "Quais são as especificações técnicas, preços e disponibilidade do Kia Niro e do Hyundai Kona Electric?"
+}</div>
+
+    <p>Esse texto <strong>não</strong> foi escrito por você. O orquestrador leu a pergunta original, entendeu que parte dela dependia de dados da concessionária e reformulou uma sub-pergunta específica para o colaborador certo. O Output confirma a transferência: <code>Transferring to - chat_with_collaborator_agente_de_suporte_ao_revendedor</code>.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_47.png" alt="Step 1, chamada ao agente de suporte ao revendedor">
+
+    <p><strong>Step 2 — o especialista consulta a base de conhecimento</strong></p>
+
+    <p>Já dentro do Agente de Suporte ao Revendedor, o segundo passo chama a ferramenta <code>Catálogo_de_Carro_com_preços</code> com uma consulta enxuta:</p>
+
+    <div class="code-block">{
+  "query": "Kia Niro"
+}</div>
+
+    <p>O Output tem 22 linhas e vem do documento <code>Catalog_with_prices_clean.pdf</code>, com trechos do catálogo, preços e observações. É aqui que nasce o primeiro bloco da resposta.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_48.png" alt="Step 2, consulta à base de conhecimento">
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">Ao expandir o Output com <code>Show more</code>, procure o trecho marcado como <em>QUALIDADE DE DADOS</em>. Ele avisa que o catálogo de origem escreve o modelo como <strong>NERO</strong>, enquanto o crossover elétrico da Kia se chama <strong>Niro</strong>, e que o texto foi mantido como impresso. Vale observar que o agente conseguiu casar a consulta "Kia Niro" com o registro "Kia Nero" do catálogo mesmo com a divergência de grafia.</p>
+      </div>
+    </div>
+
+    <p><strong>Step 3 — o orquestrador chama o especialista de busca</strong></p>
+
+    <p>Com os dados internos em mãos, o orquestrador parte para a segunda metade da pergunta e aciona <code>chat_with_collaborator_agente_de_busca</code>, novamente com uma sub-pergunta que ele mesmo formulou:</p>
+
+    <div class="code-block">{
+  "message": "Busque avaliações de usuários e opiniões de especialistas sobre o Kia Niro e o Hyundai Kona Electric."
+}</div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_49.png" alt="Step 3, chamada ao agente de busca">
+
+    <p><strong>Step 4 — o segundo salto, até o agente externo</strong></p>
+
+    <p>Este é o passo mais interessante do laboratório. O Agente de Busca <strong>não</strong> responde sozinho: ele repassa a mesma mensagem para <code>chat_with_collaborator_Agente_Langflow_de_Buscas</code>, e o Output mostra a transferência para a instância <code>chat_with_collaborator_Agente_Langflow_de_Buscas_5015mM</code>, que é o agente externo importado via protocolo A2A no início deste laboratório.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_50.png" alt="Step 4, transferência para o agente externo via A2A">
+
+    <p>Colocando os quatro passos lado a lado, o desenho da execução fica assim:</p>
+
+    <div class="code-block">Usuário
+  └─ Assistente de Compra de Veículos (orquestrador)
+       ├─ Agente de Suporte ao Revendedor          ← dados internos
+       │    └─ Catálogo_de_Carro_com_preços        (base de conhecimento / PDF)
+       └─ Agente de Busca                          ← dados externos
+            └─ Agente Langflow de Buscas           (agente externo via A2A)</div>
+
+    <hr class="section-divider">
+
+    <h3 id="teste2">Teste 2: quando o agente decide <em>não</em> buscar na web</h3>
+
+    <p>Se o orquestrador sempre chamasse todos os colaboradores, o roteamento não teria valor nenhum. Vamos verificar se ele sabe se conter.</p>
+
+    <p>Clique no ícone <code>Reset chat</code>, no canto superior direito do painel <code>Draft Preview</code>, para começar uma conversa limpa. Isso é importante: sem o reset, o agente pode reaproveitar o contexto da comparação anterior e o teste perde a validade.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_51.png" alt="Reset chat no painel Draft Preview">
+
+    <p>Com o chat zerado, envie a consulta abaixo.</p>
     <div class="code-block">me apresente as opções disponíveis que vocês tem no catálogo e os preços</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_41.png" alt="Pergunta sobre opções e preços do catálogo">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_52.png" alt="Consulta apenas de catálogo">
 
-    <p>Abrindo o raciocínio dessa resposta, o <strong>Step 1</strong> mostra o orquestrador consultando apenas o <strong>Agente de suporte ao revendedor</strong>, sem acionar o agente de busca externa, já que a pergunta não pede reviews nem pesquisa de mercado.</p>
+    <p>Desta vez a resposta é uma tabela única com os cinco veículos em estoque, trazendo ID, marca, modelo, ano, cor e preço:</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_47.png" alt="Step 1 da consulta de catálogo">
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>ID</th><th>Marca</th><th>Modelo</th><th>Ano</th><th>Cor</th><th>Preço (R$)</th></tr></thead>
+      <tbody>
+        <tr><td>VEH-001</td><td>Nissan</td><td>Versa</td><td>2024</td><td>Azul</td><td>95.778,20</td></tr>
+        <tr><td>VEH-002</td><td>Hyundai</td><td>Kona Electric</td><td>2022</td><td>Preto</td><td>139.834,10</td></tr>
+        <tr><td>VEH-003</td><td>Alfa Romeo</td><td>Spider</td><td>1991</td><td>Vermelho</td><td>103.082,00</td></tr>
+        <tr><td>VEH-004</td><td>Porsche</td><td>911 Carrera GTS</td><td>–</td><td>Cinza</td><td>776.974,10</td></tr>
+        <tr><td>VEH-005</td><td>Kia</td><td>Nero</td><td>2026</td><td>Amarelo</td><td>168.324,10</td></tr>
+      </tbody>
+    </table>
+    </div>
 
-    <p>No <strong>Step 2</strong>, a ferramenta <code>Catálogo_de_Carro_com_preços</code> devolve a lista de veículos com seus respectivos preços, que o agente organiza em uma tabela na resposta final.</p>
+    <p>Note que o registro VEH-005 aparece como <strong>Kia Nero</strong>, exatamente como está impresso no catálogo, confirmando a observação de qualidade de dados do Step 2 do teste anterior. E o preço de R$ 139.834,10 do Kona Electric é o mesmo que apareceu na comparação, o que prova que aquele bloco realmente veio da base interna.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_48.png" alt="Step 2, lista de veículos e preços retornada pela ferramenta">
+    <p>Clique em <code>Show Reasoning</code> para conferir o caminho.</p>
 
-    <p>A resposta final apresenta a tabela de modelos, anos, versões, cores e preços, junto com uma observação transparente sobre o Hyundai Kona Electric 2022, cujo preço não está divulgado no catálogo no momento. Repare no pequeno ícone abaixo da resposta: ele indica que existe uma fonte associada a essa informação.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_53.png" alt="Show Reasoning da consulta de catálogo">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_49.png" alt="Tabela final de opções do catálogo">
+    <p>Agora são apenas <strong>dois</strong> passos, e não quatro. O Step 1 encaminha para o Agente de Suporte ao Revendedor com a mensagem reformulada:</p>
 
-    <p>Clique nesse ícone para expandir a fonte. O Orchestrate mostra o trecho exato do documento de conhecimento usado para gerar a resposta, neste caso o arquivo <code>Catalog_with_prices_clean.pdf</code>, com os dados brutos de cada veículo. Essa rastreabilidade é o que permite conferir, a qualquer momento, se a resposta do agente está mesmo apoiada nos dados oficiais do catálogo.</p>
+    <div class="code-block">{
+  "message": "Por favor, apresente as opções disponíveis no catálogo e os preços."
+}</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_50.png" alt="Fonte do documento de catálogo expandida">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_54.png" alt="Step 1 da consulta de catálogo">
 
-    <p>Com o orquestrador testado nos dois cenários, catálogo isolado e consulta híbrida, publique o agente. Clique em <strong>Deploy</strong>, no topo da tela, à esquerda, e em seguida clique em <strong>Deploy</strong> novamente para confirmar.</p>
+    <p>E o Step 2 consulta a base de conhecimento com a query <code>catalog</code>, retornando novamente 22 linhas do <code>Catalog_with_prices_clean.pdf</code>.</p>
 
-    <p>O deploy do seu agente está ativo. Quando solicitado, clique em <strong>Activate agent monitoring</strong> para acompanhar o uso do agente em produção.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_55.png" alt="Step 2, consulta à base com a query catalog">
+
+    <p>O Agente de Busca e o agente externo do Langflow <strong>não foram acionados</strong> e é esse o resultado esperado. A pergunta era sobre estoque próprio, um dado que existe internamente, então não havia razão para uma busca na web. Roteamento seletivo é o que separa um sistema multiagente de um sistema que apenas encarece e atrasa cada resposta.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">Cada colaborador acionado é uma chamada de modelo a mais, com latência e consumo próprios. Comparar os quatro passos do primeiro teste com os dois passos do segundo é a forma mais direta de mostrar, na prática, o custo de um roteamento mal calibrado.</p>
+      </div>
+    </div>
+
+    <h4>Verificando a fonte da resposta</h4>
+
+    <p>Falta um último detalhe. Logo abaixo do texto da resposta há um pequeno botão de seta. Clique nele.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_56.png" alt="Botão de seta abaixo da resposta">
+
+    <p>O painel se abre e exibe o card do documento <code>Catalog_with_prices_clean.pdf</code>, com o trecho exato que fundamentou a resposta e um link <code>View source</code>. O contador <code>1/5</code> no rodapé indica que cinco trechos da base foram recuperados para montar aquela mensagem, e as setas permitem navegar entre eles.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab02/lab02_57.png" alt="Card do documento com o trecho que fundamentou a resposta">
+
+    <p>Enquanto o <code>Show Reasoning</code> responde <em>"por onde a resposta passou"</em>, esse painel responde <em>"em que documento ela se apoia"</em>. São duas perguntas diferentes e igualmente importantes quando você precisa auditar um agente:</p>
+    <ul>
+      <li>A resposta veio de uma fonte controlada por você ou de uma busca externa livre?</li>
+      <li>O trecho recuperado sustenta mesmo a afirmação que o agente fez?</li>
+    </ul>
   </section>
 
   <hr class="section-divider">
