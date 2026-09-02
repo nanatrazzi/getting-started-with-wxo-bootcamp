@@ -5,7 +5,6 @@
 - [Controles no watsonx Orchestrate](#controles-no-watsonx-orchestrate)
   - [Índice](#índice)
   - [Visão Geral](#visão-geral)
-    - [O que é PII (Personal Identifiable Information)?](#o-que-é-pii-personal-identifiable-information)
   - [Pré-requisitos](#pré-requisitos)
   - [Descrição do Caso de Uso](#descrição-do-caso-de-uso)
     - [Parte 1: Acessar o watsonx Orchestrate e configurar o agente](#parte-1-acessar-o-watsonx-orchestrate-e-configurar-o-agente)
@@ -18,28 +17,33 @@
 
 ## Visão Geral
 
-Neste laboratório você vai aprender a proteger agentes de IA contra vazamento de PII, sigla em inglês para Personally Identifiable Information, ou informações de identificação pessoal, usando controls no watsonx Orchestrate.
+Neste laboratório você vai aprender a proteger agentes de Inteligência Artificial Generativa contra vazamento de PII, sigla em inglês para Personally Identifiable Information, ou informações de identificação pessoal, usando controls no watsonx Orchestrate.
 
-Os controls são políticas de governança aplicadas sobre os ativos do ambiente, sejam agentes, modelos ou tools. Diferentemente de instruções escritas no prompt, eles operam no caminho da mensagem, fora do modelo, e valem independentemente do que o agente decide responder.
-
-Ao longo do laboratório vamos identificar dados sensíveis sendo expostos por um agente sem proteção e, em seguida, configurar um controle que impede essa exposição.
-
-### O que é PII (Personal Identifiable Information)?
-
-PII é qualquer dado que possa ser usado para identificar um indivíduo. Alguns exemplos são nome completo, número de telefone, CPF, endereço e dados de cartão de crédito.
-
+> O que é PII (Personal Identifiable Information)?**
+> PII é qualquer dado que possa ser usado para identificar um indivíduo. Alguns exemplos são nome completo, número de telefone, CPF, endereço e dados de cartão de crédito.
 > [!Note]
 > Se o dado pode ser usado para identificar uma pessoa, ele é considerado PII.
+
+Os controles no watsonx Orchestrate são políticas de governança aplicadas sobre os ativos do ambiente, sejam agentes, modelos ou tools. Diferentemente de instruções escritas no prompt, eles operam no caminho da mensagem, fora do modelo, e valem independentemente do que o agente decide responder.
+
+Ao longo do laboratório vamos identificar dados sensíveis sendo expostos por um agente sem proteção e, em seguida, configurar um controle que impede essa exposição.
 
 ## Pré-requisitos
 
 Para realizar este laboratório, é necessário ter concluído previamente os seguintes laboratórios:
 
-Laboratório 1, [Envenenamento de Dados](./Step_by_Step_Lab1.md), e Laboratório 2, [Agente externo](./Step_by_Step_Lab2.md). Esses dois laboratórios servem como base para as atividades que serão executadas a seguir, já que vamos reaproveitar os agentes criados neles.
+**->** Laboratório 1. [Envenenamento de Dados](./Step_by_Step_Lab1.md) <br>
+**->** Laboratório 2. [Agente externo](./Step_by_Step_Lab2.md) <br>
+
+Esses dois laboratórios servem como base para as atividades que serão executadas a seguir, já que vamos reaproveitar os agentes criados neles.
 
 ## Descrição do Caso de Uso
 
-Neste laboratório, assim como no [Laboratório 1](./Step_by_Step_Lab1.md), vamos trabalhar com guardrails. A diferença está no mecanismo. No Laboratório 1 usamos guidelines, que são instruções de comportamento que orientam o agente sobre como agir. Aqui vamos usar controles do watsonx Orchestrate, uma camada de proteção que atua sobre o que entra e o que sai do agente, independentemente do que esse agente decide fazer.
+Neste laboratório, assim como no [Laboratório 1](./Step_by_Step_Lab1.md), vamos trabalhar com guardrails. 
+
+**A diferença está no mecanismo.** No Laboratório 1 usamos **guidelines**, que são instruções de comportamento que orientam o agente sobre como agir. Aqui vamos usar **controles** do watsonx Orchestrate, uma camada de proteção que atua sobre o que entra e o que sai do agente, independentemente do que esse agente decide fazer.
+
+**E qual a diferença dos dois?**
 
 Guidelines dependem do agente seguir a orientação. Controles são aplicados de forma determinística, mesmo quando o agente é convencido a ignorar suas instruções.
 
