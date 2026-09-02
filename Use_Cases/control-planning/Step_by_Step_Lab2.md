@@ -390,9 +390,9 @@ Exemplos:
 - "Compare o Versa e o Kona"
 - "Quais são as especificações do Porsche 911?"
 
-## 2. PESQUISA EXTERNA → Agente_Langflow_Buscas
+## 2. PESQUISA EXTERNA → Agente de Busca
 
-Encaminhe para o agente **Agente_Langflow_Buscas** quando o usuário pedir:
+Encaminhe para o agente **Agente de Buscas** quando o usuário pedir:
 
 - Avaliações de proprietários
 - Reviews
@@ -425,7 +425,7 @@ Exemplos:
 Fluxo:
 
 1. Consultar o agente **Agente de suporte ao revendedor**
-2. Consultar o agente **Agente_Langflow_Buscas.**
+2. Consultar o agente **Agente de Busca**
 3. Consolidar os resultados em uma única resposta.
 
 # REGRAS ADICIONAIS
@@ -434,7 +434,7 @@ Fluxo:
 - Nunca rejeite uma consulta apenas porque o usuário informou um nome parcial.
 - Sempre prefira interpretar o veículo pretendido quando houver alta confiança.
 - Somente peça esclarecimentos quando houver ambiguidade real.
-- Para pesquisas externas, utilize exclusivamente o agente **Agente_Langflow_Buscas.**
+- Para pesquisas externas, utilize exclusivamente o agente **Agente de Busca**
 ```
 
 Teste com uma consulta híbrida, que combina uma pergunta de mercado com um pedido de comparação:
