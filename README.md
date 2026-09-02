@@ -1,6 +1,6 @@
 # Laboratório de watsonx Orchestrate - Segundo Semestre de 2026
 
-> **Última atualização:** 25 de Agosto de 2026
+> **Última atualização:** Setembro de 2026
 >
 > O watsonx Orchestrate é uma plataforma em constante evolução e recebe atualizações frequentes com novos recursos, melhorias e alterações na experiência de criação de agentes e workflows.
 >
