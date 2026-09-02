@@ -248,19 +248,19 @@ O valor padrão corresponde a aproximadamente **10 MB**, sendo suficiente para a
 
 Os dois últimos campos (11 e 12) desta etapa são **Custom patterns** e **Allowlist patterns**, que permitem personalizar o comportamento da detecção de PII.
 
-**11.** **Custom patterns**: permite adicionar expressões regulares (*regex*) para identificar formatos que não estão cobertos pelas categorias nativas do controle. Isso é útil para detectar dados específicos da sua organização ou de um país, como **CPF**, **CNPJ**, números de matrícula, códigos internos ou outros identificadores proprietários.
+**10.** **Custom patterns**: permite adicionar expressões regulares (*regex*) para identificar formatos que não estão cobertos pelas categorias nativas do controle. Isso é útil para detectar dados específicos da sua organização ou de um país, como **CPF**, **CNPJ**, números de matrícula, códigos internos ou outros identificadores proprietários.
 
-**12.** **Allowlist patterns**: funciona como uma lista de exceções. Valores que correspondam aos padrões configurados não serão tratados como PII, mesmo que tenham aparência de informação sensível. Um exemplo seria um telefone institucional ou um endereço de e-mail publicado oficialmente no site da empresa.
+**11.** **Allowlist patterns**: funciona como uma lista de exceções. Valores que correspondam aos padrões configurados não serão tratados como PII, mesmo que tenham aparência de informação sensível. Um exemplo seria um telefone institucional ou um endereço de e-mail publicado oficialmente no site da empresa.
 
 **Neste laboratório, deixe os dois campos em branco. Como o objetivo é observar o funcionamento do controle durante os testes, não queremos criar regras adicionais nem exceções que possam impedir a detecção do número de telefone utilizado nas próximas etapas.**
 
-**13.** Clique em `Next`.
+**12.** Clique em `Next`.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_18.png)
 
 A etapa Assign Assets define em quais agentes o controle será aplicado. Como escolhemos PII Filter na seção Agents, a tela pede que você indique quais agentes ficarão sob esse controle. 
 
-Clique em `Add Agent`.
+**13.** Clique em `Add Agent`.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_19.png)
 
