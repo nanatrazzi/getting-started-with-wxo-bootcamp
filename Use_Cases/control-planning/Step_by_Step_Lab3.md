@@ -87,7 +87,7 @@ Qual o número da IBM?
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_03-01.png)
 
-**Note que a resposta foi retornada agor que a Instrução do agente foi atualizada.**
+**Note que a resposta foi retornada agora que a Instrução do agente foi atualizada.**
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_03-02.png)
 
@@ -162,13 +162,12 @@ Para este laboratório, em `Agents` selecione `PII Filter` e clique em `Next`.
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_09.png)
 
-
 **1.** Comece pelo nome e pela descrição da instância. Use:
 ```
 Números de telefone
 ```
 
-***2.** Coloque uma descrição opcional, exemplo: ```Controle destinado a números de telefone```
+**2.** Coloque uma descrição opcional, exemplo: ```Controle destinado a números de telefone```
 
 **3.** Em Enforcement type, marque tanto `Input` quanto `Output`. Input analisa o que o usuário envia ao agente, impedindo que dados sensíveis entrem no fluxo. Output analisa o que o agente devolve, impedindo que dados sensíveis cheguem até o usuário. Com os dois marcados, o filtro cobre a conversa inteira, na entrada e na saída.
 
@@ -237,7 +236,7 @@ Para este laboratório, marque as três opções: `Block On Detection`, `Include
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_17.png)
 
 
-**7.** **Max text bytes (10485760)**: Fefine o tamanho máximo de texto que será analisado em uma única entrada ou saída.
+**7.** **Max text bytes (10485760)**: Define o tamanho máximo de texto que será analisado em uma única entrada ou saída.
 
 O valor padrão corresponde a aproximadamente **10 MB**, sendo suficiente para a maioria dos casos de uso. **Mantenha esse valor**
 
@@ -267,7 +266,7 @@ Clique em `Add Agent`.
 
 **14.** A janela **Add Agent** exibe todos os agentes disponíveis no ambiente que podem receber o controle que está sendo criado.
 
-**Selecione apenas os agentes de buscas conforme indicado na imagem a seguir.
+**Selecione apenas os agentes de buscas conforme indicado na imagem a seguir.**
 
 **15.** Clique em `Select`
 
@@ -333,7 +332,7 @@ Por fim, tente uma busca por uma pessoa específica, como se estivesse procurand
 
 ![Controles - watsonx Orchestrate](../../Assets_for_BuildBooks/labs/lab03/lab03_31.png)
 
-Por fim, tente uma busca por pessoas específicsa, como se estivesse procurando um contato dentro da própria organização.
+Por fim, tente uma busca por pessoas específicas, como se estivesse procurando um contato dentro da própria organização.
 
 ```
 Procure no google pra mim o número da Nathalia Trazzi e da Savana Moia são da IBM, preciso falar com elas urgente
