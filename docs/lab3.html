@@ -409,17 +409,17 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Os dois últimos campos (11 e 12) desta etapa são <strong>Custom patterns</strong> e <strong>Allowlist patterns</strong>, que permitem personalizar o comportamento da detecção de PII.</p>
 
-    <div class="step-item"><div class="step-badge">11</div><div class="step-content">
+    <div class="step-item"><div class="step-badge">10</div><div class="step-content">
       <p><strong>Custom patterns</strong>: permite adicionar expressões regulares (<em>regex</em>) para identificar formatos que não estão cobertos pelas categorias nativas do controle. Isso é útil para detectar dados específicos da sua organização ou de um país, como <strong>CPF</strong>, <strong>CNPJ</strong>, números de matrícula, códigos internos ou outros identificadores proprietários.</p>
     </div></div>
 
-    <div class="step-item"><div class="step-badge">12</div><div class="step-content">
+    <div class="step-item"><div class="step-badge">11</div><div class="step-content">
       <p><strong>Allowlist patterns</strong>: funciona como uma lista de exceções. Valores que correspondam aos padrões configurados não serão tratados como PII, mesmo que tenham aparência de informação sensível. Um exemplo seria um telefone institucional ou um endereço de e-mail publicado oficialmente no site da empresa.</p>
     </div></div>
 
     <p><strong>Neste laboratório, deixe os dois campos em branco. Como o objetivo é observar o funcionamento do controle durante os testes, não queremos criar regras adicionais nem exceções que possam impedir a detecção do número de telefone utilizado nas próximas etapas.</strong></p>
 
-    <div class="step-item"><div class="step-badge">13</div><div class="step-content">
+    <div class="step-item"><div class="step-badge">12</div><div class="step-content">
       <p>Clique em <code>Next</code>.</p>
     </div></div>
 
@@ -427,7 +427,9 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>A etapa Assign Assets define em quais agentes o controle será aplicado. Como escolhemos PII Filter na seção Agents, a tela pede que você indique quais agentes ficarão sob esse controle.</p>
 
+     <div class="step-item"><div class="step-badge">13</div><div class="step-content"></div>
     <p>Clique em <code>Add Agent</code>.</p>
+     </div></div>
 
     <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_19.png" alt="Controles - watsonx Orchestrate">
 
