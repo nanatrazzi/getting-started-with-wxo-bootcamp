@@ -58,6 +58,10 @@
   .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
   .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
   .step-content { flex: 1; }
+  .step-content p:last-child { margin-bottom: 0; }
+  .step-item { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
+  .step-badge { display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .table-wrap { overflow-x: auto; }
   .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
   code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
   .lab-img { display: block; max-width: 100%; border: 1px solid var(--carbon-gray-20); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
@@ -125,18 +129,14 @@
   <nav style="background:var(--carbon-white);border:1px solid var(--carbon-gray-20);padding:20px 24px;margin-bottom:32px;">
     <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--carbon-gray-70);margin-bottom:10px;">Índice</div>
     <ul style="list-style:none;padding:0;margin:0;">
-      <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a>
-        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
-          <li><a href="#o-que-e-pii">O que é PII (Personal Identifiable Information)?</a></li>
-        </ul>
-      </li>
+      <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
       <li style="margin-bottom:6px;"><a href="#pre-requisitos">Pré-requisitos</a></li>
       <li style="margin-bottom:6px;"><a href="#caso-de-uso">Descrição do Caso de Uso</a>
         <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
-          <li><a href="#parte1">Parte 1: Acessar o watsonx Orchestrate e configurar o agente</a></li>
-          <li><a href="#parte2">Parte 2: Testando sem Asset Controls</a></li>
-          <li><a href="#parte3">Parte 3: Criando Controls para Filtragem de PII</a></li>
-          <li><a href="#parte4">Parte 4: Testando com Asset Controls</a></li>
+          <li style="margin-bottom:4px;"><a href="#parte1">Parte 1: Acessar o watsonx Orchestrate e configurar o agente</a></li>
+          <li style="margin-bottom:4px;"><a href="#parte2">Parte 2: Testando sem Asset Controls</a></li>
+          <li style="margin-bottom:4px;"><a href="#parte3">Parte 3: Criando Controls para Filtragem de PII</a></li>
+          <li style="margin-bottom:4px;"><a href="#parte4">Parte 4: Testando com Asset Controls</a></li>
         </ul>
       </li>
       <li style="margin-bottom:6px;"><a href="#resultados">Resultados e importância dos controles construídos com o Orchestrate</a></li>
@@ -149,22 +149,19 @@
   <section id="visao-geral">
     <h2>Visão Geral</h2>
 
-    <p>Neste laboratório você vai aprender a proteger agentes de IA contra vazamento de PII, sigla em inglês para Personally Identifiable Information, ou informações de identificação pessoal, usando controls no watsonx Orchestrate.</p>
-
-    <p>Os controls são políticas de governança aplicadas sobre os ativos do ambiente, sejam agentes, modelos ou tools. Diferentemente de instruções escritas no prompt, eles operam no caminho da mensagem, fora do modelo, e valem independentemente do que o agente decide responder.</p>
-
-    <p>Ao longo do laboratório vamos identificar dados sensíveis sendo expostos por um agente sem proteção e, em seguida, configurar um controle que impede essa exposição.</p>
-
-    <h3 id="o-que-e-pii">O que é PII (Personal Identifiable Information)?</h3>
-
-    <p>PII é qualquer dado que possa ser usado para identificar um indivíduo. Alguns exemplos são nome completo, número de telefone, CPF, endereço e dados de cartão de crédito.</p>
+    <p>Neste laboratório você vai aprender a proteger agentes de Inteligência Artificial Generativa contra vazamento de PII, sigla em inglês para Personally Identifiable Information, ou informações de identificação pessoal, usando controls no watsonx Orchestrate.</p>
 
     <div class="callout callout--note">
       <div>
-        <div class="callout__title">Nota</div>
-        <p style="margin:0;">Se o dado pode ser usado para identificar uma pessoa, ele é considerado PII.</p>
+        <div class="callout__title">O que é PII (Personal Identifiable Information)?</div>
+        <p>PII é qualquer dado que possa ser usado para identificar um indivíduo. Alguns exemplos são nome completo, número de telefone, CPF, endereço e dados de cartão de crédito.</p>
+        <p style="margin:0;"><strong>Nota:</strong> Se o dado pode ser usado para identificar uma pessoa, ele é considerado PII.</p>
       </div>
     </div>
+
+    <p>Os controles no watsonx Orchestrate são políticas de governança aplicadas sobre os ativos do ambiente, sejam agentes, modelos ou tools. Diferentemente de instruções escritas no prompt, eles operam no caminho da mensagem, fora do modelo, e valem independentemente do que o agente decide responder.</p>
+
+    <p>Ao longo do laboratório vamos identificar dados sensíveis sendo expostos por um agente sem proteção e, em seguida, configurar um controle que impede essa exposição.</p>
   </section>
 
   <hr class="section-divider">
@@ -175,7 +172,12 @@
 
     <p>Para realizar este laboratório, é necessário ter concluído previamente os seguintes laboratórios:</p>
 
-    <p>Laboratório 1, <a href="lab1.html">Envenenamento de Dados</a>, e Laboratório 2, <a href="lab2.html">Agente externo</a>. Esses dois laboratórios servem como base para as atividades que serão executadas a seguir, já que vamos reaproveitar os agentes criados neles.</p>
+    <ul>
+      <li>Laboratório 1. <a href="lab1.html">Envenenamento de Dados</a></li>
+      <li>Laboratório 2. <a href="lab2.html">Agente externo</a></li>
+    </ul>
+
+    <p>Esses dois laboratórios servem como base para as atividades que serão executadas a seguir, já que vamos reaproveitar os agentes criados neles.</p>
   </section>
 
   <hr class="section-divider">
@@ -184,26 +186,37 @@
   <section id="caso-de-uso">
     <h2>Descrição do Caso de Uso</h2>
 
-    <p>Neste laboratório, assim como no <a href="lab1.html">Laboratório 1</a>, vamos trabalhar com guardrails. A diferença está no mecanismo. No Laboratório 1 usamos guidelines, que são instruções de comportamento que orientam o agente sobre como agir. Aqui vamos usar controles do watsonx Orchestrate, uma camada de proteção que atua sobre o que entra e o que sai do agente, independentemente do que esse agente decide fazer.</p>
+    <p>Neste laboratório, assim como no <a href="lab1.html">Laboratório 1</a>, vamos trabalhar com guardrails.</p>
 
-    <p>Guidelines dependem do agente seguir a orientação. Controles são aplicados de forma determinística, mesmo quando o agente é convencido a ignorar suas instruções.</p>
+    <p><strong>A diferença está no mecanismo.</strong> No Laboratório 1 usamos <strong>guidelines</strong>, que são instruções de comportamento que orientam o agente sobre como agir. Aqui vamos usar <strong>controles</strong> do watsonx Orchestrate, uma camada de proteção que atua sobre o que entra e o que sai do agente, independentemente do que esse agente decide fazer.</p>
+
+    <p><strong>E qual a diferença dos dois?</strong></p>
+
+    <p><strong>Guidelines</strong> dependem do agente seguir a orientação.</p>
+
+    <p><strong>Controles</strong> são aplicados de forma determinística, mesmo quando o agente é convencido a ignorar suas instruções.</p>
 
     <p>Temos o seguinte cenário: Um usuário faz uma pergunta simples e, por trás dela, o agente aciona uma ferramenta externa de busca para responder. Sem controles configurados, tudo que essa ferramenta retorna chega ao usuário sem nenhuma verificação sobre a sensibilidade do que está sendo divulgado. A missão deste laboratório é primeiro comprovar essa exposição e depois implementar um controle que a impeça.</p>
 
     <h3 id="parte1">Parte 1: Acessar o watsonx Orchestrate e configurar o agente</h3>
 
-    <p>Vamos reaproveitar o agente orquestrador criado no <a href="lab2.html">Laboratório 2</a>, o <strong>Assistente de Compra de Veículos</strong>. Ele é o agente que recebe a pergunta do usuário e decide, com base nas próprias instruções, se deve responder diretamente ou encaminhar a consulta para um agente especializado, como o Agente de Busca.</p>
+    <p>Vamos reaproveitar o agente orquestrador criado no <a href="lab2.html">Laboratório 2</a>, o <strong>Agente de Busca</strong>.</p>
 
-    <p>Com o agente aberto, na sessão Behavior, o campo Instructions deve ser alterado. </p>
-    <p>Copie e cole o seguinte treco abaixo:</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_00.png" alt="Agente de Busca aberto no watsonx Orchestrate">
 
-    <div class="code-block">Utilize o agente **agente de buscas** para localizar as informações solicitadas pelo usuário.
+    <p>No campo <strong>Description</strong>, altere a descrição atual para:</p>
+
+    <div class="code-block">Este agente pesquisa no Google informações em tempo real.</div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_01.png" alt="Campo Description atualizado">
+
+    <p>Em seguida, no campo <strong>Instructions</strong> também altere o texto atual para:</p>
+
+    <div class="code-block">Utilize o agente **Agente Langflow de Buscas** para localizar as informações solicitadas pelo usuário.
 
 Em seguida apresente o resultado de forma clara, objetiva e completa, preservando os detalhes relevantes encontrados.</div>
 
-    <p>Essa é a instrução que vamos colocar à prova na próxima parte. Ela diz ao Assistente de Compra de Veículos para sempre delegar a busca de informações ao agente especializado, sem qualquer ressalva sobre o tipo de dado que pode voltar dessa busca.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_01.png" alt="Campo Instructions do Assistente de Compra de Veículos">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_02.png" alt="Campo Instructions atualizado">
 
     <h3 id="parte2">Parte 2: Testando sem Asset Controls</h3>
 
@@ -213,21 +226,26 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <div class="code-block">Qual o número da IBM?</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_02.png" alt="Pergunta enviada no Draft Preview">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_03-01.png" alt="Pergunta enviada no Draft Preview">
+
+    <p><strong>Note que a resposta foi retornada agora que a Instrução do agente foi atualizada.</strong></p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_03-02.png" alt="Resposta do agente com o número da IBM">
 
     <p>Essa é uma informação que qualquer pessoa consegue encontrar em segundos com uma busca simples no Google, que retorna o número público de atendimento da IBM no Brasil.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_03.png" alt="Busca no Google pelo número da IBM">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_03-03.png" alt="Busca no Google pelo número da IBM">
 
-    <p>O Assistente de Compra de Veículos responde com uma lista de números de telefone da IBM em diferentes países, incluindo Estados Unidos, Brasil, Portugal e Espanha.</p>
+    <p>Clique em <code>Show Reasoning</code>, ao lado da resposta, para entender de onde esses dados vieram.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_04.png" alt="Resposta do agente com telefones da IBM">
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">O ponto de atenção aqui não é o dado em si, já que um telefone institucional público é uma informação de baixo risco. O ponto de atenção é o mecanismo. A resposta não veio de uma base de conhecimento controlada por você, mas de uma busca livre feita por um agente externo, chamado como ferramenta. Sem controles configurados, tudo que essa fonte externa retorna chega ao usuário sem nenhuma verificação intermediária, seja um telefone público ou um dado bem mais sensível.</p>
+      </div>
+    </div>
 
-    <p>Clique em <code>Show Reasoning</code>, ao lado da resposta, para entender de onde esses dados vieram. O primeiro passo do raciocínio mostra que o agente acionou a ferramenta <code>chat_with_collaborator_Agente_de_Buscas</code>, repassando a pergunta original, e o resultado foi transferido para o agente especializado <code>Agente_de_Buscas_48414t</code>, que é quem de fato pesquisa na internet.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_05.png" alt="Show Reasoning com a chamada ao agente de buscas">
-
-    <p>O ponto de atenção aqui não é o dado em si, já que um telefone institucional público é uma informação de baixo risco. O ponto de atenção é o mecanismo. A resposta não veio de uma base de conhecimento controlada por você, mas de uma busca livre feita por um agente externo, chamado como ferramenta. Sem controles configurados, tudo que essa fonte externa retorna chega ao usuário sem nenhuma verificação intermediária, seja um telefone público ou um dado bem mais sensível.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_04.png" alt="Show Reasoning da resposta">
 
     <h3 id="parte3">Parte 3: Criando Controls para Filtragem de PII</h3>
 
@@ -235,17 +253,19 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Clique no menu hambúrguer, no canto superior esquerdo da tela.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_06.png" alt="Menu hambúrguer no canto superior esquerdo">
-
     <p>Clique em <code>Manage</code> para expandir a sessão.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_04.png" alt="Menu Manage expandido">
 
     <p>Em seguida, clique em <code>Controls</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_07.png" alt="Menu Manage expandido com a opção Controls">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_05.png" alt="Opção Controls no menu Manage">
 
-    <p>Nesse momento o painel de controles está vazio, sem nenhum controle criado. Clique em <code>Create Control</code>.</p>
+    <p>Nesse momento o painel de controles está vazio, sem nenhum controle criado.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_08.png" alt="Painel de controles vazio">
+    <p>Clique em <code>Create Control</code>.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_06.png" alt="Painel de controles vazio">
 
     <p>A tela Select Control lista os tipos de controle disponíveis, organizados por onde eles atuam.</p>
 
@@ -261,7 +281,9 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <li>PII Filter, que identifica e mascara informações pessoalmente identificáveis (PII) em argumentos, entradas e saídas do agente.</li>
     </ul>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_09.png" alt="Controles disponíveis para Agents">
+    <p>Clique em <code>Create Control</code>.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_07.png" alt="Controles disponíveis para Agents">
 
     <p><strong>Tools</strong> os controles protegem chamadas para ferramentas externas e integrações:</p>
 
@@ -273,7 +295,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <li>Secrets Detector, que impede o vazamento acidental de credenciais ou segredos durante o uso das ferramentas.</li>
     </ul>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_10.png" alt="Controles disponíveis para Tools">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_08.png" alt="Controles disponíveis para Tools">
 
     <p><strong>Models</strong> os controles aumentam a resiliência e a disponibilidade dos modelos utilizados pelos agentes:</p>
 
@@ -285,28 +307,35 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Esses controles podem ser combinados para implementar diferentes estratégias de governança, segurança e confiabilidade em agentes de IA, reduzindo riscos operacionais e ajudando a atender requisitos de conformidade e proteção de dados.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_11.png" alt="Controles disponíveis para Models">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_08.png" alt="Controles disponíveis para Models">
 
     <p>Para este laboratório, em <code>Agents</code> selecione <code>PII Filter</code> e clique em <code>Next</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_12.png" alt="Seleção do PII Filter">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_09.png" alt="Seleção do PII Filter">
 
-    <p>Na etapa Configure Control, comece pelo nome e pela descrição da instância. Use:</p>
+    <div class="step-item"><div class="step-badge">1</div><div class="step-content">
+      <p>Comece pelo nome e pela descrição da instância. Use:</p>
+      <div class="code-block">Números de telefone</div>
+    </div></div>
 
-    <div class="code-block">Números de telefone</div>
+    <div class="step-item"><div class="step-badge">2</div><div class="step-content">
+      <p>Coloque uma descrição opcional, exemplo:</p>
+      <div class="code-block">Controle destinado a números de telefone</div>
+    </div></div>
 
-    <div class="code-block">Com esse controle, o agente bloqueia solicitações de pedidos de número de telefones.</div>
+    <div class="step-item"><div class="step-badge">3</div><div class="step-content">
+      <p>Em Enforcement type, marque tanto <code>Input</code> quanto <code>Output</code>. Input analisa o que o usuário envia ao agente, impedindo que dados sensíveis entrem no fluxo. Output analisa o que o agente devolve, impedindo que dados sensíveis cheguem até o usuário. Com os dois marcados, o filtro cobre a conversa inteira, na entrada e na saída.</p>
+    </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_13.png" alt="Nome e descrição do controle">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_10.png" alt="Nome, descrição e Enforcement type">
 
-    <p>Em Enforcement type, marque tanto <code>Input</code> quanto <code>Output</code>. Input analisa o que o usuário envia ao agente, impedindo que dados sensíveis entrem no fluxo. Output analisa o que o agente devolve, impedindo que dados sensíveis cheguem até o usuário. Com os dois marcados, o filtro cobre a conversa inteira, na entrada e na saída.</p>
+    <div class="step-item"><div class="step-badge">4</div><div class="step-content">
+      <p>Em Detection Type você define o escopo do filtro, ou seja, quais categorias de dado o controle vai procurar em cada mensagem. Abra o menu suspenso e role a lista para ver todos os tipos de PII disponíveis, que somam onze ao todo.</p>
+    </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_14.png" alt="Enforcement type com Input e Output marcados">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_11.png" alt="Menu suspenso de Detection Type">
 
-    <p>Em Detection Type você define o escopo do filtro, ou seja, quais categorias de dado o controle vai procurar em cada mensagem. Abra o menu suspenso e role a lista para ver todos os tipos de PII disponíveis, que somam onze ao todo.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_15.png" alt="Menu suspenso de Detection Type">
-
+    <div class="table-wrap">
     <table>
       <thead><tr><th>Tipo</th><th>O que detecta</th></tr></thead>
       <tbody>
@@ -323,33 +352,35 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
         <tr><td>Detect SSN</td><td>Número de Seguro Social dos Estados Unidos</td></tr>
       </tbody>
     </table>
+    </div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_16.png" alt="Lista de tipos de PII, parte 1">
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_17.png" alt="Lista de tipos de PII, parte 2">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_12.png" alt="Lista de tipos de PII, parte 1">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_13.png" alt="Lista de tipos de PII, parte 2">
 
-    <p>Para este laboratório, marque <code>Select all</code>. O campo passa a exibir o indicador 11, confirmando que todos os tipos de PII estão ativos, mesmo que o foco do teste seja o número de telefone.</p>
+    <p>Para este laboratório, marque <code>Detect Phone</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_18.png" alt="Select all com o indicador 11">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_14.png" alt="Detect Phone marcado">
 
-    <p>Em <strong>Default mask strategy</strong>, você define qual ação será tomada quando um dado sensível for identificado:</p>
+    <div class="step-item"><div class="step-badge">5</div><div class="step-content">
+      <p>Em <strong>Default mask strategy</strong>, você define qual ação será tomada quando um dado sensível for identificado:</p>
+      <ul>
+        <li><strong>Redact</strong>: substitui o valor por um marcador fixo, ocultando completamente a informação original.</li>
+        <li><strong>Partial</strong>: mantém apenas parte do valor visível e mascara o restante. É comum em casos como cartões de crédito, onde apenas os últimos dígitos permanecem visíveis.</li>
+        <li><strong>Hash</strong>: substitui o valor por um hash. O mesmo dado sempre gera o mesmo resultado, permitindo correlação sem expor o valor original. O processo não é reversível.</li>
+        <li><strong>Tokenize</strong>: troca o valor por um token que representa o dado original. É útil quando processos posteriores precisam continuar referenciando o mesmo registro sem expor a informação sensível.</li>
+        <li><strong>Remove</strong>: remove completamente o valor do texto, sem deixar qualquer marcador ou indicação de que havia um dado naquele local.</li>
+      </ul>
+      <p>A escolha da estratégia depende do caso de uso. Em cenários onde a informação não deve ser exibida de forma alguma, <strong>Redact</strong> e <strong>Remove</strong> costumam ser as opções mais seguras. Já <strong>Partial</strong>, <strong>Hash</strong> e <strong>Tokenize</strong> são úteis quando parte da informação ou sua rastreabilidade ainda precisa ser preservada.</p>
+      <p>Para esse laboratório, selecione <code>Remove</code>.</p>
+    </div></div>
 
-    <ul>
-      <li><strong>Redact</strong>: substitui o valor por um marcador fixo, ocultando completamente a informação original.</li>
-      <li><strong>Partial</strong>: mantém apenas parte do valor visível e mascara o restante. É comum em casos como cartões de crédito, onde apenas os últimos dígitos permanecem visíveis.</li>
-      <li><strong>Hash</strong>: substitui o valor por um hash. O mesmo dado sempre gera o mesmo resultado, permitindo correlação sem expor o valor original. O processo não é reversível.</li>
-      <li><strong>Tokenize</strong>: troca o valor por um token que representa o dado original. É útil quando processos posteriores precisam continuar referenciando o mesmo registro sem expor a informação sensível.</li>
-      <li><strong>Remove</strong>: remove completamente o valor do texto, sem deixar qualquer marcador ou indicação de que havia um dado naquele local.</li>
-    </ul>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_15.png" alt="Estratégia Remove selecionada">
 
-    <p>A escolha da estratégia depende do caso de uso. Em cenários onde a informação não deve ser exibida de forma alguma, <strong>Redact</strong> e <strong>Remove</strong> costumam ser as opções mais seguras. Já <strong>Partial</strong>, <strong>Hash</strong> e <strong>Tokenize</strong> são úteis quando parte da informação ou sua rastreabilidade ainda precisa ser preservada.</p>
+    <div class="step-item"><div class="step-badge">6</div><div class="step-content">
+      <p>Em <strong>Enforcement Mode</strong>, você define qual ação o controle deve tomar quando uma informação sensível for detectada.</p>
+    </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_19.png" alt="Opções de Default mask strategy">
-
-    <p>Para esse laboratório, selecione <code>Remove</code>.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_20.png" alt="Estratégia Remove selecionada">
-
-    <p>Em <strong>Enforcement Mode</strong>, você define qual ação o controle deve tomar quando uma informação sensível for detectada.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_16.png" alt="Opções de Enforcement Mode">
 
     <p>Enquanto <strong>Detection Type</strong> determina <em>o que procurar</em> e <strong>Default mask strategy</strong> define <em>como mascarar ou transformar o dado encontrado</em>, o <strong>Enforcement Mode</strong> determina <em>o que fazer após a detecção</em>. As opções podem ser combinadas conforme a necessidade.</p>
 
@@ -359,109 +390,121 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <li><strong>Log Detections</strong>: registra as detecções para fins de auditoria, monitoramento e rastreabilidade. Essa configuração não altera o conteúdo exibido ao usuário, apenas gera registros para análise posterior.</li>
     </ul>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_21.png" alt="Opções de Enforcement Mode">
-
     <p>Para este laboratório, marque as três opções: <code>Block On Detection</code>, <code>Include Detection Details</code> e <code>Log Detections</code></p>
 
-    <p>O campo passa a exibir o indicador 3.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_17.png" alt="Três opções de Enforcement Mode marcadas">
 
-    <p>Em seguida, mantenha os valores padrão dos três parâmetros numéricos exibidos na tela. Esses limites existem para evitar que o processo de inspeção consuma recursos excessivos ao analisar conteúdos muito grandes ou estruturas excessivamente complexas.</p>
+    <div class="step-item"><div class="step-badge">7</div><div class="step-content">
+      <p><strong>Max text bytes (10485760)</strong>: define o tamanho máximo de texto que será analisado em uma única entrada ou saída.</p>
+      <p>O valor padrão corresponde a aproximadamente <strong>10 MB</strong>, sendo suficiente para a maioria dos casos de uso. <strong>Mantenha esse valor</strong></p>
+    </div></div>
 
-    <ul>
-      <li><strong>Max text bytes (10485760)</strong>: define o tamanho máximo de texto que será analisado em uma única entrada ou saída. O valor padrão corresponde a aproximadamente <strong>10 MB</strong>, sendo suficiente para a maioria dos casos de uso.</li>
-      <li><strong>Max nested depth (32)</strong>: determina até quantos níveis de aninhamento o controle deve percorrer ao inspecionar estruturas de dados, como objetos JSON. O valor padrão de <strong>32 níveis</strong> é muito superior ao encontrado normalmente em respostas reais.</li>
-      <li><strong>Max collection items (4096)</strong>: define a quantidade máxima de elementos de coleções, listas ou arrays que serão analisados. Esse limite ajuda a manter o tempo e o custo de processamento previsíveis, mesmo em respostas contendo grandes volumes de dados.</li>
-    </ul>
+    <div class="step-item"><div class="step-badge">8</div><div class="step-content">
+      <p><strong>Max nested depth (32)</strong>: determina até quantos níveis de aninhamento o controle deve percorrer ao inspecionar estruturas de dados, como objetos JSON. O valor padrão de <strong>32 níveis</strong> é muito superior ao encontrado normalmente em respostas reais. <strong>Mantenha esse valor</strong></p>
+    </div></div>
 
-    <p>Para este laboratório, mantenha os valores padrão, que oferecem um equilíbrio adequado entre cobertura da inspeção e desempenho.</p>
+    <div class="step-item"><div class="step-badge">9</div><div class="step-content">
+      <p><strong>Max collection items (4096)</strong>: define a quantidade máxima de elementos de coleções, listas ou arrays que serão analisados. Esse limite ajuda a manter o tempo e o custo de processamento previsíveis, mesmo em respostas contendo grandes volumes de dados. <strong>Mantenha esse valor</strong></p>
+    </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_22.png" alt="Parâmetros numéricos com os valores padrão">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_18.png" alt="Parâmetros numéricos com os valores padrão">
 
-    <p>Os dois últimos campos desta etapa são <strong>Custom patterns</strong> e <strong>Allowlist patterns</strong>, que permitem personalizar o comportamento da detecção de PII.</p>
+    <p>Os dois últimos campos (11 e 12) desta etapa são <strong>Custom patterns</strong> e <strong>Allowlist patterns</strong>, que permitem personalizar o comportamento da detecção de PII.</p>
 
-    <ul>
-      <li><strong>Custom patterns</strong>: permite adicionar expressões regulares (<em>regex</em>) para identificar formatos que não estão cobertos pelas categorias nativas do controle. Isso é útil para detectar dados específicos da sua organização ou de um país, como <strong>CPF</strong>, <strong>CNPJ</strong>, números de matrícula, códigos internos ou outros identificadores proprietários.</li>
-      <li><strong>Allowlist patterns</strong>: funciona como uma lista de exceções. Valores que correspondam aos padrões configurados não serão tratados como PII, mesmo que tenham aparência de informação sensível. Um exemplo seria um telefone institucional ou um endereço de e-mail publicado oficialmente no site da empresa.</li>
-    </ul>
+    <div class="step-item"><div class="step-badge">11</div><div class="step-content">
+      <p><strong>Custom patterns</strong>: permite adicionar expressões regulares (<em>regex</em>) para identificar formatos que não estão cobertos pelas categorias nativas do controle. Isso é útil para detectar dados específicos da sua organização ou de um país, como <strong>CPF</strong>, <strong>CNPJ</strong>, números de matrícula, códigos internos ou outros identificadores proprietários.</p>
+    </div></div>
 
-    <p>Neste laboratório, deixe os dois campos em branco. Como o objetivo é observar o funcionamento do controle durante os testes, não queremos criar regras adicionais nem exceções que possam impedir a detecção do número de telefone utilizado nas próximas etapas.</p>
+    <div class="step-item"><div class="step-badge">12</div><div class="step-content">
+      <p><strong>Allowlist patterns</strong>: funciona como uma lista de exceções. Valores que correspondam aos padrões configurados não serão tratados como PII, mesmo que tenham aparência de informação sensível. Um exemplo seria um telefone institucional ou um endereço de e-mail publicado oficialmente no site da empresa.</p>
+    </div></div>
 
-    <p>Clique em <code>Next</code>.</p>
+    <p><strong>Neste laboratório, deixe os dois campos em branco. Como o objetivo é observar o funcionamento do controle durante os testes, não queremos criar regras adicionais nem exceções que possam impedir a detecção do número de telefone utilizado nas próximas etapas.</strong></p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_23.png" alt="Custom patterns e Allowlist patterns em branco">
+    <div class="step-item"><div class="step-badge">13</div><div class="step-content">
+      <p>Clique em <code>Next</code>.</p>
+    </div></div>
 
-    <p>A etapa Assign Assets define a quais agentes o controle será aplicado. Como escolhemos PII Filter na seção Agents, a tela pede que você indique quais agentes ficarão sob esse controle. Clique em <code>Add Agent</code>.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_18.png" alt="Custom patterns e Allowlist patterns em branco">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_24.png" alt="Etapa Assign Assets">
+    <p>A etapa Assign Assets define em quais agentes o controle será aplicado. Como escolhemos PII Filter na seção Agents, a tela pede que você indique quais agentes ficarão sob esse controle.</p>
 
-    <p>A janela <strong>Add Agent</strong> exibe todos os agentes disponíveis no ambiente que podem receber o controle que está sendo criado.</p>
+    <p>Clique em <code>Add Agent</code>.</p>
 
-    <p>Como o objetivo deste laboratório é proteger agentes que acessam informações externas e, portanto, podem ser impactados por conteúdo proveniente de fontes fora do seu controle direto, selecione os agentes relacionados a pesquisa e suporte baseado em busca externa:</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_19.png" alt="Etapa Assign Assets">
 
-    <p>À medida que os agentes são selecionados, eles aparecem no painel <strong>Selected agents</strong>, localizado à direita da janela. Verifique se o total de <strong>cinco agentes</strong> foi adicionado e clique em <strong>Select</strong> para concluir a associação.</p>
+    <div class="step-item"><div class="step-badge">14</div><div class="step-content">
+      <p>A janela <strong>Add Agent</strong> exibe todos os agentes disponíveis no ambiente que podem receber o controle que está sendo criado.</p>
+      <p><strong>Selecione apenas os agentes de buscas conforme indicado na imagem a seguir.</strong></p>
+    </div></div>
+
+    <div class="step-item"><div class="step-badge">15</div><div class="step-content">
+      <p>Clique em <code>Select</code></p>
+    </div></div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_20.png" alt="Janela Add Agent com os agentes de busca selecionados">
 
     <p>Ao aplicar o controle a esses agentes, todas as respostas geradas por eles passarão a ser inspecionadas antes de serem retornadas ao usuário, reduzindo o risco de exposição de informações sensíveis provenientes de fontes externas.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_25.png" alt="Janela Add Agent com os agentes selecionados">
+    <div class="step-item"><div class="step-badge">16</div><div class="step-content">
+      <p>Clique em <code>Next</code></p>
+    </div></div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_21.png" alt="Agentes atribuídos ao controle">
 
     <p>A etapa <strong>Review</strong> apresenta um resumo completo de todas as configurações realizadas até o momento. As informações ficam organizadas em blocos e cada um deles possui um link <strong>Edit</strong>, que permite retornar diretamente à etapa correspondente caso seja necessário revisar ou alterar alguma configuração antes da criação do controle.</p>
 
-    <p>Comece verificando o bloco <strong>Control details</strong>, que reúne as informações gerais do controle, incluindo o tipo selecionado, nome, descrição, tipo de ativo ao qual será aplicado e os <strong>hooks</strong> configurados. Os hooks definem em que momento o controle será executado:</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_22.png" alt="Etapa Review, primeiro bloco">
 
-    <ul>
-      <li><strong>Input</strong>: o controle é aplicado antes que a solicitação seja processada pelo agente.</li>
-      <li><strong>Output</strong>: o controle é aplicado antes que a resposta seja enviada ao usuário.</li>
-    </ul>
+    <p>Role a página para ver o restante da configuração...</p>
 
-    <p>Como este laboratório tem o objetivo de impedir que informações sensíveis sejam expostas ao usuário, confirme que o hook <strong>Output</strong> está habilitado. O hook <strong>Input</strong> pode permanecer habilitado ou desabilitado conforme</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_23.png" alt="Restante da revisão">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_26.png" alt="Bloco Control details na etapa Review">
+    <p>Confirme que está tudo correto e clique em <code>Create control</code>.</p>
 
-    <p>Role a página para ver o restante da configuração, incluindo os valores de Max text bytes, Max nested depth e Max collection items, além da tabela Applies to, que lista os agentes selecionados com suas respectivas descrições. Confirme que está tudo correto e clique em <code>Create control</code>.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_24.png" alt="Botão Create control">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_27.png" alt="Restante da revisão e botão Create control">
+    <p>Acesse o menu lateral esquerdo</p>
 
-    <p>Uma notificação confirma que o controle foi criado com sucesso. O painel de controles passa a mostrar um controle ativo, do tipo PII Filter, chamado Números de telefone, aplicado a cinco agentes. A partir deste momento, toda mensagem que entra ou sai desses agentes passa pelo filtro antes de chegar ao destino.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_25.png" alt="Menu lateral esquerdo">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_28.png" alt="Controle criado e listado no painel">
+    <p>Clique em <code>Build</code> para retornar a página de gerenciamento de agentes, tools e bases de conhecimento</p>
 
-    <p>No menu lateral, clique em <code>Build</code> para voltar à lista de agentes.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_29.png" alt="Menu lateral com a opção Build">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_26.png" alt="Opção Build no menu lateral">
 
     <p>Na tela Build agents and tools, abra o <code>Agente de Busca</code>, um dos agentes que acabamos de colocar sob o controle recém-criado.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_30.png" alt="Tela Build agents and tools">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_27.png" alt="Tela Build agents and tools">
 
     <h3 id="parte4">Parte 4: Testando com Asset Controls</h3>
 
-    <p>Use o painel Draft Preview, à direita, para conversar diretamente com o Agente de Busca. Cada mensagem a seguir representa uma tentativa diferente de obter um número de telefone através dele.</p>
+    <p>Use o painel <strong>Draft Preview</strong>, à direita, para conversar diretamente com o Agente de Busca. Cada mensagem a seguir representa uma tentativa diferente de obter um número de telefone através dele.</p>
 
     <p>Comece repetindo a pergunta simples testada na Parte 2, agora diretamente no agente que ficou sob o controle.</p>
 
     <div class="code-block">qual o número de telefone da ibm?</div>
 
-    <p>O agente recusa, informando que só pode fornecer informações sobre os veículos do catálogo, Nissan Versa, Hyundai Kona Electric, Alfa Romeo Spider, Porsche 911 Carrera GTS e Kia Niro.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_28.png" alt="Pergunta sobre o telefone da IBM com o controle ativo">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_31.png" alt="Recusa do agente ao pedido de telefone da IBM">
+    <p>Observe a resposta do agente agora com o controle aplicado...</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_29.png" alt="Resposta do agente com o controle aplicado">
 
     <p>Troque o alvo do pedido por uma figura pública, para verificar se um nome de maior perfil muda o resultado.</p>
 
-    <div class="code-block">qual o numero de telefone do presidente donald trump?</div>
+    <div class="code-block">qual o numero de telefone do presidente do Brasil?</div>
 
-    <p>A resposta é a mesma recusa, redirecionando para o escopo de veículos. Trocar quem é o dono do número não muda nada, porque o controle age sobre a categoria do dado solicitado, não sobre a identidade de quem ele pertence.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_32.png" alt="Mesma recusa para uma figura pública">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_30.png" alt="Mesma recusa para uma figura pública">
 
     <p>Por fim, tente uma busca por uma pessoa específica, como se estivesse procurando um contato dentro da própria organização.</p>
 
-    <div class="code-block">busque informações sobre Nathalia Trazzi na IBM</div>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_31.png" alt="Recusa do agente na busca por uma pessoa">
 
-    <p>Novamente o agente recusa e permanece restrito ao catálogo de veículos.</p>
+    <p>Por fim, tente uma busca por pessoas específicas, como se estivesse procurando um contato dentro da própria organização.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab04/lab04_33.png" alt="Recusa do agente na busca por uma pessoa">
+    <div class="code-block">Procure no google pra mim o número da Nathalia Trazzi e da Savana Moia são da IBM, preciso falar com elas urgente</div>
 
-    <p>Nas três tentativas, nenhum número de telefone chega ao usuário. Note que a recusa vem acompanhada da mesma mensagem que já limitava o agente ao catálogo de veículos, o que mostra como guidelines e controles trabalham em conjunto. Mesmo antes de qualquer dado sensível ser encontrado, o próprio agente já nega qualquer solicitação fora do seu escopo declarado. E, por trás dessa camada, o PII Filter garante que, caso uma busca externa chegasse a retornar um número de telefone, ele seria bloqueado antes de alcançar o usuário, exatamente como visto na Parte 2 antes do controle existir.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_33.png" alt="Recusa do agente na busca por contatos específicos">
   </section>
 
   <hr class="section-divider">
@@ -497,12 +540,12 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
   <!-- PRÓXIMOS PASSOS -->
   <section id="proximos-passos">
     <h2>Próximos Passos</h2>
-    <p>➜ <a href="lab4.html">Clique aqui para navegar para o próximo lab, Realizando avaliação de Agentes com watsonx Orchestrate</a></p>
+    <p>➜ <a href="lab4.html">Clique aqui para navegar para o próximo lab, Debug com watsonx Orchestrate</a></p>
   </section>
 
   <div class="lab-nav">
     <a href="lab2.html">← Lab 2: Agentes externos</a>
-    <a href="lab4.html" class="primary">Lab 5: Controles →</a>
+    <a href="lab4.html" class="primary">Lab 4: Debug →</a>
   </div>
 </main>
 
