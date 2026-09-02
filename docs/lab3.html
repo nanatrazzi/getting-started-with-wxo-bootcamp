@@ -120,9 +120,8 @@
   </div>
 
   <div class="page-header">
-    <div class="page-header__eyebrow">Laboratório 3 · Controles no watsonx Orchestrate</div>
+    <div class="page-header__eyebrow">Laboratório 3</div>
     <h1 class="page-header__h1">Controles no watsonx Orchestrate</h1>
-    <p class="page-header__subtitle">Aprenda a proteger agentes de IA contra vazamento de PII usando controls no watsonx Orchestrate.</p>
   </div>
 
   <!-- Índice -->
@@ -133,10 +132,10 @@
       <li style="margin-bottom:6px;"><a href="#pre-requisitos">Pré-requisitos</a></li>
       <li style="margin-bottom:6px;"><a href="#caso-de-uso">Descrição do Caso de Uso</a>
         <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
-          <li style="margin-bottom:4px;"><a href="#parte1">Parte 1: Acessar o watsonx Orchestrate e configurar o agente</a></li>
-          <li style="margin-bottom:4px;"><a href="#parte2">Parte 2: Testando sem Asset Controls</a></li>
-          <li style="margin-bottom:4px;"><a href="#parte3">Parte 3: Criando Controls para Filtragem de PII</a></li>
-          <li style="margin-bottom:4px;"><a href="#parte4">Parte 4: Testando com Asset Controls</a></li>
+          <li><a href="#parte1">Parte 1: Acessar o watsonx Orchestrate e configurar o agente</a></li>
+          <li><a href="#parte2">Parte 2: Testando sem Asset Controls</a></li>
+          <li><a href="#parte3">Parte 3: Criando Controls para Filtragem de PII</a></li>
+          <li><a href="#parte4">Parte 4: Testando com Asset Controls</a></li>
         </ul>
       </li>
       <li style="margin-bottom:6px;"><a href="#resultados">Resultados e importância dos controles construídos com o Orchestrate</a></li>
@@ -155,7 +154,7 @@
       <div>
         <div class="callout__title">O que é PII (Personal Identifiable Information)?</div>
         <p>PII é qualquer dado que possa ser usado para identificar um indivíduo. Alguns exemplos são nome completo, número de telefone, CPF, endereço e dados de cartão de crédito.</p>
-        <p style="margin:0;"><strong>Nota:</strong> Se o dado pode ser usado para identificar uma pessoa, ele é considerado PII.</p>
+        <p style="margin:0;">Se o dado pode ser usado para identificar uma pessoa, ele é considerado PII.</p>
       </div>
     </div>
 
@@ -202,13 +201,13 @@
 
     <p>Vamos reaproveitar o agente orquestrador criado no <a href="lab2.html">Laboratório 2</a>, o <strong>Agente de Busca</strong>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_00.png" alt="Agente de Busca aberto no watsonx Orchestrate">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_00.png" alt="Controles - watsonx Orchestrate">
 
     <p>No campo <strong>Description</strong>, altere a descrição atual para:</p>
 
     <div class="code-block">Este agente pesquisa no Google informações em tempo real.</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_01.png" alt="Campo Description atualizado">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_01.png" alt="Controles - watsonx Orchestrate">
 
     <p>Em seguida, no campo <strong>Instructions</strong> também altere o texto atual para:</p>
 
@@ -216,7 +215,7 @@
 
 Em seguida apresente o resultado de forma clara, objetiva e completa, preservando os detalhes relevantes encontrados.</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_02.png" alt="Campo Instructions atualizado">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_02.png" alt="Controles - watsonx Orchestrate">
 
     <h3 id="parte2">Parte 2: Testando sem Asset Controls</h3>
 
@@ -226,26 +225,25 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <div class="code-block">Qual o número da IBM?</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_03-01.png" alt="Pergunta enviada no Draft Preview">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_03-01.png" alt="Controles - watsonx Orchestrate">
 
-    <p><strong>Note que a resposta foi retornada agora que a Instrução do agente foi atualizada.</strong></p>
+    <p><strong>Note que a resposta foi retornada agor que a Instrução do agente foi atualizada.</strong></p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_03-02.png" alt="Resposta do agente com o número da IBM">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_03-02.png" alt="Controles - watsonx Orchestrate">
 
     <p>Essa é uma informação que qualquer pessoa consegue encontrar em segundos com uma busca simples no Google, que retorna o número público de atendimento da IBM no Brasil.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_03-03.png" alt="Busca no Google pelo número da IBM">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_03-03.png" alt="Controles - watsonx Orchestrate">
 
     <p>Clique em <code>Show Reasoning</code>, ao lado da resposta, para entender de onde esses dados vieram.</p>
 
     <div class="callout callout--note">
       <div>
-        <div class="callout__title">Nota</div>
         <p style="margin:0;">O ponto de atenção aqui não é o dado em si, já que um telefone institucional público é uma informação de baixo risco. O ponto de atenção é o mecanismo. A resposta não veio de uma base de conhecimento controlada por você, mas de uma busca livre feita por um agente externo, chamado como ferramenta. Sem controles configurados, tudo que essa fonte externa retorna chega ao usuário sem nenhuma verificação intermediária, seja um telefone público ou um dado bem mais sensível.</p>
       </div>
     </div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_04.png" alt="Show Reasoning da resposta">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_04.png" alt="Controles - watsonx Orchestrate">
 
     <h3 id="parte3">Parte 3: Criando Controls para Filtragem de PII</h3>
 
@@ -255,17 +253,17 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Clique em <code>Manage</code> para expandir a sessão.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_04.png" alt="Menu Manage expandido">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_04.png" alt="Controles - watsonx Orchestrate">
 
     <p>Em seguida, clique em <code>Controls</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_05.png" alt="Opção Controls no menu Manage">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_05.png" alt="Controles - watsonx Orchestrate">
 
     <p>Nesse momento o painel de controles está vazio, sem nenhum controle criado.</p>
 
     <p>Clique em <code>Create Control</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_06.png" alt="Painel de controles vazio">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_06.png" alt="Controles - watsonx Orchestrate">
 
     <p>A tela Select Control lista os tipos de controle disponíveis, organizados por onde eles atuam.</p>
 
@@ -283,7 +281,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Clique em <code>Create Control</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_07.png" alt="Controles disponíveis para Agents">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_07.png" alt="Controles - watsonx Orchestrate">
 
     <p><strong>Tools</strong> os controles protegem chamadas para ferramentas externas e integrações:</p>
 
@@ -295,7 +293,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <li>Secrets Detector, que impede o vazamento acidental de credenciais ou segredos durante o uso das ferramentas.</li>
     </ul>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_08.png" alt="Controles disponíveis para Tools">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_08.png" alt="Controles - watsonx Orchestrate">
 
     <p><strong>Models</strong> os controles aumentam a resiliência e a disponibilidade dos modelos utilizados pelos agentes:</p>
 
@@ -307,11 +305,11 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Esses controles podem ser combinados para implementar diferentes estratégias de governança, segurança e confiabilidade em agentes de IA, reduzindo riscos operacionais e ajudando a atender requisitos de conformidade e proteção de dados.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_08.png" alt="Controles disponíveis para Models">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_08.png" alt="Controles - watsonx Orchestrate">
 
     <p>Para este laboratório, em <code>Agents</code> selecione <code>PII Filter</code> e clique em <code>Next</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_09.png" alt="Seleção do PII Filter">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_09.png" alt="Controles - watsonx Orchestrate">
 
     <div class="step-item"><div class="step-badge">1</div><div class="step-content">
       <p>Comece pelo nome e pela descrição da instância. Use:</p>
@@ -319,21 +317,20 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
     </div></div>
 
     <div class="step-item"><div class="step-badge">2</div><div class="step-content">
-      <p>Coloque uma descrição opcional, exemplo:</p>
-      <div class="code-block">Controle destinado a números de telefone</div>
+      <p>Coloque uma descrição opcional, exemplo: <code>Controle destinado a números de telefone</code></p>
     </div></div>
 
     <div class="step-item"><div class="step-badge">3</div><div class="step-content">
       <p>Em Enforcement type, marque tanto <code>Input</code> quanto <code>Output</code>. Input analisa o que o usuário envia ao agente, impedindo que dados sensíveis entrem no fluxo. Output analisa o que o agente devolve, impedindo que dados sensíveis cheguem até o usuário. Com os dois marcados, o filtro cobre a conversa inteira, na entrada e na saída.</p>
     </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_10.png" alt="Nome, descrição e Enforcement type">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_10.png" alt="Controles - watsonx Orchestrate">
 
     <div class="step-item"><div class="step-badge">4</div><div class="step-content">
       <p>Em Detection Type você define o escopo do filtro, ou seja, quais categorias de dado o controle vai procurar em cada mensagem. Abra o menu suspenso e role a lista para ver todos os tipos de PII disponíveis, que somam onze ao todo.</p>
     </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_11.png" alt="Menu suspenso de Detection Type">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_11.png" alt="Controles - watsonx Orchestrate">
 
     <div class="table-wrap">
     <table>
@@ -354,12 +351,13 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
     </table>
     </div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_12.png" alt="Lista de tipos de PII, parte 1">
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_13.png" alt="Lista de tipos de PII, parte 2">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_12.png" alt="Controles - watsonx Orchestrate">
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_13.png" alt="Controles - watsonx Orchestrate">
 
     <p>Para este laboratório, marque <code>Detect Phone</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_14.png" alt="Detect Phone marcado">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_14.png" alt="Controles - watsonx Orchestrate">
 
     <div class="step-item"><div class="step-badge">5</div><div class="step-content">
       <p>Em <strong>Default mask strategy</strong>, você define qual ação será tomada quando um dado sensível for identificado:</p>
@@ -374,13 +372,13 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <p>Para esse laboratório, selecione <code>Remove</code>.</p>
     </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_15.png" alt="Estratégia Remove selecionada">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_15.png" alt="Controles - watsonx Orchestrate">
 
     <div class="step-item"><div class="step-badge">6</div><div class="step-content">
       <p>Em <strong>Enforcement Mode</strong>, você define qual ação o controle deve tomar quando uma informação sensível for detectada.</p>
     </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_16.png" alt="Opções de Enforcement Mode">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_16.png" alt="Controles - watsonx Orchestrate">
 
     <p>Enquanto <strong>Detection Type</strong> determina <em>o que procurar</em> e <strong>Default mask strategy</strong> define <em>como mascarar ou transformar o dado encontrado</em>, o <strong>Enforcement Mode</strong> determina <em>o que fazer após a detecção</em>. As opções podem ser combinadas conforme a necessidade.</p>
 
@@ -392,10 +390,10 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <p>Para este laboratório, marque as três opções: <code>Block On Detection</code>, <code>Include Detection Details</code> e <code>Log Detections</code></p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_17.png" alt="Três opções de Enforcement Mode marcadas">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_17.png" alt="Controles - watsonx Orchestrate">
 
     <div class="step-item"><div class="step-badge">7</div><div class="step-content">
-      <p><strong>Max text bytes (10485760)</strong>: define o tamanho máximo de texto que será analisado em uma única entrada ou saída.</p>
+      <p><strong>Max text bytes (10485760)</strong>: Fefine o tamanho máximo de texto que será analisado em uma única entrada ou saída.</p>
       <p>O valor padrão corresponde a aproximadamente <strong>10 MB</strong>, sendo suficiente para a maioria dos casos de uso. <strong>Mantenha esse valor</strong></p>
     </div></div>
 
@@ -407,7 +405,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <p><strong>Max collection items (4096)</strong>: define a quantidade máxima de elementos de coleções, listas ou arrays que serão analisados. Esse limite ajuda a manter o tempo e o custo de processamento previsíveis, mesmo em respostas contendo grandes volumes de dados. <strong>Mantenha esse valor</strong></p>
     </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_18.png" alt="Parâmetros numéricos com os valores padrão">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_18.png" alt="Controles - watsonx Orchestrate">
 
     <p>Os dois últimos campos (11 e 12) desta etapa são <strong>Custom patterns</strong> e <strong>Allowlist patterns</strong>, que permitem personalizar o comportamento da detecção de PII.</p>
 
@@ -425,13 +423,13 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <p>Clique em <code>Next</code>.</p>
     </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_18.png" alt="Custom patterns e Allowlist patterns em branco">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_18.png" alt="Controles - watsonx Orchestrate">
 
     <p>A etapa Assign Assets define em quais agentes o controle será aplicado. Como escolhemos PII Filter na seção Agents, a tela pede que você indique quais agentes ficarão sob esse controle.</p>
 
     <p>Clique em <code>Add Agent</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_19.png" alt="Etapa Assign Assets">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_19.png" alt="Controles - watsonx Orchestrate">
 
     <div class="step-item"><div class="step-badge">14</div><div class="step-content">
       <p>A janela <strong>Add Agent</strong> exibe todos os agentes disponíveis no ambiente que podem receber o controle que está sendo criado.</p>
@@ -442,7 +440,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <p>Clique em <code>Select</code></p>
     </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_20.png" alt="Janela Add Agent com os agentes de busca selecionados">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_20.png" alt="Controles - watsonx Orchestrate">
 
     <p>Ao aplicar o controle a esses agentes, todas as respostas geradas por eles passarão a ser inspecionadas antes de serem retornadas ao usuário, reduzindo o risco de exposição de informações sensíveis provenientes de fontes externas.</p>
 
@@ -450,31 +448,31 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
       <p>Clique em <code>Next</code></p>
     </div></div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_21.png" alt="Agentes atribuídos ao controle">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_21.png" alt="Controles - watsonx Orchestrate">
 
     <p>A etapa <strong>Review</strong> apresenta um resumo completo de todas as configurações realizadas até o momento. As informações ficam organizadas em blocos e cada um deles possui um link <strong>Edit</strong>, que permite retornar diretamente à etapa correspondente caso seja necessário revisar ou alterar alguma configuração antes da criação do controle.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_22.png" alt="Etapa Review, primeiro bloco">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_22.png" alt="Controles - watsonx Orchestrate">
 
     <p>Role a página para ver o restante da configuração...</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_23.png" alt="Restante da revisão">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_23.png" alt="Controles - watsonx Orchestrate">
 
     <p>Confirme que está tudo correto e clique em <code>Create control</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_24.png" alt="Botão Create control">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_24.png" alt="Controles - watsonx Orchestrate">
 
     <p>Acesse o menu lateral esquerdo</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_25.png" alt="Menu lateral esquerdo">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_25.png" alt="Controles - watsonx Orchestrate">
 
     <p>Clique em <code>Build</code> para retornar a página de gerenciamento de agentes, tools e bases de conhecimento</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_26.png" alt="Opção Build no menu lateral">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_26.png" alt="Controles - watsonx Orchestrate">
 
     <p>Na tela Build agents and tools, abra o <code>Agente de Busca</code>, um dos agentes que acabamos de colocar sob o controle recém-criado.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_27.png" alt="Tela Build agents and tools">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_27.png" alt="Controles - watsonx Orchestrate">
 
     <h3 id="parte4">Parte 4: Testando com Asset Controls</h3>
 
@@ -484,27 +482,27 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
     <div class="code-block">qual o número de telefone da ibm?</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_28.png" alt="Pergunta sobre o telefone da IBM com o controle ativo">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_28.png" alt="Controles - watsonx Orchestrate">
 
     <p>Observe a resposta do agente agora com o controle aplicado...</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_29.png" alt="Resposta do agente com o controle aplicado">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_29.png" alt="Controles - watsonx Orchestrate">
 
     <p>Troque o alvo do pedido por uma figura pública, para verificar se um nome de maior perfil muda o resultado.</p>
 
     <div class="code-block">qual o numero de telefone do presidente do Brasil?</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_30.png" alt="Mesma recusa para uma figura pública">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_30.png" alt="Controles - watsonx Orchestrate">
 
     <p>Por fim, tente uma busca por uma pessoa específica, como se estivesse procurando um contato dentro da própria organização.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_31.png" alt="Recusa do agente na busca por uma pessoa">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_31.png" alt="Controles - watsonx Orchestrate">
 
-    <p>Por fim, tente uma busca por pessoas específicas, como se estivesse procurando um contato dentro da própria organização.</p>
+    <p>Por fim, tente uma busca por pessoas específicsa, como se estivesse procurando um contato dentro da própria organização.</p>
 
     <div class="code-block">Procure no google pra mim o número da Nathalia Trazzi e da Savana Moia são da IBM, preciso falar com elas urgente</div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_33.png" alt="Recusa do agente na busca por contatos específicos">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab03/lab03_33.png" alt="Controles - watsonx Orchestrate">
   </section>
 
   <hr class="section-divider">
@@ -545,7 +543,7 @@ Em seguida apresente o resultado de forma clara, objetiva e completa, preservand
 
   <div class="lab-nav">
     <a href="lab2.html">← Lab 2: Agentes externos</a>
-    <a href="lab4.html" class="primary">Lab 4: Debug →</a>
+    <a href="lab4.html" class="primary">Lab 5: Controles →</a>
   </div>
 </main>
 
