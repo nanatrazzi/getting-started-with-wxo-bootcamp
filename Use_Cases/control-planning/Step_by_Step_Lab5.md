@@ -2,16 +2,16 @@
 
 ## Visão Geral
 
-Quando um agente responde de um jeito inesperado, a pergunta que importa não é o que ele respondeu, e sim **por que** ele chegou até ali. 
+Quando um agente responde de maneira inesperada, a pergunta que importa não é o que ele respondeu, e sim **por que** ele chegou até ali. 
 
-O modo de debug do **watsonx Orchestrate** registra cada passo da execução, mostra o caminho percorrido no fluxo e expõe os dados brutos que trafegaram entre o usuário, o modelo, os colaboradores e as bases de conhecimento.
+O modo de debug do **watsonx Orchestrate** registra cada passo da execução, mostrando o caminho percorrido no fluxo e expondo os dados brutos que trafegaram entre o usuário, o modelo, os agentes e as bases de conhecimento.
 
 Neste laboratório o cenário é **multiagente**:
 
 ```
-Usuário → Assistente de Compra de Veículos (supervisor)
-              └─→ Agente de suporte ao revendedor (colaborador)
-                      └─→ Catálogo de Carro com preços (knowledge base)
+Usuário → Assistente de Compra de Veículos (Agente orquestrador)
+              └─→ Agente de suporte ao revendedor (Colaborador)
+                      └─→ Catálogo de Carro com preços (Knowledge base)
 ```
 
 São três camadas de decisão, e o debug é o que permite enxergar todas elas.
@@ -33,7 +33,7 @@ São três camadas de decisão, e o debug é o que permite enxergar todas elas.
   - [Passo 3: Abra a janela de Debug](#passo-3-abra-a-janela-de-debug)
   - [Passo 4: Os controles da barra superior](#passo-4-os-controles-da-barra-superior)
   - [Passo 5: O passo User input](#passo-5-o-passo-user-input)
-  - [Passo 6: O passo Agent e a decisão de roteamento](#passo-6-o-passo-agent-e-a-decisão-de-roteamento)
+  - [Passo 6: Decisão de roteamento com Agente orquestrador](#passo-6-decisão-de-roteamento-com-agente-orquestrador)
   - [Passo 7: Dentro do colaborador](#passo-7-dentro-do-colaborador)
   - [Passo 8: A volta para o agente orquestrador](#passo-8-a-volta-para-o-agente-orquestrador)
   - [Passo 9: O passo Answer](#passo-9-o-passo-answer)
@@ -48,9 +48,9 @@ São três camadas de decisão, e o debug é o que permite enxergar todas elas.
 
 Na tela `Build agents and tools`, clique no card **Assistente de Compra de Veículos**.
 
-- O contador `Agents` marca `2` → o agente tem **dois colaboradores** registrados.
-
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_01.png)
+
+Envie a pergunta `qual o carro mais caro que vcs tem?`
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_03.png)
 
@@ -62,12 +62,9 @@ Leia a resposta
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_04.png)
 
----
-
-Antes de abrir o modo debug, boa parte do diagnóstico já está no próprio chat.
+Antes de abrir o modo debug, uma parte do diagnóstico já está no próprio chat.
 
 Clique em `Show Reasoning`
-
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_05.png)
 
@@ -85,19 +82,17 @@ Expanda o `Step 1` (o roteamento)
 | `Input` | A pergunta original do usuário, intacta |
 | `Output` | `Transferring to - chat_with_collaborator_agente_de_suporte_ao_revendedor` |
 
-o agente orquestrador não tentou responder. Leu a pergunta, reconheceu consulta de catálogo e delegou.
+O agente orquestrador não tentou responder. Ele leu a pergunta, reconheceu consulta de catálogo e delegou a missão para outro agente.
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_07.png)
 
-Expanda o `Step 2` (a busca na base)**
+Expanda o `Step 2` (a busca na base)
 
 | Campo | Conteúdo |
 |---|---|
 | `Tool` | `Catálogo_de_Carro_com_preços` |
 | `Input` | `{"query": "preço"}` |
 | `Output` | 22 linhas, começando pelo `title` do documento `Catalog_with_prices_clean.pdf` |
-
-A busca **não** usou a frase do usuário, e sim uma consulta reescrita pelo agente. Quando a resposta vem incompleta, esse campo `query` é o primeiro suspeito.
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_08.png)
 
@@ -107,7 +102,9 @@ Clique no botão de expansão abaixo da resposta.
 - **Trecho recuperado:** registro do `VEH-004 Porsche 911 Carrera GTS`, com cor e valor
 - **`View source`:** abre o documento completo
 
-A prova de que a resposta veio da base, e não de conhecimento próprio do modelo.
+A prova de que a resposta veio da base, e não de conhecimento próprio do modelo. 
+
+**A resposta veio conforme o esperado**.
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_09.png)
 
@@ -121,6 +118,9 @@ Clique na joaninha (🐞)
 
 Passe o mouse para confirmar o rótulo `Debug`.
 
+> O modo debug é uma funcionalidade disponível no watsonx Orchestrate, tanto pela interface de usuário (UI) quanto por APIs, destinada exclusivamente a usuários responsáveis pelo desenvolvimento e manutenção de agentes e workflows na plataforma.
+>  Usuários finais e clientes não possuem acesso a esse tipo de visão ou funcionalidade por padrão. Esse acesso somente pode ser concedido quando fizer parte do caso de uso definido e mediante as permissões apropriadas e controles de segurança estabelecidos.
+
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_10.png)
 
 **Entendendo a divisão da tela**
@@ -132,9 +132,9 @@ Passe o mouse para confirmar o rótulo `Debug`.
 
 **Estrutura visível no canvas:**
 
-- `Assistente de Compra de Veículos` → modelo
-- `Assistente de Compra de Veículos` → colaborador `Agente de Busca`
-- `Assistente de Compra de Veículos` → colaborador `Agente de suporte ao revendedor` → base `Catálogo de Carro com preços`
+- `Assistente de Compra de Veículos` → Modelo
+- `Assistente de Compra de Veículos` → Colaborador `Agente de Busca`
+- `Assistente de Compra de Veículos` → Colaborador `Agente de suporte ao revendedor` → base `Catálogo de Carro com preços`
 - Nós de `Answer` em cada ramo
 
 **Resumo da execução: 9 passos / 5ms**
@@ -170,20 +170,20 @@ Abra o seletor `Legends`, no rodapé do canvas.
 
 **Estados do nó:**
 
-- `Not yet executed` — ainda não executado
-- `Used in the execution` — participou desta execução
-- `Current active node` — nó selecionado agora
+- `Not yet executed` — Ainda não executado
+- `Used in the execution` — Participou desta execução
+- `Current active node` — Nó selecionado agora
 
 **Tipos de conexão:**
 
-- `Agent flow` — ligação estrutural do agente
-- `Current taken path` — caminho realmente percorrido nesta execução
-- `Not used in this execution` — ligações que ficaram de fora
+- `Agent flow` — Ligação estrutural do agente
+- `Current taken path` — Caminho realmente percorrido nesta execução
+- `Not used in this execution` — Ligações que ficaram de fora
 
 **Etiquetas:**
 
-- `COLLAB` — marca um agente colaborador
-- Ícone de camadas — o nó tem nós filhos
+- `COLLAB` — Marca um agente colaborador
+- Ícone de camadas — O nó tem nós filhos
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_12.png)
 
@@ -206,7 +206,7 @@ Destaca no diagrama todos os nós que participaram da execução.
 Com o realce ativo:
 
 - **Realçados:** `Agente de suporte ao revendedor`, o modelo e a base `Catálogo de Carro com preços`
-- **Apagado:** `Agente de Busca` — existe no agente, mas não foi acionado nesta conversa
+- **Apagado:** `Agente de Busca` — Existe no agente, mas não foi acionado nesta conversa
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_15.png)
 
@@ -215,13 +215,13 @@ Com o realce ativo:
 Remove do canvas tudo que não participou da execução. Sobram apenas:
 
 - `User input`
-- Supervisor
+- Supervisor (Agente orquestrador)
 - Colaborador
 - Nós de modelo
 - Base de conhecimento
 - Nós de `Answer`
 
-> **Quando usar:** em agentes com muitos colaboradores e ferramentas, elimina o ruído e deixa o caminho real evidente.
+> **Quando usar:** Em agentes com muitos colaboradores e ferramentas, elimina o ruído e deixa o caminho real evidente.
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_16.png)
 
@@ -269,7 +269,7 @@ Clique no primeiro passo da linha do tempo. O nó correspondente acende no canva
 | `isCollaboratorNode` | `false` | Não é nó de colaborador |
 | `collaboratorId` | `null` | Nenhum colaborador envolvido |
 
-> 💡 O botão `Raw`, no canto direito, alterna entre a versão formatada e o JSON puro.
+> O botão `Raw`, no canto direito, alterna entre a versão formatada e o JSON puro.
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_20.png)
 
@@ -288,9 +288,9 @@ Clique no primeiro passo da linha do tempo. O nó correspondente acende no canva
 
 ---
 
-## Passo 6: O passo Agent e a decisão de roteamento
+## Passo 6: Decisão de roteamento com Agente orquestrador
 
-Avance para o segundo passo: `Agent` · `Model invoked` · **Agent reasoning**. É aqui que o supervisor decide o que fazer com a pergunta.
+Avance para o segundo passo: `Agent` · `Model invoked` · **Agent reasoning**. É aqui que o agente orquestrador decide o que fazer com a pergunta.
 
 **6.1 — Aba `Summary` (o campo mais revelador)**
 
@@ -301,7 +301,7 @@ Avance para o segundo passo: `Agent` · `Model invoked` · **Agent reasoning**. 
 
 > **Leitura:** este texto é a resposta direta para *"por que ele chamou esse colaborador e não o outro"*.
 
-**No canvas:** o caminho tracejado sai do `User input`, passa pelo supervisor e chega ao nó `groq/openai/gpt-oss`.
+**No canvas:** o caminho tracejado sai do `User input`, passa pelo agente orquestrador e chega ao nó `groq/openai/gpt-oss`.
 
 **Node properties ganha 4 abas:** `About` · `Collaborators` · `Guidelines` · `LLM Model`
 
@@ -351,7 +351,7 @@ Para o selecionado, mostra:
 
 | Bloco | Campos |
 |---|---|
-| `Agent mapping` | `Hidden`, `Display name` que o supervisor enxerga |
+| `Agent mapping` | `Hidden`, `Display name` que o agente orquestrador enxerga |
 | `Additional properties` | `Context access enabled`, `Hide reasoning`, `Sync tool flow interrupt`, `Restrictions`, `Bundled` |
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_26.png)
@@ -396,7 +396,7 @@ Clique na seta à direita do nome. Quatro subpassos aparecem indentados:
 | 1 | `Agent` · Agent reasoning | 0.72ms | O colaborador decide o que fazer |
 | 2 | `Knowledge: Catálogo de Carro com preços` | 1.33ms | `Searching knowledge base for relevant information` |
 | 3 | `Agent` · Agent processing | 0.77ms | Redige a resposta com o que foi recuperado |
-| 4 | `Answer` | 0.01ms | Prepara a devolução para o supervisor |
+| 4 | `Answer` | 0.01ms | Prepara a devolução para o agente orquestrador |
 
 **Node properties do colaborador:**
 
@@ -420,7 +420,7 @@ Clique na seta à direita do nome. Quatro subpassos aparecem indentados:
 
 **7.3 — Subpasso 1: `Agent reasoning` do colaborador**
 
-- **No canvas:** acende o nó de modelo pendurado no **colaborador**, não mais o do supervisor
+- **No canvas:** acende o nó de modelo pendurado no **colaborador**, não mais o do agente orquestrador
 - **Instruções:** trecho final inclui a diretriz de responder somente em Português do Brasil
 - **`Node type`:** volta a ser `Agent`
 
@@ -486,7 +486,7 @@ O campo `Request` traz:
 | Camada | Fecho da mensagem |
 |---|---|
 | Colaborador | *"Você tem interesse em algum tipo de carro específico, como esportivo, utilitário ou familiar?"* |
-| Supervisor (entregue ao usuário) | *"Caso queira saber mais detalhes sobre ele ou comparar com outros modelos, estou à disposição!"* |
+| Agente orquestrador (entregue ao usuário) | *"Caso queira saber mais detalhes sobre ele ou comparar com outros modelos, estou à disposição!"* |
 
 > O que chega ao usuário **não é necessariamente** o que o colaborador escreveu. Quando o tom ou o conteúdo final destoam do esperado, é aqui que se descobre em qual camada a alteração aconteceu.
 
@@ -499,7 +499,7 @@ O campo `Request` traz:
 | `Async flag` | `false` | Execução síncrona |
 | `In async execution` | `0` | Nenhuma execução assíncrona em curso |
 | `Is Collaborator` | `false` | Quem processa agora é o **agente principal** |
-| `Use supervisor interrupt handoff` | `false` | Não houve transferência para supervisor externo |
+| `Use supervisor interrupt handoff` | `false` | Não houve transferência para agente orquestrador externo |
 | `Agent depth` | `1` | Nível do agente na hierarquia |
 | `Code act is question` | `false` | — |
 
@@ -507,7 +507,7 @@ O campo `Request` traz:
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_42.png)
 
-**8.3 — Node properties (segundo turno do supervisor)**
+**8.3 — Node properties (segundo turno do Agente orquestrador)**
 
 As mesmas abas do `Agent reasoning`. Em `About`:
 
@@ -540,7 +540,7 @@ A mesma lista de dois agentes, com identificadores, nomes internos, descrições
 | `Style` | `react_intrinsic` |
 | `Created by` / `Created on` | Campos de auditoria |
 
-> Um agente colaborador pode rodar em um **modelo diferente** do supervisor. Isso explica diferenças de comportamento entre as camadas.
+> Um agente colaborador pode rodar em um **modelo diferente** do agente orquestrador. Isso explica diferenças de comportamento entre as camadas.
 
 ![test](../../Assets_for_BuildBooks/labs/lab05/lab05_47.png)
 
@@ -560,7 +560,7 @@ Na sequência aparecem: `Environments` (Draft) · `Agent mapping` · `Chat with 
 
 **8.7 — Aba `Output`**
 
-O campo `Response` traz a resposta **já reescrita pelo supervisor**, palavra por palavra igual à que apareceu no Draft Preview.
+O campo `Response` traz a resposta **já reescrita pelo agente orquestrador**, palavra por palavra igual à que apareceu no Draft Preview.
 
 > **O ciclo se fecha:** entrou o texto do agente colaborador, saiu o texto do usuário.
 
@@ -697,9 +697,9 @@ Você concluiu o laboratório de debug de agentes no watsonx Orchestrate.
 | # | Verificação | Onde olhar |
 |---|---|---|
 | 1 | O roteamento foi para o colaborador esperado? | Canvas com o realce ativado |
-| 2 | Por que o supervisor escolheu esse caminho? | `Output response` do `Agent reasoning` × regras de roteamento |
+| 2 | Por que o agente orquestrador escolheu esse caminho? | `Output response` do `Agent reasoning` × regras de roteamento |
 | 3 | A busca na base trouxe o conteúdo certo? | Campo `query` e a citação do documento |
-| 4 | A resposta foi alterada na volta? | `Input` do último passo do supervisor × `Output` final |
+| 4 | A resposta foi alterada na volta? | `Input` do último passo do agente orquestrador × `Output` final |
 | 5 | O modelo e as configurações eram os esperados? | Abas `LLM Model` e `Node properties` de cada camada |
 
 Na maioria dos casos o problema aparece em um desses cinco pontos.
