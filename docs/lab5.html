@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lab 5 · Debug de Agentes · watsonx Orchestrate</title>
+<title>Lab 5 · Debug com watsonx Orchestrate</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -117,8 +117,7 @@
 
   <div class="page-header">
     <div class="page-header__eyebrow">Laboratório 5 · Depuração e Diagnóstico</div>
-    <h1 class="page-header__h1">Debug de Agentes com watsonx Orchestrate</h1>
-    <p class="page-header__subtitle">Percorra a linha do tempo de execução, leia as variáveis de cada nó e transforme uma resposta suspeita em um diagnóstico concreto.</p>
+    <h1 class="page-header__h1">Debug com watsonx Orchestrate</h1>
   </div>
 
   <!-- Índice -->
@@ -127,11 +126,14 @@
     <ul style="list-style:none;padding:0;margin:0;">
       <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
       <li style="margin-bottom:6px;"><a href="#passo1">Passo 1: Reproduza a conversa</a></li>
-      <li style="margin-bottom:6px;"><a href="#passo2">Passo 2: Entenda a janela de Debug</a></li>
-      <li style="margin-bottom:6px;"><a href="#passo3">Passo 3: O passo User input</a></li>
-      <li style="margin-bottom:6px;"><a href="#passo4">Passo 4: O passo Agent</a></li>
-      <li style="margin-bottom:6px;"><a href="#passo5">Passo 5: O passo Answer</a></li>
-      <li style="margin-bottom:6px;"><a href="#passo6">Passo 6: Leia o fluxo de outras maneiras</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo3">Passo 3: Abra a janela de Debug</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo4">Passo 4: Os controles da barra superior</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo5">Passo 5: O passo User input</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo6">Passo 6: Decisão de roteamento com Agente orquestrador</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo7">Passo 7: Dentro do colaborador</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo8">Passo 8: A volta para o agente orquestrador</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo9">Passo 9: O passo Answer</a></li>
+      <li style="margin-bottom:6px;"><a href="#passo10">Passo 10: Ajuste o espaço de trabalho</a></li>
       <li style="margin-bottom:6px;"><a href="#resumo">Resumo</a></li>
       <li style="margin-bottom:6px;"><a href="#sou-desenvolvedor">Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate</a></li>
       <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos Passos</a></li>
@@ -142,18 +144,27 @@
   <section id="visao-geral">
     <h2>Visão Geral</h2>
 
-    <p>Quando um agente responde de um jeito inesperado, a pergunta que importa não é apenas o que ele respondeu, e sim por que ele chegou até ali. O modo de debug do <strong>watsonx Orchestrate</strong> responde exatamente isso: Registra cada passo da execução, mostra o caminho percorrido dentro do fluxo do agente e expõe os dados brutos que trafegaram entre o usuário, o modelo de linguagem e os colaboradores.</p>
+    <p>Quando um agente responde de maneira inesperada, a pergunta que importa não é o que ele respondeu, e sim <strong>por que</strong> ele chegou até ali.</p>
 
-    <p>Neste laboratório você vai:</p>
+    <p>O modo de debug do <strong>watsonx Orchestrate</strong> registra cada passo da execução, mostrando o caminho percorrido no fluxo e expondo os dados brutos que trafegaram entre o usuário, o modelo, os agentes e as bases de conhecimento.</p>
+
+    <p>Neste laboratório o cenário é <strong>multiagente</strong>:</p>
+
+    <div class="code-block">Usuário → Assistente de Compra de Veículos (Agente orquestrador)
+              └─→ Agente de suporte ao revendedor (Colaborador)
+                      └─→ Catálogo de Carro com preços (Knowledge base)</div>
+
+    <p>São três camadas de decisão, e o debug é o que permite enxergar todas elas.</p>
+
+    <p><strong>O que você vai fazer:</strong></p>
 
     <ul>
-      <li>Reproduzir uma interação no Draft Preview abrir a janela de Debug a partir da própria resposta;</li>
-      <li>Percorrer a linha do tempo de execução passo a passo;</li>
-      <li>Ler as variáveis de entrada e saída de cada nó;</li>
-      <li>Interpretar o log detalhado em JSON e alternar entre as visualizações do fluxo para isolar o caminho que realmente foi executado.;</li>
+      <li>Reproduzir uma interação no Draft Preview e ler o raciocínio direto no chat;</li>
+      <li>Abrir a janela de Debug a partir da própria resposta;</li>
+      <li>Percorrer a linha do tempo passo a passo, incluindo os passos aninhados no colaborador;</li>
+      <li>Ler variáveis de entrada e saída de cada nó e as propriedades de cada agente;</li>
+      <li>Interpretar o log em JSON e alternar entre as visualizações do fluxo.</li>
     </ul>
-
-    <p>Ao final, você vai saber transformar uma resposta suspeita em um diagnóstico concreto, identificando se o problema está nas instruções do agente, no roteamento entre colaboradores ou na resposta do modelo.</p>
   </section>
 
   <hr class="section-divider">
@@ -162,219 +173,900 @@
   <section id="passo1">
     <h2>Passo 1: Reproduza a conversa</h2>
 
-    <p>Vamos continuar com o Agente de Busca, o mesmo agente do <a href="lab4.html">laboratório anterior</a>.
+    <p>Na tela <code>Build agents and tools</code>, clique no card <strong>Assistente de Compra de Veículos</strong>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_01.png" alt="Faixa Running in debug mode no Draft Preview">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_01.png" alt="Card do Assistente de Compra de Veículos na tela Build agents and tools">
 
-    <p>Envie a pergunta abaixo no Draft Preview.</p>
+    <p>Envie a pergunta <code>qual o carro mais caro que vcs tem?</code></p>
 
-    <div class="code-block">qual o número da ibm?</div>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_03.png" alt="Pergunta enviada no Draft Preview">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_02.png" alt="Pergunta enviada no Draft Preview">
-
-    <p>O agente responde que só pode falar sobre os veículos do catálogo, já que a pergunta não passa pela validação de veículo definida nas instruções.</p>
-
-    <p>Logo abaixo da resposta aparecem quatro ícones: positivo, negativo, copiar e uma joaninha. A joaninha abre a depuração daquela mensagem específica. Clique nela.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_03.png" alt="Ícones abaixo da resposta, incluindo a joaninha">
-  </section>
-
-  <hr class="section-divider">
-
-  <!-- PASSO 2 -->
-  <section id="passo2">
-    <h2>Passo 2: Entenda a janela de Debug</h2>
-
-    <p>A tela <code>Debug: Agente de Busca</code> ocupa toda a área de trabalho e se divide em duas partes. À esquerda fica o <code>Agent flow</code>, o mapa de todos os nós que formam o agente. À direita fica o rastreamento da execução, organizado em <code>Execution timeline</code>, <code>Variables</code> e <code>Node properties</code>.</p>
-
-    <p>O aviso amarelo no topo merece atenção: a tela desenha a versão atual do agente, que pode não ser a mesma que rodou quando a conversa aconteceu. Se você editar o agente e depois voltar para depurar uma conversa antiga, o diagrama pode mostrar nós que ainda nem existiam na execução original.</p>
-
-    <p>Abra o seletor <code>Legends</code>, no rodapé do canvas, para aprender a ler o diagrama. Os tipos de nó descrevem o papel de cada caixa:</p>
+    <p>Leia a resposta</p>
 
     <ul>
-      <li><code>User input</code> é o ponto de entrada da conversa.</li>
-      <li><code>Agent</code> orquestra as tarefas.</li>
-      <li><code>LLM</code> representa uma chamada ao modelo de linguagem.</li>
-      <li><code>Tool</code> é uma função externa.</li>
-      <li><code>API</code> é um endpoint HTTP ou REST.</li>
-      <li><code>Knowledge base</code> faz busca por recuperação.</li>
-      <li><code>Workflow</code> é um processo de várias etapas.</li>
-      <li><code>Answer</code> é o nó de resposta final.</li>
+      <li><strong>Veículo:</strong> Porsche 911 Carrera GTS (ID VEH-004)</li>
+      <li><strong>Valor:</strong> R$ 776.974,10</li>
+      <li><strong>Abaixo da resposta:</strong> 4 ícones → positivo, negativo, copiar e <strong>joaninha</strong> (debug)</li>
     </ul>
 
-    <p>Logo abaixo vêm os estados, que dizem se cada nó foi executado (<code>Not yet executed</code>, <code>Used in the execution</code> e <code>Current active node</code>), e os tipos de conexão, que diferenciam a ligação estrutural do agente (<code>Agent flow</code>) do caminho realmente percorrido nesta execução (<code>Current taken path</code>) e das ligações que ficaram de fora (<code>Not used in this execution</code>). Por último, as etiquetas: <code>COLLAB</code> marca um agente colaborador e o ícone de camadas indica que aquele nó tem nós filhos.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_04.png" alt="Resposta do agente com os quatro ícones abaixo">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_04-a.png" alt="Seletor Legends aberto com os tipos de nó">
+    <p>Antes de abrir o modo debug, uma parte do diagnóstico já está no próprio chat.</p>
 
-    <p>Feche a legenda e olhe para o painel da direita. O bloco <code>Execution timeline</code> resume a conversa inteira em três passos e 1ms de duração: <code>User input</code>, <code>Agent</code> com a etiqueta <code>Model invoked</code> e <code>Answer</code>. Repare que os 0.66ms do passo <code>Agent</code> concentram praticamente todo o tempo, o que já indica onde vale investigar primeiro. Clique no primeiro passo, <code>User input</code>.</p>
+    <p>Clique em <code>Show Reasoning</code></p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_04-b.png" alt="Execution timeline com os três passos da execução">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_05.png" alt="Link Show Reasoning abaixo da resposta">
+
+    <p>O link vira <code>Hide Reasoning</code></p>
+
+    <p>Surgem <code>Step 1</code> e <code>Step 2</code> → cada um é uma chamada que o agente fez antes de responder</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_06.png" alt="Step 1 e Step 2 exibidos no chat">
+
+    <p>Expanda o <code>Step 1</code> (o roteamento)</p>
+
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Conteúdo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Tool</code></td><td><code>chat_with_collaborator_agente_de_suporte_ao_revendedor</code></td></tr>
+        <tr><td><code>Input</code></td><td>A pergunta original do usuário, intacta</td></tr>
+        <tr><td><code>Output</code></td><td><code>Transferring to - chat_with_collaborator_agente_de_suporte_ao_revendedor</code></td></tr>
+      </tbody>
+    </table>
+
+    <p>O agente orquestrador não tentou responder. Ele leu a pergunta, reconheceu consulta de catálogo e delegou a missão para outro agente.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_07.png" alt="Step 1 expandido com Tool, Input e Output">
+
+    <p>Expanda o <code>Step 2</code> (a busca na base)</p>
+
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Conteúdo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Tool</code></td><td><code>Catálogo_de_Carro_com_preços</code></td></tr>
+        <tr><td><code>Input</code></td><td><code>{"query": "preço"}</code></td></tr>
+        <tr><td><code>Output</code></td><td>22 linhas, começando pelo <code>title</code> do documento <code>Catalog_with_prices_clean.pdf</code></td></tr>
+      </tbody>
+    </table>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_08.png" alt="Step 2 expandido com a busca na base de conhecimento">
+
+    <p>Clique no botão de expansão abaixo da resposta.</p>
+
+    <ul>
+      <li><strong>Arquivo de origem:</strong> <code>Catalog_with_prices_clean.pdf</code></li>
+      <li><strong>Trecho recuperado:</strong> registro do <code>VEH-004 Porsche 911 Carrera GTS</code>, com cor e valor</li>
+      <li><strong><code>View source</code>:</strong> abre o documento completo</li>
+    </ul>
+
+    <p>A prova de que a resposta veio da base, e não de conhecimento próprio do modelo.</p>
+
+    <p><strong>A resposta veio conforme o esperado</strong>.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_09.png" alt="Citação do documento de origem expandida">
   </section>
 
   <hr class="section-divider">
 
   <!-- PASSO 3 -->
   <section id="passo3">
-    <h2>Passo 3: O passo User input</h2>
+    <h2>Passo 3: Abra a janela de Debug</h2>
 
-    <p>Com o passo selecionado, o nó correspondente acende no canvas e o bloco <code>Variables</code> passa a mostrar os dados daquele ponto do fluxo, distribuídos em quatro abas. A aba <code>Summary</code> já traz a leitura rápida, com a frase que o usuário enviou.</p>
+    <p>O <code>Show Reasoning</code> mostra o resumo. Para ver dados brutos, tempos e configurações vigentes, use o debug.</p>
 
-    <p>Abra a aba <code>Input</code>. Os campos <code>Request</code> e <code>Message</code> carregam a mesma pergunta, porque nesse ponto ainda não houve nenhum processamento: o que entrou foi exatamente o que o usuário digitou.</p>
+    <p>Clique na joaninha (🐞)</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_05.png" alt="Aba Input do passo User input">
+    <p>Passe o mouse para confirmar o rótulo <code>Debug</code>.</p>
 
-    <p>Em <code>Output</code> aparece a mensagem <code>No output information available for this step</code>. Isso é esperado. O nó de entrada apenas recebe a mensagem e a repassa adiante, sem produzir nada por conta própria.</p>
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p>O modo debug é uma funcionalidade disponível no watsonx Orchestrate, tanto pela interface de usuário (UI) quanto por APIs, destinada exclusivamente a usuários responsáveis pelo desenvolvimento e manutenção de agentes e workflows na plataforma.</p>
+        <p>Usuários finais e clientes não possuem acesso a esse tipo de visão ou funcionalidade por padrão. Esse acesso somente pode ser concedido quando fizer parte do caso de uso definido e mediante as permissões apropriadas e controles de segurança estabelecidos.</p>
+      </div>
+    </div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_06.png" alt="Aba Output sem informação disponível">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_10.png" alt="Ícone de joaninha com o rótulo Debug">
 
-    <p>A aba <code>Node logs</code> mostra o span, que é o registro bruto do passo. O cabeçalho traz a identificação: <code>stepIndex</code> em zero marca o primeiro passo, <code>spanId</code> com o valor <code>__user_input__</code> identifica o nó, <code>parentAgentId</code> guarda o identificador do Agente de Busca e <code>depth</code> em zero indica que tudo aconteceu no nível principal, sem aninhamento em nenhum colaborador. O botão <code>Raw</code>, no canto direito, alterna entre a versão formatada e o JSON puro.</p>
+    <p><strong>Entendendo a divisão da tela</strong></p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_07.png" alt="Aba Node logs com o cabeçalho do span">
+    <table>
+      <thead>
+        <tr><th>Área</th><th>Conteúdo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Esquerda</td><td><code>Agent flow</code> — mapa de todos os nós do agente</td></tr>
+        <tr><td>Direita</td><td><code>Execution timeline</code>, <code>Variables</code> e <code>Node properties</code></td></tr>
+      </tbody>
+    </table>
 
-    <p>Clique em <code>Show more</code> para ver o span inteiro.</p>
+    <p><strong>Estrutura visível no canvas:</strong></p>
 
-    <p>A parte de baixo cobre a execução: <code>duration</code> em zero confirma um passo instantâneo, <code>hasModelCall</code> como false mostra que nenhuma chamada ao modelo saiu daqui, <code>input</code> guarda a mensagem original, <code>output</code> está nulo e <code>status</code> marca <code>success</code>. Os campos <code>childSpanIds</code> vazio e <code>hasChildren</code> como false completam o quadro, este passo não gerou nenhum passo filho.</p>
+    <ul>
+      <li><code>Assistente de Compra de Veículos</code> → Modelo</li>
+      <li><code>Assistente de Compra de Veículos</code> → Colaborador <code>Agente de Busca</code></li>
+      <li><code>Assistente de Compra de Veículos</code> → Colaborador <code>Agente de suporte ao revendedor</code> → base <code>Catálogo de Carro com preços</code></li>
+      <li>Nós de <code>Answer</code> em cada ramo</li>
+    </ul>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_08.png" alt="Span completo do passo User input">
+    <p><strong>Resumo da execução: 9 passos / 5ms</strong></p>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Passo</th><th>Tempo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><code>User input</code></td><td>—</td></tr>
+        <tr><td>2</td><td><code>Agent</code> · <code>Model invoked</code> · Agent reasoning</td><td>0.75ms</td></tr>
+        <tr><td>3</td><td><code>Collaborator: Agente de suporte ao revendedor</code></td><td><strong>3.15ms</strong></td></tr>
+        <tr><td>4</td><td><code>Agent</code> · <code>Model invoked</code> · Agent processing</td><td>0.75ms</td></tr>
+        <tr><td>5</td><td><code>Answer</code></td><td>0.00ms</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Onde investigar primeiro:</strong> os 3.15ms concentrados no colaborador indicam onde está o trabalho pesado.</p>
+      </div>
+    </div>
+
+    <p>Abra o seletor <code>Legends</code>, no rodapé do canvas.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_11.png" alt="Seletor Legends no rodapé do canvas">
+
+    <p><strong>Aprenda a ler o diagrama</strong></p>
+
+    <p><strong>Tipos de nó:</strong></p>
+
+    <table>
+      <thead>
+        <tr><th>Nó</th><th>Papel</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>User input</code></td><td>Ponto de entrada da conversa</td></tr>
+        <tr><td><code>Agent</code></td><td>Orquestra as tarefas</td></tr>
+        <tr><td><code>LLM</code></td><td>Chamada ao modelo de linguagem</td></tr>
+        <tr><td><code>Tool</code></td><td>Função externa</td></tr>
+        <tr><td><code>API</code></td><td>Endpoint HTTP ou REST</td></tr>
+        <tr><td><code>Knowledge base</code></td><td>Busca por recuperação</td></tr>
+        <tr><td><code>Workflow</code></td><td>Processo de várias etapas</td></tr>
+        <tr><td><code>Answer</code></td><td>Nó de resposta final</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Estados do nó:</strong></p>
+
+    <ul>
+      <li><code>Not yet executed</code> — Ainda não executado</li>
+      <li><code>Used in the execution</code> — Participou desta execução</li>
+      <li><code>Current active node</code> — Nó selecionado agora</li>
+    </ul>
+
+    <p><strong>Tipos de conexão:</strong></p>
+
+    <ul>
+      <li><code>Agent flow</code> — Ligação estrutural do agente</li>
+      <li><code>Current taken path</code> — Caminho realmente percorrido nesta execução</li>
+      <li><code>Not used in this execution</code> — Ligações que ficaram de fora</li>
+    </ul>
+
+    <p><strong>Etiquetas:</strong></p>
+
+    <ul>
+      <li><code>COLLAB</code> — Marca um agente colaborador</li>
+      <li>Ícone de camadas — O nó tem nós filhos</li>
+    </ul>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_12.png" alt="Legenda aberta com tipos de nó, estados e conexões">
   </section>
 
   <hr class="section-divider">
 
   <!-- PASSO 4 -->
   <section id="passo4">
-    <h2>Passo 4: O passo Agent</h2>
+    <h2>Passo 4: Os controles da barra superior</h2>
 
-    <p>Volte para a linha do tempo e clique no segundo passo. A etiqueta <code>Model invoked</code> avisa que foi aqui que o modelo de linguagem entrou em ação.</p>
+    <p><strong>1. Restart (<code>⌘ + R</code>)</strong></p>
 
-    <p>No canvas, o caminho percorrido aparece tracejado saindo de <code>User input</code>, passando pelo <code>Agente de Busca</code> e chegando ao nó do modelo <code>groq/openai/gpt-oss</code>. O <code>Agente de Buscas</code>, colaborador identificado pela etiqueta <code>COLLAB</code>, continua apagado, porque não foi acionado nesta conversa. Esse detalhe visual já responde à primeira pergunta de qualquer investigação de roteamento: o agente resolveu sozinho, sem repassar a solicitação.</p>
+    <p>Reinicia a leitura do rastreamento e volta a seleção para o primeiro passo.</p>
 
-    <p>O bloco <code>Node properties</code> também muda e ganha três abas, <code>About</code>, <code>Guidelines</code> e <code>LLM Model</code>. Em <code>About</code> estão o nome interno do agente, o nome de exibição, a descrição e as instruções vigentes.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_13.png" alt="Botão Restart na barra superior">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_09.png" alt="Caminho percorrido no canvas e aba About">
+    <p><strong>2. <code>Highlight all nodes used in this run</code></strong></p>
 
-    <p>Role o painel para ler as instruções na íntegra. Essa é a leitura mais valiosa da depuração, porque coloca lado a lado o que você escreveu e o que o agente fez. O bloco de validação de veículo pede que o agente identifique o modelo mencionado antes de atender qualquer solicitação, tolerando nomes incompletos, variações de escrita, erros de digitação, apelidos e omissão da marca.</p>
+    <p>Destaca no diagrama todos os nós que participaram da execução.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_10.png" alt="Instruções do agente no painel Node properties">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_14.png" alt="Botão Highlight all nodes used in this run">
 
-    <p>A lista de exemplos válidos mostra os apelidos aceitos para cada carro do catálogo, de "Versa" a "Carrera GTS". Nenhum deles se parece com a pergunta enviada, o que explica o desfecho.</p>
+    <p>Com o realce ativo:</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_11.png" alt="Lista de exemplos válidos nas instruções">
+    <ul>
+      <li><strong>Realçados:</strong> <code>Agente de suporte ao revendedor</code>, o modelo e a base <code>Catálogo de Carro com preços</code></li>
+      <li><strong>Apagado:</strong> <code>Agente de Busca</code> — Existe no agente, mas não foi acionado nesta conversa</li>
+    </ul>
 
-    <p>Em seguida vem a regra de roteamento. Havendo alta confiança de que o veículo pertence ao catálogo, a solicitação deve ser encaminhada ao Agente de Buscas. A recusa só é permitida quando não houver como associar o pedido a nenhum modelo, e a mensagem de rejeição está escrita literalmente nas instruções. É por isso que a resposta saiu palavra por palavra igual ao texto configurado.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_15.png" alt="Canvas com os nós usados na execução realçados">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_12.png" alt="Regra de roteamento e mensagem de recusa">
+    <p><strong>3 — Visão limpa (terceiro ícone)</strong></p>
 
-    <p>No fim do painel ficam as configurações do nó: <code>Chat with doc</code> e <code>Memory enabled</code> desabilitados, <code>Agent style</code> em <code>Default</code> e <code>Node type</code> como <code>Agent</code>. Quando um agente parece ignorar o contexto de mensagens anteriores, é aqui que se descobre que a memória simplesmente não estava ligada.</p>
+    <p>Remove do canvas tudo que não participou da execução. Sobram apenas:</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_13.png" alt="Configurações do nó no fim do painel">
+    <ul>
+      <li><code>User input</code></li>
+      <li>Supervisor (Agente orquestrador)</li>
+      <li>Colaborador</li>
+      <li>Nós de modelo</li>
+      <li>Base de conhecimento</li>
+      <li>Nós de <code>Answer</code></li>
+    </ul>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Quando usar:</strong> Em agentes com muitos colaboradores e ferramentas, elimina o ruído e deixa o caminho real evidente.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_16.png" alt="Canvas apenas com os nós executados">
+
+    <p><strong>Setas de navegação (<code>⌘⇧→</code>)</strong></p>
+
+    <p>Percorrem os passos em ordem, sem precisar clicar na linha do tempo.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_17.png" alt="Setas de navegação entre os passos">
   </section>
 
   <hr class="section-divider">
 
   <!-- PASSO 5 -->
   <section id="passo5">
-    <h2>Passo 5: O passo Answer</h2>
+    <h2>Passo 5: O passo User input</h2>
 
-    <p>Selecione o terceiro passo da linha do tempo. O nó <code>Answer</code> acende no fim do caminho tracejado e a aba <code>Summary</code> mostra <code>Input request</code> e <code>Output response</code> com exatamente o mesmo texto. Essa igualdade é o ponto central: o nó de resposta não reescreve nada, ele entrega o que o passo anterior produziu.</p>
+    <p>Clique no primeiro passo da linha do tempo. O nó correspondente acende no canvas.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_14.png" alt="Aba Summary do passo Answer">
+    <h3>5.1 — Aba <code>Input</code></h3>
 
-    <p>A aba <code>Input</code> acrescenta o contexto da chamada. <code>Async flag</code> como false e <code>In async execution</code> em zero indicam execução síncrona, <code>Is Collaborator</code> como false confirma que quem responde é o agente principal, <code>Use supervisor interrupt handoff</code> como false mostra que não houve transferência para um supervisor e <code>Agent depth</code> em um informa o nível do agente na hierarquia.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_15.png" alt="Aba Input do passo Answer">
-
-    <p>Em <code>Output</code>, o campo <code>Response</code> traz a resposta final, a mesma que o usuário viu no Draft Preview.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_16.png" alt="Aba Output com a resposta final">
-
-    <p>Abra <code>Node logs</code>. O cabeçalho do span identifica o passo com <code>stepIndex</code> em um, <code>displayIndex</code> em dois, um <code>spanId</code> próprio e <code>operationName</code> igual a <code>answer</code>.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_17.png" alt="Cabeçalho do span do passo Answer">
-
-    <p>Clique em <code>Show more</code>.</p>
-
-    <p>A primeira parte do span cobre a execução e o contexto da conversa. Os valores <code>duration</code> em três, <code>tokenUsage</code> em zero e <code>hasModelCall</code> como false confirmam de novo que este nó não conversa com o modelo. Logo abaixo vem o bloco <code>context</code>, com os identificadores que amarram tudo: <code>wxo_thread_id</code> para a conversa, <code>wxo_run_id</code> para esta execução, além do usuário e do tenant. Vale guardar o <code>wxo_thread_id</code>, é ele que permite reencontrar a mesma conversa nas ferramentas de observabilidade.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_18.png" alt="Bloco context do span">
-
-    <p>O bloco <code>messages</code> traz o diálogo como o modelo o enxergou. A primeira mensagem é a do usuário, marcada com <code>type</code> igual a <code>human</code>.</p>
-
-    <p>A segunda é a resposta, e dentro dela o campo <code>reasoning</code> guarda a justificativa do modelo em uma linha: o usuário perguntou algo sem relação com veículos, então a solicitação precisa ser recusada com a mensagem especificada. É a prova direta de que a instrução foi lida e seguida.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_19.png" alt="Bloco messages com o campo reasoning">
-
-    <p>Em seguida aparecem os metadados do modelo. Os campos <code>model_provider</code>, <code>actual_model</code> e <code>configured_model</code> mostram qual modelo respondeu e confirmam que ele é o mesmo configurado no agente; uma divergência aí explicaria comportamentos estranhos. O <code>finish_reason</code> igual a <code>stop</code> indica encerramento normal, <code>retry_count</code> em zero mostra que não houve nova tentativa e <code>tool_calls</code> vazio confirma que nenhuma ferramenta foi chamada.</p>
-
-    <p>Por fim, <code>usage_metadata</code> contabiliza 1116 tokens de entrada, 118 de saída e 1234 no total, que é o número a observar quando o assunto é custo quando está se utilizando outros modelos.</p>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Request</code></td><td><code>qual o carro mais caro que vcs tem?</code></td></tr>
+        <tr><td><code>Message</code></td><td><code>qual o carro mais caro que vcs tem?</code></td></tr>
+      </tbody>
+    </table>
 
     <div class="callout callout--note">
       <div>
         <div class="callout__title">Nota</div>
-        <p>o watsonx Orchestrate não faz cobrança por token e sim por MAUs. (Monthly active users)</p>
-        <p>Para entede mais sobre MAUs, consulte este link: <a href="https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=entitlements-licenses-cloud" target="_blank">https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=entitlements-licenses-cloud</a></p>
-        <p style="margin:0;">Ou o time comercial responsável pela sua conta.</p>
+        <p><strong>Por que são iguais:</strong> nesse ponto ainda não houve processamento. O que entrou é exatamente o que o usuário digitou.</p>
       </div>
     </div>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_20.png" alt="Metadados do modelo e usage_metadata">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_18.png" alt="Aba Input do passo User input">
 
-    <p>A sequência seguinte descreve o estado interno do agente no momento da resposta. <code>reflection_enabled</code> como true, com <code>reflection_retry_count</code> em zero e limite em um, significa que a revisão automática estava disponível mas não precisou ser usada. <code>step_count</code> em um conta os ciclos de raciocínio e <code>is_collaborator</code> como false reforça que nenhum colaborador entrou na conversa.</p>
+    <h3>5.2 — Aba <code>Output</code></h3>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_21.png" alt="Estado interno do agente no span">
+    <ul>
+      <li><code>No output information available for this step</code></li>
+    </ul>
 
-    <p>Mais abaixo ficam os campos de planejamento.</p>
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Esperado:</strong> o nó de entrada só recebe a mensagem e repassa adiante.</p>
+      </div>
+    </div>
 
-    <p>Com <code>plan</code> vazio, <code>current_task</code> sem tarefa ativa e <code>is_planning</code> como false, fica claro que o agente respondeu direto, sem quebrar a solicitação em etapas. O campo <code>citations</code> vazio mostra que nenhuma base de conhecimento foi consultada.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_19.png" alt="Aba Output sem informação disponível">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_22.png" alt="Campos de planejamento do span">
+    <h3>5.3 — Aba <code>Node logs</code> (cabeçalho do span)</h3>
 
-    <p>O trecho final reúne o resultado. O campo <code>output</code> repete a resposta entregue e <code>status</code> marca <code>success</code>.</p>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th><th>O que indica</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>stepIndex</code></td><td><code>0</code></td><td>Primeiro passo da execução</td></tr>
+        <tr><td><code>spanId</code></td><td><code>__user_input__</code></td><td>Identificador do nó</td></tr>
+        <tr><td><code>operationName</code></td><td><code>user_input</code></td><td>Tipo de operação</td></tr>
+        <tr><td><code>parentSpanId</code></td><td><code>null</code></td><td>Não tem passo pai</td></tr>
+        <tr><td><code>parentAgentId</code></td><td><code>c649b05f-...</code></td><td>ID do Assistente de Compra de Veículos</td></tr>
+        <tr><td><code>depth</code></td><td><code>0</code></td><td>Nível principal, sem aninhamento</td></tr>
+        <tr><td><code>isCollaboratorNode</code></td><td><code>false</code></td><td>Não é nó de colaborador</td></tr>
+        <tr><td><code>collaboratorId</code></td><td><code>null</code></td><td>Nenhum colaborador envolvido</td></tr>
+      </tbody>
+    </table>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_23.png" alt="Trecho final com output e status">
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p>O botão <code>Raw</code>, no canto direito, alterna entre a versão formatada e o JSON puro.</p>
+      </div>
+    </div>
 
-    <p>Depois vem o bloco <code>tags</code>, com os identificadores de rastreamento: a sessão, a transação, o <code>thread_id</code>, o workspace, o nome do nó e o fluxo interno que executou a resposta. São eles que conectam este passo aos painéis de monitoramento.</p>
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_20.png" alt="Cabeçalho do span na aba Node logs">
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_24.png" alt="Bloco tags com os identificadores de rastreamento">
+    <h3>5.4 — Clique em <code>Show more</code> (corpo do span)</h3>
 
-    <p>Os logs guardam as entradas e as saídas de nó em blocos separados, então a conversa, os metadados do modelo e o estado do agente aparecem uma segunda vez, agora dentro de <code>langchain.chain.input</code>. Use essa divisão a seu favor quando estiver procurando algo específico: o que está em <code>langchain.chain.input</code> descreve o que o nó recebeu, e o que está em <code>langchain.chain.output</code> descreve o que ele devolveu.</p>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th><th>O que indica</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>duration</code></td><td><code>0</code></td><td>Passo instantâneo</td></tr>
+        <tr><td><code>hasModelCall</code></td><td><code>false</code></td><td>Nenhuma chamada ao modelo saiu daqui</td></tr>
+        <tr><td><code>input</code></td><td><code>{message: ...}</code></td><td>Mensagem original</td></tr>
+        <tr><td><code>output</code></td><td><code>null</code></td><td>Não produziu saída</td></tr>
+        <tr><td><code>status</code></td><td><code>success</code></td><td>Executou sem erro</td></tr>
+        <tr><td><code>graphNodeIds</code></td><td><code>[]</code></td><td>Não gerou passos filhos</td></tr>
+      </tbody>
+    </table>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_25.png" alt="Bloco langchain.chain.input, parte 1">
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_26.png" alt="Bloco langchain.chain.input, parte 2">
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_27.png" alt="Bloco langchain.chain.input, parte 3">
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_28.png" alt="Bloco langchain.chain.input, parte 4">
-
-    <p>Passado o bloco, vem a identificação técnica do passo dentro do motor de execução.</p>
-
-    <p>O campo <code>openinference.span.kind</code> classifica o span como <code>CHAIN</code>, e os campos de <code>langgraph</code> marcam a posição exata do nó no grafo, incluindo a etapa, o nome do nó e o gatilho que levou até ele. Esses valores são úteis para reconstruir a ordem de execução em fluxos maiores.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_29.png" alt="Identificação técnica do span no motor de execução">
-
-    <p>O bloco <code>langchain.chain.output</code> fecha o ciclo com a resposta final do assistente, novamente acompanhada do campo <code>reasoning</code>.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_30.png" alt="Bloco langchain.chain.output">
-
-    <p>A última linha, <code>isWorkflow</code> como false, confirma que a execução seguiu o caminho de um agente comum e não de um workflow. Clique em <code>Show less</code> para recolher o span.</p>
-
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_31.png" alt="Campo isWorkflow e botão Show less">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_21.png" alt="Corpo do span do passo User input">
   </section>
 
   <hr class="section-divider">
 
   <!-- PASSO 6 -->
   <section id="passo6">
-    <h2>Passo 6: Leia o fluxo de outras maneiras</h2>
+    <h2>Passo 6: Decisão de roteamento com Agente orquestrador</h2>
 
-    <p>Os dois últimos ícones da barra superior controlam como o <code>Agent flow</code> é desenhado. O primeiro deles destaca o caminho percorrido dentro do diagrama completo: os nós usados ficam realçados e os demais continuam visíveis, porém apagados. É a visão indicada para comparar o que o agente poderia ter feito com o que ele de fato fez.</p>
+    <p>Avance para o segundo passo: <code>Agent</code> · <code>Model invoked</code> · <strong>Agent reasoning</strong>. É aqui que o agente orquestrador decide o que fazer com a pergunta.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_32.png" alt="Visão com o caminho percorrido destacado">
+    <h3>6.1 — Aba <code>Summary</code> (o campo mais revelador)</h3>
 
-    <p>O segundo ícone vai além e remove do canvas tudo que não participou da execução. Sobram apenas <code>User input</code>, <code>Agente de Busca</code>, o nó do modelo e <code>Answer</code>, em tamanho maior. Em agentes com muitos colaboradores e ferramentas, essa visão elimina o ruído e deixa o caminho real evidente.</p>
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Conteúdo</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Input request</code></td><td>A pergunta do usuário</td></tr>
+        <tr><td><code>Output response</code></td><td>O raciocínio do modelo: identifica a pergunta como consulta de catálogo sobre preço e decide rotear para o agente de suporte ao revendedor</td></tr>
+      </tbody>
+    </table>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_33.png" alt="Visão apenas com os nós executados">
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Leitura:</strong> este texto é a resposta direta para <em>"por que ele chamou esse colaborador e não o outro"</em>.</p>
+      </div>
+    </div>
 
-    <p>As setas à esquerda da barra percorrem os passos em ordem, sem precisar clicar na linha do tempo, o que ajuda a acompanhar a execução como uma sequência contínua. O ícone de recarregar atualiza o rastreamento e o <code>X</code>, no canto superior direito, fecha a depuração e devolve você à aba Build.</p>
+    <p><strong>No canvas:</strong> o caminho tracejado sai do <code>User input</code>, passa pelo agente orquestrador e chega ao nó <code>groq/openai/gpt-oss</code>.</p>
 
-    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_debug_34.png" alt="Controles da barra superior da janela de Debug">
+    <p><strong>Node properties ganha 4 abas:</strong> <code>About</code> · <code>Collaborators</code> · <code>Guidelines</code> · <code>LLM Model</code></p>
+
+    <p>Em <code>About</code>:</p>
+
+    <ul>
+      <li><code>Name</code>: <code>Untitled_Agent_1_0690we</code></li>
+      <li><code>Display name</code>: <code>Assistente de Compra de Veículos</code></li>
+      <li><code>Description</code> e <code>Instructions</code> vigentes</li>
+    </ul>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_22.png" alt="Aba About do Node properties do agente orquestrador">
+
+    <h3>6.2 — Role o painel e leia as instruções na íntegra</h3>
+
+    <ul>
+      <li>Bloco <code># REGRAS DE ROTEAMENTO</code></li>
+      <li>Primeira regra: <code>## 1. CONSULTAS SOBRE CATÁLOGO → Agente de suporte ao revendedor</code></li>
+      <li>Seguida da lista de situações que devem ser encaminhadas</li>
+    </ul>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>A comparação que importa:</strong> coloque lado a lado o raciocínio do <code>Summary</code> e essa regra. Quando o roteamento sai errado, é isso que revela se o problema está na <strong>instrução mal escrita</strong> ou na <strong>interpretação do modelo</strong>.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_23.png" alt="Bloco de regras de roteamento nas instruções do agente">
+
+    <h3>6.3 — Aba <code>Collaborators</code></h3>
+
+    <p>Lista os dois agentes registrados: <code>Agente de Busca</code> e <code>Agente de suporte ao revendedor</code>.</p>
+
+    <p>Para o selecionado, mostra:</p>
+
+    <ul>
+      <li><code>Id</code>, <code>Tenant ID</code>, <code>Workspace ID</code></li>
+      <li><code>Name</code> (nome interno), <code>Description</code>, <code>Instructions</code></li>
+    </ul>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Para que serve:</strong> conferir se o colaborador que deveria ter sido chamado está disponível e com que instruções ele opera.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_24.png" alt="Aba Collaborators com os dois agentes registrados">
+
+    <h3>6.4 — Campos de auditoria e ambiente</h3>
+
+    <table>
+      <thead>
+        <tr><th>Bloco</th><th>Campos</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Auditoria</td><td><code>Created by</code>, <code>Created on</code>, <code>Updated by</code>, <code>Updated at</code></td></tr>
+        <tr><td><code>Environments</code></td><td>Ambiente <code>Draft</code>, com <code>Id</code>, <code>Name</code> e estado da integração</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Para que serve:</strong> Checar se alguém alterou o agente entre a execução e a investigação.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_25.png" alt="Campos de auditoria e bloco Environments">
+
+    <h3>6.5 — <code>Agent mapping</code> e <code>Additional properties</code></h3>
+
+    <table>
+      <thead>
+        <tr><th>Bloco</th><th>Campos</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Agent mapping</code></td><td><code>Hidden</code>, <code>Display name</code> que o agente orquestrador enxerga</td></tr>
+        <tr><td><code>Additional properties</code></td><td><code>Context access enabled</code>, <code>Hide reasoning</code>, <code>Sync tool flow interrupt</code>, <code>Restrictions</code>, <code>Bundled</code></td></tr>
+      </tbody>
+    </table>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_26.png" alt="Blocos Agent mapping e Additional properties">
+
+    <h3>6.6 — <code>Chat with docs</code> (configuração de recuperação)</h3>
+
+    <ul>
+      <li><code>Enabled</code></li>
+      <li>Suporte a documento completo</li>
+      <li><code>Vector index</code></li>
+      <li><code>Generation</code></li>
+      <li><code>Query rewrite</code></li>
+      <li><code>Confidence thresholds</code></li>
+      <li><code>Citations</code></li>
+      <li><code>HAP filtering</code></li>
+      <li><code>Query source</code> — quem monta a consulta</li>
+      <li><code>Agent query description</code> — orienta a busca na base</li>
+    </ul>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Quando o agente busca a coisa errada na base, a explicação costuma estar aqui.</strong></p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_27.png" alt="Bloco Chat with docs com as configurações de recuperação">
+
+    <h3>6.7 — Fim do painel</h3>
+
+    <p>Últimos interruptores: <code>Memory enabled</code> e <code>Is schedulable</code>.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Dica de diagnóstico:</strong> quando um agente parece ignorar o contexto de mensagens anteriores, é aqui que se descobre que a memória simplesmente não estava ligada.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_28.png" alt="Interruptores Memory enabled e Is schedulable">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_29.png" alt="Fim do painel Node properties">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PASSO 7 -->
+  <section id="passo7">
+    <h2>Passo 7: Dentro do colaborador</h2>
+
+    <h3>7.1 — Expanda o <code>Collaborator: Agente de suporte ao revendedor</code></h3>
+
+    <p>Clique na seta à direita do nome. Quatro subpassos aparecem indentados:</p>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Subpasso</th><th>Tempo</th><th>O que faz</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><code>Agent</code> · Agent reasoning</td><td>0.72ms</td><td>O colaborador decide o que fazer</td></tr>
+        <tr><td>2</td><td><code>Knowledge: Catálogo de Carro com preços</code></td><td>1.33ms</td><td><code>Searching knowledge base for relevant information</code></td></tr>
+        <tr><td>3</td><td><code>Agent</code> · Agent processing</td><td>0.77ms</td><td>Redige a resposta com o que foi recuperado</td></tr>
+        <tr><td>4</td><td><code>Answer</code></td><td>0.01ms</td><td>Prepara a devolução para o agente orquestrador</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Node properties do colaborador:</strong></p>
+
+    <ul>
+      <li><code>Display name</code>: <code>Agente de suporte ao revendedor</code></li>
+      <li><code>Description</code>: responde perguntas e qualifica vendas para a concessionária</li>
+      <li><code>Instructions</code>: abrem com <em>"Você é um Agente Virtual de Vendas da ABC Automóveis"</em></li>
+    </ul>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_30.png" alt="Subpassos do colaborador expandidos na linha do tempo">
+
+    <h3>7.2 — Role até o fim das propriedades</h3>
+
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Chat with doc</code></td><td><code>Disabled</code></td></tr>
+        <tr><td><code>Memory enabled</code></td><td><code>Disabled</code></td></tr>
+        <tr><td><code>Agent style</code></td><td><code>React_intrinsic</code></td></tr>
+        <tr><td><code>Node type</code></td><td><strong><code>Collaborator</code></strong></td></tr>
+        <tr><td><code>Agent type</code></td><td><code>native</code></td></tr>
+      </tbody>
+    </table>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_31.png" alt="Fim das propriedades do nó colaborador">
+
+    <h3>7.3 — Subpasso 1: <code>Agent reasoning</code> do colaborador</h3>
+
+    <ul>
+      <li><strong>No canvas:</strong> acende o nó de modelo pendurado no <strong>colaborador</strong>, não mais o do agente orquestrador</li>
+      <li><strong>Instruções:</strong> trecho final inclui a diretriz de responder somente em Português do Brasil</li>
+      <li><strong><code>Node type</code>:</strong> volta a ser <code>Agent</code></li>
+    </ul>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Diferença:</strong> o passo anterior era o colaborador como <em>entidade</em>; este é o colaborador <em>em execução</em>.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_32.png" alt="Agent reasoning do colaborador com o nó de modelo aceso">
+
+    <h3>7.4 — Subpasso 2: <code>Knowledge: Catálogo de Carro com preços</code></h3>
+
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Display name</code></td><td><code>Catálogo de Carro com preços</code></td></tr>
+        <tr><td><code>Node type</code></td><td><code>Knowledge</code></td></tr>
+        <tr><td><code>Created by</code></td><td><code>IBMid-691000KKI2</code></td></tr>
+        <tr><td><code>Updated at</code></td><td>Data da última atualização da base</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Amarrando as pontas:</strong> esses 1.33ms são o momento em que o <code>{"query": "preço"}</code> do Passo 2 foi executado contra o índice.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_33.png" alt="Propriedades do nó de base de conhecimento">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_34.png" alt="Detalhes da busca na base de conhecimento">
+
+    <h3>7.5 — Subpasso 3: <code>Agent processing</code> (0.77ms)</h3>
+
+    <ul>
+      <li>Segunda passagem pelo modelo dentro do colaborador, agora <strong>com o conteúdo recuperado em mãos</strong></li>
+      <li>Instruções mostram o bloco <code># FONTE DE CONHECIMENTO</code> — o trecho que orienta como usar o material recuperado</li>
+    </ul>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_35.png" alt="Subpasso Agent processing do colaborador">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_36.png" alt="Bloco FONTE DE CONHECIMENTO nas instruções">
+
+    <h3>7.6 — Subpasso 4: <code>Answer</code> do colaborador (0.01ms)</h3>
+
+    <ul>
+      <li>O nó acende no ramo do colaborador</li>
+      <li><code>Node type</code>: <code>Answer</code></li>
+    </ul>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>O que ele faz:</strong> nada de reescrita. Só empacota o que o <code>Agent processing</code> produziu e devolve para quem chamou.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_37.png" alt="Nó Answer do colaborador aceso no canvas">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PASSO 8 -->
+  <section id="passo8">
+    <h2>Passo 8: A volta para o agente orquestrador</h2>
+
+    <p>Volte ao nível principal e selecione o quarto passo: <code>Agent</code> · <strong>Agent processing</strong> (0.75ms).</p>
+
+    <ul>
+      <li><strong>No canvas:</strong> o caminho tracejado sai do colaborador e volta para o orquestrador, que passa mais uma vez pelo modelo antes de encerrar</li>
+      <li><strong>Node properties:</strong> voltam a ser as do <code>Assistente de Compra de Veículos</code></li>
+    </ul>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_38.png" alt="Caminho de volta do colaborador para o orquestrador">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_39.png" alt="Node properties do Assistente de Compra de Veículos">
+
+    <h3>8.1 — Aba <code>Input</code> — o achado mais importante do laboratório</h3>
+
+    <p>O campo <code>Request</code> traz:</p>
+
+    <ul>
+      <li><code>thread_id</code> da conversa</li>
+      <li>A mensagem que <strong>o colaborador devolveu</strong>: Porsche 911 Carrera GTS, o valor, e uma pergunta de follow-up sobre o tipo de carro de interesse</li>
+    </ul>
+
+    <p><strong>Compare com o que o usuário viu no chat:</strong></p>
+
+    <table>
+      <thead>
+        <tr><th>Camada</th><th>Fecho da mensagem</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Colaborador</td><td><em>"Você tem interesse em algum tipo de carro específico, como esportivo, utilitário ou familiar?"</em></td></tr>
+        <tr><td>Agente orquestrador (entregue ao usuário)</td><td><em>"Caso queira saber mais detalhes sobre ele ou comparar com outros modelos, estou à disposição!"</em></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p>O que chega ao usuário <strong>não é necessariamente</strong> o que o colaborador escreveu. Quando o tom ou o conteúdo final destoam do esperado, é aqui que se descobre em qual camada a alteração aconteceu.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_40.png" alt="Aba Input com a mensagem devolvida pelo colaborador">
+
+    <h3>8.2 — Contexto da chamada</h3>
+
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th><th>O que indica</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Async flag</code></td><td><code>false</code></td><td>Execução síncrona</td></tr>
+        <tr><td><code>In async execution</code></td><td><code>0</code></td><td>Nenhuma execução assíncrona em curso</td></tr>
+        <tr><td><code>Is Collaborator</code></td><td><code>false</code></td><td>Quem processa agora é o <strong>agente principal</strong></td></tr>
+        <tr><td><code>Use supervisor interrupt handoff</code></td><td><code>false</code></td><td>Não houve transferência para agente orquestrador externo</td></tr>
+        <tr><td><code>Agent depth</code></td><td><code>1</code></td><td>Nível do agente na hierarquia</td></tr>
+        <tr><td><code>Code act is question</code></td><td><code>false</code></td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_41.png" alt="Contexto da chamada na aba Input, parte 1">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_42.png" alt="Contexto da chamada na aba Input, parte 2">
+
+    <h3>8.3 — Node properties (segundo turno do Agente orquestrador)</h3>
+
+    <p>As mesmas abas do <code>Agent reasoning</code>. Em <code>About</code>:</p>
+
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Name</code></td><td><code>Untitled_Agent_1_0690we</code></td></tr>
+        <tr><td><code>Display name</code></td><td><code>Assistente de Compra de Veículos</code></td></tr>
+        <tr><td><code>Chat with doc</code></td><td><code>Disabled</code></td></tr>
+        <tr><td><code>Memory enabled</code></td><td><code>Disabled</code></td></tr>
+        <tr><td><code>Agent style</code></td><td><code>React_intrinsic</code></td></tr>
+        <tr><td><code>Node type</code></td><td><code>Agent</code></td></tr>
+      </tbody>
+    </table>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_43.png" alt="Aba About no segundo turno do agente orquestrador">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_44.png" alt="Continuação da aba About">
+
+    <h3>8.4 — Aba <code>Collaborators</code></h3>
+
+    <p>A mesma lista de dois agentes, com identificadores, nomes internos, descrições e instruções.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_45.png" alt="Aba Collaborators no segundo turno, parte 1">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_46.png" alt="Aba Collaborators no segundo turno, parte 2">
+
+    <h3>8.5 — Bloco <code>Collaborators: 1 item</code></h3>
+
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>LLM</code></td><td><code>groq/openai/gpt-oss-120b</code></td></tr>
+        <tr><td><code>Style</code></td><td><code>react_intrinsic</code></td></tr>
+        <tr><td><code>Created by</code> / <code>Created on</code></td><td>Campos de auditoria</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p>Um agente colaborador pode rodar em um <strong>modelo diferente</strong> do agente orquestrador. Isso explica diferenças de comportamento entre as camadas.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_47.png" alt="Bloco Collaborators com o modelo do colaborador">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_48.png" alt="Continuação do bloco Collaborators">
+
+    <h3>8.6 — Demais blocos</h3>
+
+    <p>Na sequência aparecem: <code>Environments</code> (Draft) · <code>Agent mapping</code> · <code>Chat with docs</code> · <code>Additional properties</code> (<code>Restrictions</code>, <code>Bundled</code>, <code>Memory enabled</code>, <code>Is schedulable</code>).</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_49.png" alt="Bloco Environments">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_50.png" alt="Bloco Agent mapping">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_51.png" alt="Bloco Chat with docs">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_52.png" alt="Bloco Additional properties">
+
+    <h3>8.7 — Aba <code>Output</code></h3>
+
+    <p>O campo <code>Response</code> traz a resposta <strong>já reescrita pelo agente orquestrador</strong>, palavra por palavra igual à que apareceu no Draft Preview.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>O ciclo se fecha:</strong> entrou o texto do agente colaborador, saiu o texto do usuário.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_53.png" alt="Aba Output com a resposta reescrita">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_54.png" alt="Continuação da aba Output">
+
+    <h3>8.8 — Aba <code>LLM Model</code></h3>
+
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>Id</code></td><td><code>groq/openai/gpt-oss-120b</code></td></tr>
+        <tr><td><code>Label</code></td><td><code>GPT-OSS 120B — OpenAI (via Groq)</code></td></tr>
+        <tr><td><code>Type</code></td><td><code>Groq</code></td></tr>
+        <tr><td><code>Tags</code></td><td>3 itens</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p>O watsonx Orchestrate não faz cobrança por token e sim por <strong>MAUs</strong> (Monthly Active Users).</p>
+        <p>Saiba mais sobre MAUs <a href="https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=entitlements-licenses-cloud" target="_blank">nesta documentação</a> ou com o time comercial responsável pela sua conta.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_55.png" alt="Aba LLM Model com os dados do modelo">
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PASSO 9 -->
+  <section id="passo9">
+    <h2>Passo 9: O passo Answer</h2>
+
+    <p>Selecione o último passo da linha do tempo: <code>Answer</code> (0.00ms). O nó acende no fim do caminho tracejado.</p>
+
+    <h3>9.1 — Aba <code>Summary</code></h3>
+
+    <ul>
+      <li><code>Input request</code> traz <strong>exatamente</strong> o mesmo texto que o usuário recebeu</li>
+    </ul>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Ponto central:</strong> o nó de resposta não reescreve nada. Ele entrega o que o passo anterior produziu.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_56.png" alt="Aba Summary do passo Answer">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_57.png" alt="Continuação da aba Summary do passo Answer">
+
+    <h3>9.2 — Aba <code>Input</code></h3>
+
+    <ul>
+      <li><code>Request</code> completo</li>
+      <li>Os mesmos indicadores de execução: <code>Async flag</code>, <code>In async execution</code>, <code>Is Collaborator</code>, <code>Use supervisor interrupt handoff</code>, <code>Agent depth</code>, <code>Code act is question</code></li>
+    </ul>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_58.png" alt="Aba Input do passo Answer, parte 1">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_59.png" alt="Aba Input do passo Answer, parte 2">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_60.png" alt="Aba Input do passo Answer, parte 3">
+
+    <h3>9.3 — Aba <code>Output</code></h3>
+
+    <ul>
+      <li><code>Response</code> repete a resposta final, a mesma vista no Draft Preview</li>
+    </ul>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_61.png" alt="Aba Output do passo Answer, parte 1">
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_62.png" alt="Aba Output do passo Answer, parte 2">
+
+    <h3>9.4 — Aba <code>Node logs</code></h3>
+
+    <table>
+      <thead>
+        <tr><th>Campo</th><th>Valor</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>stepIndex</code></td><td><code>7</code></td></tr>
+        <tr><td><code>displayIndex</code></td><td><code>8</code></td></tr>
+        <tr><td><code>spanId</code></td><td><code>5067dd8b7a8d4bcf</code></td></tr>
+        <tr><td><code>operationName</code></td><td><code>answer</code></td></tr>
+        <tr><td><code>parentSpanId</code></td><td><code>null</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p><strong>Compare com o <code>stepIndex 0</code> do <code>User input</code>:</strong> a numeração percorre <strong>todos</strong> os passos, incluindo os aninhados dentro do colaborador.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_63.png" alt="Cabeçalho do span do passo Answer">
+
+    <h3>9.5 — <code>Show more</code></h3>
+
+    <p>Em execuções que passam por base de conhecimento, o span carrega também os <strong>vetores de embedding</strong> usados na recuperação — longas listas de números em ponto flutuante.</p>
+
+    <ul>
+      <li>Raramente úteis na leitura manual</li>
+      <li>Explicam por que o span fica tão extenso</li>
+      <li>Use o botão <code>Raw</code> para copiar o JSON puro e analisar fora da ferramenta</li>
+    </ul>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PASSO 10 -->
+  <section id="passo10">
+    <h2>Passo 10: Ajuste o espaço de trabalho</h2>
+
+    <p>Com spans longos, a tela padrão fica apertada. Dois controles resolvem isso.</p>
+
+    <h3>10.1 — Divisor horizontal (as reticências)</h3>
+
+    <p>Fica entre a linha do tempo e o bloco <code>Variables</code>. Arraste para cima.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_64.png" alt="Divisor horizontal entre a linha do tempo e Variables">
+
+    <p>Resultado:</p>
+
+    <ul>
+      <li>A linha do tempo encolhe e ganha barra de rolagem própria</li>
+      <li>O <code>Variables</code> passa a exibir muito mais conteúdo de uma vez</li>
+    </ul>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_65.png" alt="Painel Variables ampliado após arrastar o divisor">
+
+    <h3>10.2 — Alça vertical (o círculo no meio da divisão)</h3>
+
+    <p>Fica entre o <code>Agent flow</code> e o rastreamento.</p>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_66.png" alt="Alça vertical entre o Agent flow e o rastreamento">
+
+    <p>Resultado:</p>
+
+    <ul>
+      <li>Amplia o painel direito e reduz o canvas</li>
+      <li><strong>Use quando</strong> a leitura dos logs for mais importante que o diagrama</li>
+    </ul>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p>Para encerrar, o <code>X</code> no canto superior direito fecha a debug e devolve você à aba <code>Build</code>.</p>
+      </div>
+    </div>
+
+    <img class="lab-img" src="Assets_for_BuildBooks/lab05/lab05_67.png" alt="Botão X para fechar a janela de Debug">
   </section>
 
   <hr class="section-divider">
@@ -383,11 +1075,38 @@
   <section id="resumo">
     <h2>Resumo</h2>
 
-    <p>Parabéns! 🎉 Você concluiu o laboratório de depuração de agentes no watsonx Orchestrate.</p>
+    <p>Parabéns!</p>
 
-    <p>Ao longo das atividades, você reproduziu uma resposta no Draft Preview em modo de depuração, abriu o rastreamento pelo ícone de inseto, percorreu os três passos da execução, leu as variáveis de entrada e saída de cada nó, interpretou o span completo em JSON e alternou entre as visualizações do fluxo para isolar o caminho executado.</p>
+    <p>Você concluiu o laboratório de debug de agentes no watsonx Orchestrate.</p>
 
-    <p>Mais importante que a mecânica é o método. Quando uma resposta sair errada, a investigação segue sempre a mesma ordem: confira no canvas se o roteamento foi o esperado, leia as instruções vigentes no passo <code>Agent</code>, procure o campo <code>reasoning</code> para entender a decisão do modelo e confirme nos metadados se o modelo e as configurações eram os que você imaginava. Na maioria dos casos o problema aparece em um desses quatro pontos.</p>
+    <p><strong>O que você fez:</strong></p>
+
+    <ul>
+      <li>Reproduziu uma resposta no Draft Preview em modo de debug</li>
+      <li>Leu o raciocínio direto no chat pelo <code>Show Reasoning</code></li>
+      <li>Abriu o rastreamento pelo ícone de inseto</li>
+      <li>Percorreu os 9 passos, incluindo os aninhados dentro do colaborador</li>
+      <li>Leu variáveis de entrada e saída de cada nó</li>
+      <li>Comparou o texto do colaborador com o texto final entregue ao usuário</li>
+      <li>Interpretou os spans em JSON e alternou entre as visualizações do fluxo</li>
+    </ul>
+
+    <p><strong>O método de investigação em arquitetura multiagente:</strong></p>
+
+    <table>
+      <thead>
+        <tr><th>#</th><th>Verificação</th><th>Onde olhar</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>O roteamento foi para o colaborador esperado?</td><td>Canvas com o realce ativado</td></tr>
+        <tr><td>2</td><td>Por que o agente orquestrador escolheu esse caminho?</td><td><code>Output response</code> do <code>Agent reasoning</code> × regras de roteamento</td></tr>
+        <tr><td>3</td><td>A busca na base trouxe o conteúdo certo?</td><td>Campo <code>query</code> e a citação do documento</td></tr>
+        <tr><td>4</td><td>A resposta foi alterada na volta?</td><td><code>Input</code> do último passo do agente orquestrador × <code>Output</code> final</td></tr>
+        <tr><td>5</td><td>O modelo e as configurações eram os esperados?</td><td>Abas <code>LLM Model</code> e <code>Node properties</code> de cada camada</td></tr>
+      </tbody>
+    </table>
+
+    <p>Na maioria dos casos o problema aparece em um desses cinco pontos.</p>
   </section>
 
   <hr class="section-divider">
@@ -404,7 +1123,7 @@
   <!-- PRÓXIMOS PASSOS -->
   <section id="proximos-passos">
     <h2>Próximos Passos</h2>
-    <p>➜ <a href="lab6.html">Clique aqui para navegar para o próximo lab, Control Plane Lab do watsonx Orchestrate</a></p>
+    <p>➜ <a href="lab6.html">Clique aqui para navegar para o próximo lab, Monitoramento em Tempo Real e Control Plane do watsonx Orchestrate</a></p>
   </section>
 
   <div class="lab-nav">
@@ -414,7 +1133,7 @@
 </main>
 
 <footer class="c-footer">
-  Made by Nathalia Trazzi & Julia Almeida
+  Made by Nathalia Trazzi &amp; Julia Almeida
 </footer>
 </body>
 </html>
