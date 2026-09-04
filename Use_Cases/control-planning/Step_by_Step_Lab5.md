@@ -2,16 +2,27 @@
 
 ## Visão Geral
 
-Quando um agente responde de um jeito inesperado, a pergunta que importa não é apenas o que ele respondeu, e sim por que ele chegou até ali. O modo de debug do **watsonx Orchestrate** responde exatamente isso: Registra cada passo da execução, mostra o caminho percorrido dentro do fluxo do agente e expõe os dados brutos que trafegaram entre o usuário, o modelo de linguagem e os colaboradores.
+Quando um agente responde de um jeito inesperado, a pergunta que importa não é o que ele respondeu, e sim **por que** ele chegou até ali. 
 
-Neste laboratório você vai:
+O modo de debug do **watsonx Orchestrate** registra cada passo da execução, mostra o caminho percorrido no fluxo e expõe os dados brutos que trafegaram entre o usuário, o modelo, os colaboradores e as bases de conhecimento.
 
-- Reproduzir uma interação no Draft Preview abrir a janela de Debug a partir da própria resposta;
-- Percorrer a linha do tempo de execução passo a passo;
-- Ler as variáveis de entrada e saída de cada nó;
-- Interpretar o log detalhado em JSON e alternar entre as visualizações do fluxo para isolar o caminho que realmente foi executado.;
+Neste laboratório o cenário é **multiagente**:
 
-Ao final, você vai saber transformar uma resposta suspeita em um diagnóstico concreto, identificando se o problema está nas instruções do agente, no roteamento entre colaboradores ou na resposta do modelo.
+```
+Usuário → Assistente de Compra de Veículos (supervisor)
+              └─→ Agente de suporte ao revendedor (colaborador)
+                      └─→ Catálogo de Carro com preços (knowledge base)
+```
+
+São três camadas de decisão, e o debug é o que permite enxergar todas elas.
+
+**O que você vai fazer:**
+
+- Reproduzir uma interação no Draft Preview e ler o raciocínio direto no chat;
+- Abrir a janela de Debug a partir da própria resposta;
+- Percorrer a linha do tempo passo a passo, incluindo os passos aninhados no colaborador;
+- Ler variáveis de entrada e saída de cada nó e as propriedades de cada agente;
+- Interpretar o log em JSON e alternar entre as visualizações do fluxo.
 
 ## Índice
 
@@ -19,217 +30,681 @@ Ao final, você vai saber transformar uma resposta suspeita em um diagnóstico c
   - [Visão Geral](#visão-geral)
   - [Índice](#índice)
   - [Passo 1: Reproduza a conversa](#passo-1-reproduza-a-conversa)
-  - [Passo 2: Entenda a janela de Debug](#passo-2-entenda-a-janela-de-debug)
-  - [Passo 3: O passo User input](#passo-3-o-passo-user-input)
-  - [Passo 4: O passo Agent](#passo-4-o-passo-agent)
-  - [Passo 5: O passo Answer](#passo-5-o-passo-answer)
-  - [Passo 6: Leia o fluxo de outras maneiras](#passo-6-leia-o-fluxo-de-outras-maneiras)
+  - [Passo 3: Abra a janela de Debug](#passo-3-abra-a-janela-de-debug)
+  - [Passo 4: Os controles da barra superior](#passo-4-os-controles-da-barra-superior)
+  - [Passo 5: O passo User input](#passo-5-o-passo-user-input)
+  - [Passo 6: O passo Agent e a decisão de roteamento](#passo-6-o-passo-agent-e-a-decisão-de-roteamento)
+  - [Passo 7: Dentro do colaborador](#passo-7-dentro-do-colaborador)
+  - [Passo 8: A volta para o agente orquestrador](#passo-8-a-volta-para-o-agente-orquestrador)
+  - [Passo 9: O passo Answer](#passo-9-o-passo-answer)
+  - [Passo 10: Ajuste o espaço de trabalho](#passo-10-ajuste-o-espaço-de-trabalho)
   - [Resumo](#resumo)
   - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
-  - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate-1)
   - [Próximos Passos](#próximos-passos)
+
+---
 
 ## Passo 1: Reproduza a conversa
 
-Vamos continuar com o Agente de Busca, o mesmo agente do [laboratório anterior](./Step_by_Step_Lab4.md). Com ele aberto na aba Build, olhe para o topo do painel Draft Preview: a faixa azul com a mensagem `Running in debug mode` avisa que o Orchestrate está gravando o rastreamento completo de tudo que acontece ali. É esse registro que alimenta a janela de depuração.
+Na tela `Build agents and tools`, clique no card **Assistente de Compra de Veículos**.
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_01.png)
+- O contador `Agents` marca `2` → o agente tem **dois colaboradores** registrados.
 
-Envie a pergunta abaixo no Draft Preview.
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_01.png)
 
-```
-qual o número da ibm?
-```
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_03.png)
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_02.png)
+Leia a resposta
 
-O agente responde que só pode falar sobre os veículos do catálogo, já que a pergunta não passa pela validação de veículo definida nas instruções.
+- **Veículo:** Porsche 911 Carrera GTS (ID VEH-004)
+- **Valor:** R$ 776.974,10
+- **Abaixo da resposta:** 4 ícones → positivo, negativo, copiar e **joaninha** (debug)
 
- Logo abaixo da resposta aparecem quatro ícones:  positivo, negativo, copiar e uma joaninha. A joaninha abre a depuração daquela mensagem específica. Clique nela.
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_04.png)
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_03.png)
+---
 
-## Passo 2: Entenda a janela de Debug
+Antes de abrir o modo debug, boa parte do diagnóstico já está no próprio chat.
 
-A tela `Debug: Agente de Busca` ocupa toda a área de trabalho e se divide em duas partes. À esquerda fica o `Agent flow`, o mapa de todos os nós que formam o agente. À direita fica o rastreamento da execução, organizado em `Execution timeline`, `Variables` e `Node properties`.
+Clique em `Show Reasoning`
 
-O aviso amarelo no topo merece atenção: a tela desenha a versão atual do agente, que pode não ser a mesma que rodou quando a conversa aconteceu. Se você editar o agente e depois voltar para depurar uma conversa antiga, o diagrama pode mostrar nós que ainda nem existiam na execução original.
 
-Abra o seletor `Legends`, no rodapé do canvas, para aprender a ler o diagrama. Os tipos de nó descrevem o papel de cada caixa:
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_05.png)
 
-* `User input` é o ponto de entrada da conversa.
-* `Agent` orquestra as tarefas.
-* `LLM` representa uma chamada ao modelo de linguagem.
-* `Tool` é uma função externa.
-* `API` é um endpoint HTTP ou REST.
-* `Knowledge base` faz busca por recuperação.
-* `Workflow` é um processo de várias etapas.
-* `Answer` é o nó de resposta final.
+O link vira `Hide Reasoning`
 
-Logo abaixo vêm os estados, que dizem se cada nó foi executado (`Not yet executed`, `Used in the execution` e `Current active node`), e os tipos de conexão, que diferenciam a ligação estrutural do agente (`Agent flow`) do caminho realmente percorrido nesta execução (`Current taken path`) e das ligações que ficaram de fora (`Not used in this execution`). Por último, as etiquetas: `COLLAB` marca um agente colaborador e o ícone de camadas indica que aquele nó tem nós filhos.
+Surgem `Step 1` e `Step 2` → cada um é uma chamada que o agente fez antes de responder
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_04-a.png)
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_06.png)
 
-Feche a legenda e olhe para o painel da direita. O bloco `Execution timeline` resume a conversa inteira em três passos e 1ms de duração: `User input`, `Agent` com a etiqueta `Model invoked` e `Answer`. Repare que os 0.66ms do passo `Agent` concentram praticamente todo o tempo, o que já indica onde vale investigar primeiro. Clique no primeiro passo, `User input`.
+Expanda o `Step 1` (o roteamento)
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_04-b.png)
+| Campo | Conteúdo |
+|---|---|
+| `Tool` | `chat_with_collaborator_agente_de_suporte_ao_revendedor` |
+| `Input` | A pergunta original do usuário, intacta |
+| `Output` | `Transferring to - chat_with_collaborator_agente_de_suporte_ao_revendedor` |
 
-## Passo 3: O passo User input
+o agente orquestrador não tentou responder. Leu a pergunta, reconheceu consulta de catálogo e delegou.
 
-Com o passo selecionado, o nó correspondente acende no canvas e o bloco `Variables` passa a mostrar os dados daquele ponto do fluxo, distribuídos em quatro abas. A aba `Summary` já traz a leitura rápida, com a frase que o usuário enviou.
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_07.png)
 
-Abra a aba `Input`. Os campos `Request` e `Message` carregam a mesma pergunta, porque nesse ponto ainda não houve nenhum processamento: o que entrou foi exatamente o que o usuário digitou.
+Expanda o `Step 2` (a busca na base)**
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_05.png)
+| Campo | Conteúdo |
+|---|---|
+| `Tool` | `Catálogo_de_Carro_com_preços` |
+| `Input` | `{"query": "preço"}` |
+| `Output` | 22 linhas, começando pelo `title` do documento `Catalog_with_prices_clean.pdf` |
 
-Em `Output` aparece a mensagem `No output information available for this step`. Isso é esperado. O nó de entrada apenas recebe a mensagem e a repassa adiante, sem produzir nada por conta própria.
+A busca **não** usou a frase do usuário, e sim uma consulta reescrita pelo agente. Quando a resposta vem incompleta, esse campo `query` é o primeiro suspeito.
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_06.png)
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_08.png)
 
-A aba `Node logs` mostra o span, que é o registro bruto do passo. O cabeçalho traz a identificação: `stepIndex` em zero marca o primeiro passo, `spanId` com o valor `__user_input__` identifica o nó, `parentAgentId` guarda o identificador do Agente de Busca e `depth` em zero indica que tudo aconteceu no nível principal, sem aninhamento em nenhum colaborador. O botão `Raw`, no canto direito, alterna entre a versão formatada e o JSON puro.
+Clique no botão de expansão abaixo da resposta.
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_07.png)
+- **Arquivo de origem:** `Catalog_with_prices_clean.pdf`
+- **Trecho recuperado:** registro do `VEH-004 Porsche 911 Carrera GTS`, com cor e valor
+- **`View source`:** abre o documento completo
 
-Clique em `Show more` para ver o span inteiro. 
+A prova de que a resposta veio da base, e não de conhecimento próprio do modelo.
 
-A parte de baixo cobre a execução: `duration` em zero confirma um passo instantâneo, `hasModelCall` como false mostra que nenhuma chamada ao modelo saiu daqui, `input` guarda a mensagem original, `output` está nulo e `status` marca `success`. Os campos `childSpanIds` vazio e `hasChildren` como false completam o quadro, este passo não gerou nenhum passo filho.
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_09.png)
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_08.png)
+---
 
-## Passo 4: O passo Agent
+## Passo 3: Abra a janela de Debug
 
-Volte para a linha do tempo e clique no segundo passo. A etiqueta `Model invoked` avisa que foi aqui que o modelo de linguagem entrou em ação.
+O `Show Reasoning` mostra o resumo. Para ver dados brutos, tempos e configurações vigentes, use o debug.
 
-No canvas, o caminho percorrido aparece tracejado saindo de `User input`, passando pelo `Agente de Busca` e chegando ao nó do modelo `groq/openai/gpt-oss`. O `Agente Langflow de Buscas`, colaborador identificado pela etiqueta `COLLAB`, continua apagado, porque não foi acionado nesta conversa. Esse detalhe visual já responde à primeira pergunta de qualquer investigação de roteamento: o agente resolveu sozinho, sem repassar a solicitação.
+Clique na joaninha (🐞)
 
-O bloco `Node properties` também muda e ganha três abas, `About`, `Guidelines` e `LLM Model`. Em `About` estão o nome interno do agente, o nome de exibição, a descrição e as instruções vigentes.
+Passe o mouse para confirmar o rótulo `Debug`.
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_09.png)
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_10.png)
 
-Role o painel para ler as instruções na íntegra. Essa é a leitura mais valiosa da depuração, porque coloca lado a lado o que você escreveu e o que o agente fez. O bloco de validação de veículo pede que o agente identifique o modelo mencionado antes de atender qualquer solicitação, tolerando nomes incompletos, variações de escrita, erros de digitação, apelidos e omissão da marca.
+**Entendendo a divisão da tela**
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_10.png)
+| Área | Conteúdo |
+|---|---|
+| Esquerda | `Agent flow` — mapa de todos os nós do agente |
+| Direita | `Execution timeline`, `Variables` e `Node properties` |
 
-A lista de exemplos válidos mostra os apelidos aceitos para cada carro do catálogo, de "Versa" a "Carrera GTS". Nenhum deles se parece com a pergunta enviada, o que explica o desfecho.
+**Estrutura visível no canvas:**
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_11.png)
+- `Assistente de Compra de Veículos` → modelo
+- `Assistente de Compra de Veículos` → colaborador `Agente de Busca`
+- `Assistente de Compra de Veículos` → colaborador `Agente de suporte ao revendedor` → base `Catálogo de Carro com preços`
+- Nós de `Answer` em cada ramo
 
-Em seguida vem a regra de roteamento. Havendo alta confiança de que o veículo pertence ao catálogo, a solicitação deve ser encaminhada ao **Agente Langflow de Buscas.** A recusa só é permitida quando não houver como associar o pedido a nenhum modelo, e a mensagem de rejeição está escrita literalmente nas instruções. É por isso que a resposta saiu palavra por palavra igual ao texto configurado.
+**Resumo da execução: 9 passos / 5ms**
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_12.png)
+| # | Passo | Tempo |
+|---|---|---|
+| 1 | `User input` | — |
+| 2 | `Agent` · `Model invoked` · Agent reasoning | 0.75ms |
+| 3 | `Collaborator: Agente de suporte ao revendedor` | **3.15ms** |
+| 4 | `Agent` · `Model invoked` · Agent processing | 0.75ms |
+| 5 | `Answer` | 0.00ms |
 
-No fim do painel ficam as configurações do nó: `Chat with doc` e `Memory enabled` desabilitados, `Agent style` em `Default` e `Node type` como `Agent`. Quando um agente parece ignorar o contexto de mensagens anteriores, é aqui que se descobre que a memória simplesmente não estava ligada.
+> **Onde investigar primeiro:** os 3.15ms concentrados no colaborador indicam onde está o trabalho pesado.
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_13.png)
+Abra o seletor `Legends`, no rodapé do canvas.
 
-## Passo 5: O passo Answer
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_11.png)
 
-Selecione o terceiro passo da linha do tempo. O nó `Answer` acende no fim do caminho tracejado e a aba `Summary` mostra `Input request` e `Output response` com exatamente o mesmo texto. Essa igualdade é o ponto central: o nó de resposta não reescreve nada, ele entrega o que o passo anterior produziu.
+**Aprenda a ler o diagrama**
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_14.png)
+**Tipos de nó:**
 
-A aba `Input` acrescenta o contexto da chamada. `Async flag` como false e `In async execution` em zero indicam execução síncrona, `Is Collaborator` como false confirma que quem responde é o agente principal, `Use supervisor interrupt handoff` como false mostra que não houve transferência para um supervisor e `Agent depth` em um informa o nível do agente na hierarquia.
+| Nó | Papel |
+|---|---|
+| `User input` | Ponto de entrada da conversa |
+| `Agent` | Orquestra as tarefas |
+| `LLM` | Chamada ao modelo de linguagem |
+| `Tool` | Função externa |
+| `API` | Endpoint HTTP ou REST |
+| `Knowledge base` | Busca por recuperação |
+| `Workflow` | Processo de várias etapas |
+| `Answer` | Nó de resposta final |
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_15.png)
+**Estados do nó:**
 
-Em `Output`, o campo `Response` traz a resposta final, a mesma que o usuário viu no Draft Preview.
+- `Not yet executed` — ainda não executado
+- `Used in the execution` — participou desta execução
+- `Current active node` — nó selecionado agora
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_16.png)
+**Tipos de conexão:**
 
-Abra `Node logs`. O cabeçalho do span identifica o passo com `stepIndex` em um, `displayIndex` em dois, um `spanId` próprio e `operationName` igual a `answer`.
+- `Agent flow` — ligação estrutural do agente
+- `Current taken path` — caminho realmente percorrido nesta execução
+- `Not used in this execution` — ligações que ficaram de fora
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_17.png)
+**Etiquetas:**
 
-Clique em `Show more`. 
+- `COLLAB` — marca um agente colaborador
+- Ícone de camadas — o nó tem nós filhos
 
-A primeira parte do span cobre a execução e o contexto da conversa. Os valores `duration` em três, `tokenUsage` em zero e `hasModelCall` como false confirmam de novo que este nó não conversa com o modelo. Logo abaixo vem o bloco `context`, com os identificadores que amarram tudo: `wxo_thread_id` para a conversa, `wxo_run_id` para esta execução, além do usuário e do tenant. Vale guardar o `wxo_thread_id`, é ele que permite reencontrar a mesma conversa nas ferramentas de observabilidade.
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_12.png)
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_18.png)
+---
 
-O bloco `messages` traz o diálogo como o modelo o enxergou. A primeira mensagem é a do usuário, marcada com `type` igual a `human`. 
+## Passo 4: Os controles da barra superior
 
-A segunda é a resposta, e dentro dela o campo `reasoning` guarda a justificativa do modelo em uma linha: o usuário perguntou algo sem relação com veículos, então a solicitação precisa ser recusada com a mensagem especificada. É a prova direta de que a instrução foi lida e seguida.
+**1. Restart (`⌘ + R`)**
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_19.png)
+Reinicia a leitura do rastreamento e volta a seleção para o primeiro passo.
 
-Em seguida aparecem os metadados do modelo. Os campos `model_provider`, `actual_model` e `configured_model` mostram qual modelo respondeu e confirmam que ele é o mesmo configurado no agente; uma divergência aí explicaria comportamentos estranhos. O `finish_reason` igual a `stop` indica encerramento normal, `retry_count` em zero mostra que não houve nova tentativa e `tool_calls` vazio confirma que nenhuma ferramenta foi chamada. 
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_13.png)
 
-Por fim, `usage_metadata` contabiliza 1116 tokens de entrada, 118 de saída e 1234 no total, que é o número a observar quando o assunto é custo quando está se utilizando outros modelos.
+**2. `Highlight all nodes used in this run`**
 
-> o watsonx Orchestrate não faz cobrança por token e sim por MAUs. (Monthly active users)
-> Para entede mais sobre MAUs, consulte este link: https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=entitlements-licenses-cloud
-> Ou o time comercial responsável pela sua conta.
+Destaca no diagrama todos os nós que participaram da execução.
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_20.png)
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_14.png)
 
-A sequência seguinte descreve o estado interno do agente no momento da resposta. `reflection_enabled` como true, com `reflection_retry_count` em zero e limite em um, significa que a revisão automática estava disponível mas não precisou ser usada. `step_count` em um conta os ciclos de raciocínio e `is_collaborator` como false reforça que nenhum colaborador entrou na conversa.
+Com o realce ativo:
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_21.png)
+- **Realçados:** `Agente de suporte ao revendedor`, o modelo e a base `Catálogo de Carro com preços`
+- **Apagado:** `Agente de Busca` — existe no agente, mas não foi acionado nesta conversa
 
-Mais abaixo ficam os campos de planejamento. 
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_15.png)
 
-Com `plan` vazio, `current_task` sem tarefa ativa e `is_planning` como false, fica claro que o agente respondeu direto, sem quebrar a solicitação em etapas. O campo `citations` vazio mostra que nenhuma base de conhecimento foi consultada.
+**3 — Visão limpa (terceiro ícone)**
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_22.png)
+Remove do canvas tudo que não participou da execução. Sobram apenas:
 
-O trecho final reúne o resultado. O campo `output` repete a resposta entregue e `status` marca `success`.
+- `User input`
+- Supervisor
+- Colaborador
+- Nós de modelo
+- Base de conhecimento
+- Nós de `Answer`
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_23.png)
+> **Quando usar:** em agentes com muitos colaboradores e ferramentas, elimina o ruído e deixa o caminho real evidente.
 
-Depois vem o bloco `tags`, com os identificadores de rastreamento: a sessão, a transação, o `thread_id`, o workspace, o nome do nó e o fluxo interno que executou a resposta. São eles que conectam este passo aos painéis de monitoramento.
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_16.png)
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_24.png)
+**Setas de navegação (`⌘⇧→`)**
 
-Os logs guardam as entradas e as saídas de nó em blocos separados, então a conversa, os metadados do modelo e o estado do agente aparecem uma segunda vez, agora dentro de `langchain.chain.input`. Use essa divisão a seu favor quando estiver procurando algo específico: o que está em `langchain.chain.input` descreve o que o nó recebeu, e o que está em `langchain.chain.output` descreve o que ele devolveu.
+Percorrem os passos em ordem, sem precisar clicar na linha do tempo.
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_25.png)
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_17.png)
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_26.png)
+---
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_27.png)
+## Passo 5: O passo User input
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_28.png)
+Clique no primeiro passo da linha do tempo. O nó correspondente acende no canvas.
 
-Passado o bloco, vem a identificação técnica do passo dentro do motor de execução. 
+**5.1 — Aba `Input`**
 
-O campo `openinference.span.kind` classifica o span como `CHAIN`, e os campos de `langgraph` marcam a posição exata do nó no grafo, incluindo a etapa, o nome do nó e o gatilho que levou até ele. Esses valores são úteis para reconstruir a ordem de execução em fluxos maiores.
+| Campo | Valor |
+|---|---|
+| `Request` | `qual o carro mais caro que vcs tem?` |
+| `Message` | `qual o carro mais caro que vcs tem?` |
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_29.png)
+> **Por que são iguais:** nesse ponto ainda não houve processamento. O que entrou é exatamente o que o usuário digitou.
 
-O bloco `langchain.chain.output` fecha o ciclo com a resposta final do assistente, novamente acompanhada do campo `reasoning`.
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_18.png)
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_30.png)
+**5.2 — Aba `Output`**
 
-A última linha, `isWorkflow` como false, confirma que a execução seguiu o caminho de um agente comum e não de um workflow. Clique em `Show less` para recolher o span.
+- `No output information available for this step`
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_31.png)
+> **Esperado:** o nó de entrada só recebe a mensagem e repassa adiante.
 
-## Passo 6: Leia o fluxo de outras maneiras
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_19.png)
 
-Os dois últimos ícones da barra superior controlam como o `Agent flow` é desenhado. O primeiro deles destaca o caminho percorrido dentro do diagrama completo: os nós usados ficam realçados e os demais continuam visíveis, porém apagados. É a visão indicada para comparar o que o agente poderia ter feito com o que ele de fato fez.
+**5.3 — Aba `Node logs` (cabeçalho do span)**
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_32.png)
+| Campo | Valor | O que indica |
+|---|---|---|
+| `stepIndex` | `0` | Primeiro passo da execução |
+| `spanId` | `__user_input__` | Identificador do nó |
+| `operationName` | `user_input` | Tipo de operação |
+| `parentSpanId` | `null` | Não tem passo pai |
+| `parentAgentId` | `c649b05f-...` | ID do Assistente de Compra de Veículos |
+| `depth` | `0` | Nível principal, sem aninhamento |
+| `isCollaboratorNode` | `false` | Não é nó de colaborador |
+| `collaboratorId` | `null` | Nenhum colaborador envolvido |
 
-O segundo ícone vai além e remove do canvas tudo que não participou da execução. Sobram apenas `User input`, `Agente de Busca`, o nó do modelo e `Answer`, em tamanho maior. Em agentes com muitos colaboradores e ferramentas, essa visão elimina o ruído e deixa o caminho real evidente.
+> 💡 O botão `Raw`, no canto direito, alterna entre a versão formatada e o JSON puro.
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_33.png)
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_20.png)
 
-As setas à esquerda da barra percorrem os passos em ordem, sem precisar clicar na linha do tempo, o que ajuda a acompanhar a execução como uma sequência contínua. O ícone de recarregar atualiza o rastreamento e o `X`, no canto superior direito, fecha a depuração e devolve você à aba Build.
+**5.4 — Clique em `Show more` (corpo do span)**
 
-![test](../../Assets_for_BuildBooks/labs/lab05/lab05_debug_34.png)
+| Campo | Valor | O que indica |
+|---|---|---|
+| `duration` | `0` | Passo instantâneo |
+| `hasModelCall` | `false` | Nenhuma chamada ao modelo saiu daqui |
+| `input` | `{message: ...}` | Mensagem original |
+| `output` | `null` | Não produziu saída |
+| `status` | `success` | Executou sem erro |
+| `graphNodeIds` | `[]` | Não gerou passos filhos |
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_21.png)
+
+---
+
+## Passo 6: O passo Agent e a decisão de roteamento
+
+Avance para o segundo passo: `Agent` · `Model invoked` · **Agent reasoning**. É aqui que o supervisor decide o que fazer com a pergunta.
+
+**6.1 — Aba `Summary` (o campo mais revelador)**
+
+| Campo | Conteúdo |
+|---|---|
+| `Input request` | A pergunta do usuário |
+| `Output response` | O raciocínio do modelo: identifica a pergunta como consulta de catálogo sobre preço e decide rotear para o agente de suporte ao revendedor |
+
+> **Leitura:** este texto é a resposta direta para *"por que ele chamou esse colaborador e não o outro"*.
+
+**No canvas:** o caminho tracejado sai do `User input`, passa pelo supervisor e chega ao nó `groq/openai/gpt-oss`.
+
+**Node properties ganha 4 abas:** `About` · `Collaborators` · `Guidelines` · `LLM Model`
+
+Em `About`:
+
+- `Name`: `Untitled_Agent_1_0690we`
+- `Display name`: `Assistente de Compra de Veículos`
+- `Description` e `Instructions` vigentes
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_22.png)
+
+**6.2 — Role o painel e leia as instruções na íntegra**
+
+- Bloco `# REGRAS DE ROTEAMENTO`
+- Primeira regra: `## 1. CONSULTAS SOBRE CATÁLOGO → Agente de suporte ao revendedor`
+- Seguida da lista de situações que devem ser encaminhadas
+
+> **A comparação que importa:** coloque lado a lado o raciocínio do `Summary` e essa regra. Quando o roteamento sai errado, é isso que revela se o problema está na **instrução mal escrita** ou na **interpretação do modelo**.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_23.png)
+
+**6.3 — Aba `Collaborators`**
+
+Lista os dois agentes registrados: `Agente de Busca` e `Agente de suporte ao revendedor`.
+
+Para o selecionado, mostra:
+
+- `Id`, `Tenant ID`, `Workspace ID`
+- `Name` (nome interno), `Description`, `Instructions`
+
+> **Para que serve:** conferir se o colaborador que deveria ter sido chamado está disponível e com que instruções ele opera.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_24.png)
+
+**6.4 — Campos de auditoria e ambiente**
+
+| Bloco | Campos |
+|---|---|
+| Auditoria | `Created by`, `Created on`, `Updated by`, `Updated at` |
+| `Environments` | Ambiente `Draft`, com `Id`, `Name` e estado da integração |
+
+> **Para que serve:** Checar se alguém alterou o agente entre a execução e a investigação.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_25.png)
+
+**6.5 — `Agent mapping` e `Additional properties`**
+
+| Bloco | Campos |
+|---|---|
+| `Agent mapping` | `Hidden`, `Display name` que o supervisor enxerga |
+| `Additional properties` | `Context access enabled`, `Hide reasoning`, `Sync tool flow interrupt`, `Restrictions`, `Bundled` |
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_26.png)
+
+**6.6 — `Chat with docs` (configuração de recuperação)**
+
+- `Enabled`
+- Suporte a documento completo
+- `Vector index`
+- `Generation`
+- `Query rewrite`
+- `Confidence thresholds`
+- `Citations`
+- `HAP filtering`
+- `Query source` — quem monta a consulta
+- `Agent query description` — orienta a busca na base
+
+> **Quando o agente busca a coisa errada na base, a explicação costuma estar aqui.**
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_27.png)
+
+**6.7 — Fim do painel**
+
+Últimos interruptores: `Memory enabled` e `Is schedulable`.
+
+> **Dica de diagnóstico:** quando um agente parece ignorar o contexto de mensagens anteriores, é aqui que se descobre que a memória simplesmente não estava ligada.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_28.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_29.png)
+
+---
+
+## Passo 7: Dentro do colaborador
+
+**7.1 — Expanda o `Collaborator: Agente de suporte ao revendedor`**
+
+Clique na seta à direita do nome. Quatro subpassos aparecem indentados:
+
+| # | Subpasso | Tempo | O que faz |
+|---|---|---|---|
+| 1 | `Agent` · Agent reasoning | 0.72ms | O colaborador decide o que fazer |
+| 2 | `Knowledge: Catálogo de Carro com preços` | 1.33ms | `Searching knowledge base for relevant information` |
+| 3 | `Agent` · Agent processing | 0.77ms | Redige a resposta com o que foi recuperado |
+| 4 | `Answer` | 0.01ms | Prepara a devolução para o supervisor |
+
+**Node properties do colaborador:**
+
+- `Display name`: `Agente de suporte ao revendedor`
+- `Description`: responde perguntas e qualifica vendas para a concessionária
+- `Instructions`: abrem com *"Você é um Agente Virtual de Vendas da ABC Automóveis"*
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_30.png)
+
+**7.2 — Role até o fim das propriedades**
+
+| Campo | Valor |
+|---|---|
+| `Chat with doc` | `Disabled` |
+| `Memory enabled` | `Disabled` |
+| `Agent style` | `React_intrinsic` |
+| `Node type` | **`Collaborator`** |
+| `Agent type` | `native` |
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_31.png)
+
+**7.3 — Subpasso 1: `Agent reasoning` do colaborador**
+
+- **No canvas:** acende o nó de modelo pendurado no **colaborador**, não mais o do supervisor
+- **Instruções:** trecho final inclui a diretriz de responder somente em Português do Brasil
+- **`Node type`:** volta a ser `Agent`
+
+> **Diferença:** o passo anterior era o colaborador como *entidade*; este é o colaborador *em execução*.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_32.png)
+
+**7.4 — Subpasso 2: `Knowledge: Catálogo de Carro com preços`**
+
+| Campo | Valor |
+|---|---|
+| `Display name` | `Catálogo de Carro com preços` |
+| `Node type` | `Knowledge` |
+| `Created by` | `IBMid-691000KKI2` |
+| `Updated at` | Data da última atualização da base |
+
+> **Amarrando as pontas:** esses 1.33ms são o momento em que o `{"query": "preço"}` do Passo 2 foi executado contra o índice.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_33.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_34.png)
+
+**7.5 — Subpasso 3: `Agent processing` (0.77ms)**
+
+- Segunda passagem pelo modelo dentro do colaborador, agora **com o conteúdo recuperado em mãos**
+- Instruções mostram o bloco `# FONTE DE CONHECIMENTO` — o trecho que orienta como usar o material recuperado
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_35.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_36.png)
+
+**7.6 — Subpasso 4: `Answer` do colaborador (0.01ms)**
+
+- O nó acende no ramo do colaborador
+- `Node type`: `Answer`
+
+> **O que ele faz:** nada de reescrita. Só empacota o que o `Agent processing` produziu e devolve para quem chamou.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_37.png)
+
+---
+
+## Passo 8: A volta para o agente orquestrador
+
+Volte ao nível principal e selecione o quarto passo: `Agent` · **Agent processing** (0.75ms).
+
+- **No canvas:** o caminho tracejado sai do colaborador e volta para o orquestrador, que passa mais uma vez pelo modelo antes de encerrar
+- **Node properties:** voltam a ser as do `Assistente de Compra de Veículos`
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_38.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_39.png)
+
+**8.1 — Aba `Input` — o achado mais importante do laboratório**
+
+O campo `Request` traz:
+
+- `thread_id` da conversa
+- A mensagem que **o colaborador devolveu**: Porsche 911 Carrera GTS, o valor, e uma pergunta de follow-up sobre o tipo de carro de interesse
+
+**Compare com o que o usuário viu no chat:**
+
+| Camada | Fecho da mensagem |
+|---|---|
+| Colaborador | *"Você tem interesse em algum tipo de carro específico, como esportivo, utilitário ou familiar?"* |
+| Supervisor (entregue ao usuário) | *"Caso queira saber mais detalhes sobre ele ou comparar com outros modelos, estou à disposição!"* |
+
+> O que chega ao usuário **não é necessariamente** o que o colaborador escreveu. Quando o tom ou o conteúdo final destoam do esperado, é aqui que se descobre em qual camada a alteração aconteceu.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_40.png)
+
+**8.2 — Contexto da chamada**
+
+| Campo | Valor | O que indica |
+|---|---|---|
+| `Async flag` | `false` | Execução síncrona |
+| `In async execution` | `0` | Nenhuma execução assíncrona em curso |
+| `Is Collaborator` | `false` | Quem processa agora é o **agente principal** |
+| `Use supervisor interrupt handoff` | `false` | Não houve transferência para supervisor externo |
+| `Agent depth` | `1` | Nível do agente na hierarquia |
+| `Code act is question` | `false` | — |
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_41.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_42.png)
+
+**8.3 — Node properties (segundo turno do supervisor)**
+
+As mesmas abas do `Agent reasoning`. Em `About`:
+
+| Campo | Valor |
+|---|---|
+| `Name` | `Untitled_Agent_1_0690we` |
+| `Display name` | `Assistente de Compra de Veículos` |
+| `Chat with doc` | `Disabled` |
+| `Memory enabled` | `Disabled` |
+| `Agent style` | `React_intrinsic` |
+| `Node type` | `Agent` |
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_43.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_44.png)
+
+**8.4 — Aba `Collaborators`**
+
+A mesma lista de dois agentes, com identificadores, nomes internos, descrições e instruções.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_45.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_46.png)
+
+**8.5 — Bloco `Collaborators: 1 item`**
+
+| Campo | Valor |
+|---|---|
+| `LLM` | `groq/openai/gpt-oss-120b` |
+| `Style` | `react_intrinsic` |
+| `Created by` / `Created on` | Campos de auditoria |
+
+> Um agente colaborador pode rodar em um **modelo diferente** do supervisor. Isso explica diferenças de comportamento entre as camadas.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_47.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_48.png)
+
+**8.6 — Demais blocos**
+
+Na sequência aparecem: `Environments` (Draft) · `Agent mapping` · `Chat with docs` · `Additional properties` (`Restrictions`, `Bundled`, `Memory enabled`, `Is schedulable`).
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_49.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_50.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_51.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_52.png)
+
+**8.7 — Aba `Output`**
+
+O campo `Response` traz a resposta **já reescrita pelo supervisor**, palavra por palavra igual à que apareceu no Draft Preview.
+
+> **O ciclo se fecha:** entrou o texto do agente colaborador, saiu o texto do usuário.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_53.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_54.png)
+
+**8.8 — Aba `LLM Model`**
+
+| Campo | Valor |
+|---|---|
+| `Id` | `groq/openai/gpt-oss-120b` |
+| `Label` | `GPT-OSS 120B — OpenAI (via Groq)` |
+| `Type` | `Groq` |
+| `Tags` | 3 itens |
+
+
+> O watsonx Orchestrate não faz cobrança por token e sim por **MAUs** (Monthly Active Users).
+> Saiba mais sobre MAUs [nesta documentação](https://www.ibm.com/docs/en/watsonx/watson-orchestrate/base?topic=entitlements-licenses-cloud) ou com o time comercial responsável pela sua conta.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_55.png)
+
+---
+
+## Passo 9: O passo Answer
+
+Selecione o último passo da linha do tempo: `Answer` (0.00ms). O nó acende no fim do caminho tracejado.
+
+**9.1 — Aba `Summary`**
+
+- `Input request` traz **exatamente** o mesmo texto que o usuário recebeu
+
+> **Ponto central:** o nó de resposta não reescreve nada. Ele entrega o que o passo anterior produziu.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_56.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_57.png)
+
+**9.2 — Aba `Input`**
+
+- `Request` completo
+- Os mesmos indicadores de execução: `Async flag`, `In async execution`, `Is Collaborator`, `Use supervisor interrupt handoff`, `Agent depth`, `Code act is question`
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_58.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_59.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_60.png)
+
+**9.3 — Aba `Output`**
+
+- `Response` repete a resposta final, a mesma vista no Draft Preview
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_61.png)
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_62.png)
+
+**9.4 — Aba `Node logs`**
+
+| Campo | Valor |
+|---|---|
+| `stepIndex` | `7` |
+| `displayIndex` | `8` |
+| `spanId` | `5067dd8b7a8d4bcf` |
+| `operationName` | `answer` |
+| `parentSpanId` | `null` |
+
+> **Compare com o `stepIndex 0` do `User input`:** a numeração percorre **todos** os passos, incluindo os aninhados dentro do colaborador.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_63.png)
+
+**9.5 — `Show more`**
+
+Em execuções que passam por base de conhecimento, o span carrega também os **vetores de embedding** usados na recuperação — longas listas de números em ponto flutuante.
+
+- Raramente úteis na leitura manual
+- Explicam por que o span fica tão extenso
+- Use o botão `Raw` para copiar o JSON puro e analisar fora da ferramenta
+
+---
+
+## Passo 10: Ajuste o espaço de trabalho
+
+Com spans longos, a tela padrão fica apertada. Dois controles resolvem isso.
+
+**10.1 — Divisor horizontal (as reticências)**
+
+Fica entre a linha do tempo e o bloco `Variables`. Arraste para cima.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_64.png)
+
+Resultado:
+
+- A linha do tempo encolhe e ganha barra de rolagem própria
+- O `Variables` passa a exibir muito mais conteúdo de uma vez
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_65.png)
+
+**10.2 — Alça vertical (o círculo no meio da divisão)**
+
+Fica entre o `Agent flow` e o rastreamento.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_66.png)
+
+Resultado:
+
+- Amplia o painel direito e reduz o canvas
+- **Use quando** a leitura dos logs for mais importante que o diagrama
+
+> Para encerrar, o `X` no canto superior direito fecha a debug e devolve você à aba `Build`.
+
+![test](../../Assets_for_BuildBooks/labs/lab05/lab05_67.png)
+
+---
 
 ## Resumo
 
-Parabéns!  🎉  Você concluiu o laboratório de depuração de agentes no watsonx Orchestrate.
+Parabéns!
 
-Ao longo das atividades, você reproduziu uma resposta no Draft Preview em modo de depuração, abriu o rastreamento pelo ícone de inseto, percorreu os três passos da execução, leu as variáveis de entrada e saída de cada nó, interpretou o span completo em JSON e alternou entre as visualizações do fluxo para isolar o caminho executado.
+Você concluiu o laboratório de debug de agentes no watsonx Orchestrate.
 
-Mais importante que a mecânica é o método. Quando uma resposta sair errada, a investigação segue sempre a mesma ordem: confira no canvas se o roteamento foi o esperado, leia as instruções vigentes no passo `Agent`, procure o campo `reasoning` para entender a decisão do modelo e confirme nos metadados se o modelo e as configurações eram os que você imaginava. Na maioria dos casos o problema aparece em um desses quatro pontos.
+**O que você fez:**
 
+- Reproduziu uma resposta no Draft Preview em modo de debug
+- Leu o raciocínio direto no chat pelo `Show Reasoning`
+- Abriu o rastreamento pelo ícone de inseto
+- Percorreu os 9 passos, incluindo os aninhados dentro do colaborador
+- Leu variáveis de entrada e saída de cada nó
+- Comparou o texto do colaborador com o texto final entregue ao usuário
+- Interpretou os spans em JSON e alternou entre as visualizações do fluxo
 
-## Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
+**O método de investigação em arquitetura multiagente:**
 
-Todas as operações realizadas também estão disponíveis em uma experiência utilizando o ADK, o Agent Development Kit. [Clique aqui](https://developer.watson-orchestrate.ibm.com/) para saber mais sobre como criar agentes, tools, bases de conhecimento e muito mais.
+| # | Verificação | Onde olhar |
+|---|---|---|
+| 1 | O roteamento foi para o colaborador esperado? | Canvas com o realce ativado |
+| 2 | Por que o supervisor escolheu esse caminho? | `Output response` do `Agent reasoning` × regras de roteamento |
+| 3 | A busca na base trouxe o conteúdo certo? | Campo `query` e a citação do documento |
+| 4 | A resposta foi alterada na volta? | `Input` do último passo do supervisor × `Output` final |
+| 5 | O modelo e as configurações eram os esperados? | Abas `LLM Model` e `Node properties` de cada camada |
+
+Na maioria dos casos o problema aparece em um desses cinco pontos.
+
+---
 
 ## Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
 
