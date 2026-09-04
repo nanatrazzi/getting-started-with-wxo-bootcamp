@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentos · Materiais do Bootcamp · watsonx Orchestrate</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe; --carbon-blue-70: #0043ce; --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616; --carbon-gray-90: #262626; --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252; --carbon-gray-30: #c6c6c6; --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4; --carbon-white: #ffffff;
+    --sidebar-width: 256px; --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--carbon-gray-100); background: var(--carbon-gray-10); line-height: 1.5; }
+  .c-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--carbon-gray-100); color: var(--carbon-white); display: flex; align-items: center; z-index: 9000; padding: 0 16px; gap: 16px; }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__name { font-size: 14px; font-weight: 400; letter-spacing: .1px; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; font-weight: 400; color: var(--carbon-white); }
+  .c-sidenav { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000; }
+  .c-sidenav__section-title { padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30); }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; transition: background .1s, color .1s; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  /* ─── ACCORDION MATERIAIS ─── */
+  .c-sidenav__accordion-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 16px 16px 8px; font-size: 12px; font-weight: 600;
+    letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30);
+    background: none; border: none; cursor: pointer;
+  }
+  .c-sidenav__accordion-btn:hover { color: var(--carbon-white); }
+  .c-sidenav__accordion-btn .chevron {
+    width: 12px; height: 12px; transition: transform .2s;
+    fill: none; stroke: currentColor; stroke-width: 2;
+  }
+  .c-sidenav__accordion-btn[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .c-sidenav__accordion-body { display: none; }
+  .c-sidenav__accordion-body.open { display: block; }
+  .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 960px; }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--carbon-gray-70); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .breadcrumb span { color: var(--carbon-gray-30); }
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 28px; font-weight: 300; line-height: 1.25; color: var(--carbon-gray-100); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 14px; color: var(--carbon-gray-70); line-height: 1.5; }
+  /* ─── FILE GRID ─── */
+  .file-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 8px; }
+  .file-card { background: var(--carbon-white); border: 1px solid var(--carbon-gray-20); display: flex; flex-direction: column; overflow: hidden; }
+  .file-card__thumb { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; border-bottom: 1px solid var(--carbon-gray-20); background: var(--carbon-gray-10); }
+  .file-card__body { padding: 12px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .file-card__name { font-size: 13px; font-weight: 500; color: var(--carbon-gray-100); word-break: break-all; line-height: 1.4; }
+  .file-card__meta { font-size: 11px; color: var(--carbon-gray-70); text-transform: uppercase; letter-spacing: .2px; }
+  .file-card__dl { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; padding: 7px 12px; font-size: 12px; font-weight: 600; text-decoration: none; color: var(--carbon-blue-60); border: 1px solid var(--carbon-blue-60); align-self: flex-start; transition: background .1s, color .1s; }
+  .file-card__dl:hover { background: var(--carbon-blue-10); }
+  .file-card__dl svg { fill: currentColor; }
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--carbon-gray-70); background: var(--carbon-white); }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .file-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+
+<header class="c-header">
+  <a class="c-header__logo" href="index.html">
+    <span style="display:inline-flex;align-items:center;justify-content:center;background:#0f62fe;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;padding:4px 9px;line-height:1;">IBM</span>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Materiais do Bootcamp</span>
+</header>
+
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Governança de Agentes</div>
+  <a class="c-sidenav__item" href="lab1.html"><span class="lab-num">Lab 1</span>Data Poisoning</a>
+  <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
+  <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Controles</a>
+  <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Avaliação de Agentes</a>
+  <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Debugging</a>
+  <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
+  <div class="c-sidenav__section-title">Construindo Workflows</div>
+  <a class="c-sidenav__item" href="lab-workflow-1.html"><span class="lab-num">WF 1</span>Construindo Workflows</a>
+  <a class="c-sidenav__item" href="lab-workflow-2.html"><span class="lab-num">WF 2</span>Mensagens &amp; Ramificações</a>
+  <a class="c-sidenav__item" href="lab-workflow-3.html"><span class="lab-num">WF 3</span>Tratamento de Exceções</a>
+  <button class="c-sidenav__accordion-btn" aria-expanded="true" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.classList.toggle('open');">
+    Materiais para usar no bootcamp
+    <svg class="chevron" viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>
+  </button>
+  <div class="c-sidenav__accordion-body open">
+    <a class="c-sidenav__item" href="#">Control Planning</a>
+    <a class="c-sidenav__item active" href="workflow-documents.html">Workflow</a>
+  </div>
+</nav>
+
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+    <span>›</span>
+    <span>Materiais para usar no bootcamp</span>
+    <span>›</span>
+    <span>Workflow</span>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">Materiais · Workflow</div>
+    <h1 class="page-header__h1">Documentos para o Lab de Workflow</h1>
+    <p class="page-header__subtitle">Imagens de documentos de exemplo para utilizar nos exercícios de extração de dados nos workflows do watsonx Orchestrate. Clique em <strong>Baixar</strong> para salvar o arquivo.</p>
+  </div>
+
+  <div class="file-grid">
+
+    <div class="file-card">
+      <img class="file-card__thumb" src="assets_workflow_documents/11837-41 copy.jpg" alt="CNH – Fernando Caetano">
+      <div class="file-card__body">
+        <span class="file-card__name">11837-41 copy.jpg</span>
+        <span class="file-card__meta">JPG · CNH</span>
+        <a class="file-card__dl" href="assets_workflow_documents/11837-41 copy.jpg" download>
+          <svg width="12" height="12" viewBox="0 0 16 16"><path d="M8 11L3 6h3V1h4v5h3L8 11zM1 13h14v2H1v-2z"/></svg>
+          Baixar
+        </a>
+      </div>
+    </div>
+
+    <div class="file-card">
+      <img class="file-card__thumb" src="assets_workflow_documents/11837-41.jpg" alt="CNH – documento 11837-41">
+      <div class="file-card__body">
+        <span class="file-card__name">11837-41.jpg</span>
+        <span class="file-card__meta">JPG · CNH</span>
+        <a class="file-card__dl" href="assets_workflow_documents/11837-41.jpg" download>
+          <svg width="12" height="12" viewBox="0 0 16 16"><path d="M8 11L3 6h3V1h4v5h3L8 11zM1 13h14v2H1v-2z"/></svg>
+          Baixar
+        </a>
+      </div>
+    </div>
+
+    <div class="file-card">
+      <img class="file-card__thumb" src="assets_workflow_documents/cnh1.jpg" alt="CNH – Master Laser Maquinas">
+      <div class="file-card__body">
+        <span class="file-card__name">cnh1.jpg</span>
+        <span class="file-card__meta">JPG · CNH</span>
+        <a class="file-card__dl" href="assets_workflow_documents/cnh1.jpg" download>
+          <svg width="12" height="12" viewBox="0 0 16 16"><path d="M8 11L3 6h3V1h4v5h3L8 11zM1 13h14v2H1v-2z"/></svg>
+          Baixar
+        </a>
+      </div>
+    </div>
+
+    <div class="file-card">
+      <img class="file-card__thumb" src="assets_workflow_documents/cnh2.jpg" alt="CNH – documento cnh2">
+      <div class="file-card__body">
+        <span class="file-card__name">cnh2.jpg</span>
+        <span class="file-card__meta">JPG · CNH</span>
+        <a class="file-card__dl" href="assets_workflow_documents/cnh2.jpg" download>
+          <svg width="12" height="12" viewBox="0 0 16 16"><path d="M8 11L3 6h3V1h4v5h3L8 11zM1 13h14v2H1v-2z"/></svg>
+          Baixar
+        </a>
+      </div>
+    </div>
+
+    <div class="file-card">
+      <img class="file-card__thumb" src="assets_workflow_documents/cnh3.png" alt="CNH – Niqueias Jonatas de Lira Silva">
+      <div class="file-card__body">
+        <span class="file-card__name">cnh3.png</span>
+        <span class="file-card__meta">PNG · CNH</span>
+        <a class="file-card__dl" href="assets_workflow_documents/cnh3.png" download>
+          <svg width="12" height="12" viewBox="0 0 16 16"><path d="M8 11L3 6h3V1h4v5h3L8 11zM1 13h14v2H1v-2z"/></svg>
+          Baixar
+        </a>
+      </div>
+    </div>
+
+    <div class="file-card">
+      <img class="file-card__thumb" src="assets_workflow_documents/images.jpg" alt="Documento images">
+      <div class="file-card__body">
+        <span class="file-card__name">images.jpg</span>
+        <span class="file-card__meta">JPG · Documento</span>
+        <a class="file-card__dl" href="assets_workflow_documents/images.jpg" download>
+          <svg width="12" height="12" viewBox="0 0 16 16"><path d="M8 11L3 6h3V1h4v5h3L8 11zM1 13h14v2H1v-2z"/></svg>
+          Baixar
+        </a>
+      </div>
+    </div>
+
+    <div class="file-card">
+      <img class="file-card__thumb" src="assets_workflow_documents/images2.jpg" alt="Documento images2">
+      <div class="file-card__body">
+        <span class="file-card__name">images2.jpg</span>
+        <span class="file-card__meta">JPG · Documento</span>
+        <a class="file-card__dl" href="assets_workflow_documents/images2.jpg" download>
+          <svg width="12" height="12" viewBox="0 0 16 16"><path d="M8 11L3 6h3V1h4v5h3L8 11zM1 13h14v2H1v-2z"/></svg>
+          Baixar
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="c-footer">
+  watsonx Orchestrate Bootcamp · Materiais de apoio
+</footer>
+
+</body>
+</html>
