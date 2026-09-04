@@ -32,6 +32,21 @@
   .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
   .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
   .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  /* ─── ACCORDION MATERIAIS ─── */
+  .c-sidenav__accordion-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 16px 16px 8px; font-size: 12px; font-weight: 600;
+    letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30);
+    background: none; border: none; cursor: pointer;
+  }
+  .c-sidenav__accordion-btn:hover { color: var(--carbon-white); }
+  .c-sidenav__accordion-btn .chevron {
+    width: 12px; height: 12px; transition: transform .2s;
+    fill: none; stroke: currentColor; stroke-width: 2;
+  }
+  .c-sidenav__accordion-btn[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .c-sidenav__accordion-body { display: none; }
+  .c-sidenav__accordion-body.open { display: block; }
   .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 900px; }
   .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--carbon-gray-70); margin-bottom: 24px; }
   .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
@@ -110,6 +125,14 @@
   <a class="c-sidenav__item" href="lab-workflow-1.html"><span class="lab-num">WF 1</span>Construindo Workflows</a>
   <a class="c-sidenav__item" href="lab-workflow-2.html"><span class="lab-num">WF 2</span>Mensagens &amp; Ramificações</a>
   <a class="c-sidenav__item" href="lab-workflow-3.html"><span class="lab-num">WF 3</span>Tratamento de Exceções</a>
+  <button class="c-sidenav__accordion-btn" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.classList.toggle('open');">
+    Materiais para usar no bootcamp
+    <svg class="chevron" viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>
+  </button>
+  <div class="c-sidenav__accordion-body">
+    <a class="c-sidenav__item" href="#">Control Planning</a>
+    <a class="c-sidenav__item" href="#">Workflow</a>
+  </div>
 </nav>
 
 <main class="c-content">
