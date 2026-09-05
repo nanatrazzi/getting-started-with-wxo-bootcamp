@@ -114,144 +114,236 @@
   .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--text-secondary); background: var(--bg-surface); }
   @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .obj-list { grid-template-columns: 1fr; } }
 
-  /* ─── DARK / LIGHT THEME ─── */
+  /* ═══════════════════════════════════════════════════════
+     IBM Carbon Design System — White / Gray-100 theme tokens
+     https://carbondesignsystem.com/guidelines/color/tokens
+     ═══════════════════════════════════════════════════════ */
+
+  /* ── Light (White theme) ── */
   :root {
-    --bg-page:        #f4f4f4;
-    --bg-surface:     #ffffff;
-    --bg-nav:         #ffffff;
-    --bg-header:      #161616;
-    --bg-code:        #262626;
-    --bg-stripe:      #f4f4f4;
-    --bg-th:          #393939;
-    --nav-border:     #e0e0e0;
-    --nav-text:       #525252;
-    --nav-hover:      #f4f4f4;
-    --nav-title:      #6f6f6f;
-    --text-primary:   #161616;
-    --text-secondary: #525252;
-    --text-muted:     #8d8d8d;
-    --border:         #e0e0e0;
+    /* backgrounds */
+    --cds-background:          #ffffff;   /* $background */
+    --cds-background-hover:    #e8e8e8;   /* $background-hover */
+    --cds-layer-01:            #f4f4f4;   /* $layer-01 */
+    --cds-layer-02:            #ffffff;   /* $layer-02 */
+    --cds-layer-hover-01:      #e8e8e8;   /* $layer-hover-01 */
+    /* ui */
+    --cds-border-subtle:       #e0e0e0;   /* $border-subtle-00 */
+    --cds-border-strong:       #8d8d8d;   /* $border-strong-01 */
+    /* text */
+    --cds-text-primary:        #161616;   /* $text-primary */
+    --cds-text-secondary:      #525252;   /* $text-secondary */
+    --cds-text-placeholder:    #a8a8a8;   /* $text-placeholder */
+    --cds-text-on-color:       #ffffff;   /* $text-on-color */
+    --cds-text-helper:         #6f6f6f;   /* $text-helper */
+    /* interactive */
+    --cds-link-primary:        #0f62fe;   /* $link-primary */
+    --cds-interactive:         #0f62fe;   /* $interactive */
+    --cds-focus:               #0f62fe;   /* $focus */
+    /* code/shell */
+    --cds-code-bg:             #282828;   /* always dark for code blocks */
+    --cds-code-text:           #f4f4f4;
+    /* shell nav (Gray 10 shell) */
+    --cds-shell-bg:            #ffffff;   /* $shell-side-nav-bg-01 (White shell) */
+    --cds-shell-header-bg:     #161616;   /* $shell-header-bg-01 */
+    --cds-shell-link:          #161616;   /* nav item text */
+    --cds-shell-link-hover-bg: #edf5ff;   /* Blue-10 tint on hover */
+    --cds-shell-category:      #0f62fe;   /* Blue-60 — accent category titles */
+    --cds-shell-accent:        #0f62fe;   /* IBM Blue-60 */
+    --cds-shell-accent-tint:   #edf5ff;   /* Blue-10 */
+    --cds-shell-active-text:   #0f62fe;   /* Blue text on blue-10 active bg */
+    --cds-shell-hover-text:    #0f62fe;   /* Blue text on blue-10 hover bg */
+    /* notification / callout tints */
+    --cds-notification-info-bg:    #edf5ff;
+    --cds-notification-success-bg: #defbe6;
+    --cds-notification-warning-bg: #fdf6da;
+    --cds-notification-error-bg:   #fff1f1;
+    --cds-danger-text:             #a2191f;
   }
+
+  /* ── Dark (Gray 100 theme) ── */
   html.dark {
-    --bg-page:        #161616;
-    --bg-surface:     #262626;
-    --bg-nav:         #1a1a1a;
-    --bg-header:      #0d0d0d;
-    --bg-code:        #1a1a1a;
-    --bg-stripe:      #1f1f1f;
-    --bg-th:          #0d0d0d;
-    --nav-border:     #393939;
-    --nav-text:       #c6c6c6;
-    --nav-hover:      #2a2a2a;
-    --nav-title:      #8d8d8d;
-    --text-primary:   #f4f4f4;
-    --text-secondary: #c6c6c6;
-    --text-muted:     #8d8d8d;
-    --border:         #393939;
+    /* backgrounds */
+    --cds-background:          #161616;   /* $background */
+    --cds-background-hover:    #353535;   /* $background-hover */
+    --cds-layer-01:            #262626;   /* $layer-01 */
+    --cds-layer-02:            #393939;   /* $layer-02 */
+    --cds-layer-hover-01:      #353535;   /* $layer-hover-01 */
+    /* ui */
+    --cds-border-subtle:       #393939;   /* $border-subtle-00 */
+    --cds-border-strong:       #6f6f6f;   /* $border-strong-01 */
+    /* text */
+    --cds-text-primary:        #f4f4f4;   /* $text-primary */
+    --cds-text-secondary:      #c6c6c6;   /* $text-secondary */
+    --cds-text-placeholder:    #6f6f6f;   /* $text-placeholder */
+    --cds-text-on-color:       #ffffff;   /* $text-on-color */
+    --cds-text-helper:         #8d8d8d;   /* $text-helper */
+    /* interactive */
+    --cds-link-primary:        #78a9ff;   /* $link-primary (dark) */
+    --cds-interactive:         #4589ff;   /* $interactive (dark) */
+    --cds-focus:               #ffffff;   /* $focus (dark) */
+    /* code/shell */
+    --cds-code-bg:             #161616;
+    --cds-code-text:           #f4f4f4;
+    /* shell nav (Gray 100 shell) */
+    --cds-shell-bg:            #161616;   /* $shell-side-nav-bg-01 (Gray 100 shell) */
+    --cds-shell-header-bg:     #161616;
+    --cds-shell-link:          #c6c6c6;
+    --cds-shell-link-hover-bg: #353535;
+    --cds-shell-category:      #8d8d8d;
+    --cds-shell-accent:        #4589ff;   /* Blue-50 — border accent in dark */
+    --cds-shell-accent-tint:   #0f62fe;   /* Blue-60 solid for active bg */
+    --cds-shell-active-text:   #ffffff;   /* White text on blue active bg */
+    --cds-shell-hover-text:    #f4f4f4;   /* Light text on dark hover bg */
+    /* notification / callout tints */
+    --cds-notification-info-bg:    #001141;
+    --cds-notification-success-bg: #071908;
+    --cds-notification-warning-bg: #302200;
+    --cds-notification-error-bg:   #2d0709;
+    --cds-danger-text:             #ff8389;
   }
 
-  /* ── apply to all elements ── */
-  body            { background: var(--bg-page) !important; color: var(--text-primary) !important; }
+  /* ── Semantic aliases (shorthand used in rules below) ── */
+  :root,html.dark {
+    --bg-page:    var(--cds-layer-01);
+    --bg-surface: var(--cds-background);
+    --text-primary:   var(--cds-text-primary);
+    --text-secondary: var(--cds-text-secondary);
+    --border:     var(--cds-border-subtle);
+  }
 
-  /* header — always dark bg, always white text */
-  .c-header       { background: var(--bg-header) !important; }
-  .c-header__name { color: #a8a8a8 !important; }
-  .c-header__title { color: #ffffff !important; }
-  .c-header__divider { background: #3d3d3d !important; }
+  /* ═══════════════ COMPONENT OVERRIDES ═══════════════ */
 
-  /* sidebar */
-  .c-sidenav      { background: var(--bg-nav) !important; border-right: 1px solid var(--nav-border) !important; }
-  .c-sidenav__section-title { color: var(--nav-title) !important; }
-  .c-sidenav__item { color: var(--nav-text) !important; }
-  .c-sidenav__item:hover { background: var(--nav-hover) !important; color: var(--text-primary) !important; }
-  .c-sidenav__item.active { background: #0f62fe !important; color: #ffffff !important; }
-  .c-sidenav__item .lab-num { background: var(--border) !important; color: var(--text-primary) !important; }
-  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.25) !important; color: #ffffff !important; }
-  .c-sidenav__accordion-btn { color: var(--nav-title) !important; }
-  .c-sidenav__accordion-btn:hover { color: var(--text-primary) !important; }
+  /* body */
+  body { background: var(--cds-layer-01) !important; color: var(--cds-text-primary) !important; }
 
-  /* footer */
-  .c-footer { background: var(--bg-surface) !important; border-top-color: var(--border) !important; color: var(--text-secondary) !important; }
+  /* ── Shell header (always gray-100 regardless of theme) ── */
+  .c-header         { background: var(--cds-shell-header-bg) !important; }
+  .c-header__name   { color: #a8a8a8 !important; }
+  .c-header__title  { color: #f4f4f4 !important; }
+  .c-header__divider { background: #393939 !important; }
 
-  /* typography */
-  h2, h3, h4 { color: var(--text-primary) !important; }
-  h2 { border-bottom-color: var(--border) !important; }
-  p, li { color: var(--text-primary) !important; }
-  .page-header__h1 { color: var(--text-primary) !important; }
-  .page-header__subtitle { color: var(--text-secondary) !important; }
+  /* ── Shell side-nav ── */
+  .c-sidenav { background: var(--cds-shell-bg) !important; border-right: 2px solid var(--cds-border-subtle) !important; }
+  .c-sidenav__section-title { color: var(--cds-shell-category) !important; }
+  .c-sidenav__item { color: var(--cds-shell-link) !important; border-left: 3px solid transparent !important; }
+  .c-sidenav__item:hover { background: var(--cds-shell-link-hover-bg) !important; color: var(--cds-shell-hover-text, #0f62fe) !important; border-left-color: var(--cds-shell-accent, #0f62fe) !important; }
+  .c-sidenav__item.active { background: var(--cds-shell-accent-tint, #edf5ff) !important; color: var(--cds-shell-active-text, #0f62fe) !important; border-left-color: var(--cds-shell-accent, #0f62fe) !important; font-weight: 600 !important; }
+  .c-sidenav__item .lab-num { background: var(--cds-shell-accent-tint, #edf5ff) !important; color: var(--cds-shell-active-text, #0f62fe) !important; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2) !important; color: var(--cds-shell-active-text, #0f62fe) !important; }
+  .c-sidenav__accordion-btn { color: var(--cds-shell-category) !important; }
+  .c-sidenav__accordion-btn:hover { color: var(--cds-shell-hover-text, #0f62fe) !important; }
+
+  /* ── Footer ── */
+  .c-footer { background: var(--cds-background) !important; border-top-color: var(--cds-border-subtle) !important; color: var(--cds-text-secondary) !important; }
+
+  /* ── Typography ── */
+  h2, h3, h4 { color: var(--cds-text-primary) !important; }
+  h2 { border-bottom-color: var(--cds-border-subtle) !important; }
+  p { color: var(--cds-text-primary) !important; }
+  li { color: var(--cds-text-primary) !important; }
+  strong { color: inherit !important; }
+  a { color: var(--cds-link-primary) !important; }
+  .page-header { border-bottom-color: var(--cds-border-subtle) !important; }
+  .page-header__h1 { color: var(--cds-text-primary) !important; }
   .page-header__eyebrow { color: #0f62fe !important; }
-  .page-header { border-bottom-color: var(--border) !important; }
-  .breadcrumb { color: var(--text-muted) !important; }
-  .breadcrumb span { color: var(--text-muted) !important; }
-  .lab-img-caption { color: var(--text-secondary) !important; }
-  .section-divider { border-top-color: var(--border) !important; }
+  html.dark .page-header__eyebrow { color: #78a9ff !important; }
+  .page-header__subtitle { color: var(--cds-text-secondary) !important; }
+  .breadcrumb { color: var(--cds-text-secondary) !important; }
+  .breadcrumb span { color: var(--cds-text-helper) !important; }
+  .lab-img-caption { color: var(--cds-text-helper) !important; }
+  .section-divider { border-top-color: var(--cds-border-subtle) !important; }
 
-  /* cards / surfaces */
+  /* ── Surfaces / Cards ── */
   .lab-card, .objective-tile, .prereq-list,
   .file-card, .access-box, .update-notice,
   .link-box, .node-card, .obj-item {
-    background: var(--bg-surface) !important;
-    border-color: var(--border) !important;
+    background: var(--cds-background) !important;
+    border-color: var(--cds-border-subtle) !important;
+    color: var(--cds-text-primary) !important;
   }
-  .lab-card__title { color: var(--text-primary) !important; }
-  .lab-card__desc, .lab-card__num { color: var(--text-secondary) !important; }
-  .obj-item { color: var(--text-primary) !important; }
+  .lab-card__title { color: var(--cds-text-primary) !important; }
+  .lab-card__desc, .lab-card__num { color: var(--cds-text-secondary) !important; }
 
-  /* tables */
-  th { background: var(--bg-th) !important; color: #f4f4f4 !important; }
-  td { color: var(--text-primary) !important; border-bottom-color: var(--border) !important; }
-  table th, .vehicle-table th { background: var(--bg-th) !important; color: #f4f4f4 !important; }
+  /* ── Tables ── */
+  table th, .vehicle-table th { background: #393939 !important; color: #f4f4f4 !important; }
+  html.dark table th, html.dark .vehicle-table th { background: #474747 !important; color: #f4f4f4 !important; }
+  table td, .vehicle-table td { color: var(--cds-text-primary) !important; border-bottom-color: var(--cds-border-subtle) !important; }
   table tr:nth-child(even) td,
-  .vehicle-table tr:nth-child(even) td { background: var(--bg-stripe) !important; }
-  table td, .vehicle-table td { color: var(--text-primary) !important; border-bottom-color: var(--border) !important; }
+  .vehicle-table tr:nth-child(even) td { background: var(--cds-layer-01) !important; }
 
-  /* code */
+  /* ── Code ── */
   .code-block, .questions-block {
-    background: var(--bg-code) !important;
-    color: #f4f4f4 !important;
+    background: var(--cds-code-bg) !important;
+    color: var(--cds-code-text) !important;
   }
   code {
-    background: var(--border) !important;
-    color: var(--text-primary) !important;
+    background: var(--cds-layer-02) !important;
+    color: var(--cds-text-primary) !important;
+    border: 1px solid var(--cds-border-subtle) !important;
   }
 
-  /* callouts — light uses base colors, dark overrides */
-  html.dark .callout--note    { background: #0a1a3a !important; }
-  html.dark .callout--tip     { background: #003030 !important; }
-  html.dark .callout--warning { background: #2a1f00 !important; }
-  html.dark .callout--danger  { background: #2a0a0a !important; }
-  html.dark .callout          { background: #1a2a2a !important; }
-  .callout p, .callout li     { color: var(--text-primary) !important; }
+  /* ── Callouts — light = tint, dark = dark tint ── */
+  .callout--note    { background: var(--cds-notification-info-bg) !important; }
+  .callout--tip     { background: var(--cds-notification-success-bg) !important; }
+  .callout--warning { background: var(--cds-notification-warning-bg) !important; }
+  .callout--danger  { background: var(--cds-notification-error-bg) !important; }
+  .callout p, .callout li { color: var(--cds-text-primary) !important; }
+  /* callout titles — light */
+  .callout--note    .callout__title { color: #0043ce !important; }
+  .callout--tip     .callout__title { color: #198038 !important; }
+  .callout--warning .callout__title { color: #8a3800 !important; }
+  .callout--danger  .callout__title { color: #a2191f !important; }
+  /* callout titles — dark (lighter for contrast) */
+  html.dark .callout--note    .callout__title { color: #78a9ff !important; }
+  html.dark .callout--tip     .callout__title { color: #42be65 !important; }
+  html.dark .callout--warning .callout__title { color: #f1c21b !important; }
+  html.dark .callout--danger  .callout__title { color: #ff8389 !important; }
 
-  /* hero attention */
+  /* ── Hero attention (informational, always dark) ── */
   .hero-attention { background: #262626 !important; }
   .hero-attention p { color: #f4f4f4 !important; }
 
-  /* nav buttons (prev/next) */
-  .lab-nav { border-top-color: var(--border) !important; }
+  /* ── Nav (prev/next) ── */
+  .lab-nav { border-top-color: var(--cds-border-subtle) !important; }
   .lab-nav a { color: #0f62fe !important; border-color: #0f62fe !important; background: transparent !important; }
-  .lab-nav a:hover { background: #edf5ff !important; }
-  .lab-nav a.primary { background: #0f62fe !important; color: #ffffff !important; }
-  html.dark .lab-nav a:hover { background: #0a1a3a !important; }
+  .lab-nav a:hover { background: #edf5ff !important; color: #0f62fe !important; }
+  .lab-nav a.primary { background: #0f62fe !important; color: #ffffff !important; border-color: #0f62fe !important; }
+  .lab-nav a.primary:hover { background: #0043ce !important; color: #ffffff !important; }
+  html.dark .lab-nav a { color: #78a9ff !important; border-color: #78a9ff !important; background: transparent !important; }
+  html.dark .lab-nav a:hover { background: #001d6c !important; color: #78a9ff !important; }
+  html.dark .lab-nav a.primary { background: #0f62fe !important; color: #ffffff !important; border-color: #0f62fe !important; }
+  html.dark .lab-nav a.primary:hover { background: #0043ce !important; color: #ffffff !important; }
+  /* CTA button — always blue bg, always white text */
+  .cta-btn { background: #0f62fe !important; color: #ffffff !important; }
+  .cta-btn:hover { background: #0043ce !important; color: #ffffff !important; }
 
-  /* file cards */
-  .file-card__body, .file-card__actions { border-color: var(--border) !important; }
-  .file-card__thumb { background: var(--bg-page) !important; border-color: var(--border) !important; }
-  .file-card__name { color: var(--text-primary) !important; }
-  .file-card__desc, .file-card__meta { color: var(--text-secondary) !important; }
-  html.dark .file-card__icon--pdf { background: #3a1f1f !important; }
-  html.dark .file-card__icon--txt { background: #1a3a26 !important; }
+  /* ── Images ── */
+  .lab-img { border-color: var(--cds-border-subtle) !important; }
 
-  /* access box */
-  .access-box__value { background: var(--bg-page) !important; border-color: var(--border) !important; color: var(--text-primary) !important; }
-  .access-box__label { color: var(--text-secondary) !important; }
+  /* ── File cards ── */
+  .file-card__body, .file-card__actions { border-color: var(--cds-border-subtle) !important; }
+  .file-card__thumb { background: var(--cds-layer-01) !important; border-color: var(--cds-border-subtle) !important; }
+  .file-card__name { color: var(--cds-text-primary) !important; }
+  .file-card__desc, .file-card__meta { color: var(--cds-text-secondary) !important; }
+  html.dark .file-card__icon--pdf { background: #2d0709 !important; }
+  html.dark .file-card__icon--txt { background: #071908 !important; }
 
-  /* images */
-  .lab-img { border-color: var(--border) !important; }
+  /* ── Access box ── */
+  .access-box__value { background: var(--cds-layer-01) !important; border-color: var(--cds-border-subtle) !important; color: var(--cds-text-primary) !important; }
+  .access-box__label { color: var(--cds-text-secondary) !important; }
 
-  /* theme toggle button */
-  .theme-toggle { display: flex; align-items: center; justify-content: center; margin-left: auto; width: 36px; height: 36px; border: none; border-radius: 50%; background: transparent; color: #a0a0a0; cursor: pointer; flex-shrink: 0; transition: color .2s, background .2s; }
-  .theme-toggle:hover { background: rgba(255,255,255,0.12); color: #ffffff; }
+  /* ── Tag pills ── */
+  .tag--blue { background: #edf5ff !important; color: #0043ce !important; }
+  html.dark .tag--blue { background: #001d6c !important; color: #78a9ff !important; }
+  .tag--red  { background: #fff1f1 !important; color: #a2191f !important; }
+  html.dark .tag--red  { background: #2d0709 !important; color: #ff8389 !important; }
+  .tag--green{ background: #defbe6 !important; color: #0e6027 !important; }
+  html.dark .tag--green { background: #071908 !important; color: #42be65 !important; }
+
+  /* ── Theme toggle button ── */
+  .theme-toggle { display: flex; align-items: center; justify-content: center; margin-left: auto; width: 36px; height: 36px; border: none; border-radius: 50%; background: transparent; color: #a8a8a8; cursor: pointer; flex-shrink: 0; transition: color .15s, background .15s; }
+  .theme-toggle:hover { background: rgba(255,255,255,0.1); color: #f4f4f4; }
   .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
 </style>
 </head>
@@ -285,12 +377,12 @@
   <a class="c-sidenav__item" href="lab-workflow-2.html"><span class="lab-num">WF 2</span>Mensagens &amp; Ramificações</a>
   <a class="c-sidenav__item" href="lab-workflow-3.html"><span class="lab-num">WF 3</span>Tratamento de Exceções</a>
   <button class="c-sidenav__accordion-btn" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.classList.toggle('open');">
-    Materiais para usar no bootcamp
+    Materiais
     <svg class="chevron" viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>
   </button>
   <div class="c-sidenav__accordion-body">
-    <a class="c-sidenav__item" href="control-planning.html">Control Planning</a>
-    <a class="c-sidenav__item" href="workflow-documents.html">Workflow</a>
+  <a class="c-sidenav__item" href="control-planning.html">Control Planning</a>
+  <a class="c-sidenav__item" href="workflow-documents.html">Workflow</a>
   </div>
 </nav>
 
@@ -376,19 +468,19 @@
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;">
       <div style="background:var(--bg-surface);border:1px solid var(--border);padding:16px;">
-        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">Injeção Direta</div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--cds-link-primary);margin-bottom:6px;">Injeção Direta</div>
         <p style="margin:0;font-size:13px;">Informações falsas inseridas diretamente nos dados, como alterar o preço de um veículo de R$45.000 para R$1.</p>
       </div>
       <div style="background:var(--bg-surface);border:1px solid var(--border);padding:16px;">
-        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">Manipulação Sutil</div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--cds-danger-text,#a2191f);margin-bottom:6px;">Manipulação Sutil</div>
         <p style="margin:0;font-size:13px;">Pequenas alterações que parecem legítimas, como aumentar artificialmente uma classificação de segurança.</p>
       </div>
       <div style="background:var(--bg-surface);border:1px solid var(--border);padding:16px;">
-        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">Envenenamento de Contexto</div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--cds-danger-text,#a2191f);margin-bottom:6px;">Envenenamento de Contexto</div>
         <p style="margin:0;font-size:13px;">Inclusão de informações enganosas para influenciar a interpretação dos dados, como promoções ou garantias inexistentes.</p>
       </div>
       <div style="background:var(--bg-surface);border:1px solid var(--border);padding:16px;">
-        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--carbon-red-60);margin-bottom:6px;">Ataques de Disponibilidade</div>
+        <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--cds-danger-text,#a2191f);margin-bottom:6px;">Ataques de Disponibilidade</div>
         <p style="margin:0;font-size:13px;">Inserção de informações contraditórias que reduzem a confiabilidade do sistema.</p>
       </div>
     </div>
