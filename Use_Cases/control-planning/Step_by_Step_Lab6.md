@@ -2,17 +2,16 @@
 
 ## Visão Geral
 
-Este laboratório apresenta os recursos de monitoramento em tempo real disponíveis no watsonx Orchestrate.
+Este laboratório apresenta o **Agentic Control Plane** do **watsonx Orchestrate**, ele é um conjunto de painéis e ferramentas que reúne, em um só lugar, a visão de adoção, custos, qualidade, confiabilidade e segurança dos seus agentes e workflows construídos e reunidos.
 
-Ao longo das atividades, você vai aprender a acompanhar o desempenho dos agentes e consultar as métricas por linguagem natural através do assistente integrado ao painel de controle.
+Ao longo das atividades, você vai conversar com o agente do painel para consultar métricas em linguagem natural, navegar pelas abas do dashboard, conhecer o AgentOps e explorar as áreas de administração do tenant, o centro de controle de segurança e as configurações de seu tenant.
 
-O monitoramento contínuo é essencial para garantir a eficiência dos agentes em produção, identificar comportamentos inesperados e agir proativamente na resolução de problemas antes que eles impactem a experiência dos usuários.
+**O monitoramento contínuo é essencial para garantir a eficiência dos agentes em produção, identificar comportamentos inesperados e agir proativamente na resolução de problemas antes que eles impactem a experiência dos usuários.**
 
-Este laboratório apresenta o Agentic Control Plane do watsonx Orchestrate, um conjunto de painéis e ferramentas que reúne, em um só lugar, a visão de adoção, custos, qualidade, confiabilidade e segurança dos seus agentes.
+Conhecer essas ferramentas permite identificar rapidamente pontos de atenção, investigar falhas, acompanhar o consumo de tokens e revisar permissões, conexões e credenciais dos seus agentes antes que eles sejam expostos a usuários reais.
 
-Ao longo das atividades, você vai navegar pelas diferentes abas do dashboard e criar um Controle de Content Guardrails para bloquear conteúdo impróprio nas interações de um agente.
-
-Conhecer essas ferramentas é essencial para operar agentes de IA com confiança, permitindo identificar rapidamente pontos de atenção, investigar comportamentos inesperados e aplicar salvaguardas antes que um agente seja exposto a usuários reais.
+> [!NOTE]
+> Os números mostrados nas imagens deste laboratório vêm de um ambiente de demonstração. No seu tenant, os valores serão diferentes, e alguns painéis podem aparecer como `No data available` se ainda não houver tráfego suficiente na janela de tempo selecionada.
 
 ## Índice
 
@@ -20,251 +19,347 @@ Conhecer essas ferramentas é essencial para operar agentes de IA com confiança
   - [Visão Geral](#visão-geral)
   - [Índice](#índice)
   - [Explorando o Dashboard do Control Plane](#explorando-o-dashboard-do-control-plane)
+    - [Perguntando ao agente do dashboard](#perguntando-ao-agente-do-dashboard)
     - [Overview: visão geral do ambiente](#overview-visão-geral-do-ambiente)
-    - [Adoption: engajamento e uso dos agentes](#adoption-engajamento-e-uso-dos-agentes)
+    - [Adoption: Engajamento e uso dos agentes](#adoption-engajamento-e-uso-dos-agentes)
     - [FinOps: consumo de tokens](#finops-consumo-de-tokens)
     - [Quality: qualidade das respostas](#quality-qualidade-das-respostas)
     - [Reliability: confiabilidade e desempenho](#reliability-confiabilidade-e-desempenho)
     - [Security and Risk: controles de segurança](#security-and-risk-controles-de-segurança)
+    - [Navegando entre as abas e atualizando os dados](#navegando-entre-as-abas-e-atualizando-os-dados)
   - [Entendendo as Métricas](#entendendo-as-métricas)
-  - [Criando um Controle de Content Guardrails](#criando-um-controle-de-content-guardrails)
-    - [Selecionando o tipo de controle](#selecionando-o-tipo-de-controle)
-    - [Configurando o controle](#configurando-o-controle)
-    - [Atribuindo o controle a um agente](#atribuindo-o-controle-a-um-agente)
-    - [Revisando e criando o controle](#revisando-e-criando-o-controle)
-  - [Testando o Controle Criado](#testando-o-controle-criado)
+  - [AgentOps: O Assistente de otimização de agentes](#agentops-o-assistente-de-otimização-de-agentes)
+  - [Security Control Center: acessos, conexões e credenciais](#security-control-center-acessos-conexões-e-credenciais)
+    - [Agents: o que cada agente pode acessar](#agents-o-que-cada-agente-pode-acessar)
+    - [Connections: integrações com aplicações](#connections-integrações-com-aplicações)
+    - [Team credentials: credenciais compartilhadas](#team-credentials-credenciais-compartilhadas)
+  - [Configurações do Tenant](#configurações-do-tenant)
+    - [Data Retention: retenção do histórico de chat](#data-retention-retenção-do-histórico-de-chat)
+    - [API details: chaves e URL da instância](#api-details-chaves-e-url-da-instância)
+    - [Embed Security: segurança do chat incorporado](#embed-security-segurança-do-chat-incorporado)
+    - [Platform languages: idiomas do tenant](#platform-languages-idiomas-do-tenant)
+    - [Member credentials: credenciais individuais](#member-credentials-credenciais-individuais)
+    - [Models: seleção de modelos](#models-seleção-de-modelos)
+    - [Analytics: mascaramento de PII](#analytics-mascaramento-de-pii)
+    - [Catalog: acesso a ativos prontos](#catalog-acesso-a-ativos-prontos)
   - [Resumo](#resumo)
     - [Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate](#sou-desenvolvedor-e-quero-me-aprofundar-no-watsonx-orchestrate)
   - [Próximos Passos](#próximos-passos)
 
 ## Explorando o Dashboard do Control Plane
 
-Vamos conhecer o painel de controle de monitoramento do watsonx Orchestrate. Ao acessar o ambiente da sua instância do watsonx Orchestrate, você pode ver um aviso apresentando os novos dashboards do Agentic Control Plane, que reúnem em um só lugar as métricas de mensagens, implantação, avaliação, agentes e controles referentes à sua instância.
+Ao acessar o ambiente da sua instância do **watsonx Orchestrate**, você chega diretamente ao dashboard do Agentic Control Plane, com uma saudação personalizada e um resumo de quantos agentes estão em produção (Live) e quantos usuários interagiram com eles nos últimos 30 dias.
 
-Feche o aviso clicando em **Maybe later**, para ver o dashboard completo.
+Antes de percorrer as abas, clique no ícone circular de IA, no canto inferior esquerdo da tela, para abrir o agente do painel de controle, conforme indicado na imagem abaixo:
 
-![Control plane welcome screen](../../Assets_for_BuildBooks/labs/lab05/lab05_01.png)
+![Dashboard do Control Plane com o botão do agente em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_01.png)
 
-Ao acessar o ambiente da sua instância do watsonx Orchestrate, você chega diretamente ao dashboard do Agentic Control Plane, com uma saudação personalizada e um resumo de quantos agentes estão em produção (Live) e quantos usuários interagiram com eles nos últimos 30 dias.
+### Perguntando ao agente do dashboard
 
-![Overview dashboard](../../Assets_for_BuildBooks/labs/lab06/lab06_01.png)
+O agente abre em um painel lateral, com uma mensagem de boas-vindas e três sugestões prontas, **Performance hotspots**, **Coverage gaps** e **Feedback investigation**, além de um campo livre para perguntas em linguagem natural.
 
-Clique no ícone circular de IA, no canto inferior esquerdo, para abrir o assistente do painel de controle. Ele oferece sugestões prontas, como identificar pontos de atenção de performance, lacunas de cobertura de testes e investigar feedback negativo, além de um campo para perguntas livres em linguagem natural.
+Digite a pergunta abaixo no campo de mensagem e clique no botão de envio.
 
-![Assistente do dashboard](../../Assets_for_BuildBooks/labs/lab06/lab06_02.png)
+```
+Quais são os pontos mais críticos dos meus agentes atualmente?
+```
+
+![Agente do dashboard com a pergunta digitada](../../Assets_for_BuildBooks/labs/lab06/lab06_02.png)
+
+A pergunta aparece no histórico da conversa e o agente sinaliza que está processando, com a mensagem...
+
+![Agente processando a pergunta](../../Assets_for_BuildBooks/labs/lab06/lab06_03.png)
+
+Enquanto elabora a resposta, o agente mostra o raciocínio que está executando: ele consulta conversas, traces e chamadas de ferramenta do período e monta um cálculo de severidade por agente para ranquear os pontos críticos.
+
+![Raciocínio do assistente em execução](../../Assets_for_BuildBooks/labs/lab06/lab06_04.png)
+
+A resposta final aponta os dois agentes com os pontos críticos mais relevantes dos últimos sete dias: o **Assistente de Compra de Veículos**, com severidade 2,78, uma conversa com falha, um trace com falha, sete observações com falha e taxa de falha de 11,11%; e o **Agente de Busca**, com severidade 2,31, seis conversas com falha, seis traces com falha, 22 observações com falha e taxa de falha de 9,23%. Os dois mantêm 100% de sucesso nas chamadas de ferramenta.
+
+O resumo fecha a análise indicando que os problemas atuais não estão nas ferramentas nem em erros de mensagem, mas em falhas técnicas nas traces e no impacto delas sobre as conversas  e sugere priorizar a correção pelo agente de maior severidade. Use `Show Reasoning` para reabrir o raciocínio, os ícones de joinha para avaliar a resposta e o ícone de cópia para reaproveitar o texto.
+
+![Resposta do assistente sobre os pontos críticos](../../Assets_for_BuildBooks/labs/lab06/lab06_05.png)
+
+Agora faça uma segunda pergunta, dessa vez olhando para o outro lado da operação.
+
+```
+Quais são os pontos positivos?
+```
+
+O agente responde destacando a estabilidade das ferramentas (65 chamadas no período, nenhuma falha, 100% de sucesso), a saúde geral da operação (162 mensagens no total, 155 bem-sucedidas, taxa geral de 95,68%) e os três agentes com sinais positivos, com o número de conversas de cada um.
+
+![Resposta do agente sobre os pontos positivos](../../Assets_for_BuildBooks/labs/lab06/lab06_06.png)
+
+Role a resposta para ver o restante da análise. 
+
+Os problemas não vêm de falhas de ferramenta e os agentes continuam processando conversas com boa estabilidade técnica. O agente ainda se oferece para transformar a análise em uma leitura mais executiva, separando "o que está funcionando bem", "o que merece atenção" e "prioridade imediata".
+
+![Continuação da resposta com a sugestão de leitura executiva](../../Assets_for_BuildBooks/labs/lab06/lab06_07.png)
+
+Como o painel do agente fica lado a lado com o dashboard, você pode rolar a página ao fundo e conferir nos gráficos os mesmos números citados na resposta, sem perder o contexto da conversa.
+
+![Assistente e dashboard lado a lado](../../Assets_for_BuildBooks/labs/lab06/lab06_08.png)
+
+Ao rolar o histórico para cima, você vê a pergunta enviada junto da resposta consolidada.
+
+- Taxa geral de sucesso de 95,68% (155 de 162 mensagens) <br>
+- Sucesso total em 65 chamadas de ferramenta e o detalhamento dos três agentes de melhor desempenho: Agente de Busca (score 100, 55 conversas), Agente de suporte ao revendedor (score 100, 20 conversas) e Assistente de Compra de Veículos (score 99, 9 conversas, todos sem mensagens com falha)
+
+![Pergunta e resposta consolidada no histórico](../../Assets_for_BuildBooks/labs/lab06/lab06_09.png)
+
+> [!TIP]
+> O agente responde no mesmo idioma da pergunta, então você pode conversar com ele em português mesmo com a interface em inglês. Vale testar perguntas como "qual agente consumiu mais tokens esta semana?" ou "quais agentes ainda não têm casos de teste?".
 
 ### Overview: visão geral do ambiente
 
-A aba **Overview**, selecionada por padrão, reúne seis cartões de resumo: Messages, Feedback, Deployment status, Evaluation status, Agents e Controls, cada um com a taxa de sucesso ou a distribuição relevante da última semana. À direita, o painel **Needs attention** já aponta o que precisa da sua atenção, agrupado por categoria (Evaluation, Adoption, Credentials, Execution e Quality), sem que você precise procurar manualmente.
+Feche o agente e volte ao dashboard. A aba **Overview**, selecionada por padrão, reúne seis cartões de resumo: **Messages**, **Feedback**, **Deployment status**, **Evaluation status**, **Agents** e **Controls**, cada um com a taxa de sucesso ou a distribuição relevante do período.
 
-![Métricas da aba Overview](../../Assets_for_BuildBooks/labs/lab06/lab06_03.png)
+À direita, o painel **Needs attention** já aponta o que precisa da sua atenção, agrupado por categoria **Evaluation, Adoption, Credentials, Execution e Quality** sem que você precise procurar manualmente. No exemplo, ele sinaliza três agentes sem casos de teste, três agentes não avaliados nos últimos sete dias e um agente inativo, enquanto credenciais, execução e qualidade aparecem sem pendências.
 
-Role a página para baixo para ver as seções **Usage trends** e **Operational trends**, com gráficos de usuários ativos, agentes ativos, mensagens, uso de tokens, taxa de falha, conversas com erro e latência P50 ao longo dos últimos sete dias.
+No canto superior direito, o seletor **24h / 7d** define a janela de tempo aplicada a todos os cartões da aba.
 
-![Usage e Operational trends](../../Assets_for_BuildBooks/labs/lab06/lab06_04.png)
+![Métricas da aba Overview](../../Assets_for_BuildBooks/labs/lab06/lab06_10.png)
 
-Em seguida, digite a pergunta abaixo no campo de mensagem do assistente.
+Role a página para baixo para ver as seções **Usage trends**  usuários ativos, agentes ativos, mensagens e uso de tokens e **Operational trends**, com taxa de falha de mensagens (4,32%), conversas com erro (7), mensagens por conversa (1,2) e latência P50 (2,50 s) ao longo dos últimos sete dias.
 
-```
-Mostre os agentes com a menor taxa de sucesso desta semana
-```
+![Usage e Operational trends](../../Assets_for_BuildBooks/labs/lab06/lab06_11.png)
 
-![Control plane welcome screen](../../Assets_for_BuildBooks/labs/lab05/lab05_05.png)
-
-O assistente responde diretamente, sem que você precise navegar por gráficos. Nesse caso, ele identificou o AskOrchestrate como o agente com a menor taxa de sucesso da semana, zero por cento, detalhando o total de conversas e quantas delas falharam. Clique em `Show Reasoning` caso queira ver como o assistente chegou a essa conclusão, e use os ícones de joinha para avaliar a resposta.
-
-![Conversation analysis](../../Assets_for_BuildBooks/labs/lab05/lab05_06.png)
-
-### Adoption: engajamento e uso dos agentes
+### Adoption: Engajamento e uso dos agentes
 
 Volte ao topo da página e clique na aba **Adoption**.
 
-![Navegando para Adoption](../../Assets_for_BuildBooks/labs/lab06/lab06_05.png)
+A seção **Engagement depth** mostra a relação entre usuários, conversas e chamadas de modelo: usuários por agente (0,3), conversas por usuário (140,00), mensagens por conversa (1,16) e chamadas de LLM por conversa (2,21), cada indicador acompanhado do total absoluto que o originou.
 
-A seção **Engagement depth** mostra a relação entre usuários, conversas e chamadas de modelo, como usuários por agente, conversas por usuário, mensagens por conversa e chamadas de LLM por conversa. Logo abaixo, a tabela **Agent analytics** detalha, por agente, o número de conversas, usuários únicos, duração média, tokens consumidos, chamadas de LLM, taxa de erro e latência P95.
+![Engagement depth na aba Adoption](../../Assets_for_BuildBooks/labs/lab06/lab06_12.png)
 
-![Engagement depth e Agent analytics](../../Assets_for_BuildBooks/labs/lab06/lab06_06.png)
+Logo abaixo, **Agent analytics** detalha o comportamento de cada agente no período. Quando ainda não há dados agregados para a janela selecionada, o painel exibe `No data available`, use o link **View agent analytics**, no canto superior direito do cartão, para abrir a visão completa de analytics.
 
-A tabela também traz uma legenda de cores para interpretar rapidamente a taxa de erro e a latência de cada agente, além de paginação para instâncias com muitos agentes.
+Role a página para ver o gráfico **Adoption trends**, que compara conversas, usuários ativos e agentes ativos ao longo do tempo, e o painel **Model usage distribution**, que mostra quantos modelos estão disponíveis (11) e quantos estão efetivamente em uso (1, o GPT-OSS 120B), além de quantos agentes utilizam cada um deles.
 
-![Legenda da tabela de agentes](../../Assets_for_BuildBooks/labs/lab06/lab06_07.png)
-
-Role a página para ver o gráfico **Adoption trends**, que compara conversas, usuários ativos e agentes ativos ao longo do tempo, e o painel **Model usage distribution**, que mostra quantos modelos estão em uso e quantos agentes utilizam cada um deles.
-
-![Adoption trends e Model usage distribution](../../Assets_for_BuildBooks/labs/lab06/lab06_08.png)
+![Adoption trends e Model usage distribution](../../Assets_for_BuildBooks/labs/lab06/lab06_13.png)
 
 ### FinOps: consumo de tokens
 
 Volte ao topo e clique na aba **FinOps**.
 
-![Navegando para FinOps](../../Assets_for_BuildBooks/labs/lab06/lab06_09.png)
+O **Token summary** resume o consumo da semana: 328,5 mil tokens no total, divididos entre 297,1 mil de entrada e 31,4 mil de saída, distribuídos em 309 chamadas de LLM. Logo abaixo, **Token usage** traz um gráfico de rosca com a distribuição percentual e uma tabela detalhada com tokens de entrada, saída, total, número de chamadas e participação de cada agente.
 
-O **Token summary** resume o total de tokens consumidos na semana, com a divisão entre tokens de entrada e saída e o número de chamadas de LLM. Logo abaixo, **Token usage** permite alternar a visão **By agent** ou **By model** e traz um gráfico de rosca com a distribuição percentual de tokens entre os agentes, complementado por uma tabela detalhada.
+![Token summary e Token usage por agente](../../Assets_for_BuildBooks/labs/lab06/lab06_14.png)
 
-![Token summary e Token usage](../../Assets_for_BuildBooks/labs/lab06/lab06_10.png)
+Role a página para ver a tabela completa e o gráfico **Token trends**, com pílulas de alternância entre Total tokens, Input tokens e Output tokens ao longo dos últimos sete dias. No exemplo, o Agente de suporte ao revendedor concentra 62,6% do consumo, seguido pelo Agente de Busca (20,8%) e pelo Assistente de Compra de Veículos (16,5%).
 
-Role a página para ver **Token trends**, com pílulas de alternância para Total, Input e Output tokens ao longo dos últimos sete dias.
+![Token usage detalhado e Token trends](../../Assets_for_BuildBooks/labs/lab06/lab06_15.png)
 
-![Token trends](../../Assets_for_BuildBooks/labs/lab06/lab06_11.png)
+Alterne a visualização de **By agent** para **By model** para ver o mesmo consumo agrupado por modelo. Aqui, o `openai/gpt-oss-120b` responde por 100% dos tokens do período.
+
+![Token usage por modelo](../../Assets_for_BuildBooks/labs/lab06/lab06_16-2.png)
+
+Repare no agente externo baseado em Langflow: ele aparece com zero tokens de entrada e saída, porque o processamento acontece fora do watsonx Orchestrate, mas suas 39 chamadas continuam sendo contabilizadas na coluna **LLM**. Esse é um detalhe importante ao comparar custos entre agentes nativos e externos.
+
+![Token usage por modelo e Token trends](../../Assets_for_BuildBooks/labs/lab06/lab06_16-3.png)
+
+Agora troque o seletor de período de **7d** para **24h**. Como não houve tráfego nas últimas 24 horas neste ambiente, todos os painéis passam a exibir `No data available`. Vale lembrar disso sempre que um dashboard parecer vazio: antes de investigar um problema, confira a janela de tempo selecionada.
+
+![FinOps com o filtro de 24 horas](../../Assets_for_BuildBooks/labs/lab06/lab06_16.png)
 
 ### Quality: qualidade das respostas
 
-Volte ao topo e clique na aba **Quality**.
+Volte o seletor para **7d** e clique na aba **Quality**.
 
-![Navegando para Quality](../../Assets_for_BuildBooks/labs/lab06/lab06_12.png)
+A seção **Insights** mostra quantos agentes já possuem avaliações configuradas (1 de 5), o feedback dos usuários e as métricas de **Helpfulness score** e **Hallucination score**. Esses três últimos indicadores dependem de feedback dos usuários e de avaliações executadas, então aparecem como `No data available` enquanto não houver esse insumo. O mesmo vale para a tabela **Agent feedback**, logo abaixo.
 
-A seção **Insights** mostra quantos agentes já possuem avaliações configuradas, o total de feedback de usuários (positivo e negativo) e as métricas de Helpfulness score e Hallucination score. A tabela **Agent feedback** detalha, por agente, o total de mensagens, mensagens com falha, feedback positivo e negativo, e a proporção de feedback positivo.
+![Insights e Agent feedback na aba Quality](../../Assets_for_BuildBooks/labs/lab06/lab06_17.png)
 
-![Insights e Agent feedback](../../Assets_for_BuildBooks/labs/lab06/lab06_13.png)
+Role a página para ver três painéis lado a lado: **Top agents by positive feedback**, **Top agents by negative feedback** e **Tool call success**, este último com a taxa de sucesso das chamadas de ferramenta (100,0%) e o comparativo entre chamadas bem-sucedidas, com falha e totais. Mais abaixo, o gráfico **Feedback trends** permite alternar entre mensagens totais, bem-sucedidas, com falha, feedback positivo e negativo.
 
-Role a página para ver três painéis lado a lado: **Top agents by positive feedback**, **Top agents by negative feedback** e **Tool call success**, seguidos pelo gráfico **Feedback trends**, que permite alternar entre mensagens totais, bem-sucedidas, com falha, feedback positivo e negativo.
-
-![Rankings de feedback e Tool call success](../../Assets_for_BuildBooks/labs/lab06/lab06_14.png)
+![Rankings de feedback, Tool call success e Feedback trends](../../Assets_for_BuildBooks/labs/lab06/lab06_18.png)
 
 ### Reliability: confiabilidade e desempenho
 
 Volte ao topo e clique na aba **Reliability**.
 
-![Navegando para Reliability](../../Assets_for_BuildBooks/labs/lab06/lab06_15.png)
+A seção **Utilization (7-day)** mostra quantos modelos estão ativos, a média de mensagens por conversa e por agente ativo e quantos agentes estão sob carga com falhas de trace, no exemplo, dois. A tabela **Agent latency** detalha, por agente, mensagens, mensagens com falha, taxa de erro e as latências P50, P95 e P99, com um campo de busca para instâncias com muitos agentes.
 
-A seção **Utilization** mostra, na janela de sete dias, quantos modelos estão ativos, a média de mensagens por conversa, mensagens por agente ativo e quantos agentes estão sob carga com falhas de trace. A tabela **Agent latency** detalha, por agente, mensagens, mensagens com falha, taxa de erro e as latências P50, P95 e P99.
+A legenda abaixo da tabela explica o código de cores: mensagens com falha a partir de 20 e de 100; taxa de erro abaixo de 5%, entre 5% e 15% e acima de 15%; P95 abaixo de 3 s, entre 3 s e 6 s e acima de 6 s; e P99 abaixo de 5 s, entre 5 s e 8 s e acima de 8 s. É o caminho mais rápido para identificar qual agente merece investigação.
 
-![Utilization e Agent latency](../../Assets_for_BuildBooks/labs/lab06/lab06_16.png)
+![Utilization e Agent latency](../../Assets_for_BuildBooks/labs/lab06/lab06_20.png)
 
-Role a página para ver **Deployment readiness** (total de chamadas de ferramenta, conversas com falha e latência P95), **Runtime inventory** (contagem de agentes, toolkits, tools e bases de conhecimento) e os gráficos **Latency trends** e **Failed messages over time**.
+Role a página para ver **Deployment readiness** (65 chamadas de ferramenta, 7 conversas com falha e latência P95 de 55,01 s), **Runtime inventory** (5 agentes, toolkits e tools ainda não publicados e 1 base de conhecimento) e, na parte inferior, os gráficos **Latency trends**, que alterna entre os percentis p50, p95 e p99, e **Failed messages over time**, com o total de 7 mensagens com falha no período.
 
-![Deployment readiness, Runtime inventory e Latency trends](../../Assets_for_BuildBooks/labs/lab06/lab06_17.png)
-
-O painel **Runtime inventory** dá um retrato rápido de tudo o que está publicado na sua instância: agentes, toolkits, tools e bases de conhecimento.
-
-![Runtime inventory em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_18.png)
-
-Já o gráfico **Latency trends** permite alternar entre os percentis P50, P95 e P99 para identificar picos de latência ao longo da semana.
-
-![Latency trends em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_19.png)
+![Deployment readiness, Runtime inventory e gráficos de latência](../../Assets_for_BuildBooks/labs/lab06/lab06_21.png)
 
 ### Security and Risk: controles de segurança
 
 Volte ao topo e clique na aba **Security and Risk**.
 
-![Navegando para Security and Risk](../../Assets_for_BuildBooks/labs/lab06/lab06_20.png)
+Essa aba resume o painel **Controls summary**, com o total de controles configurados na instância e sua divisão entre **Agent controls**, **Tool controls** e **Model controls**. Logo abaixo, a lista **Recent controls** mostra os controles mais recentes com o tipo, o ativo ao qual se aplicam, o ponto de aplicação e a data de criação.
 
-Essa aba resume o painel **Controls summary**, com o total de controles configurados na instância e sua divisão entre Agent controls, Tool controls e Model controls, além da lista **Recent controls**. Como você ainda não criou nenhum controle, todos os contadores aparecem zerados; isso muda na última parte deste laboratório, quando você criar seu primeiro controle.
+No exemplo, existe um único controle: o `Controle de telefones`, do tipo **PII Filter**, aplicado a um agente, com enforcement em `INPUT & OUTPUT`. O link **View all**, no canto superior direito, abre a área completa de controles, onde novos controles podem ser criados.
 
-![Security and Risk sem controles](../../Assets_for_BuildBooks/labs/lab06/lab06_21.png)
+![Controls summary e Recent controls](../../Assets_for_BuildBooks/labs/lab06/lab06_22.png)
 
-> [!NOTE]
-> Ao voltar para a aba Overview, um tour guiado pode aparecer sugerindo navegar pelas demais abas usando a seta `>` ao final da barra de abas. Sinta-se à vontade para explorar as abas adicionais por conta própria.
+### Navegando entre as abas e atualizando os dados
 
-![Tour guiado no dashboard](../../Assets_for_BuildBooks/labs/lab06/lab06_22.png)
+A barra de abas tem setas nas duas extremidades. A seta `>` (**Next**), à direita, avança para as abas seguintes quando elas não cabem na tela.
 
-## Entendendo as Métricas:
+![Seta Next na barra de abas](../../Assets_for_BuildBooks/labs/lab06/lab06_23.png)
 
-Métricas de Feedback do Usuário:
+A seta `<` (**Previous**), à esquerda, faz o caminho inverso e devolve a barra para o início, na aba Overview.
 
-`Thumbs up`: Número de respostas de feedback positivo dos usuários indicando satisfação com a resposta do agente.
+![Seta Previous na barra de abas](../../Assets_for_BuildBooks/labs/lab06/lab06_25.png)
 
-`Thumbs down`: Número de respostas de feedback negativo dos usuários indicando insatisfação com a resposta do agente.
+Dois outros controles são úteis no dia a dia: o botão **Refresh data**, ao lado da etiqueta `Preview`, recarrega as métricas sem recarregar a página inteira; e o ícone de menu (☰), no canto superior esquerdo, abre a navegação principal do produto, que você usará nas próximas seções.
 
-`Not rated`: Número de interações onde os usuários não forneceram feedback.
+![Botões de menu e Refresh data](../../Assets_for_BuildBooks/labs/lab06/lab06_26.png)
 
-`Toxicity`: Pontuação indicando o nível de conteúdo tóxico, ofensivo ou inapropriado na resposta (0.00 = nenhuma toxicidade detectada).
+## Entendendo as Métricas
 
-`Input PII`: Pontuação indicando se informações pessoalmente identificáveis foram detectadas na entrada do usuário (0.00 = nenhuma PII detectada).
+Antes de seguir, vale fixar o significado dos indicadores que aparecem nas abas do dashboard:
 
-`Output PII`: Pontuação indicando se informações pessoalmente identificáveis foram detectadas na resposta do agente (0.00 = nenhuma PII detectada).
+| Métrica | O que significa |
+|---|---|
+| `Successful / Failed messages` | Proporção de mensagens processadas com sucesso e de mensagens que terminaram em erro na janela selecionada. |
+| `Positive / Negative / No feedback` | Distribuição do feedback dado pelos usuários (joinha para cima, para baixo ou nenhuma avaliação). |
+| `Live / Draft agents` | Agentes publicados em produção versus agentes ainda em rascunho. |
+| `Evaluated / Not evaluated` | Agentes que já passaram por avaliação versus os que ainda não têm avaliações executadas. |
+| `Native / Imported / External agents` | Origem dos agentes: criados no Orchestrate, importados ou conectados a partir de plataformas externas. |
+| `Input / Output tokens` | Tokens enviados ao modelo (prompt e contexto) e tokens gerados pelo modelo na resposta. |
+| `LLM calls` | Número de chamadas feitas aos modelos de linguagem no período. |
+| `Helpfulness score` | Quão útil a resposta do agente foi para a pergunta feita, medido pelas avaliações. |
+| `Hallucination score` | Indicação de conteúdo gerado sem sustentação nos dados disponíveis ao agente. |
+| `Tool call success` | Percentual de chamadas de ferramenta concluídas sem erro. |
+| `Error rate` | Percentual de mensagens do agente que terminaram em falha. |
+| `P50 / P95 / P99` | Latência mediana e as caudas de latência: 95% e 99% das requisições ficaram abaixo do valor mostrado. |
+| `Agents under load` | Agentes com falhas de trace registradas na janela analisada. |
+| `PII` | Informações pessoalmente identificáveis, como e-mails e telefones, detectadas na entrada do usuário ou na resposta do agente. |
 
-## Criando um Controle de Content Guardrails
+## AgentOps: O Assistente de otimização de agentes
 
-Abra o menu lateral e, em **Manage**, selecione **Controls** para acessar a área de criação de controles.
+Abra o menu lateral pelo ícone ☰ e clique em **AgentOps**, item marcado com a etiqueta `Preview`.
 
-![Navegando para Manage > Controls](../../Assets_for_BuildBooks/labs/lab06/lab06_43.png)
+![Menu lateral com AgentOps em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_28.png)
 
-Como nenhum controle foi criado ainda, a página **Controls** aparece vazia, com uma mensagem de boas-vindas explicando que os controles ajudam a impor regras sobre o comportamento de agentes, modelos e ferramentas MCP. Clique em `Create Control`.
+O AgentOps abre um espaço de chat dedicado ao ciclo de vida dos agentes, o **Agent optimization assistant**, com um histórico de conversas à esquerda e três atalhos para começar:
 
-![Página Controls vazia](../../Assets_for_BuildBooks/labs/lab06/lab06_44.png)
+- **Show available agents**: lista os agentes do workspace com seus detalhes principais.
+- **Evaluate an agent**: executa casos de teste e resume os sinais de qualidade de um agente.
+- **Optimize an agent**: otimiza as instruções (GEPA) ou as diretrizes (ACE) do agente.
 
-### Selecionando o tipo de controle
+Um banner no topo lembra que o AgentOps é um recurso em preview e que suas funcionalidades podem mudar antes da disponibilidade geral.
 
-A janela **Create Control** se abre com um assistente de quatro etapas: `Select Control`, `Configure Control`, `Assign Assets` e `Review`. Na primeira etapa, os controles disponíveis são organizados por tipo de ativo: **Agents** (Content Guardrails, Output Length Guard, Regex Pattern, Secrets Detector e PII Filter) e **Tools** (Content Guardrails, Output Length Guard, Rate Limiter, SQLSanitizer e Secrets Detector).
+![Agent optimization assistant](../../Assets_for_BuildBooks/labs/lab06/lab06_29.png)
 
-![Etapa Select Control](../../Assets_for_BuildBooks/labs/lab06/lab06_45.png)
+## Security Control Center: acessos, conexões e credenciais
 
-Selecione **Content Guardrails**, na seção Agents. Essa opção aplica um serviço externo de detecção de conteúdo para identificar conteúdo sexual, violência, discurso de ódio, conteúdo prejudicial, tentativas de jailbreak e viés social. Clique em `Next`.
+Abra o menu lateral novamente, expanda o item **Manage** e selecione **Security**. Repare que, além de Security, o menu expandido também dá acesso a **Voice**, **Phone**, **Access management** e **Controls**  esta última é a área completa de controles que você viu resumida na aba Security and Risk.
 
-![Content Guardrails selecionado](../../Assets_for_BuildBooks/labs/lab06/lab06_46.png)
+![Menu Manage expandido com Security em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_30.png)
 
-### Configurando o controle
+### Agents: o que cada agente pode acessar
 
-Na etapa **Configure Control**, dê um nome ao controle no campo `Control instance name`, como no exemplo abaixo. Em `Enforcement type`, marque `Input`, para que o controle analise as mensagens enviadas pelos usuários antes de chegarem ao agente.
+O **Security control center** abre na aba **Agents**, com a seção **Agent access overview**. Os filtros no topo separam os agentes por origem, `Native (4)`, `Imported (0)` e `External (1)`  e a tabela lista cada agente com seu identificador, a data da última atualização e dois links **View all**: um para os recursos acessíveis (conexões, tools e bases de conhecimento) e outro para as permissões do agente.
 
-```
-Controle_de_palavras_de_baixo_calão
-```
+É aqui que você responde, de forma auditável, à pergunta "o que exatamente esse agente pode acessar?".
 
-![Nome e tipo de enforcement do controle](../../Assets_for_BuildBooks/labs/lab06/lab06_47.png)
+![Aba Agents do Security control center](../../Assets_for_BuildBooks/labs/lab06/lab06_31.png)
 
-Role para baixo até a seção `Toggle detection for each content type`. Por padrão, todos os tipos de conteúdo: Sexual Content, Violence, HAP (Hate, Abuse and Profanity), Harm, Jailbreak e Social Bias, vêm desativados (`Off`).
+### Connections: integrações com aplicações
 
-![Tipos de conteúdo desativados](../../Assets_for_BuildBooks/labs/lab06/lab06_48.png)
+Clique na aba **Connections**. Esta área concentra as integrações com aplicações de terceiros, separadas em `Custom`, `Knowledge` e `Pre-built`, no exemplo, 172 conexões prontas estão disponíveis para uso.
 
-Ative todos os toggles, deixando-os em `On`, e revise o campo `Block message`, que já vem preenchido com uma mensagem padrão explicando ao usuário por que o conteúdo foi bloqueado. Você pode personalizar esse texto como preferir, ou usar o texto sugerido abaixo. Clique em `Next`.
+A tabela mostra, para cada conexão, o tipo de autenticação configurado nos ambientes **Draft** e **Live** e a data da última atualização. O botão `Add connection` inicia a criação de uma nova integração.
 
-```
-Esse conteúdo não é apropriado para esta conversa. Peço que mantenhamos uma comunicação respeitosa e construtiva. Estou aqui para ajudar da melhor forma possível e fornecer suporte adequado às suas necessidades.
-```
+![Aba Connections do Security control center](../../Assets_for_BuildBooks/labs/lab06/lab06_32.png)
 
-![Todos os tipos de conteúdo ativados e Block message preenchido](../../Assets_for_BuildBooks/labs/lab06/lab06_49.png)
+### Team credentials: credenciais compartilhadas
 
-### Atribuindo o controle a um agente
+Clique na aba **Team credentials**. Aqui ficam as credenciais compartilhadas pelo time, informadas durante a configuração de uma conexão, separadas por ambiente (`Draft environment` e `Live environment`).
 
-Na etapa **Assign Assets**, clique em `Add Agent` para escolher a quais agentes esse controle será aplicado.
+Uma nota no topo lembra que as credenciais individuais de cada pessoa foram movidas para **Settings > Member credentials**, que você verá na próxima seção.
 
-![Etapa Assign Assets](../../Assets_for_BuildBooks/labs/lab06/lab06_50.png)
+![Aba Team credentials do Security control center](../../Assets_for_BuildBooks/labs/lab06/lab06_33.png)
 
-Na janela **Add Agent**, marque a caixa de seleção ao lado de um agente criado por você (no exemplo, `Assistente de Compra de Veiculos`) e clique em `Select`.
+## Configurações do Tenant
 
-![Selecionando o agente na janela Add Agent](../../Assets_for_BuildBooks/labs/lab06/lab06_51.png)
+Clique no avatar com suas iniciais, no canto superior direito, e selecione **Settings**.
 
-O agente selecionado aparece na tabela, junto com sua descrição. Clique em `Next`.
+O menu de perfil também mostra informações úteis do ambiente: o e-mail da conta, a região da instância (`br-sao`) e o plano contratado (`Agentic Essentials`), além dos atalhos para enviar feedback, consultar a política de privacidade e sair da sessão.
 
-![Agente atribuído ao controle](../../Assets_for_BuildBooks/labs/lab06/lab06_52.png)
+![Menu de perfil com Settings em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_34.png)
 
-### Revisando e criando o controle
+### Data Retention: retenção do histórico de chat
 
-A etapa **Review** resume toda a configuração: o tipo de controle, o nome da instância, o tipo de ativo, o hook configurado (`Input`) e, logo abaixo, os detalhes de configuração com cada tipo de conteúdo habilitado. Revise as informações e clique em `Create control`.
+A página **Settings** abre na aba **Data Retention**, onde você define por quantos dias o histórico de conversas dos usuários do tenant fica armazenado, de 30 a 365 dias. Passado esse período, o histórico é excluído permanentemente, sem afetar os aplicativos conectados nem as skills adicionadas.
 
-![Etapa Review](../../Assets_for_BuildBooks/labs/lab06/lab06_53.png)
+Um aviso no topo indica que essa configuração está migrando para os **Enterprise controls**, mantendo a configuração atual preservada.
 
-Uma notificação confirma que o controle foi criado com sucesso. Na página **Asset Controls**, o total de controles e o número de agentes com controles passam a mostrar `1`, e o novo controle aparece listado, com a informação de que está aplicado a `1 agent`.
+![Aba Data Retention](../../Assets_for_BuildBooks/labs/lab06/lab06_35.png)
 
-![Controle criado com sucesso](../../Assets_for_BuildBooks/labs/lab06/lab06_54.png)
+### API details: chaves e URL da instância
 
-## Testando o Controle Criado
+Na aba **API details**, você gera as chaves de API usadas para obter o token JWT que autentica as requisições feitas à API do watsonx Orchestrate. Logo abaixo, o campo **Service instance URL** traz o endereço da sua instância, com um botão para copiá-lo, é o valor que você usará ao configurar o ADK ou qualquer integração externa.
 
-Abra o menu lateral novamente e selecione **Build** para voltar à área de agentes.
+![Aba API details](../../Assets_for_BuildBooks/labs/lab06/lab06_36.png)
 
-![Menu lateral com Build em destaque](../../Assets_for_BuildBooks/labs/lab06/lab06_55.png)
+### Embed Security: segurança do chat incorporado
 
-Na página **Build agents and tools**, clique no agente que você acabou de vincular ao controle.
+A aba **Embed Security** controla a segurança do chat incorporado em sites e aplicações. A primeira opção define se os builders podem editar as configurações de segurança ou apenas visualizá-las.
 
-![Selecionando o agente com o controle aplicado](../../Assets_for_BuildBooks/labs/lab06/lab06_56.png)
+Abaixo, a seção **Security** permite ativar a autenticação e a autorização dos usuários do chat incorporado: em **Chat user identity**, você informa a chave pública usada para verificar mensagens assinadas em RS256, garantindo que o tráfego venha de usuários reais; em **Encrypt sensitive information**, a mesma chave é usada para criptografar dados sensíveis.
 
-No painel **Preview**, à direita, envie uma mensagem com palavras de baixo calão para testar o controle. O agente não chega a processar o conteúdo ofensivo: a resposta é bloqueada antes mesmo de chegar ao modelo, e o agente retorna a mensagem de bloqueio configurada na etapa de configuração, pedindo que a comunicação seja mantida respeitosa e construtiva.
+![Aba Embed Security](../../Assets_for_BuildBooks/labs/lab06/lab06_37.png)
 
-![Controle bloqueando conteúdo impróprio](../../Assets_for_BuildBooks/labs/lab06/lab06_57.png)
+### Platform languages: idiomas do tenant
+
+Na aba **Platform languages**, você define quais idiomas ficam disponíveis para os usuários do tenant e qual deles é o padrão para todos.
+
+![Aba Platform languages](../../Assets_for_BuildBooks/labs/lab06/lab06_38.png)
+
+### Member credentials: credenciais individuais
+
+A aba **Member credentials** reúne as credenciais que você mesmo informou nos ambientes de rascunho e produção, o complemento individual das Team credentials que você viu no Security control center. Enquanto nenhuma credencial pessoal for adicionada, a lista aparece vazia, com o botão `Add credentials`.
+
+![Aba Member credentials](../../Assets_for_BuildBooks/labs/lab06/lab06_39.png)
+
+### Models: seleção de modelos
+
+Na aba **Models**, a opção **Model selection** habilita ou desabilita a escolha de modelos pelos usuários do tenant. Por padrão, ela vem desativada.
+
+![Aba Models](../../Assets_for_BuildBooks/labs/lab06/lab06_40.png)
+
+### Analytics: mascaramento de PII
+
+A aba **Analytics** controla como os dados de analytics são coletados e exibidos. A opção **PII masking** mascara informações pessoalmente identificáveis, como e-mails e telefones, nos metadados de trace: as entradas dos usuários e as saídas dos agentes continuam visíveis, mas os atributos sensíveis detectados são mascarados antes de aparecerem em dashboards, logs e relatórios.
+
+Vale ler a nota logo abaixo do controle: os logs já gerados permanecem intactos, e apenas as traces criadas depois da ativação são mascaradas.
+
+![Aba Analytics com PII masking](../../Assets_for_BuildBooks/labs/lab06/lab06_41.png)
+
+### Catalog: acesso a ativos prontos
+
+Por fim, a aba **Catalog** define como os ativos são acessados e exibidos no catálogo do tenant. A opção **Access to prebuilt assets** habilita ou bloqueia o acesso dos usuários aos ativos prontos disponíveis na instância.
+
+![Aba Catalog](../../Assets_for_BuildBooks/labs/lab06/lab06_42.png)
 
 ## Resumo
 
 Parabéns! 🎉 Você concluiu o Control Plane Lab do watsonx Orchestrate.
 
-Ao longo deste laboratório, você navegou pelas seis abas do dashboard do Agentic Control Plane: Overview, Adoption, FinOps, Quality, Reliability e Security and Risk, entendendo como cada uma resume um aspecto diferente da operação dos seus agentes: uso geral, engajamento, custo de tokens, qualidade das respostas, confiabilidade e segurança.
+Ao longo deste laboratório, você usou o assistente de IA integrado ao painel para fazer perguntas em linguagem natural sobre os pontos críticos e os pontos positivos dos seus agentes, recebendo respostas diretas, com o raciocínio disponível para consulta.
 
-Em seguida, usou o assistente de IA integrado a esse painel para fazer uma pergunta em linguagem natural sobre a taxa de sucesso dos agentes na semana e recebeu uma resposta direta, já com o raciocínio disponível para consulta.
+Em seguida, navegou pelas seis abas do dashboard do Agentic Control Plane:
+- Overview,
+-  Adoption
+-  FinOps
+-  Quality
+-  Reliability 
+-  Security and Risk
 
-Por fim, você criou um Controle de Content Guardrails, configurou os tipos de conteúdo a serem bloqueados, atribuiu o controle a um agente e testou seu funcionamento na prática.
+Onde foi possível entender como cada uma resume um aspecto diferente da operação: uso geral, engajamento, custo de tokens, qualidade das respostas, confiabilidade e segurança. Também viu como a janela de tempo (24h ou 7d) e a alternância entre visões por agente e por modelo mudam completamente a leitura dos painéis.
 
-Com isso, você agora sabe onde encontrar as principais métricas de adoção, custo, qualidade, confiabilidade e segurança dos seus agentes, e como aplicar controles de segurança para proteger seus agentes contra conteúdo impróprio antes que ele chegue aos usuários.
+Depois, conheceu o AgentOps, o assistente de otimização de agentes em preview, e percorreu as áreas de administração do tenant: o Security control center, com os acessos de cada agente, as conexões e as credenciais de time, e as configurações em Settings, de retenção de dados e chaves de API a mascaramento de PII e acesso ao catálogo.
+
+Com isso, você agora sabe onde encontrar as principais métricas de adoção, custo, qualidade, confiabilidade e segurança dos seus agentes, e onde ajustar as configurações que sustentam a governança do seu ambiente.
 
 ### Sou desenvolvedor e quero me aprofundar no watsonx Orchestrate
 
@@ -272,7 +367,7 @@ Todas as operações realizadas também estão disponíveis em uma experiência 
 
 ## Próximos Passos
 
-Este é o último laboratório desta série. Abaixo está uma coletânea de links oficiais, documentação, tutoriais e novidades da IBM watsonx Orchestrate e do Agent Development Kit (ADK) para você continuar se aprofundando.
+Este é o último laboratório desta série. **Abaixo está uma coletânea de links oficiais, documentação, tutoriais e novidades da IBM watsonx Orchestrate e do Agent Development Kit (ADK) para você continuar se aprofundando.**
 
 > Última atualização da coletânea: 15/07/2026.
 
