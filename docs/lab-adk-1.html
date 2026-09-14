@@ -377,8 +377,8 @@
 
   <div class="page-header">
     <div class="page-header__eyebrow">ADK 1 · Developer experience</div>
-    <h1 class="page-header__h1">Conectando a ADK ao seu tenant e criando o primeiro agente em código</h1>
-    <p class="page-header__subtitle">Instale o Agent Development Kit, aponte a CLI para o tenant que você já vinha usando e publique um agente escrito num arquivo YAML — sem abrir a interface.</p>
+    <h1 class="page-header__h1">Conectando a ADK (Agent Development Kit) ao seu tenant e criando o primeiro agente em código</h1>
+    <p class="page-header__subtitle">Instale o Agent Development Kit, conecte a CLI ao tenant do watsonx Orchestrate e publique recursos diretamente pelo terminal, entendendo como aproveitar as vantagens do modelo <em>as code</em> além das capacidades disponíveis na interface visual.</p>
   </div>
 
   <!-- Índice -->
@@ -401,7 +401,7 @@
       </li>
       <li style="margin-bottom:6px;"><a href="#conectar">Conectando ao seu tenant</a>
         <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
-          <li><a href="#credenciais">Pegando a URL e a API key</a></li>
+          <li><a href="#credenciais">Obtendo a URL e a API key</a></li>
           <li><a href="#env-add">Registrando e ativando o ambiente</a></li>
         </ul>
       </li>
@@ -423,20 +423,17 @@
   <section id="visao-geral">
     <h2>Visão Geral</h2>
 
-    <p>No <strong>watsonx Orchestrate</strong> você pode criar agentes pela interface — preenchendo formulários na tela. Esta trilha mostra o outro caminho: escrevendo arquivos.</p>
+    <p>No <strong>watsonx Orchestrate</strong>, você pode criar agentes diretamente pela interface utilizando formulários de uma forma simples e intuitiva. No entanto, essa não é a única forma de desenvolver agentes, tools e fluxos.</p>
 
-    <p>O <strong>Agent Development Kit (ADK)</strong> é o pacote que torna isso possível. Com ele, um agente vira um arquivo YAML que vive no Git, passa por pull request e vai para o tenant via linha de comando ou pipeline de CI.</p>
+    <p>O <strong>Agent Development Kit (ADK)</strong> amplia as possibilidades de desenvolvimento. Com ele, agentes, tools e outros recursos passam a ser definidos como código e arquivos de configuração, podendo ser armazenados em repositórios Git, versionados, revisados por meio de pull requests e promovidos entre ambientes através de pipelines de CI/CD.</p>
 
-    <p><strong>O ponto não é digitar menos, é conseguir repetir.</strong> Com um arquivo, você recria o mesmo agente em qualquer tenant, compara versões com diff e promove de dev para produção sem depender de memória ou print de tela.</p>
+    <p><strong>Mas o principal benefício do ADK não é apenas transformar agentes em código.</strong></p>
 
-    <p>Aqui você instala a ADK, conecta a CLI ao tenant que já vinha usando e publica um agente sem tocar na interface nenhuma vez.</p>
+    <p>O ADK também permite acessar capacidades que não estão disponíveis na interface gráfica do produto. Isso inclui maior flexibilidade para estruturar projetos, reutilizar componentes, criar integrações customizadas, automatizar processos de deployment e trabalhar com recursos avançados de desenvolvimento e governança.</p>
 
-    <div class="callout callout--note">
-      <div>
-        <div class="callout__title">Nota</div>
-        <p style="margin:0;">O que você publicar via ADK aparece normalmente no <strong>Agent Builder</strong>, no <strong>Agentic Control Plane</strong> e nas telas de avaliação. É uma entrada diferente, não um ambiente separado.</p>
-      </div>
-    </div>
+    <p>O ponto não é digitar menos, é conseguir repetir, controlar e escalar. Com uma abordagem baseada em código, é possível recriar exatamente o mesmo agente em qualquer tenant, comparar versões com ferramentas de diff, automatizar implantações e estabelecer práticas de desenvolvimento mais alinhadas à engenharia de software moderna.</p>
+
+    <p>Neste guia você instalará o ADK, conectará a CLI ao tenant do <strong>watsonx Orchestrate</strong> e publicará recursos diretamente pelo terminal, entendendo como aproveitar as vantagens do modelo <em>as code</em> além das capacidades disponíveis na interface visual.</p>
   </section>
 
   <hr class="section-divider">
@@ -485,7 +482,9 @@
 
     <h3 id="python">Conferindo a versão do Python</h3>
 
-    <p>A ADK precisa de <strong>Python 3.11 ou mais recente</strong>:</p>
+    <p>A ADK precisa de <strong>Python 3.11 ou mais recente</strong>.</p>
+
+    <p>Abra o seu terminal no Visual Studio Code ou editor de sua preferência e execute o seguinte comando:</p>
 
     <div class="code-block">python --version</div>
 
@@ -532,41 +531,61 @@ orchestrate agents import --help</div>
 
     <p>A ADK precisa saber para onde enviar o que você escreve. Essa configuração se chama <strong>ambiente</strong>, e você pode ter vários cadastrados ao mesmo tempo.</p>
 
-    <h3 id="credenciais">Pegando a URL e a API key</h3>
+    <h3 id="credenciais">Obtendo a URL e a API key</h3>
 
-    <p>São dois dados, na tela de configurações do tenant:</p>
+    <p>Faça login na IBM Cloud.</p>
 
-    <ol class="step-list">
-      <li>
-        <div class="step-content">
-          <p>Na interface do watsonx Orchestrate, clique no ícone do seu usuário (canto superior direito) e abra <strong>Settings</strong>.</p>
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Vá para a aba <strong>API details</strong>.</p>
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Copie a <strong>service instance URL</strong> — algo no formato <code>https://api.&lt;região&gt;.watson-orchestrate.ibm.com/instances/&lt;id&gt;</code>.</p>
-        </div>
-      </li>
-      <li>
-        <div class="step-content">
-          <p>Clique em <strong>Generate API key</strong> e guarde a chave antes de fechar.</p>
-        </div>
-      </li>
-    </ol>
+    <p>Na página inicial, acesse o menu lateral esquerdo como indicado na imagem a seguir:</p>
 
-    <!-- <img class="lab-img" src="Assets_for_BuildBooks/adk01/adk01_01.png" alt="Aba API details com a service instance URL e o botão Generate API key"> -->
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/adk1/lab-adk-1-01.png" alt="Menu lateral da IBM Cloud">
 
-    <div class="callout callout--warning">
+    <p>Na lista de recursos, em <strong>Product</strong> digite <code>watsonx Orchestrate</code>.</p>
+
+    <p>Clique no recurso disponível.</p>
+
+    <div class="callout callout--note">
       <div>
-        <div class="callout__title">Atenção</div>
-        <p style="margin:0;">A chave aparece uma vez só e não tem como recuperar depois. Guarde antes de fechar a janela — e jamais coloque ela num arquivo que vai pro Git.</p>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">Caso tenha mais de um recurso, busque o seu instrutor para obter informações sobre qual deve utilizar. Se a conta for sua, utilize o de sua preferência.</p>
       </div>
     </div>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/adk1/lab-adk-1-02.png" alt="Lista de recursos com watsonx Orchestrate">
+
+    <p>Na página de gerenciamento de sua instância:</p>
+
+    <ol>
+      <li>Copie o valor da <strong>API Key</strong> do produto e guarde em um local seguro.</li>
+    </ol>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">Essa API Key pertence ao produto e faz uso somente dele. Caso queira uma API Key com mais acessos e permissões, utilize uma API Key da conta. Mais informações em: <a href="https://www.ibm.com/docs/pt-br/masv-and-l/cd?topic=cli-creating-your-cloud-api-key" target="_blank">IBM Docs — Creating your Cloud API key</a>.</p>
+      </div>
+    </div>
+
+    <ol start="2">
+      <li>Clique em <strong>Launch watsonx Orchestrate</strong>.</li>
+    </ol>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/adk1/lab-adk-1-03.png" alt="Página de gerenciamento da instância com API Key e botão Launch">
+
+    <p>Na interface do watsonx Orchestrate, clique no ícone do seu usuário (canto superior direito).</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/adk1/lab-adk-1-04.png" alt="Ícone do usuário no canto superior direito">
+
+    <p>Clique em <strong>Settings</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/adk1/lab-adk-1-04-2.png" alt="Menu Settings aberto">
+
+    <p>Vá para a aba <strong>API details</strong>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/adk1/lab-adk-1-05.png" alt="Aba API details">
+
+    <p>Copie a <strong>service instance URL</strong>, algo no formato <code>https://api.&lt;região&gt;.watson-orchestrate.ibm.com/instances/&lt;id&gt;</code>.</p>
+
+    <img class="lab-img" src="../Assets_for_BuildBooks/labs/adk1/lab-adk-1-06.png" alt="Service instance URL na aba API details">
 
     <h3 id="env-add">Registrando e ativando o ambiente</h3>
 
