@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADK 2 · Tools em Python · watsonx Orchestrate</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe; --carbon-blue-70: #0043ce; --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616; --carbon-gray-90: #262626; --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252; --carbon-gray-30: #c6c6c6; --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4; --carbon-white: #ffffff; --carbon-teal-60: #007d79;
+    --carbon-green-60: #198038; --carbon-green-10: #defbe6; --carbon-yellow-30: #f1c21b;
+    --carbon-red-60: #da1e28; --sidebar-width: 256px; --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--text-primary); background: var(--carbon-gray-10); line-height: 1.5; }
+  .c-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--carbon-gray-100); color: var(--carbon-white); display: flex; align-items: center; z-index: 9000; padding: 0 16px; gap: 16px; }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__logo svg { fill: var(--carbon-white); }
+  .c-header__name { font-size: 14px; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; color: var(--carbon-white); }
+  .c-sidenav { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000; }
+  .c-sidenav__section-title { padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30); }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; transition: background .1s, color .1s; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  /* ─── ACCORDION MATERIAIS ─── */
+  .c-sidenav__accordion-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 16px 16px 8px; font-size: 12px; font-weight: 600;
+    letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30);
+    background: none; border: none; cursor: pointer;
+  }
+  .c-sidenav__accordion-btn:hover { color: var(--carbon-white); }
+  .c-sidenav__accordion-btn .chevron {
+    width: 12px; height: 12px; transition: transform .2s;
+    fill: none; stroke: currentColor; stroke-width: 2;
+  }
+  .c-sidenav__accordion-btn[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .c-sidenav__accordion-body { display: none; }
+  .c-sidenav__accordion-body.open { display: block; }
+  .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 900px; }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 28px; font-weight: 300; line-height: 1.25; color: var(--text-primary); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+  h2 { font-size: 20px; font-weight: 400; margin: 40px 0 16px; color: var(--text-primary); border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--text-primary); }
+  p { margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; font-size: 14px; line-height: 1.6; }
+  strong { font-weight: 600; }
+  a { color: var(--carbon-blue-60); }
+  .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
+  .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
+  .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
+  .callout--note .callout__title { color: var(--carbon-blue-60); }
+  .callout--warning .callout__title { color: #a4780a; }
+  .callout p:last-child { margin: 0; }
+  .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
+  .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+  .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
+  .lab-img { display: block; max-width: 100%; border: 1px solid var(--border); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .metric-card { background: var(--bg-surface); border: 1px solid var(--border); padding: 14px 16px; }
+  .metric-card__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; color: var(--text-secondary); margin-bottom: 4px; }
+  .metric-card__title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .metric-card__desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--carbon-gray-80); color: var(--carbon-white); padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--carbon-gray-20); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--carbon-gray-10); }
+  .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
+  .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
+  .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
+  .lab-nav a:hover { background: var(--carbon-blue-10); }
+  .lab-nav a.primary:hover { background: var(--carbon-blue-70); }
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--text-secondary); background: var(--bg-surface); }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .metrics-grid { grid-template-columns: 1fr; } }
+
+  /* ═══════════════════════════════════════════════════════
+     IBM Carbon Design System — White / Gray-100 theme tokens
+     https://carbondesignsystem.com/guidelines/color/tokens
+     ═══════════════════════════════════════════════════════ */
+
+  /* ── Light (White theme) ── */
+  :root {
+    /* backgrounds */
+    --cds-background:          #ffffff;   /* $background */
+    --cds-background-hover:    #e8e8e8;   /* $background-hover */
+    --cds-layer-01:            #f4f4f4;   /* $layer-01 */
+    --cds-layer-02:            #ffffff;   /* $layer-02 */
+    --cds-layer-hover-01:      #e8e8e8;   /* $layer-hover-01 */
+    /* ui */
+    --cds-border-subtle:       #e0e0e0;   /* $border-subtle-00 */
+    --cds-border-strong:       #8d8d8d;   /* $border-strong-01 */
+    /* text */
+    --cds-text-primary:        #161616;   /* $text-primary */
+    --cds-text-secondary:      #525252;   /* $text-secondary */
+    --cds-text-placeholder:    #a8a8a8;   /* $text-placeholder */
+    --cds-text-on-color:       #ffffff;   /* $text-on-color */
+    --cds-text-helper:         #6f6f6f;   /* $text-helper */
+    /* interactive */
+    --cds-link-primary:        #0f62fe;   /* $link-primary */
+    --cds-interactive:         #0f62fe;   /* $interactive */
+    --cds-focus:               #0f62fe;   /* $focus */
+    /* code/shell */
+    --cds-code-bg:             #282828;   /* always dark for code blocks */
+    --cds-code-text:           #f4f4f4;
+    /* shell nav (Gray 10 shell) */
+    --cds-shell-bg:            #ffffff;   /* $shell-side-nav-bg-01 (White shell) */
+    --cds-shell-header-bg:     #161616;   /* $shell-header-bg-01 */
+    --cds-shell-link:          #161616;   /* nav item text */
+    --cds-shell-link-hover-bg: #edf5ff;   /* Blue-10 tint on hover */
+    --cds-shell-category:      #0f62fe;   /* Blue-60 — accent category titles */
+    --cds-shell-accent:        #0f62fe;   /* IBM Blue-60 */
+    --cds-shell-accent-tint:   #edf5ff;   /* Blue-10 */
+    --cds-shell-active-text:   #0f62fe;   /* Blue text on blue-10 active bg */
+    --cds-shell-hover-text:    #0f62fe;   /* Blue text on blue-10 hover bg */
+    /* notification / callout tints */
+    --cds-notification-info-bg:    #edf5ff;
+    --cds-notification-success-bg: #defbe6;
+    --cds-notification-warning-bg: #fdf6da;
+    --cds-notification-error-bg:   #fff1f1;
+  }
+
+  /* ── Dark (Gray 100 theme) ── */
+  html.dark {
+    /* backgrounds */
+    --cds-background:          #161616;   /* $background */
+    --cds-background-hover:    #353535;   /* $background-hover */
+    --cds-layer-01:            #262626;   /* $layer-01 */
+    --cds-layer-02:            #393939;   /* $layer-02 */
+    --cds-layer-hover-01:      #353535;   /* $layer-hover-01 */
+    /* ui */
+    --cds-border-subtle:       #393939;   /* $border-subtle-00 */
+    --cds-border-strong:       #6f6f6f;   /* $border-strong-01 */
+    /* text */
+    --cds-text-primary:        #f4f4f4;   /* $text-primary */
+    --cds-text-secondary:      #c6c6c6;   /* $text-secondary */
+    --cds-text-placeholder:    #6f6f6f;   /* $text-placeholder */
+    --cds-text-on-color:       #ffffff;   /* $text-on-color */
+    --cds-text-helper:         #8d8d8d;   /* $text-helper */
+    /* interactive */
+    --cds-link-primary:        #78a9ff;   /* $link-primary (dark) */
+    --cds-interactive:         #4589ff;   /* $interactive (dark) */
+    --cds-focus:               #ffffff;   /* $focus (dark) */
+    /* code/shell */
+    --cds-code-bg:             #161616;
+    --cds-code-text:           #f4f4f4;
+    /* shell nav (Gray 100 shell) */
+    --cds-shell-bg:            #161616;   /* $shell-side-nav-bg-01 (Gray 100 shell) */
+    --cds-shell-header-bg:     #161616;
+    --cds-shell-link:          #c6c6c6;
+    --cds-shell-link-hover-bg: #353535;
+    --cds-shell-category:      #8d8d8d;
+    --cds-shell-accent:        #4589ff;   /* Blue-50 — border accent in dark */
+    --cds-shell-accent-tint:   #0f62fe;   /* Blue-60 solid for active bg */
+    --cds-shell-active-text:   #ffffff;   /* White text on blue active bg */
+    --cds-shell-hover-text:    #f4f4f4;   /* Light text on dark hover bg */
+    /* notification / callout tints */
+    --cds-notification-info-bg:    #001141;
+    --cds-notification-success-bg: #071908;
+    --cds-notification-warning-bg: #302200;
+    --cds-notification-error-bg:   #2d0709;
+  }
+
+  /* ── Semantic aliases (shorthand used in rules below) ── */
+  :root,html.dark {
+    --bg-page:    var(--cds-layer-01);
+    --bg-surface: var(--cds-background);
+    --text-primary:   var(--cds-text-primary);
+    --text-secondary: var(--cds-text-secondary);
+    --border:     var(--cds-border-subtle);
+  }
+
+  /* ═══════════════ COMPONENT OVERRIDES ═══════════════ */
+
+  /* body */
+  body { background: var(--cds-layer-01) !important; color: var(--cds-text-primary) !important; }
+
+  /* ── Shell header (always gray-100 regardless of theme) ── */
+  .c-header         { background: var(--cds-shell-header-bg) !important; }
+  .c-header__name   { color: #a8a8a8 !important; }
+  .c-header__title  { color: #f4f4f4 !important; }
+  .c-header__divider { background: #393939 !important; }
+
+  /* ── Shell side-nav ── */
+  .c-sidenav { background: var(--cds-shell-bg) !important; border-right: 2px solid var(--cds-border-subtle) !important; }
+  .c-sidenav__section-title { color: var(--cds-shell-category) !important; }
+  .c-sidenav__item { color: var(--cds-shell-link) !important; border-left: 3px solid transparent !important; }
+  .c-sidenav__item:hover { background: var(--cds-shell-link-hover-bg) !important; color: var(--cds-shell-hover-text, #0f62fe) !important; border-left-color: var(--cds-shell-accent, #0f62fe) !important; }
+  .c-sidenav__item.active { background: var(--cds-shell-accent-tint, #edf5ff) !important; color: var(--cds-shell-active-text, #0f62fe) !important; border-left-color: var(--cds-shell-accent, #0f62fe) !important; font-weight: 600 !important; }
+  .c-sidenav__item .lab-num { background: var(--cds-shell-accent-tint, #edf5ff) !important; color: var(--cds-shell-active-text, #0f62fe) !important; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2) !important; color: var(--cds-shell-active-text, #0f62fe) !important; }
+  .c-sidenav__accordion-btn { color: var(--cds-shell-category) !important; }
+  .c-sidenav__accordion-btn:hover { color: var(--cds-shell-hover-text, #0f62fe) !important; }
+
+  /* ── Footer ── */
+  .c-footer { background: var(--cds-background) !important; border-top-color: var(--cds-border-subtle) !important; color: var(--cds-text-secondary) !important; }
+
+  /* ── Typography ── */
+  h2, h3, h4 { color: var(--cds-text-primary) !important; }
+  h2 { border-bottom-color: var(--cds-border-subtle) !important; }
+  p { color: var(--cds-text-primary) !important; }
+  li { color: var(--cds-text-primary) !important; }
+  strong { color: inherit !important; }
+  a { color: var(--cds-link-primary) !important; }
+  .page-header { border-bottom-color: var(--cds-border-subtle) !important; }
+  .page-header__h1 { color: var(--cds-text-primary) !important; }
+  .page-header__eyebrow { color: #0f62fe !important; }
+  html.dark .page-header__eyebrow { color: #78a9ff !important; }
+  .page-header__subtitle { color: var(--cds-text-secondary) !important; }
+  .breadcrumb { color: var(--cds-text-secondary) !important; }
+  .breadcrumb span { color: var(--cds-text-helper) !important; }
+  .lab-img-caption { color: var(--cds-text-helper) !important; }
+  .section-divider { border-top-color: var(--cds-border-subtle) !important; }
+
+  /* ── Surfaces / Cards ── */
+  .lab-card, .objective-tile, .prereq-list,
+  .file-card, .access-box, .update-notice,
+  .link-box, .node-card, .obj-item {
+    background: var(--cds-background) !important;
+    border-color: var(--cds-border-subtle) !important;
+    color: var(--cds-text-primary) !important;
+  }
+  .lab-card__title { color: var(--cds-text-primary) !important; }
+  .lab-card__desc, .lab-card__num { color: var(--cds-text-secondary) !important; }
+
+  /* ── Tables ── */
+  table th, .vehicle-table th { background: #393939 !important; color: #f4f4f4 !important; }
+  html.dark table th, html.dark .vehicle-table th { background: #474747 !important; color: #f4f4f4 !important; }
+  table td, .vehicle-table td { color: var(--cds-text-primary) !important; border-bottom-color: var(--cds-border-subtle) !important; }
+  table tr:nth-child(even) td,
+  .vehicle-table tr:nth-child(even) td { background: var(--cds-layer-01) !important; }
+
+  /* ── Code ── */
+  .code-block, .questions-block {
+    background: var(--cds-code-bg) !important;
+    color: var(--cds-code-text) !important;
+  }
+  code {
+    background: var(--cds-layer-02) !important;
+    color: var(--cds-text-primary) !important;
+    border: 1px solid var(--cds-border-subtle) !important;
+  }
+
+  /* ── Callouts — light = tint, dark = dark tint ── */
+  .callout--note    { background: var(--cds-notification-info-bg) !important; }
+  .callout--tip     { background: var(--cds-notification-success-bg) !important; }
+  .callout--warning { background: var(--cds-notification-warning-bg) !important; }
+  .callout--danger  { background: var(--cds-notification-error-bg) !important; }
+  .callout p, .callout li { color: var(--cds-text-primary) !important; }
+  /* callout titles — light */
+  .callout--note    .callout__title { color: #0043ce !important; }
+  .callout--tip     .callout__title { color: #198038 !important; }
+  .callout--warning .callout__title { color: #8a3800 !important; }
+  .callout--danger  .callout__title { color: #a2191f !important; }
+  /* callout titles — dark (lighter for contrast) */
+  html.dark .callout--note    .callout__title { color: #78a9ff !important; }
+  html.dark .callout--tip     .callout__title { color: #42be65 !important; }
+  html.dark .callout--warning .callout__title { color: #f1c21b !important; }
+  html.dark .callout--danger  .callout__title { color: #ff8389 !important; }
+
+  /* ── Hero attention (informational, always dark) ── */
+  .hero-attention { background: #262626 !important; }
+  .hero-attention p { color: #f4f4f4 !important; }
+
+  /* ── Nav (prev/next) ── */
+  .lab-nav { border-top-color: var(--cds-border-subtle) !important; }
+  .lab-nav a { color: #0f62fe !important; border-color: #0f62fe !important; background: transparent !important; }
+  .lab-nav a:hover { background: #edf5ff !important; color: #0f62fe !important; }
+  .lab-nav a.primary { background: #0f62fe !important; color: #ffffff !important; border-color: #0f62fe !important; }
+  .lab-nav a.primary:hover { background: #0043ce !important; color: #ffffff !important; }
+  html.dark .lab-nav a { color: #78a9ff !important; border-color: #78a9ff !important; background: transparent !important; }
+  html.dark .lab-nav a:hover { background: #001d6c !important; color: #78a9ff !important; }
+  html.dark .lab-nav a.primary { background: #0f62fe !important; color: #ffffff !important; border-color: #0f62fe !important; }
+  html.dark .lab-nav a.primary:hover { background: #0043ce !important; color: #ffffff !important; }
+  /* CTA button — always blue bg, always white text */
+  .cta-btn { background: #0f62fe !important; color: #ffffff !important; }
+  .cta-btn:hover { background: #0043ce !important; color: #ffffff !important; }
+
+  /* ── Images ── */
+  .lab-img { border-color: var(--cds-border-subtle) !important; }
+
+  /* ── File cards ── */
+  .file-card__body, .file-card__actions { border-color: var(--cds-border-subtle) !important; }
+  .file-card__thumb { background: var(--cds-layer-01) !important; border-color: var(--cds-border-subtle) !important; }
+  .file-card__name { color: var(--cds-text-primary) !important; }
+  .file-card__desc, .file-card__meta { color: var(--cds-text-secondary) !important; }
+  html.dark .file-card__icon--pdf { background: #2d0709 !important; }
+  html.dark .file-card__icon--txt { background: #071908 !important; }
+
+  /* ── Access box ── */
+  .access-box__value { background: var(--cds-layer-01) !important; border-color: var(--cds-border-subtle) !important; color: var(--cds-text-primary) !important; }
+  .access-box__label { color: var(--cds-text-secondary) !important; }
+
+  /* ── Tag pills ── */
+  .tag--blue { background: #edf5ff !important; color: #0043ce !important; }
+  html.dark .tag--blue { background: #001d6c !important; color: #78a9ff !important; }
+  .tag--red  { background: #fff1f1 !important; color: #a2191f !important; }
+  html.dark .tag--red  { background: #2d0709 !important; color: #ff8389 !important; }
+  .tag--green{ background: #defbe6 !important; color: #0e6027 !important; }
+  html.dark .tag--green { background: #071908 !important; color: #42be65 !important; }
+
+  /* ── Theme toggle button ── */
+  .theme-toggle { display: flex; align-items: center; justify-content: center; margin-left: auto; width: 36px; height: 36px; border: none; border-radius: 50%; background: transparent; color: #a8a8a8; cursor: pointer; flex-shrink: 0; transition: color .15s, background .15s; }
+  .theme-toggle:hover { background: rgba(255,255,255,0.1); color: #f4f4f4; }
+  .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<header class="c-header">
+    <a class="c-header__logo" href="index.html">
+    <span style="display:inline-flex;align-items:center;justify-content:center;background:#0f62fe;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;padding:4px 9px;line-height:1;">IBM</span>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Agent Development Kit</span>
+  <button class="theme-toggle" id="themeToggle" title="Alternar tema" aria-label="Alternar tema claro/escuro">
+    <svg id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+</header>
+
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Governança de Agentes</div>
+  <a class="c-sidenav__item" href="lab1.html"><span class="lab-num">Lab 1</span>Data Poisoning</a>
+  <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
+  <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Controles</a>
+  <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Avaliação de Agentes</a>
+  <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Debugging</a>
+  <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
+  <div class="c-sidenav__section-title">Construindo Workflows</div>
+  <a class="c-sidenav__item" href="lab-workflow-1.html"><span class="lab-num">WF 1</span>Construindo Workflows</a>
+  <a class="c-sidenav__item" href="lab-workflow-2.html"><span class="lab-num">WF 2</span>Mensagens &amp; Ramificações</a>
+  <a class="c-sidenav__item" href="lab-workflow-3.html"><span class="lab-num">WF 3</span>Tratamento de Exceções</a>
+  <div class="c-sidenav__section-title">ADK (Developer experience)</div>
+  <a class="c-sidenav__item" href="lab-adk-1.html"><span class="lab-num">ADK 1</span>Ambiente e Primeiro Agente</a>
+  <a class="c-sidenav__item active" href="lab-adk-2.html"><span class="lab-num">ADK 2</span>Tools em Python</a>
+  <a class="c-sidenav__item" href="lab-adk-3.html"><span class="lab-num">ADK 3</span>Multiagente e Publicação</a>
+  <button class="c-sidenav__accordion-btn" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.classList.toggle('open');">
+    Materiais
+    <svg class="chevron" viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>
+  </button>
+  <div class="c-sidenav__accordion-body">
+  <a class="c-sidenav__item" href="control-planning.html">Control Planning</a>
+  <a class="c-sidenav__item" href="workflow-documents.html">Workflow</a>
+  </div>
+</nav>
+
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+    <span>›</span>
+    <span>ADK 2</span>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">ADK 2 · Developer experience</div>
+    <h1 class="page-header__h1">Escrevendo tools em Python e ligando ao seu agente</h1>
+    <p class="page-header__subtitle">Transforme funções Python em capacidades do agente com o decorador <code>@tool</code>, entenda como o modelo enxerga a sua assinatura e descubra por que a docstring decide se a tool vai ser chamada.</p>
+  </div>
+
+  <!-- Índice -->
+  <nav style="background:var(--bg-surface);border:1px solid var(--border);padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--text-secondary);margin-bottom:10px;">Índice</div>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
+      <li style="margin-bottom:6px;"><a href="#como-funciona">Como o Orchestrate enxerga uma tool</a></li>
+      <li style="margin-bottom:6px;"><a href="#primeira-tool">Primeira tool: cálculo puro</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#codigo-1">Escrevendo a função</a></li>
+          <li><a href="#importar-1">Importando e inspecionando o schema</a></li>
+          <li><a href="#ligar-1">Ligando a tool ao agente</a></li>
+          <li><a href="#testar-1">Testando os três caminhos</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#docstring">A docstring é o contrato</a></li>
+      <li style="margin-bottom:6px;"><a href="#segunda-tool">Segunda tool: saída estruturada com Pydantic</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#codigo-2">Modelos de entrada e saída</a></li>
+          <li><a href="#importar-2">Importando e testando</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#limites">Limites do ambiente de execução</a></li>
+      <li style="margin-bottom:6px;"><a href="#armadilhas">Armadilhas comuns</a></li>
+      <li style="margin-bottom:6px;"><a href="#resumo">Resumo</a></li>
+      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos Passos</a></li>
+    </ul>
+  </nav>
+
+  <!-- VISÃO GERAL -->
+  <section id="visao-geral">
+    <h2>Visão Geral</h2>
+
+    <p>No ADK 1 você criou um agente que sabe conversar, mas não faz nada além disso. Uma <strong>tool</strong> é o que muda isso: uma função Python que o agente aciona quando decide que precisa dela.</p>
+
+    <p>O mecanismo é mais simples do que parece. Você escreve uma função comum, coloca um decorador em cima e importa. A ADK lê a assinatura e a documentação da função e monta sozinha o schema que o modelo vai enxergar. <strong>Você nunca escreve JSON Schema à mão.</strong></p>
+
+    <p>A consequência disso é o ponto central deste lab: como o modelo só conhece a sua tool pelo que a assinatura e a docstring dizem, a qualidade desses dois elementos determina se ele vai chamar a tool certa, na hora certa, com os argumentos certos.</p>
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Escopo</div>
+        <p style="margin:0;">As duas tools deste lab são <strong>Python puro</strong>, com os dados dentro do próprio arquivo. Nenhuma delas acessa banco de dados, API externa, disco ou rede. É de propósito: o comportamento que interessa aqui é o do agente, não o da integração.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona">
+    <h2>Como o Orchestrate enxerga uma tool</h2>
+
+    <p>Uma tool no watsonx Orchestrate é uma função Python decorada com <code>@tool</code>, importado do pacote da ADK:</p>
+
+    <div class="code-block">from ibm_watsonx_orchestrate.agent_builder.tools import tool</div>
+
+    <p>Quando você importa o arquivo, a ADK extrai quatro coisas:</p>
+
+    <table>
+      <thead><tr><th>O que o modelo vê</th><th>De onde a ADK tira</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Nome da tool</strong></td><td>O nome da função. Pode ser sobrescrito com <code>@tool(name="...")</code>.</td></tr>
+        <tr><td><strong>Descrição</strong></td><td>A docstring da função. É o texto que o modelo lê para decidir se aquela tool serve para a pergunta.</td></tr>
+        <tr><td><strong>Schema de entrada</strong></td><td>As anotações de tipo dos parâmetros. A descrição de cada um sai da seção <code>Args:</code> da docstring.</td></tr>
+        <tr><td><strong>Schema de saída</strong></td><td>A anotação de tipo do retorno.</td></tr>
+      </tbody>
+    </table>
+
+    <p>Ou seja: a função é o comportamento, e a documentação é a interface. Um código impecável com docstring genérica produz uma tool que o agente ignora.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Formato da docstring</div>
+        <p style="margin:0;">Use o estilo <strong>Google</strong>, com as seções <code>Args:</code> e <code>Returns:</code>. É o formato que a ADK sabe interpretar para gerar as descrições de cada parâmetro.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PRIMEIRA TOOL -->
+  <section id="primeira-tool">
+    <h2>Primeira tool: cálculo puro</h2>
+
+    <p>O Nexus Pro tem três planos — Basic, Pro e Enterprise — com limites de uso mensais. Verificar se um cliente pode fazer upgrade é uma conta simples, mas que o modelo erra com frequência quando tenta fazer de cabeça — exatamente o tipo de coisa que merece virar tool.</p>
+
+    <h3 id="codigo-1">Escrevendo a função</h3>
+
+    <p>Crie o arquivo <code>tools/verificar_elegibilidade_upgrade.py</code>:</p>
+
+    <div class="code-block">from ibm_watsonx_orchestrate.agent_builder.tools import tool
+
+PLANOS = ["basic", "pro", "enterprise"]
+LIMITE_USO_UPGRADE = 80  # percentual mínimo de uso para sugerir upgrade
+
+
+@tool
+def verificar_elegibilidade_upgrade(
+    plano_atual: str,
+    uso_mensal_percentual: int,
+    meses_no_plano: int,
+) -&gt; dict:
+    """Verifica se um cliente é elegível para upgrade de plano no Nexus Pro.
+
+    Um cliente é elegível quando está usando mais de 80% do limite do plano
+    atual há pelo menos 2 meses consecutivos, ou quando já está no plano Basic
+    há mais de 6 meses. Use esta tool sempre que o cliente perguntar se deve
+    mudar de plano ou se o plano atual está adequado para o uso dele.
+
+    Args:
+        plano_atual (str): Plano atual do cliente. Valores aceitos: basic, pro, enterprise.
+        uso_mensal_percentual (int): Percentual de uso do limite mensal, de 0 a 100.
+        meses_no_plano (int): Quantidade de meses completos desde a contratação do plano atual.
+
+    Returns:
+        dict: Chaves elegivel, motivo, proximo_plano e acao_recomendada.
+    """
+    plano_atual = plano_atual.lower()
+    if plano_atual not in PLANOS:
+        return {
+            "elegivel": False,
+            "motivo": f"Plano '{plano_atual}' não reconhecido. Use: basic, pro ou enterprise.",
+            "proximo_plano": None,
+            "acao_recomendada": "Confirme o plano atual do cliente antes de continuar.",
+        }
+
+    if plano_atual == "enterprise":
+        return {
+            "elegivel": False,
+            "motivo": "O cliente já está no plano mais completo.",
+            "proximo_plano": None,
+            "acao_recomendada": "Verifique se o cliente precisa de funcionalidades adicionais via consultoria.",
+        }
+
+    idx = PLANOS.index(plano_atual)
+    proximo_plano = PLANOS[idx + 1]
+
+    elegivel_por_uso = uso_mensal_percentual &gt;= LIMITE_USO_UPGRADE
+    elegivel_por_tempo = plano_atual == "basic" and meses_no_plano &gt;= 6
+
+    if elegivel_por_uso and elegivel_por_tempo:
+        motivo = f"Uso em {uso_mensal_percentual}% do limite e {meses_no_plano} meses no plano Basic."
+    elif elegivel_por_uso:
+        motivo = f"Usando {uso_mensal_percentual}% do limite mensal há {meses_no_plano} mês(es)."
+    elif elegivel_por_tempo:
+        motivo = f"{meses_no_plano} meses no plano Basic — bom momento para avaliar o Pro."
+    else:
+        motivo = f"Uso em {uso_mensal_percentual}% e {meses_no_plano} mês(es) no plano. Nenhum critério atingido."
+
+    return {
+        "elegivel": elegivel_por_uso or elegivel_por_tempo,
+        "motivo": motivo,
+        "proximo_plano": proximo_plano if (elegivel_por_uso or elegivel_por_tempo) else None,
+        "acao_recomendada": f"Apresentar o plano {proximo_plano.capitalize()} ao cliente." if (elegivel_por_uso or elegivel_por_tempo) else "Manter plano atual e reavaliar no próximo mês.",
+    }</div>
+
+    <p>Repare que não há nada de especial no corpo da função: é Python comum, sem importar biblioteca externa, sem ler arquivo, sem acessar rede. A única linha da ADK é o import do decorador.</p>
+
+    <h3 id="importar-1">Importando e inspecionando o schema</h3>
+
+    <div class="code-block">orchestrate tools import -k python -f tools/verificar_elegibilidade_upgrade.py</div>
+
+    <p>A flag <code>-k python</code> indica o tipo da tool e o <code>-f</code> aponta o arquivo. Toda função decorada com <code>@tool</code> naquele arquivo vira uma tool no seu tenant.</p>
+
+    <p>Agora veja o que a plataforma entendeu:</p>
+
+    <div class="code-block">orchestrate tools list -v</div>
+
+    <p>Procure pela sua tool na saída e leia o <code>input_schema</code>. Você deve encontrar os três parâmetros, cada um com seu tipo e a descrição que você escreveu na seção <code>Args:</code>. <strong>Esse é literalmente o texto que o modelo vai ler.</strong> Se ali estiver vago, o agente vai chutar.</p>
+
+    <!-- <img class="lab-img" src="Assets_for_BuildBooks/adk02/adk02_01.png" alt="Saída do orchestrate tools list -v mostrando o schema gerado"> -->
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Uma tool por arquivo</div>
+        <p style="margin:0;">Nada impede colocar várias funções decoradas no mesmo arquivo, mas manter uma por arquivo deixa você atualizar, versionar e remover cada tool de forma independente. É a organização recomendada.</p>
+      </div>
+    </div>
+
+    <h3 id="ligar-1">Ligando a tool ao agente</h3>
+
+    <p>Importar a tool não basta: o agente só enxerga o que estiver na lista <code>tools</code> do YAML dele. Abra <code>agents/suporte_cliente.yaml</code>, acrescente a tool e complemente as instruções para orientar o uso.</p>
+
+    <div class="code-block">instructions: |
+  Você é o assistente de suporte ao cliente do Nexus Pro.
+
+  Regras de conduta:
+  - Responda sempre em português do Brasil, em tom cordial e direto.
+  - Nunca invente informações sobre planos, preços ou funcionalidades.
+  - Não resolva problemas técnicos complexos. Se o cliente descrever
+    um erro ou falha, oriente a abrir um chamado com a equipe técnica.
+  - Para saber se o cliente é elegível para upgrade, use sempre a tool
+    verificar_elegibilidade_upgrade. Nunca tome essa decisão de cabeça.
+  - A tool precisa de três dados: plano atual, percentual de uso mensal
+    e meses no plano. Se faltar algum, pergunte antes de chamar a tool.
+
+tools:
+  - verificar_elegibilidade_upgrade</div>
+
+    <p>Reimporte o agente:</p>
+
+    <div class="code-block">orchestrate agents import -f agents/suporte_cliente.yaml</div>
+
+    <h3 id="testar-1">Testando os três caminhos</h3>
+
+    <p>Teste primeiro o caminho em que todos os dados estão na pergunta:</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente \
+  "Estou no plano Basic, uso 90% do limite todo mês e já faz 4 meses. Devo fazer upgrade?" \
+  --include-reasoning</div>
+
+    <p>No raciocínio você deve ver a chamada da tool com os três argumentos preenchidos corretamente. A resposta deve indicar elegibilidade e sugerir o plano Pro.</p>
+
+    <p>Agora teste o caminho em que falta informação:</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente \
+  "Acho que preciso de um plano melhor."</div>
+
+    <p>O comportamento correto é o agente perguntar o plano atual, o uso e há quanto tempo está no plano, em vez de chamar a tool com valores inventados. Se chutar dados, sua instrução precisa ficar mais explícita.</p>
+
+    <p>E o caminho em que a resposta é não:</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente \
+  "Estou no plano Pro, uso 40% do limite e faz 1 mês. Devo mudar de plano?"</div>
+
+    <p>Aqui o agente deve dizer que não há necessidade de upgrade no momento, com os números que vieram da tool, não do modelo.</p>
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">Sempre que o agente errar, leia o raciocínio antes de mexer no código. Na maioria das vezes o problema não está na função: está na descrição de um parâmetro ou em uma instrução ausente no YAML.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- DOCSTRING -->
+  <section id="docstring">
+    <h2>A docstring é o contrato</h2>
+
+    <p>Vale fazer um experimento rápido para ver o efeito na prática. Troque a docstring da sua tool por uma versão pobre:</p>
+
+    <div class="code-block">    """Verifica upgrade.
+
+    Args:
+        plano_atual (str): plano
+        uso_mensal_percentual (int): uso
+        meses_no_plano (int): meses
+
+    Returns:
+        dict: resultado
+    """</div>
+
+    <p>Reimporte a tool e o agente e refaça as mesmas três perguntas. O que costuma acontecer: o agente passa a hesitar entre responder sozinho e chamar a tool, e às vezes confunde os parâmetros porque nada na descrição diz o que cada um significa.</p>
+
+    <p>Depois volte para a versão original. A diferença entre as duas é a diferença entre uma tool que funciona e uma que dá suporte na segunda-feira.</p>
+
+    <table>
+      <thead><tr><th>Escreva na docstring</th><th>Por quê</th></tr></thead>
+      <tbody>
+        <tr><td>O que a tool faz <strong>e quando usá-la</strong></td><td>O modelo escolhe entre tools comparando descrições. "Use esta tool quando..." é a frase mais útil que você pode escrever.</td></tr>
+        <tr><td>Unidade e formato de cada parâmetro</td><td>Evita que o agente passe metros onde você espera quilômetros, ou texto onde você espera número.</td></tr>
+        <tr><td>Um exemplo de valor válido</td><td>Reduz drasticamente o erro de formato em campos com padrão específico, como placa ou chassi.</td></tr>
+        <tr><td>O que a tool <strong>não</strong> faz</td><td>Impede que ela seja chamada para perguntas fora do escopo.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- SEGUNDA TOOL -->
+  <section id="segunda-tool">
+    <h2>Segunda tool: saída estruturada com Pydantic</h2>
+
+    <p>Retornar <code>dict</code> funciona, mas o modelo precisa deduzir o que vem dentro. Quando o retorno tem forma definida, vale declará-la com <strong>Pydantic</strong>: além de gerar um schema de saída preciso, você ganha validação automática.</p>
+
+    <p>O Pydantic já faz parte do runtime das tools, então não é preciso declarar dependência nenhuma.</p>
+
+    <h3 id="codigo-2">Modelos de entrada e saída</h3>
+
+    <p>Crie <code>tools/consultar_detalhes_plano.py</code>. Os planos estão embutidos no próprio arquivo — é a nossa "base de dados", sem banco de dados.</p>
+
+    <div class="code-block">from typing import List, Optional
+
+from pydantic import BaseModel, Field
+from ibm_watsonx_orchestrate.agent_builder.tools import tool
+
+CATALOGO = [
+    {
+        "id": "basic",
+        "nome": "Basic",
+        "preco_mensal": 29.90,
+        "limite_usuarios": 3,
+        "limite_requisicoes": 1000,
+        "funcionalidades": ["Dashboard básico", "Suporte por e-mail", "Exportação CSV"],
+    },
+    {
+        "id": "pro",
+        "nome": "Pro",
+        "preco_mensal": 79.90,
+        "limite_usuarios": 15,
+        "limite_requisicoes": 10000,
+        "funcionalidades": ["Dashboard avançado", "Suporte prioritário", "API access", "Integrações"],
+    },
+    {
+        "id": "enterprise",
+        "nome": "Enterprise",
+        "preco_mensal": 199.90,
+        "limite_usuarios": 999,
+        "limite_requisicoes": 999999,
+        "funcionalidades": ["Tudo do Pro", "SLA garantido", "Gerente de conta", "SSO", "Auditoria completa"],
+    },
+]
+
+
+class DetalhesFuncionalidade(BaseModel):
+    nome: str = Field(description="Nome do plano.")
+    preco_mensal: float = Field(description="Preço mensal em reais.")
+    limite_usuarios: int = Field(description="Número máximo de usuários incluídos.")
+    limite_requisicoes: int = Field(description="Limite de requisições mensais. 999999 significa ilimitado.")
+    funcionalidades: List[str] = Field(description="Lista de funcionalidades incluídas no plano.")
+
+
+class RespostaConsulta(BaseModel):
+    plano: Optional[DetalhesFuncionalidade] = Field(
+        None, description="Detalhes do plano consultado, se encontrado."
+    )
+    observacao: str = Field(description="Explicação curta do resultado da consulta.")
+
+
+@tool
+def consultar_detalhes_plano(nome_plano: str) -&gt; RespostaConsulta:
+    """Retorna os detalhes de um plano do Nexus Pro: preço, limites e funcionalidades incluídas.
+
+    Use esta tool quando o cliente perguntar o que está incluído em um plano,
+    qual o preço, quantos usuários cabem ou quais funcionalidades estão disponíveis.
+    Não use para decidir se o cliente deve fazer upgrade — para isso use
+    verificar_elegibilidade_upgrade.
+
+    Args:
+        nome_plano (str): Nome do plano a consultar. Valores aceitos: basic, pro, enterprise.
+
+    Returns:
+        RespostaConsulta: Detalhes do plano e uma observação sobre a busca.
+    """
+    plano = next((p for p in CATALOGO if p["id"] == nome_plano.lower()), None)
+
+    if plano is None:
+        return RespostaConsulta(
+            plano=None,
+            observacao=f"Plano '{nome_plano}' não encontrado. Opções disponíveis: basic, pro, enterprise.",
+        )
+
+    return RespostaConsulta(
+        plano=DetalhesFuncionalidade(**plano),
+        observacao=f"Detalhes do plano {plano['nome']} recuperados com sucesso.",
+    )</div>
+
+    <h3 id="importar-2">Importando e testando</h3>
+
+    <div class="code-block">orchestrate tools import -k python -f tools/consultar_detalhes_plano.py</div>
+
+    <p>Rode <code>orchestrate tools list -v</code> outra vez e compare o <code>output_schema</code> das duas tools. A primeira devolve um <code>dict</code> genérico; a segunda descreve cada campo, com tipo e descrição. Quanto mais claro o retorno, menos o modelo precisa interpretar.</p>
+
+    <p>Acrescente a nova tool ao agente:</p>
+
+    <div class="code-block">tools:
+  - verificar_elegibilidade_upgrade
+  - consultar_detalhes_plano</div>
+
+    <div class="code-block">orchestrate agents import -f agents/suporte_cliente.yaml</div>
+
+    <p>Agora faça uma pergunta que exige as duas tools na mesma resposta:</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente \
+  "Estou no plano Basic, uso 90% todo mês há 4 meses. Devo fazer upgrade e o que ganha no Pro?" \
+  --include-reasoning</div>
+
+    <p>No raciocínio você deve ver as duas chamadas em sequência e uma resposta única que combina os dois resultados. Esse encadeamento é o agente fazendo o trabalho que antes seria de três telas abertas.</p>
+
+    <!-- <img class="lab-img" src="Assets_for_BuildBooks/adk02/adk02_02.png" alt="Raciocínio mostrando as duas tools sendo chamadas em sequência"> -->
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- LIMITES -->
+  <section id="limites">
+    <h2>Limites do ambiente de execução</h2>
+
+    <p>Tools rodam em um ambiente isolado e gerenciado pela plataforma. Vale conhecer as restrições antes de esbarrar nelas:</p>
+
+    <table>
+      <thead><tr><th>Restrição</th><th>Consequência prática</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sistema de arquivos somente leitura</strong></td><td>A tool não pode gravar arquivos. Se precisar guardar algo, isso tem que sair da tool.</td></tr>
+        <tr><td><strong>Ambiente isolado por tool</strong></td><td>Cada tool tem seu próprio ambiente virtual. Uma não enxerga o que a outra instalou.</td></tr>
+        <tr><td><strong>Sem estado entre chamadas</strong></td><td>Não confie em variável global para guardar informação de uma chamada para a próxima.</td></tr>
+        <tr><td><strong>Dependências travadas</strong></td><td>Se a tool precisar de biblioteca externa, ela vai em um <code>requirements.txt</code> com versão exata, validado contra a lista de pacotes permitidos do tenant. As tools deste laboratório não precisam de nenhuma.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">Essas restrições são o motivo de as tools deste laboratório terem os dados embutidos no código. Em um projeto real, a mesma tool consultaria o sistema de origem por API — e aí entram as <strong>connections</strong>, que guardam a credencial fora do repositório. Esse assunto está fora do escopo desta trilha.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ARMADILHAS -->
+  <section id="armadilhas">
+    <h2>Armadilhas comuns</h2>
+
+    <table>
+      <thead><tr><th>Sintoma</th><th>Causa provável</th><th>Correção</th></tr></thead>
+      <tbody>
+        <tr><td>O agente nunca chama a tool</td><td>A tool não está na lista <code>tools</code> do YAML, ou a docstring é genérica demais</td><td>Confirme com <code>tools list</code> e reescreva a primeira linha da docstring dizendo <strong>quando</strong> usar</td></tr>
+        <tr><td>A tool é chamada com argumento trocado</td><td>Descrições de parâmetro parecidas demais entre si</td><td>Diferencie explicitamente: "plano atual do cliente" e "percentual de uso do limite mensal"</td></tr>
+        <tr><td>O agente responde por conta própria em vez de usar a tool</td><td>Falta instrução no YAML mandando usar</td><td>Acrescente uma regra explícita nas <code>instructions</code></td></tr>
+        <tr><td>Erro de import por nome inválido</td><td>Nome de função ou de arquivo com hífen, acento ou espaço</td><td>Use apenas letras, números e underscore</td></tr>
+        <tr><td>A alteração no código não surtiu efeito</td><td>A tool foi reimportada, mas o agente não</td><td>Reimporte também o agente sempre que mudar a lista de tools</td></tr>
+        <tr><td>Mensagem de incompatibilidade no import</td><td>Versões diferentes da ADK entre membros do time</td><td>Padronizem a versão e reimportem</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- RESUMO -->
+  <section id="resumo">
+    <h2>Resumo</h2>
+
+    <p>Você escreveu duas tools em Python puro, entendeu como a ADK converte assinatura e docstring em schema e viu o agente encadear duas chamadas para responder uma pergunta.</p>
+
+    <table>
+      <thead><tr><th>Comando</th><th>O que faz</th></tr></thead>
+      <tbody>
+        <tr><td><code>orchestrate tools import -k python -f &lt;arquivo&gt;</code></td><td>Publica as funções decoradas do arquivo como tools</td></tr>
+        <tr><td><code>orchestrate tools list</code></td><td>Lista as tools do ambiente ativo</td></tr>
+        <tr><td><code>orchestrate tools list -v</code></td><td>Mostra os schemas de entrada e saída gerados</td></tr>
+        <tr><td><code>orchestrate tools remove -n &lt;nome&gt;</code></td><td>Remove uma tool</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Antes de seguir, confirme</h3>
+
+    <ul>
+      <li><code>orchestrate tools list</code> mostra <code>verificar_elegibilidade_upgrade</code> e <code>consultar_detalhes_plano</code></li>
+      <li>O <code>input_schema</code> da primeira tool traz as descrições que você escreveu</li>
+      <li>O agente chama a tool certa com os argumentos certos no caminho completo</li>
+      <li>Quando falta um dado, ele pergunta em vez de inventar</li>
+      <li>Uma pergunta composta dispara as duas tools e vira uma resposta só</li>
+    </ul>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PRÓXIMOS PASSOS -->
+  <section id="proximos-passos">
+    <h2>Próximos Passos</h2>
+
+    <p>No <strong>ADK 3</strong> você divide o agente em dois. Vai criar um especialista que carrega as tools, transformar o agente atual em um roteador que delega, acrescentar regras determinísticas com guidelines e configurar a tela de entrada do chat — tudo pelo mesmo YAML.</p>
+  </section>
+
+  <div class="lab-nav">
+    <a href="lab-adk-1.html">← ADK 1: Ambiente e Primeiro Agente</a>
+    <a href="lab-adk-3.html" class="primary">ADK 3: Multiagente e Publicação →</a>
+  </div>
+</main>
+
+
+<footer class="c-footer">
+  Nathalia Trazzi | Technical Solutions Architect & AI Engineer
+</footer>
+
+<script>
+(function(){
+  var MOON = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  var SUN  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  function applyTheme(dark) {
+    document.documentElement.classList.toggle('dark', dark);
+    var icon = document.getElementById('themeIcon');
+    if (icon) icon.innerHTML = dark ? SUN : MOON;
+  }
+  var saved = localStorage.getItem('wxo-theme');
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var isDark = saved ? saved === 'dark' : prefersDark;
+  applyTheme(isDark);
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.addEventListener('click', function() {
+      var nowDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('wxo-theme', nowDark ? 'dark' : 'light');
+      var icon = document.getElementById('themeIcon');
+      if (icon) icon.innerHTML = nowDark ? SUN : MOON;
+    });
+  });
+})();
+</script>
+</body>
+</html>
