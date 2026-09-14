@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADK 1 · Ambiente e Primeiro Agente · watsonx Orchestrate</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe; --carbon-blue-70: #0043ce; --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616; --carbon-gray-90: #262626; --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252; --carbon-gray-30: #c6c6c6; --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4; --carbon-white: #ffffff; --carbon-teal-60: #007d79;
+    --carbon-green-60: #198038; --carbon-green-10: #defbe6; --carbon-yellow-30: #f1c21b;
+    --carbon-red-60: #da1e28; --sidebar-width: 256px; --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--text-primary); background: var(--carbon-gray-10); line-height: 1.5; }
+  .c-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--carbon-gray-100); color: var(--carbon-white); display: flex; align-items: center; z-index: 9000; padding: 0 16px; gap: 16px; }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__logo svg { fill: var(--carbon-white); }
+  .c-header__name { font-size: 14px; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; color: var(--carbon-white); }
+  .c-sidenav { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000; }
+  .c-sidenav__section-title { padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30); }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; transition: background .1s, color .1s; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  /* ─── ACCORDION MATERIAIS ─── */
+  .c-sidenav__accordion-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 16px 16px 8px; font-size: 12px; font-weight: 600;
+    letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30);
+    background: none; border: none; cursor: pointer;
+  }
+  .c-sidenav__accordion-btn:hover { color: var(--carbon-white); }
+  .c-sidenav__accordion-btn .chevron {
+    width: 12px; height: 12px; transition: transform .2s;
+    fill: none; stroke: currentColor; stroke-width: 2;
+  }
+  .c-sidenav__accordion-btn[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .c-sidenav__accordion-body { display: none; }
+  .c-sidenav__accordion-body.open { display: block; }
+  .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 900px; }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 28px; font-weight: 300; line-height: 1.25; color: var(--text-primary); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+  h2 { font-size: 20px; font-weight: 400; margin: 40px 0 16px; color: var(--text-primary); border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--text-primary); }
+  p { margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; font-size: 14px; line-height: 1.6; }
+  strong { font-weight: 600; }
+  a { color: var(--carbon-blue-60); }
+  .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
+  .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
+  .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
+  .callout--note .callout__title { color: var(--carbon-blue-60); }
+  .callout--warning .callout__title { color: #a4780a; }
+  .callout p:last-child { margin: 0; }
+  .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
+  .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+  .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
+  .lab-img { display: block; max-width: 100%; border: 1px solid var(--border); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .metric-card { background: var(--bg-surface); border: 1px solid var(--border); padding: 14px 16px; }
+  .metric-card__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; color: var(--text-secondary); margin-bottom: 4px; }
+  .metric-card__title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .metric-card__desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--carbon-gray-80); color: var(--carbon-white); padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--carbon-gray-20); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--carbon-gray-10); }
+  .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
+  .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
+  .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
+  .lab-nav a:hover { background: var(--carbon-blue-10); }
+  .lab-nav a.primary:hover { background: var(--carbon-blue-70); }
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--text-secondary); background: var(--bg-surface); }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .metrics-grid { grid-template-columns: 1fr; } }
+
+  /* ═══════════════════════════════════════════════════════
+     IBM Carbon Design System — White / Gray-100 theme tokens
+     https://carbondesignsystem.com/guidelines/color/tokens
+     ═══════════════════════════════════════════════════════ */
+
+  /* ── Light (White theme) ── */
+  :root {
+    /* backgrounds */
+    --cds-background:          #ffffff;   /* $background */
+    --cds-background-hover:    #e8e8e8;   /* $background-hover */
+    --cds-layer-01:            #f4f4f4;   /* $layer-01 */
+    --cds-layer-02:            #ffffff;   /* $layer-02 */
+    --cds-layer-hover-01:      #e8e8e8;   /* $layer-hover-01 */
+    /* ui */
+    --cds-border-subtle:       #e0e0e0;   /* $border-subtle-00 */
+    --cds-border-strong:       #8d8d8d;   /* $border-strong-01 */
+    /* text */
+    --cds-text-primary:        #161616;   /* $text-primary */
+    --cds-text-secondary:      #525252;   /* $text-secondary */
+    --cds-text-placeholder:    #a8a8a8;   /* $text-placeholder */
+    --cds-text-on-color:       #ffffff;   /* $text-on-color */
+    --cds-text-helper:         #6f6f6f;   /* $text-helper */
+    /* interactive */
+    --cds-link-primary:        #0f62fe;   /* $link-primary */
+    --cds-interactive:         #0f62fe;   /* $interactive */
+    --cds-focus:               #0f62fe;   /* $focus */
+    /* code/shell */
+    --cds-code-bg:             #282828;   /* always dark for code blocks */
+    --cds-code-text:           #f4f4f4;
+    /* shell nav (Gray 10 shell) */
+    --cds-shell-bg:            #ffffff;   /* $shell-side-nav-bg-01 (White shell) */
+    --cds-shell-header-bg:     #161616;   /* $shell-header-bg-01 */
+    --cds-shell-link:          #161616;   /* nav item text */
+    --cds-shell-link-hover-bg: #edf5ff;   /* Blue-10 tint on hover */
+    --cds-shell-category:      #0f62fe;   /* Blue-60 — accent category titles */
+    --cds-shell-accent:        #0f62fe;   /* IBM Blue-60 */
+    --cds-shell-accent-tint:   #edf5ff;   /* Blue-10 */
+    --cds-shell-active-text:   #0f62fe;   /* Blue text on blue-10 active bg */
+    --cds-shell-hover-text:    #0f62fe;   /* Blue text on blue-10 hover bg */
+    /* notification / callout tints */
+    --cds-notification-info-bg:    #edf5ff;
+    --cds-notification-success-bg: #defbe6;
+    --cds-notification-warning-bg: #fdf6da;
+    --cds-notification-error-bg:   #fff1f1;
+  }
+
+  /* ── Dark (Gray 100 theme) ── */
+  html.dark {
+    /* backgrounds */
+    --cds-background:          #161616;   /* $background */
+    --cds-background-hover:    #353535;   /* $background-hover */
+    --cds-layer-01:            #262626;   /* $layer-01 */
+    --cds-layer-02:            #393939;   /* $layer-02 */
+    --cds-layer-hover-01:      #353535;   /* $layer-hover-01 */
+    /* ui */
+    --cds-border-subtle:       #393939;   /* $border-subtle-00 */
+    --cds-border-strong:       #6f6f6f;   /* $border-strong-01 */
+    /* text */
+    --cds-text-primary:        #f4f4f4;   /* $text-primary */
+    --cds-text-secondary:      #c6c6c6;   /* $text-secondary */
+    --cds-text-placeholder:    #6f6f6f;   /* $text-placeholder */
+    --cds-text-on-color:       #ffffff;   /* $text-on-color */
+    --cds-text-helper:         #8d8d8d;   /* $text-helper */
+    /* interactive */
+    --cds-link-primary:        #78a9ff;   /* $link-primary (dark) */
+    --cds-interactive:         #4589ff;   /* $interactive (dark) */
+    --cds-focus:               #ffffff;   /* $focus (dark) */
+    /* code/shell */
+    --cds-code-bg:             #161616;
+    --cds-code-text:           #f4f4f4;
+    /* shell nav (Gray 100 shell) */
+    --cds-shell-bg:            #161616;   /* $shell-side-nav-bg-01 (Gray 100 shell) */
+    --cds-shell-header-bg:     #161616;
+    --cds-shell-link:          #c6c6c6;
+    --cds-shell-link-hover-bg: #353535;
+    --cds-shell-category:      #8d8d8d;
+    --cds-shell-accent:        #4589ff;   /* Blue-50 — border accent in dark */
+    --cds-shell-accent-tint:   #0f62fe;   /* Blue-60 solid for active bg */
+    --cds-shell-active-text:   #ffffff;   /* White text on blue active bg */
+    --cds-shell-hover-text:    #f4f4f4;   /* Light text on dark hover bg */
+    /* notification / callout tints */
+    --cds-notification-info-bg:    #001141;
+    --cds-notification-success-bg: #071908;
+    --cds-notification-warning-bg: #302200;
+    --cds-notification-error-bg:   #2d0709;
+  }
+
+  /* ── Semantic aliases (shorthand used in rules below) ── */
+  :root,html.dark {
+    --bg-page:    var(--cds-layer-01);
+    --bg-surface: var(--cds-background);
+    --text-primary:   var(--cds-text-primary);
+    --text-secondary: var(--cds-text-secondary);
+    --border:     var(--cds-border-subtle);
+  }
+
+  /* ═══════════════ COMPONENT OVERRIDES ═══════════════ */
+
+  /* body */
+  body { background: var(--cds-layer-01) !important; color: var(--cds-text-primary) !important; }
+
+  /* ── Shell header (always gray-100 regardless of theme) ── */
+  .c-header         { background: var(--cds-shell-header-bg) !important; }
+  .c-header__name   { color: #a8a8a8 !important; }
+  .c-header__title  { color: #f4f4f4 !important; }
+  .c-header__divider { background: #393939 !important; }
+
+  /* ── Shell side-nav ── */
+  .c-sidenav { background: var(--cds-shell-bg) !important; border-right: 2px solid var(--cds-border-subtle) !important; }
+  .c-sidenav__section-title { color: var(--cds-shell-category) !important; }
+  .c-sidenav__item { color: var(--cds-shell-link) !important; border-left: 3px solid transparent !important; }
+  .c-sidenav__item:hover { background: var(--cds-shell-link-hover-bg) !important; color: var(--cds-shell-hover-text, #0f62fe) !important; border-left-color: var(--cds-shell-accent, #0f62fe) !important; }
+  .c-sidenav__item.active { background: var(--cds-shell-accent-tint, #edf5ff) !important; color: var(--cds-shell-active-text, #0f62fe) !important; border-left-color: var(--cds-shell-accent, #0f62fe) !important; font-weight: 600 !important; }
+  .c-sidenav__item .lab-num { background: var(--cds-shell-accent-tint, #edf5ff) !important; color: var(--cds-shell-active-text, #0f62fe) !important; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2) !important; color: var(--cds-shell-active-text, #0f62fe) !important; }
+  .c-sidenav__accordion-btn { color: var(--cds-shell-category) !important; }
+  .c-sidenav__accordion-btn:hover { color: var(--cds-shell-hover-text, #0f62fe) !important; }
+
+  /* ── Footer ── */
+  .c-footer { background: var(--cds-background) !important; border-top-color: var(--cds-border-subtle) !important; color: var(--cds-text-secondary) !important; }
+
+  /* ── Typography ── */
+  h2, h3, h4 { color: var(--cds-text-primary) !important; }
+  h2 { border-bottom-color: var(--cds-border-subtle) !important; }
+  p { color: var(--cds-text-primary) !important; }
+  li { color: var(--cds-text-primary) !important; }
+  strong { color: inherit !important; }
+  a { color: var(--cds-link-primary) !important; }
+  .page-header { border-bottom-color: var(--cds-border-subtle) !important; }
+  .page-header__h1 { color: var(--cds-text-primary) !important; }
+  .page-header__eyebrow { color: #0f62fe !important; }
+  html.dark .page-header__eyebrow { color: #78a9ff !important; }
+  .page-header__subtitle { color: var(--cds-text-secondary) !important; }
+  .breadcrumb { color: var(--cds-text-secondary) !important; }
+  .breadcrumb span { color: var(--cds-text-helper) !important; }
+  .lab-img-caption { color: var(--cds-text-helper) !important; }
+  .section-divider { border-top-color: var(--cds-border-subtle) !important; }
+
+  /* ── Surfaces / Cards ── */
+  .lab-card, .objective-tile, .prereq-list,
+  .file-card, .access-box, .update-notice,
+  .link-box, .node-card, .obj-item {
+    background: var(--cds-background) !important;
+    border-color: var(--cds-border-subtle) !important;
+    color: var(--cds-text-primary) !important;
+  }
+  .lab-card__title { color: var(--cds-text-primary) !important; }
+  .lab-card__desc, .lab-card__num { color: var(--cds-text-secondary) !important; }
+
+  /* ── Tables ── */
+  table th, .vehicle-table th { background: #393939 !important; color: #f4f4f4 !important; }
+  html.dark table th, html.dark .vehicle-table th { background: #474747 !important; color: #f4f4f4 !important; }
+  table td, .vehicle-table td { color: var(--cds-text-primary) !important; border-bottom-color: var(--cds-border-subtle) !important; }
+  table tr:nth-child(even) td,
+  .vehicle-table tr:nth-child(even) td { background: var(--cds-layer-01) !important; }
+
+  /* ── Code ── */
+  .code-block, .questions-block {
+    background: var(--cds-code-bg) !important;
+    color: var(--cds-code-text) !important;
+  }
+  code {
+    background: var(--cds-layer-02) !important;
+    color: var(--cds-text-primary) !important;
+    border: 1px solid var(--cds-border-subtle) !important;
+  }
+
+  /* ── Callouts — light = tint, dark = dark tint ── */
+  .callout--note    { background: var(--cds-notification-info-bg) !important; }
+  .callout--tip     { background: var(--cds-notification-success-bg) !important; }
+  .callout--warning { background: var(--cds-notification-warning-bg) !important; }
+  .callout--danger  { background: var(--cds-notification-error-bg) !important; }
+  .callout p, .callout li { color: var(--cds-text-primary) !important; }
+  /* callout titles — light */
+  .callout--note    .callout__title { color: #0043ce !important; }
+  .callout--tip     .callout__title { color: #198038 !important; }
+  .callout--warning .callout__title { color: #8a3800 !important; }
+  .callout--danger  .callout__title { color: #a2191f !important; }
+  /* callout titles — dark (lighter for contrast) */
+  html.dark .callout--note    .callout__title { color: #78a9ff !important; }
+  html.dark .callout--tip     .callout__title { color: #42be65 !important; }
+  html.dark .callout--warning .callout__title { color: #f1c21b !important; }
+  html.dark .callout--danger  .callout__title { color: #ff8389 !important; }
+
+  /* ── Hero attention (informational, always dark) ── */
+  .hero-attention { background: #262626 !important; }
+  .hero-attention p { color: #f4f4f4 !important; }
+
+  /* ── Nav (prev/next) ── */
+  .lab-nav { border-top-color: var(--cds-border-subtle) !important; }
+  .lab-nav a { color: #0f62fe !important; border-color: #0f62fe !important; background: transparent !important; }
+  .lab-nav a:hover { background: #edf5ff !important; color: #0f62fe !important; }
+  .lab-nav a.primary { background: #0f62fe !important; color: #ffffff !important; border-color: #0f62fe !important; }
+  .lab-nav a.primary:hover { background: #0043ce !important; color: #ffffff !important; }
+  html.dark .lab-nav a { color: #78a9ff !important; border-color: #78a9ff !important; background: transparent !important; }
+  html.dark .lab-nav a:hover { background: #001d6c !important; color: #78a9ff !important; }
+  html.dark .lab-nav a.primary { background: #0f62fe !important; color: #ffffff !important; border-color: #0f62fe !important; }
+  html.dark .lab-nav a.primary:hover { background: #0043ce !important; color: #ffffff !important; }
+  /* CTA button — always blue bg, always white text */
+  .cta-btn { background: #0f62fe !important; color: #ffffff !important; }
+  .cta-btn:hover { background: #0043ce !important; color: #ffffff !important; }
+
+  /* ── Images ── */
+  .lab-img { border-color: var(--cds-border-subtle) !important; }
+
+  /* ── File cards ── */
+  .file-card__body, .file-card__actions { border-color: var(--cds-border-subtle) !important; }
+  .file-card__thumb { background: var(--cds-layer-01) !important; border-color: var(--cds-border-subtle) !important; }
+  .file-card__name { color: var(--cds-text-primary) !important; }
+  .file-card__desc, .file-card__meta { color: var(--cds-text-secondary) !important; }
+  html.dark .file-card__icon--pdf { background: #2d0709 !important; }
+  html.dark .file-card__icon--txt { background: #071908 !important; }
+
+  /* ── Access box ── */
+  .access-box__value { background: var(--cds-layer-01) !important; border-color: var(--cds-border-subtle) !important; color: var(--cds-text-primary) !important; }
+  .access-box__label { color: var(--cds-text-secondary) !important; }
+
+  /* ── Tag pills ── */
+  .tag--blue { background: #edf5ff !important; color: #0043ce !important; }
+  html.dark .tag--blue { background: #001d6c !important; color: #78a9ff !important; }
+  .tag--red  { background: #fff1f1 !important; color: #a2191f !important; }
+  html.dark .tag--red  { background: #2d0709 !important; color: #ff8389 !important; }
+  .tag--green{ background: #defbe6 !important; color: #0e6027 !important; }
+  html.dark .tag--green { background: #071908 !important; color: #42be65 !important; }
+
+  /* ── Theme toggle button ── */
+  .theme-toggle { display: flex; align-items: center; justify-content: center; margin-left: auto; width: 36px; height: 36px; border: none; border-radius: 50%; background: transparent; color: #a8a8a8; cursor: pointer; flex-shrink: 0; transition: color .15s, background .15s; }
+  .theme-toggle:hover { background: rgba(255,255,255,0.1); color: #f4f4f4; }
+  .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<header class="c-header">
+    <a class="c-header__logo" href="index.html">
+    <span style="display:inline-flex;align-items:center;justify-content:center;background:#0f62fe;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;padding:4px 9px;line-height:1;">IBM</span>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Agent Development Kit</span>
+  <button class="theme-toggle" id="themeToggle" title="Alternar tema" aria-label="Alternar tema claro/escuro">
+    <svg id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+</header>
+
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Governança de Agentes</div>
+  <a class="c-sidenav__item" href="lab1.html"><span class="lab-num">Lab 1</span>Data Poisoning</a>
+  <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
+  <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Controles</a>
+  <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Avaliação de Agentes</a>
+  <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Debugging</a>
+  <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
+  <div class="c-sidenav__section-title">Construindo Workflows</div>
+  <a class="c-sidenav__item" href="lab-workflow-1.html"><span class="lab-num">WF 1</span>Construindo Workflows</a>
+  <a class="c-sidenav__item" href="lab-workflow-2.html"><span class="lab-num">WF 2</span>Mensagens &amp; Ramificações</a>
+  <a class="c-sidenav__item" href="lab-workflow-3.html"><span class="lab-num">WF 3</span>Tratamento de Exceções</a>
+  <div class="c-sidenav__section-title">ADK (Developer experience)</div>
+  <a class="c-sidenav__item active" href="lab-adk-1.html"><span class="lab-num">ADK 1</span>Ambiente e Primeiro Agente</a>
+  <a class="c-sidenav__item" href="lab-adk-2.html"><span class="lab-num">ADK 2</span>Tools em Python</a>
+  <a class="c-sidenav__item" href="lab-adk-3.html"><span class="lab-num">ADK 3</span>Multiagente e Publicação</a>
+  <button class="c-sidenav__accordion-btn" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.classList.toggle('open');">
+    Materiais
+    <svg class="chevron" viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>
+  </button>
+  <div class="c-sidenav__accordion-body">
+  <a class="c-sidenav__item" href="control-planning.html">Control Planning</a>
+  <a class="c-sidenav__item" href="workflow-documents.html">Workflow</a>
+  </div>
+</nav>
+
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+    <span>›</span>
+    <span>ADK 1</span>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">ADK 1 · Developer experience</div>
+    <h1 class="page-header__h1">Conectando a ADK ao seu tenant e criando o primeiro agente em código</h1>
+    <p class="page-header__subtitle">Instale o Agent Development Kit, aponte a CLI para o tenant que você já vinha usando e publique um agente escrito num arquivo YAML — sem abrir a interface.</p>
+  </div>
+
+  <!-- Índice -->
+  <nav style="background:var(--bg-surface);border:1px solid var(--border);padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--text-secondary);margin-bottom:10px;">Índice</div>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
+      <li style="margin-bottom:6px;"><a href="#o-que-e">O que é a ADK</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#pecas">O que você declara em código</a></li>
+          <li><a href="#escopo">O que este laboratório não usa</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#ambiente">Preparando o ambiente</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#python">Conferindo a versão do Python</a></li>
+          <li><a href="#projeto">Criando a pasta do projeto</a></li>
+          <li><a href="#instalar">Instalando a ADK</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#conectar">Conectando ao seu tenant</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#credenciais">Pegando a URL e a API key</a></li>
+          <li><a href="#env-add">Registrando e ativando o ambiente</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#primeiro-agente">Seu primeiro agente em YAML</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#anatomia">Anatomia do arquivo</a></li>
+          <li><a href="#importar">Importando o agente</a></li>
+          <li><a href="#testar-cli">Testando pela CLI</a></li>
+          <li><a href="#ver-interface">Vendo o agente na interface</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#ciclo">Atualizando e removendo</a></li>
+      <li style="margin-bottom:6px;"><a href="#resumo">Resumo</a></li>
+      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos Passos</a></li>
+    </ul>
+  </nav>
+
+  <!-- VISÃO GERAL -->
+  <section id="visao-geral">
+    <h2>Visão Geral</h2>
+
+    <p>No <strong>watsonx Orchestrate</strong> você pode criar agentes pela interface — preenchendo formulários na tela. Esta trilha mostra o outro caminho: escrevendo arquivos.</p>
+
+    <p>O <strong>Agent Development Kit (ADK)</strong> é o pacote que torna isso possível. Com ele, um agente vira um arquivo YAML que vive no Git, passa por pull request e vai para o tenant via linha de comando ou pipeline de CI.</p>
+
+    <p><strong>O ponto não é digitar menos, é conseguir repetir.</strong> Com um arquivo, você recria o mesmo agente em qualquer tenant, compara versões com diff e promove de dev para produção sem depender de memória ou print de tela.</p>
+
+    <p>Aqui você instala a ADK, conecta a CLI ao tenant que já vinha usando e publica um agente sem tocar na interface nenhuma vez.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">O que você publicar via ADK aparece normalmente no <strong>Agent Builder</strong>, no <strong>Agentic Control Plane</strong> e nas telas de avaliação. É uma entrada diferente, não um ambiente separado.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- O QUE É -->
+  <section id="o-que-e">
+    <h2>O que é a ADK</h2>
+
+    <p>É um pacote Python chamado <code>ibm-watsonx-orchestrate</code>. Depois de instalado, você tem um comando chamado <code>orchestrate</code> que fala diretamente com a API do tenant.</p>
+
+    <h3 id="pecas">O que você declara em código</h3>
+
+    <table>
+      <thead><tr><th>Tipo</th><th>O que é</th><th>Como você declara</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Agente nativo</strong></td><td>Recebe a pergunta, decide o que chamar e monta a resposta.</td><td>Arquivo YAML com <code>kind: native</code></td></tr>
+        <tr><td><strong>Tool</strong></td><td>Uma ação concreta: calcular, consultar, validar algo.</td><td>Função Python com o decorador <code>@tool</code></td></tr>
+        <tr><td><strong>Collaborator</strong></td><td>Outro agente que este pode acionar como se fosse uma tool.</td><td>Lista <code>collaborators</code> no YAML</td></tr>
+        <tr><td><strong>Guideline</strong></td><td>Regra determinística no formato "quando X, faça Y".</td><td>Bloco <code>guidelines</code> no YAML</td></tr>
+      </tbody>
+    </table>
+
+    <p>Esses quatro tipos cobrem toda a trilha: agente no ADK 1, tools no ADK 2, composição multiagente no ADK 3.</p>
+
+    <h3 id="escopo">O que este laboratório não usa</h3>
+
+    <p>A ADK também suporta bancos de dados, APIs externas, servidores MCP, OAuth e a Developer Edition (versão local da plataforma). <strong>Nada disso entra aqui.</strong></p>
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Escopo desta trilha</div>
+        <p style="margin:0;">Você vai usar <strong>só o watsonx Orchestrate e Python</strong>. Sem Docker, sem banco de dados, sem API externa, sem credenciais de terceiros. As tools terão os dados dentro do próprio arquivo, e a CLI aponta para o tenant que você já tem.</p>
+      </div>
+    </div>
+
+    <p>É uma escolha intencional: num workshop, cada dependência extra é um ponto a mais para travar. E do ponto de vista didático, não faz falta — como o modelo enxerga uma tool, como o agente decide chamá-la, como tudo se conecta, isso aparece mesmo com dados fictícios.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- AMBIENTE -->
+  <section id="ambiente">
+    <h2>Preparando o ambiente</h2>
+
+    <p>Três passos: Python na versão certa, pasta do projeto e instalação do pacote.</p>
+
+    <h3 id="python">Conferindo a versão do Python</h3>
+
+    <p>A ADK precisa de <strong>Python 3.11 ou mais recente</strong>:</p>
+
+    <div class="code-block">python --version</div>
+
+    <p>Se estiver numa versão anterior, instale antes de continuar. No macOS: <code>brew install python@3.11</code>. No Windows: baixe o instalador oficial e marque "Add Python to PATH". No Linux: use o gerenciador de pacotes da distro, <code>pyenv</code> ou <code>uv</code>.</p>
+
+    <h3 id="projeto">Criando a pasta do projeto</h3>
+
+    <p>Crie a pasta e um ambiente virtual — isso evita que a ADK misture com outros projetos Python da sua máquina:</p>
+
+    <div class="code-block">mkdir -p wxo-adk-lab/{agents,tools}
+cd wxo-adk-lab
+python -m venv .venv
+source .venv/bin/activate</div>
+
+    <p>No Windows: <code>.\.venv\Scripts\activate</code>.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">Cada vez que abrir um terminal novo, entre na pasta e ative o venv de novo. Sem isso, o comando <code>orchestrate</code> não vai existir no PATH.</p>
+      </div>
+    </div>
+
+    <h3 id="instalar">Instalando a ADK</h3>
+
+    <div class="code-block">pip install --upgrade ibm-watsonx-orchestrate</div>
+
+    <p>Quando terminar, confirme:</p>
+
+    <div class="code-block">orchestrate --version</div>
+
+    <p>Anote o número — versão é sempre a primeira pergunta quando algo dá errado. O <code>--help</code> funciona em qualquer nível do comando:</p>
+
+    <div class="code-block">orchestrate --help
+orchestrate agents --help
+orchestrate agents import --help</div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- CONECTAR -->
+  <section id="conectar">
+    <h2>Conectando ao seu tenant</h2>
+
+    <p>A ADK precisa saber para onde enviar o que você escreve. Essa configuração se chama <strong>ambiente</strong>, e você pode ter vários cadastrados ao mesmo tempo.</p>
+
+    <h3 id="credenciais">Pegando a URL e a API key</h3>
+
+    <p>São dois dados, na tela de configurações do tenant:</p>
+
+    <ol class="step-list">
+      <li>
+        <div class="step-content">
+          <p>Na interface do watsonx Orchestrate, clique no ícone do seu usuário (canto superior direito) e abra <strong>Settings</strong>.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Vá para a aba <strong>API details</strong>.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Copie a <strong>service instance URL</strong> — algo no formato <code>https://api.&lt;região&gt;.watson-orchestrate.ibm.com/instances/&lt;id&gt;</code>.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p>Clique em <strong>Generate API key</strong> e guarde a chave antes de fechar.</p>
+        </div>
+      </li>
+    </ol>
+
+    <!-- <img class="lab-img" src="Assets_for_BuildBooks/adk01/adk01_01.png" alt="Aba API details com a service instance URL e o botão Generate API key"> -->
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Atenção</div>
+        <p style="margin:0;">A chave aparece uma vez só e não tem como recuperar depois. Guarde antes de fechar a janela — e jamais coloque ela num arquivo que vai pro Git.</p>
+      </div>
+    </div>
+
+    <h3 id="env-add">Registrando e ativando o ambiente</h3>
+
+    <p>Registre a instância com o nome que quiser. O <code>--activate</code> já deixa esse ambiente como o ativo:</p>
+
+    <div class="code-block">orchestrate env add -n workshop -u &lt;service-instance-url&gt; --type ibm_iam --activate</div>
+
+    <p>O <code>--type</code> depende de onde roda a instância:</p>
+
+    <table>
+      <thead><tr><th>Onde roda</th><th>Valor de <code>--type</code></th></tr></thead>
+      <tbody>
+        <tr><td>IBM Cloud</td><td><code>ibm_iam</code></td></tr>
+        <tr><td>AWS</td><td><code>mcsp</code></td></tr>
+        <tr><td>On-premises</td><td><code>cpd</code></td></tr>
+      </tbody>
+    </table>
+
+    <p>Na maioria dos casos a ADK detecta o tipo pela URL e você pode omitir a flag. Na primeira ativação, a CLI vai pedir a API key.</p>
+
+    <p>Confira se funcionou:</p>
+
+    <div class="code-block">orchestrate env list</div>
+
+    <p>O ambiente ativo aparece marcado. Para trocar: <code>orchestrate env activate &lt;nome&gt;</code>.</p>
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Atenção</div>
+        <p style="margin:0;">Todo comando age sobre o <strong>ambiente ativo</strong>. Antes de qualquer import, rode <code>orchestrate env list</code> e confira. São dois segundos que evitam publicar no tenant errado.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PRIMEIRO AGENTE -->
+  <section id="primeiro-agente">
+    <h2>Seu primeiro agente em YAML</h2>
+
+    <p>O cenário da trilha é o suporte ao cliente de um produto fictício chamado <strong>Nexus Pro</strong>: um agente que responde dúvidas sobre planos, funcionalidades e conta. Nos próximos labs ele vai ganhar tools e um agente especialista. Por enquanto, ele só conversa — e está certo assim. A ideia aqui é fechar o ciclo <strong>escrever → importar → testar</strong> antes de adicionar qualquer coisa.</p>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Tenant compartilhado</div>
+        <p style="margin:0;">Se mais de uma pessoa está usando o mesmo tenant, acrescente suas iniciais ao <code>name</code> — <code>suporte_cliente_ana</code>, por exemplo — e ajuste os comandos nos próximos labs. Dois participantes com o mesmo nome sobrescrevem o trabalho um do outro.</p>
+      </div>
+    </div>
+
+    <h3 id="anatomia">Anatomia do arquivo</h3>
+
+    <p>Crie o arquivo <code>agents/suporte_cliente.yaml</code> com o conteúdo abaixo.</p>
+
+    <div class="code-block">spec_version: v1
+kind: native
+name: suporte_cliente
+description: &gt;
+  Agente de suporte ao cliente do Nexus Pro. Atende dúvidas sobre
+  planos disponíveis, funcionalidades do produto e situação da conta.
+instructions: |
+  Você é o assistente de suporte ao cliente do Nexus Pro.
+
+  Regras de conduta:
+  - Responda sempre em português do Brasil, em tom cordial e direto.
+  - Nunca invente informações sobre planos, preços ou funcionalidades.
+    Se não tiver o dado, diga exatamente o que precisa saber para responder.
+  - Não resolva problemas técnicos complexos. Se o cliente descrever
+    um erro ou falha, oriente a abrir um chamado com a equipe técnica.
+  - Feche respostas longas com uma frase curta de próximo passo.
+llm: groq/openai/gpt-oss-120b
+style: react_core
+memory_enabled: false
+hide_reasoning: false
+collaborators: []
+tools: []</div>
+
+    <p>O que cada campo faz:</p>
+
+    <table>
+      <thead><tr><th>Campo</th><th>Para que serve</th></tr></thead>
+      <tbody>
+        <tr><td><code>spec_version</code></td><td>Versão do formato. Use <code>v1</code>.</td></tr>
+        <tr><td><code>kind</code></td><td><code>native</code> para agentes do watsonx Orchestrate.</td></tr>
+        <tr><td><code>name</code></td><td>Identificador único — letras, números e underscore. O import usa esse campo para decidir se cria ou atualiza.</td></tr>
+        <tr><td><code>description</code></td><td>Lida por <strong>outros agentes</strong> quando este é usado como colaborador. Não afeta respostas diretas ao usuário.</td></tr>
+        <tr><td><code>instructions</code></td><td>O comportamento do agente: tom, limites, quando acionar tools.</td></tr>
+        <tr><td><code>llm</code></td><td>Provedor e modelo no formato <code>provedor/modelo</code>.</td></tr>
+        <tr><td><code>style</code></td><td>Use <code>react_core</code>. Os valores <code>default</code>, <code>react</code> e <code>planner</code> estão obsoletos.</td></tr>
+        <tr><td><code>memory_enabled</code></td><td>Mantém histórico entre turnos da sessão. Padrão: desligado.</td></tr>
+        <tr><td><code>hide_reasoning</code></td><td>Esconde o raciocínio do usuário final. Deixe visível enquanto estiver desenvolvendo.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Description e instructions não são a mesma coisa</div>
+        <p style="margin:0;">Misturar os dois é a causa mais comum de agente que nunca é acionado como colaborador. A <strong>description</strong> é o que os outros agentes leem para saber o que este resolve. As <strong>instructions</strong> são o manual interno: como ele se comporta. No ADK 3 essa diferença vai ficar clara na prática.</p>
+      </div>
+    </div>
+
+    <h3 id="importar">Importando o agente</h3>
+
+    <p>Da raiz do projeto:</p>
+
+    <div class="code-block">orchestrate agents import -f agents/suporte_cliente.yaml</div>
+
+    <p>Se der certo, a CLI confirma. Liste para checar:</p>
+
+    <div class="code-block">orchestrate agents list</div>
+
+    <p>Com <code>-v</code> você vê o JSON completo — útil quando quer saber exatamente o que foi salvo na plataforma:</p>
+
+    <div class="code-block">orchestrate agents list -v</div>
+
+    <h3 id="testar-cli">Testando pela CLI</h3>
+
+    <p>Sem precisar abrir o navegador:</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente "Quem é você e o que consegue fazer?"</div>
+
+    <p>Agora teste se as instruções estão valendo. Mande algo que ele não tem como saber:</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente "Qual é o melhor plano para mim?"</div>
+
+    <p>O comportamento esperado é ele perguntar o que o cliente precisa fazer com o produto, não inventar uma recomendação. Se inventar, a instrução de "não inventar informações" está fraca — reescreva antes de continuar.</p>
+
+    <p>Para ver o raciocínio por trás da resposta:</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente "Qual é o melhor plano para mim?" --include-reasoning</div>
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">O <code>--include-reasoning</code> vai ser muito útil no ADK 2, quando as tools entrarem. É por ele que você descobre se o agente escolheu a tool certa e com quais argumentos.</p>
+      </div>
+    </div>
+
+    <h3 id="ver-interface">Vendo o agente na interface</h3>
+
+    <p>Abra o watsonx Orchestrate no navegador e vá ao <strong>Agent Builder</strong>. O <code>suporte_cliente</code> aparece lá, igual a qualquer agente criado pela interface, com o mesmo chat de teste e os mesmos campos editáveis.</p>
+
+    <!-- <img class="lab-img" src="Assets_for_BuildBooks/adk01/adk01_02.png" alt="Agente publicado pela ADK aparecendo no Agent Builder"> -->
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Cuidado com edições paralelas</div>
+        <p style="margin:0;">Se você editar pela interface e reimportar o YAML depois, o arquivo vence — o import sempre sobrescreve. Escolha uma fonte da verdade e fique nela. Em projeto de código, essa fonte é o arquivo.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- CICLO -->
+  <section id="ciclo">
+    <h2>Atualizando e removendo</h2>
+
+    <p>Não existe comando de atualização separado. O import é idempotente por nome: rodar de novo com o mesmo <code>name</code> atualiza o que já existe.</p>
+
+    <p>Teste isso agora. Mude alguma linha das <code>instructions</code> — adicione, por exemplo, que o agente deve sempre mencionar o nome do produto ao se apresentar — e importe de novo:</p>
+
+    <div class="code-block">orchestrate agents import -f agents/suporte_cliente.yaml</div>
+
+    <p>Converse e confirme que o comportamento mudou. Esse ciclo rápido de editar e reimportar é o ritmo normal de trabalho com a ADK.</p>
+
+    <p>Se quiser uma confirmação antes de sobrescrever algo que já existe:</p>
+
+    <div class="code-block">orchestrate agents import -f agents/suporte_cliente.yaml --safe</div>
+
+    <p>Para remover:</p>
+
+    <div class="code-block">orchestrate agents remove -n suporte_cliente -k native</div>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Nota</div>
+        <p style="margin:0;">Não remova o agente agora — ele é a base dos próximos dois labs. Esse comando é para quando você quiser limpar o tenant no final da trilha.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- RESUMO -->
+  <section id="resumo">
+    <h2>Resumo</h2>
+
+    <p>ADK instalada, CLI conectada ao tenant, agente publicado sem abrir a interface uma vez. Os comandos do dia a dia:</p>
+
+    <table>
+      <thead><tr><th>Comando</th><th>O que faz</th></tr></thead>
+      <tbody>
+        <tr><td><code>orchestrate env list</code></td><td>Lista os ambientes e mostra qual está ativo</td></tr>
+        <tr><td><code>orchestrate env activate &lt;nome&gt;</code></td><td>Troca o ambiente ativo</td></tr>
+        <tr><td><code>orchestrate agents import -f &lt;arquivo&gt;</code></td><td>Cria ou atualiza um agente</td></tr>
+        <tr><td><code>orchestrate agents list -v</code></td><td>Lista agentes com detalhe completo</td></tr>
+        <tr><td><code>orchestrate agents remove -n &lt;nome&gt; -k native</code></td><td>Remove um agente</td></tr>
+        <tr><td><code>orchestrate chat ask --agent-name &lt;nome&gt; "..."</code></td><td>Conversa com o agente pelo terminal</td></tr>
+        <tr><td><code>orchestrate --debug &lt;comando&gt;</code></td><td>Saída detalhada para investigar erros</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Antes de seguir, confirme</h3>
+
+    <ul>
+      <li><code>orchestrate --version</code> retorna um número de versão</li>
+      <li><code>orchestrate env list</code> mostra o seu ambiente como ativo</li>
+      <li><code>orchestrate agents list</code> inclui o <code>suporte_cliente</code></li>
+      <li>O agente responde no <code>chat ask</code> e pede as informações que faltam em vez de inventar</li>
+      <li>O agente aparece no Agent Builder</li>
+    </ul>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PRÓXIMOS PASSOS -->
+  <section id="proximos-passos">
+    <h2>Próximos Passos</h2>
+
+    <p>No <strong>ADK 2</strong>, o agente ganha tools em Python puro. Você vai ver como o modelo enxerga a assinatura de uma função e por que a docstring acaba sendo a parte mais crítica do código.</p>
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Documentação</div>
+        <p style="margin:0;">A referência oficial da ADK está em <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">developer.watson-orchestrate.ibm.com</a>, versionada por release.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="lab-nav">
+    <a href="lab-adk-2.html" class="primary">ADK 2: Tools em Python →</a>
+  </div>
+</main>
+
+
+<footer class="c-footer">
+  Nathalia Trazzi | Technical Solutions Architect & AI Engineer
+</footer>
+
+<script>
+(function(){
+  var MOON = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  var SUN  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  function applyTheme(dark) {
+    document.documentElement.classList.toggle('dark', dark);
+    var icon = document.getElementById('themeIcon');
+    if (icon) icon.innerHTML = dark ? SUN : MOON;
+  }
+  var saved = localStorage.getItem('wxo-theme');
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var isDark = saved ? saved === 'dark' : prefersDark;
+  applyTheme(isDark);
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.addEventListener('click', function() {
+      var nowDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('wxo-theme', nowDark ? 'dark' : 'light');
+      var icon = document.getElementById('themeIcon');
+      if (icon) icon.innerHTML = nowDark ? SUN : MOON;
+    });
+  });
+})();
+</script>
+</body>
+</html>
