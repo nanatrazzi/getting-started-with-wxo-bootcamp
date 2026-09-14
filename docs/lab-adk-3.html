@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADK 3 · Multiagente e Publicação · watsonx Orchestrate</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --carbon-blue-60: #0f62fe; --carbon-blue-70: #0043ce; --carbon-blue-10: #edf5ff;
+    --carbon-gray-100: #161616; --carbon-gray-90: #262626; --carbon-gray-80: #393939;
+    --carbon-gray-70: #525252; --carbon-gray-30: #c6c6c6; --carbon-gray-20: #e0e0e0;
+    --carbon-gray-10: #f4f4f4; --carbon-white: #ffffff; --carbon-teal-60: #007d79;
+    --carbon-green-60: #198038; --carbon-green-10: #defbe6; --carbon-yellow-30: #f1c21b;
+    --carbon-red-60: #da1e28; --sidebar-width: 256px; --header-height: 48px;
+    --font: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'IBM Plex Mono', 'Courier New', monospace;
+  }
+  html { font-size: 14px; }
+  body { font-family: var(--font); color: var(--text-primary); background: var(--carbon-gray-10); line-height: 1.5; }
+  .c-header { position: fixed; top: 0; left: 0; right: 0; height: var(--header-height); background: var(--carbon-gray-100); color: var(--carbon-white); display: flex; align-items: center; z-index: 9000; padding: 0 16px; gap: 16px; }
+  .c-header__logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--carbon-white); }
+  .c-header__logo svg { fill: var(--carbon-white); }
+  .c-header__name { font-size: 14px; white-space: nowrap; color: var(--carbon-gray-30); }
+  .c-header__divider { width: 1px; height: 24px; background: var(--carbon-gray-80); }
+  .c-header__title { font-size: 14px; color: var(--carbon-white); }
+  .c-sidenav { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--carbon-gray-90); overflow-y: auto; z-index: 8000; }
+  .c-sidenav__section-title { padding: 16px 16px 8px; font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30); }
+  .c-sidenav__item { display: block; padding: 10px 16px; font-size: 14px; color: var(--carbon-gray-30); text-decoration: none; border-left: 3px solid transparent; transition: background .1s, color .1s; }
+  .c-sidenav__item:hover { background: var(--carbon-gray-80); color: var(--carbon-white); }
+  .c-sidenav__item.active { background: var(--carbon-blue-60); color: var(--carbon-white); border-left-color: var(--carbon-white); font-weight: 500; }
+  .c-sidenav__item .lab-num { display: inline-block; font-size: 11px; font-weight: 600; background: var(--carbon-gray-70); color: var(--carbon-white); border-radius: 2px; padding: 0 5px; margin-right: 6px; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2); }
+  /* ─── ACCORDION MATERIAIS ─── */
+  .c-sidenav__accordion-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; padding: 16px 16px 8px; font-size: 12px; font-weight: 600;
+    letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-gray-30);
+    background: none; border: none; cursor: pointer;
+  }
+  .c-sidenav__accordion-btn:hover { color: var(--carbon-white); }
+  .c-sidenav__accordion-btn .chevron {
+    width: 12px; height: 12px; transition: transform .2s;
+    fill: none; stroke: currentColor; stroke-width: 2;
+  }
+  .c-sidenav__accordion-btn[aria-expanded="true"] .chevron { transform: rotate(180deg); }
+  .c-sidenav__accordion-body { display: none; }
+  .c-sidenav__accordion-body.open { display: block; }
+  .c-content { margin-left: var(--sidebar-width); margin-top: var(--header-height); padding: 40px 48px 80px; max-width: 900px; }
+  .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); margin-bottom: 24px; }
+  .breadcrumb a { color: var(--carbon-blue-60); text-decoration: none; }
+  .page-header { margin-bottom: 32px; border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 24px; }
+  .page-header__eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .32px; text-transform: uppercase; color: var(--carbon-blue-60); margin-bottom: 8px; }
+  .page-header__h1 { font-size: 28px; font-weight: 300; line-height: 1.25; color: var(--text-primary); margin-bottom: 12px; }
+  .page-header__subtitle { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+  h2 { font-size: 20px; font-weight: 400; margin: 40px 0 16px; color: var(--text-primary); border-bottom: 1px solid var(--carbon-gray-20); padding-bottom: 8px; }
+  h3 { font-size: 16px; font-weight: 600; margin: 28px 0 12px; color: var(--text-primary); }
+  h4 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: var(--text-primary); }
+  p { margin-bottom: 14px; font-size: 14px; line-height: 1.6; }
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { margin-bottom: 6px; font-size: 14px; line-height: 1.6; }
+  strong { font-weight: 600; }
+  a { color: var(--carbon-blue-60); }
+  .callout { display: flex; gap: 12px; padding: 16px; margin: 20px 0; border-left: 4px solid; }
+  .callout--note { border-color: var(--carbon-blue-60); background: var(--carbon-blue-10); }
+  .callout--warning { border-color: var(--carbon-yellow-30); background: #fdf6da; }
+  .callout__title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; margin-bottom: 6px; }
+  .callout--note .callout__title { color: var(--carbon-blue-60); }
+  .callout--warning .callout__title { color: #a4780a; }
+  .callout p:last-child { margin: 0; }
+  .step-list { list-style: none; padding: 0; counter-reset: step-counter; }
+  .step-list li { counter-increment: step-counter; display: flex; gap: 16px; margin-bottom: 24px; align-items: flex-start; }
+  .step-list li::before { content: counter(step-counter); display: flex; align-items: center; justify-content: center; min-width: 28px; height: 28px; background: var(--carbon-blue-60); color: white; font-size: 13px; font-weight: 600; border-radius: 50%; flex-shrink: 0; margin-top: 2px; }
+  .step-content { flex: 1; }
+  .code-block { background: var(--carbon-gray-90); color: #f4f4f4; font-family: var(--mono); font-size: 13px; padding: 16px 20px; margin: 12px 0; border-left: 4px solid var(--carbon-blue-60); overflow-x: auto; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+  code { background: var(--carbon-gray-20); font-family: var(--mono); font-size: 12px; padding: 2px 6px; border-radius: 2px; }
+  .lab-img { display: block; max-width: 100%; border: 1px solid var(--border); margin: 16px 0; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+  .section-divider { border: none; border-top: 1px solid var(--carbon-gray-20); margin: 40px 0; }
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .metric-card { background: var(--bg-surface); border: 1px solid var(--border); padding: 14px 16px; }
+  .metric-card__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .32px; color: var(--text-secondary); margin-bottom: 4px; }
+  .metric-card__title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px; }
+  .metric-card__desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th { background: var(--carbon-gray-80); color: var(--carbon-white); padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--carbon-gray-20); vertical-align: top; }
+  tr:nth-child(even) td { background: var(--carbon-gray-10); }
+  .lab-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--carbon-gray-20); gap: 16px; }
+  .lab-nav a { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid var(--carbon-blue-60); color: var(--carbon-blue-60); }
+  .lab-nav a.primary { background: var(--carbon-blue-60); color: white; }
+  .lab-nav a:hover { background: var(--carbon-blue-10); }
+  .lab-nav a.primary:hover { background: var(--carbon-blue-70); }
+  .c-footer { margin-left: var(--sidebar-width); padding: 24px 48px; border-top: 1px solid var(--carbon-gray-20); font-size: 12px; color: var(--text-secondary); background: var(--bg-surface); }
+  @media (max-width: 768px) { .c-sidenav { display: none; } .c-content, .c-footer { margin-left: 0; padding: 24px 20px 60px; } .metrics-grid { grid-template-columns: 1fr; } }
+
+  /* ═══════════════════════════════════════════════════════
+     IBM Carbon Design System — White / Gray-100 theme tokens
+     https://carbondesignsystem.com/guidelines/color/tokens
+     ═══════════════════════════════════════════════════════ */
+
+  /* ── Light (White theme) ── */
+  :root {
+    /* backgrounds */
+    --cds-background:          #ffffff;   /* $background */
+    --cds-background-hover:    #e8e8e8;   /* $background-hover */
+    --cds-layer-01:            #f4f4f4;   /* $layer-01 */
+    --cds-layer-02:            #ffffff;   /* $layer-02 */
+    --cds-layer-hover-01:      #e8e8e8;   /* $layer-hover-01 */
+    /* ui */
+    --cds-border-subtle:       #e0e0e0;   /* $border-subtle-00 */
+    --cds-border-strong:       #8d8d8d;   /* $border-strong-01 */
+    /* text */
+    --cds-text-primary:        #161616;   /* $text-primary */
+    --cds-text-secondary:      #525252;   /* $text-secondary */
+    --cds-text-placeholder:    #a8a8a8;   /* $text-placeholder */
+    --cds-text-on-color:       #ffffff;   /* $text-on-color */
+    --cds-text-helper:         #6f6f6f;   /* $text-helper */
+    /* interactive */
+    --cds-link-primary:        #0f62fe;   /* $link-primary */
+    --cds-interactive:         #0f62fe;   /* $interactive */
+    --cds-focus:               #0f62fe;   /* $focus */
+    /* code/shell */
+    --cds-code-bg:             #282828;   /* always dark for code blocks */
+    --cds-code-text:           #f4f4f4;
+    /* shell nav (Gray 10 shell) */
+    --cds-shell-bg:            #ffffff;   /* $shell-side-nav-bg-01 (White shell) */
+    --cds-shell-header-bg:     #161616;   /* $shell-header-bg-01 */
+    --cds-shell-link:          #161616;   /* nav item text */
+    --cds-shell-link-hover-bg: #edf5ff;   /* Blue-10 tint on hover */
+    --cds-shell-category:      #0f62fe;   /* Blue-60 — accent category titles */
+    --cds-shell-accent:        #0f62fe;   /* IBM Blue-60 */
+    --cds-shell-accent-tint:   #edf5ff;   /* Blue-10 */
+    --cds-shell-active-text:   #0f62fe;   /* Blue text on blue-10 active bg */
+    --cds-shell-hover-text:    #0f62fe;   /* Blue text on blue-10 hover bg */
+    /* notification / callout tints */
+    --cds-notification-info-bg:    #edf5ff;
+    --cds-notification-success-bg: #defbe6;
+    --cds-notification-warning-bg: #fdf6da;
+    --cds-notification-error-bg:   #fff1f1;
+  }
+
+  /* ── Dark (Gray 100 theme) ── */
+  html.dark {
+    /* backgrounds */
+    --cds-background:          #161616;   /* $background */
+    --cds-background-hover:    #353535;   /* $background-hover */
+    --cds-layer-01:            #262626;   /* $layer-01 */
+    --cds-layer-02:            #393939;   /* $layer-02 */
+    --cds-layer-hover-01:      #353535;   /* $layer-hover-01 */
+    /* ui */
+    --cds-border-subtle:       #393939;   /* $border-subtle-00 */
+    --cds-border-strong:       #6f6f6f;   /* $border-strong-01 */
+    /* text */
+    --cds-text-primary:        #f4f4f4;   /* $text-primary */
+    --cds-text-secondary:      #c6c6c6;   /* $text-secondary */
+    --cds-text-placeholder:    #6f6f6f;   /* $text-placeholder */
+    --cds-text-on-color:       #ffffff;   /* $text-on-color */
+    --cds-text-helper:         #8d8d8d;   /* $text-helper */
+    /* interactive */
+    --cds-link-primary:        #78a9ff;   /* $link-primary (dark) */
+    --cds-interactive:         #4589ff;   /* $interactive (dark) */
+    --cds-focus:               #ffffff;   /* $focus (dark) */
+    /* code/shell */
+    --cds-code-bg:             #161616;
+    --cds-code-text:           #f4f4f4;
+    /* shell nav (Gray 100 shell) */
+    --cds-shell-bg:            #161616;   /* $shell-side-nav-bg-01 (Gray 100 shell) */
+    --cds-shell-header-bg:     #161616;
+    --cds-shell-link:          #c6c6c6;
+    --cds-shell-link-hover-bg: #353535;
+    --cds-shell-category:      #8d8d8d;
+    --cds-shell-accent:        #4589ff;   /* Blue-50 — border accent in dark */
+    --cds-shell-accent-tint:   #0f62fe;   /* Blue-60 solid for active bg */
+    --cds-shell-active-text:   #ffffff;   /* White text on blue active bg */
+    --cds-shell-hover-text:    #f4f4f4;   /* Light text on dark hover bg */
+    /* notification / callout tints */
+    --cds-notification-info-bg:    #001141;
+    --cds-notification-success-bg: #071908;
+    --cds-notification-warning-bg: #302200;
+    --cds-notification-error-bg:   #2d0709;
+  }
+
+  /* ── Semantic aliases (shorthand used in rules below) ── */
+  :root,html.dark {
+    --bg-page:    var(--cds-layer-01);
+    --bg-surface: var(--cds-background);
+    --text-primary:   var(--cds-text-primary);
+    --text-secondary: var(--cds-text-secondary);
+    --border:     var(--cds-border-subtle);
+  }
+
+  /* ═══════════════ COMPONENT OVERRIDES ═══════════════ */
+
+  /* body */
+  body { background: var(--cds-layer-01) !important; color: var(--cds-text-primary) !important; }
+
+  /* ── Shell header (always gray-100 regardless of theme) ── */
+  .c-header         { background: var(--cds-shell-header-bg) !important; }
+  .c-header__name   { color: #a8a8a8 !important; }
+  .c-header__title  { color: #f4f4f4 !important; }
+  .c-header__divider { background: #393939 !important; }
+
+  /* ── Shell side-nav ── */
+  .c-sidenav { background: var(--cds-shell-bg) !important; border-right: 2px solid var(--cds-border-subtle) !important; }
+  .c-sidenav__section-title { color: var(--cds-shell-category) !important; }
+  .c-sidenav__item { color: var(--cds-shell-link) !important; border-left: 3px solid transparent !important; }
+  .c-sidenav__item:hover { background: var(--cds-shell-link-hover-bg) !important; color: var(--cds-shell-hover-text, #0f62fe) !important; border-left-color: var(--cds-shell-accent, #0f62fe) !important; }
+  .c-sidenav__item.active { background: var(--cds-shell-accent-tint, #edf5ff) !important; color: var(--cds-shell-active-text, #0f62fe) !important; border-left-color: var(--cds-shell-accent, #0f62fe) !important; font-weight: 600 !important; }
+  .c-sidenav__item .lab-num { background: var(--cds-shell-accent-tint, #edf5ff) !important; color: var(--cds-shell-active-text, #0f62fe) !important; }
+  .c-sidenav__item.active .lab-num { background: rgba(255,255,255,0.2) !important; color: var(--cds-shell-active-text, #0f62fe) !important; }
+  .c-sidenav__accordion-btn { color: var(--cds-shell-category) !important; }
+  .c-sidenav__accordion-btn:hover { color: var(--cds-shell-hover-text, #0f62fe) !important; }
+
+  /* ── Footer ── */
+  .c-footer { background: var(--cds-background) !important; border-top-color: var(--cds-border-subtle) !important; color: var(--cds-text-secondary) !important; }
+
+  /* ── Typography ── */
+  h2, h3, h4 { color: var(--cds-text-primary) !important; }
+  h2 { border-bottom-color: var(--cds-border-subtle) !important; }
+  p { color: var(--cds-text-primary) !important; }
+  li { color: var(--cds-text-primary) !important; }
+  strong { color: inherit !important; }
+  a { color: var(--cds-link-primary) !important; }
+  .page-header { border-bottom-color: var(--cds-border-subtle) !important; }
+  .page-header__h1 { color: var(--cds-text-primary) !important; }
+  .page-header__eyebrow { color: #0f62fe !important; }
+  html.dark .page-header__eyebrow { color: #78a9ff !important; }
+  .page-header__subtitle { color: var(--cds-text-secondary) !important; }
+  .breadcrumb { color: var(--cds-text-secondary) !important; }
+  .breadcrumb span { color: var(--cds-text-helper) !important; }
+  .lab-img-caption { color: var(--cds-text-helper) !important; }
+  .section-divider { border-top-color: var(--cds-border-subtle) !important; }
+
+  /* ── Surfaces / Cards ── */
+  .lab-card, .objective-tile, .prereq-list,
+  .file-card, .access-box, .update-notice,
+  .link-box, .node-card, .obj-item {
+    background: var(--cds-background) !important;
+    border-color: var(--cds-border-subtle) !important;
+    color: var(--cds-text-primary) !important;
+  }
+  .lab-card__title { color: var(--cds-text-primary) !important; }
+  .lab-card__desc, .lab-card__num { color: var(--cds-text-secondary) !important; }
+
+  /* ── Tables ── */
+  table th, .vehicle-table th { background: #393939 !important; color: #f4f4f4 !important; }
+  html.dark table th, html.dark .vehicle-table th { background: #474747 !important; color: #f4f4f4 !important; }
+  table td, .vehicle-table td { color: var(--cds-text-primary) !important; border-bottom-color: var(--cds-border-subtle) !important; }
+  table tr:nth-child(even) td,
+  .vehicle-table tr:nth-child(even) td { background: var(--cds-layer-01) !important; }
+
+  /* ── Code ── */
+  .code-block, .questions-block {
+    background: var(--cds-code-bg) !important;
+    color: var(--cds-code-text) !important;
+  }
+  code {
+    background: var(--cds-layer-02) !important;
+    color: var(--cds-text-primary) !important;
+    border: 1px solid var(--cds-border-subtle) !important;
+  }
+
+  /* ── Callouts — light = tint, dark = dark tint ── */
+  .callout--note    { background: var(--cds-notification-info-bg) !important; }
+  .callout--tip     { background: var(--cds-notification-success-bg) !important; }
+  .callout--warning { background: var(--cds-notification-warning-bg) !important; }
+  .callout--danger  { background: var(--cds-notification-error-bg) !important; }
+  .callout p, .callout li { color: var(--cds-text-primary) !important; }
+  /* callout titles — light */
+  .callout--note    .callout__title { color: #0043ce !important; }
+  .callout--tip     .callout__title { color: #198038 !important; }
+  .callout--warning .callout__title { color: #8a3800 !important; }
+  .callout--danger  .callout__title { color: #a2191f !important; }
+  /* callout titles — dark (lighter for contrast) */
+  html.dark .callout--note    .callout__title { color: #78a9ff !important; }
+  html.dark .callout--tip     .callout__title { color: #42be65 !important; }
+  html.dark .callout--warning .callout__title { color: #f1c21b !important; }
+  html.dark .callout--danger  .callout__title { color: #ff8389 !important; }
+
+  /* ── Hero attention (informational, always dark) ── */
+  .hero-attention { background: #262626 !important; }
+  .hero-attention p { color: #f4f4f4 !important; }
+
+  /* ── Nav (prev/next) ── */
+  .lab-nav { border-top-color: var(--cds-border-subtle) !important; }
+  .lab-nav a { color: #0f62fe !important; border-color: #0f62fe !important; background: transparent !important; }
+  .lab-nav a:hover { background: #edf5ff !important; color: #0f62fe !important; }
+  .lab-nav a.primary { background: #0f62fe !important; color: #ffffff !important; border-color: #0f62fe !important; }
+  .lab-nav a.primary:hover { background: #0043ce !important; color: #ffffff !important; }
+  html.dark .lab-nav a { color: #78a9ff !important; border-color: #78a9ff !important; background: transparent !important; }
+  html.dark .lab-nav a:hover { background: #001d6c !important; color: #78a9ff !important; }
+  html.dark .lab-nav a.primary { background: #0f62fe !important; color: #ffffff !important; border-color: #0f62fe !important; }
+  html.dark .lab-nav a.primary:hover { background: #0043ce !important; color: #ffffff !important; }
+  /* CTA button — always blue bg, always white text */
+  .cta-btn { background: #0f62fe !important; color: #ffffff !important; }
+  .cta-btn:hover { background: #0043ce !important; color: #ffffff !important; }
+
+  /* ── Images ── */
+  .lab-img { border-color: var(--cds-border-subtle) !important; }
+
+  /* ── File cards ── */
+  .file-card__body, .file-card__actions { border-color: var(--cds-border-subtle) !important; }
+  .file-card__thumb { background: var(--cds-layer-01) !important; border-color: var(--cds-border-subtle) !important; }
+  .file-card__name { color: var(--cds-text-primary) !important; }
+  .file-card__desc, .file-card__meta { color: var(--cds-text-secondary) !important; }
+  html.dark .file-card__icon--pdf { background: #2d0709 !important; }
+  html.dark .file-card__icon--txt { background: #071908 !important; }
+
+  /* ── Access box ── */
+  .access-box__value { background: var(--cds-layer-01) !important; border-color: var(--cds-border-subtle) !important; color: var(--cds-text-primary) !important; }
+  .access-box__label { color: var(--cds-text-secondary) !important; }
+
+  /* ── Tag pills ── */
+  .tag--blue { background: #edf5ff !important; color: #0043ce !important; }
+  html.dark .tag--blue { background: #001d6c !important; color: #78a9ff !important; }
+  .tag--red  { background: #fff1f1 !important; color: #a2191f !important; }
+  html.dark .tag--red  { background: #2d0709 !important; color: #ff8389 !important; }
+  .tag--green{ background: #defbe6 !important; color: #0e6027 !important; }
+  html.dark .tag--green { background: #071908 !important; color: #42be65 !important; }
+
+  /* ── Theme toggle button ── */
+  .theme-toggle { display: flex; align-items: center; justify-content: center; margin-left: auto; width: 36px; height: 36px; border: none; border-radius: 50%; background: transparent; color: #a8a8a8; cursor: pointer; flex-shrink: 0; transition: color .15s, background .15s; }
+  .theme-toggle:hover { background: rgba(255,255,255,0.1); color: #f4f4f4; }
+  .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<header class="c-header">
+    <a class="c-header__logo" href="index.html">
+    <span style="display:inline-flex;align-items:center;justify-content:center;background:#0f62fe;color:#fff;font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;padding:4px 9px;line-height:1;">IBM</span>
+  </a>
+  <div class="c-header__divider"></div>
+  <span class="c-header__name">watsonx Orchestrate</span>
+  <div class="c-header__divider"></div>
+  <span class="c-header__title">Agent Development Kit</span>
+  <button class="theme-toggle" id="themeToggle" title="Alternar tema" aria-label="Alternar tema claro/escuro">
+    <svg id="themeIcon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  </button>
+</header>
+
+<nav class="c-sidenav">
+  <div class="c-sidenav__section-title">Visão Geral</div>
+  <a class="c-sidenav__item" href="index.html">Introdução</a>
+  <div class="c-sidenav__section-title">Governança de Agentes</div>
+  <a class="c-sidenav__item" href="lab1.html"><span class="lab-num">Lab 1</span>Data Poisoning</a>
+  <a class="c-sidenav__item" href="lab2.html"><span class="lab-num">Lab 2</span>Agentes Externos</a>
+  <a class="c-sidenav__item" href="lab3.html"><span class="lab-num">Lab 3</span>Controles</a>
+  <a class="c-sidenav__item" href="lab4.html"><span class="lab-num">Lab 4</span>Avaliação de Agentes</a>
+  <a class="c-sidenav__item" href="lab5.html"><span class="lab-num">Lab 5</span>Debugging</a>
+  <a class="c-sidenav__item" href="lab6.html"><span class="lab-num">Lab 6</span>Control Plane</a>
+  <div class="c-sidenav__section-title">Construindo Workflows</div>
+  <a class="c-sidenav__item" href="lab-workflow-1.html"><span class="lab-num">WF 1</span>Construindo Workflows</a>
+  <a class="c-sidenav__item" href="lab-workflow-2.html"><span class="lab-num">WF 2</span>Mensagens &amp; Ramificações</a>
+  <a class="c-sidenav__item" href="lab-workflow-3.html"><span class="lab-num">WF 3</span>Tratamento de Exceções</a>
+  <div class="c-sidenav__section-title">ADK (Developer experience)</div>
+  <a class="c-sidenav__item" href="lab-adk-1.html"><span class="lab-num">ADK 1</span>Ambiente e Primeiro Agente</a>
+  <a class="c-sidenav__item" href="lab-adk-2.html"><span class="lab-num">ADK 2</span>Tools em Python</a>
+  <a class="c-sidenav__item active" href="lab-adk-3.html"><span class="lab-num">ADK 3</span>Multiagente e Publicação</a>
+  <button class="c-sidenav__accordion-btn" aria-expanded="false" onclick="this.setAttribute('aria-expanded', this.getAttribute('aria-expanded')==='true'?'false':'true'); this.nextElementSibling.classList.toggle('open');">
+    Materiais
+    <svg class="chevron" viewBox="0 0 12 12"><polyline points="2,4 6,8 10,4"/></svg>
+  </button>
+  <div class="c-sidenav__accordion-body">
+  <a class="c-sidenav__item" href="control-planning.html">Control Planning</a>
+  <a class="c-sidenav__item" href="workflow-documents.html">Workflow</a>
+  </div>
+</nav>
+
+<main class="c-content">
+  <div class="breadcrumb">
+    <a href="index.html">Início</a>
+    <span>›</span>
+    <span>ADK 3</span>
+  </div>
+
+  <div class="page-header">
+    <div class="page-header__eyebrow">ADK 3 · Developer experience</div>
+    <h1 class="page-header__h1">Multiagente, regras determinísticas e publicação repetível</h1>
+    <p class="page-header__subtitle">Divida o agente em especialistas que delegam entre si, controle comportamento com guidelines, configure a tela de entrada do chat e transforme tudo em um script que recria a solução do zero.</p>
+  </div>
+
+  <!-- Índice -->
+  <nav style="background:var(--bg-surface);border:1px solid var(--border);padding:20px 24px;margin-bottom:32px;">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.32px;color:var(--text-secondary);margin-bottom:10px;">Índice</div>
+    <ul style="list-style:none;padding:0;margin:0;">
+      <li style="margin-bottom:6px;"><a href="#visao-geral">Visão Geral</a></li>
+      <li style="margin-bottom:6px;"><a href="#por-que-dividir">Por que dividir em vários agentes</a></li>
+      <li style="margin-bottom:6px;"><a href="#especialista">Criando o agente especialista</a></li>
+      <li style="margin-bottom:6px;"><a href="#roteador">Transformando o agente principal em roteador</a>
+        <ul style="list-style:none;padding-left:16px;margin:6px 0 0;">
+          <li><a href="#guidelines">Guidelines: regras que não podem falhar</a></li>
+          <li><a href="#chat-config">Mensagem de boas-vindas e atalhos</a></li>
+          <li><a href="#yaml-final">O arquivo completo</a></li>
+        </ul>
+      </li>
+      <li style="margin-bottom:6px;"><a href="#ordem">Ordem de importação e script de deploy</a></li>
+      <li style="margin-bottom:6px;"><a href="#testar">Testando a delegação</a></li>
+      <li style="margin-bottom:6px;"><a href="#exportar">Exportando o que você construiu</a></li>
+      <li style="margin-bottom:6px;"><a href="#fechando-ciclo">O que vem depois</a></li>
+      <li style="margin-bottom:6px;"><a href="#resumo">Resumo</a></li>
+      <li style="margin-bottom:6px;"><a href="#proximos-passos">Próximos Passos</a></li>
+    </ul>
+  </nav>
+
+  <!-- VISÃO GERAL -->
+  <section id="visao-geral">
+    <h2>Visão Geral</h2>
+
+    <p>No ADK 2 você construiu um agente com duas tools: uma que verifica elegibilidade de upgrade e outra que consulta detalhes dos planos. Funciona bem com duas tools. Com dez, começa a hesitar.</p>
+
+    <p>Neste lab você refatora a solução em dois agentes, do jeito que ela cresceria em um projeto real: um <strong>especialista em planos</strong>, que carrega as tools e domina o assunto, e um <strong>agente de atendimento</strong>, que conversa com o cliente e delega quando a pergunta envolve análise de conta.</p>
+
+    <p>Depois disso, você acrescenta as duas coisas que separam um protótipo de algo que vai para produção: <strong>guidelines</strong>, para regras de negócio que não podem depender da boa vontade do modelo, e um <strong>script de publicação</strong>, para que a solução inteira possa ser recriada do zero em qualquer tenant.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- POR QUE DIVIDIR -->
+  <section id="por-que-dividir">
+    <h2>Por que dividir em vários agentes</h2>
+
+    <p>Um agente escolhe a tool comparando descrições. Quanto mais tools disputam a atenção dele, mais contexto ele precisa processar por turno e maior a chance de escolher errado. Dividir por domínio resolve isso: cada agente enxerga poucas tools e um agente de nível acima decide para quem mandar a pergunta.</p>
+
+    <table>
+      <thead><tr><th>Sinal de que é hora de dividir</th><th>O que fazer</th></tr></thead>
+      <tbody>
+        <tr><td>O agente passou de seis ou sete tools</td><td>Agrupe por assunto e crie um especialista para cada grupo</td></tr>
+        <tr><td>Tools de assuntos diferentes estão sendo confundidas</td><td>Separe em agentes distintos, com descrições que se excluem</td></tr>
+        <tr><td>As <code>instructions</code> viraram um documento longo com regras de vários domínios</td><td>Cada especialista carrega as regras do próprio domínio</td></tr>
+        <tr><td>Times diferentes cuidam de partes diferentes da solução</td><td>Um agente por time, com repositórios e ciclos de release próprios</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Divisão também tem custo</div>
+        <p style="margin:0;">Cada delegação é uma rodada a mais de raciocínio, e isso aparece em latência. Dividir dois agentes com uma tool cada não faz sentido. Divida quando a confusão entre tools ou o tamanho das instruções começar a atrapalhar — não antes.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ESPECIALISTA -->
+  <section id="especialista">
+    <h2>Criando o agente especialista</h2>
+
+    <p>O especialista recebe as duas tools que você escreveu no ADK 2 e as regras do domínio de planos. Crie <code>agents/especialista_planos.yaml</code>:</p>
+
+    <div class="code-block">spec_version: v1
+kind: native
+name: especialista_planos
+description: |
+  Especialista em planos do Nexus Pro. Acione este agente quando
+  a pergunta envolver elegibilidade para upgrade, comparação de planos,
+  funcionalidades incluídas, preço ou limites de uso.
+  Não trata problemas técnicos, falhas no produto nem solicitações
+  de cancelamento.
+instructions: |
+  Você analisa planos e uso de conta do Nexus Pro.
+
+  - Para saber se o cliente é elegível para upgrade, use verificar_elegibilidade_upgrade.
+    Nunca tome essa decisão de cabeça.
+  - Para detalhar funcionalidades e preços, use consultar_detalhes_plano.
+  - Se faltar o plano atual, o percentual de uso ou o tempo no plano,
+    peça exatamente o que falta.
+  - Responda em no máximo três frases, com os dados que vieram das tools.
+llm: groq/openai/gpt-oss-120b
+style: react_core
+collaborators: []
+tools:
+  - verificar_elegibilidade_upgrade
+  - consultar_detalhes_plano</div>
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">A description é o roteador</div>
+        <p style="margin:0;">É por esse texto que o agente principal decide delegar. Repare que ele diz o que o especialista faz <strong>e o que ele não faz</strong>. A segunda parte evita delegação errada tanto quanto a primeira garante a delegação certa — e é justamente a parte que quase todo mundo esquece de escrever.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ROTEADOR -->
+  <section id="roteador">
+    <h2>Transformando o agente principal em roteador</h2>
+
+    <p>O <code>suporte_cliente</code> perde as tools e ganha um colaborador. Ele passa a cuidar da conversa com o cliente e do que fazer quando a pergunta sai do escopo técnico.</p>
+
+    <h3 id="guidelines">Guidelines: regras que não podem falhar</h3>
+
+    <p>Instruções em texto livre orientam o modelo, mas não garantem nada. Quando existe uma regra de negócio que precisa valer sempre, ela vira uma <strong>guideline</strong>, no formato <em>quando a condição X acontecer, faça Y</em>.</p>
+
+    <table>
+      <thead><tr><th>Campo</th><th>Para que serve</th></tr></thead>
+      <tbody>
+        <tr><td><code>condition</code></td><td>A situação que dispara a regra. Obrigatório.</td></tr>
+        <tr><td><code>action</code></td><td>O que o agente deve fazer quando a condição for atendida.</td></tr>
+        <tr><td><code>tool</code></td><td>Tool a ser acionada, quando a regra exigir uma. Opcional.</td></tr>
+      </tbody>
+    </table>
+
+    <p>A ordem importa: as guidelines são avaliadas na sequência em que aparecem na lista.</p>
+
+    <div class="callout callout--warning">
+      <div>
+        <div class="callout__title">Guidelines custam</div>
+        <p style="margin:0;">Cada guideline acrescenta uma chamada de modelo por turno da conversa, o que significa mais latência e mais consumo de tokens — algo que você vai ver refletido na aba <strong>FinOps</strong> do Control Plane. Use guidelines para o que precisa ser determinístico. Para tom de voz, formato e preferências gerais, as <code>instructions</code> resolvem sem custo adicional.</p>
+      </div>
+    </div>
+
+    <h3 id="chat-config">Mensagem de boas-vindas e atalhos</h3>
+
+    <p>Dois blocos opcionais controlam a primeira tela do chat. O <code>welcome_content</code> define a saudação e a linha de apoio. O <code>starter_prompts</code> define até três atalhos clicáveis, que enviam uma mensagem pronta como se o usuário tivesse digitado.</p>
+
+    <p>Vale mais do que parece: os atalhos ensinam o usuário a fazer perguntas que o agente sabe responder bem, e reduzem a chance de a primeira interação ser frustrante.</p>
+
+    <h3 id="yaml-final">O arquivo completo</h3>
+
+    <p>Substitua o conteúdo de <code>agents/suporte_cliente.yaml</code> por este:</p>
+
+    <div class="code-block">spec_version: v1
+kind: native
+name: suporte_cliente
+description: &gt;
+  Agente de suporte ao cliente do Nexus Pro. Primeiro ponto de contato
+  para dúvidas sobre planos, conta e uso do produto.
+instructions: |
+  Você é o assistente de suporte ao cliente do Nexus Pro e é o primeiro
+  contato do cliente.
+
+  Regras de conduta:
+  - Responda sempre em português do Brasil, em tom cordial e direto.
+  - Nunca invente informações sobre planos, preços ou funcionalidades.
+  - Toda pergunta sobre elegibilidade para upgrade, comparação de planos
+    ou limites de uso deve ser encaminhada ao especialista_planos.
+  - Não resolva problemas técnicos complexos. Se o cliente descrever
+    um erro ou falha, oriente a abrir um chamado com a equipe técnica.
+  - Ao juntar informação de mais de uma fonte, responda em um parágrafo só.
+llm: groq/openai/gpt-oss-120b
+style: react_core
+memory_enabled: true
+hide_reasoning: false
+
+collaborators:
+  - especialista_planos
+
+tools: []
+
+guidelines:
+  - condition: "O cliente descreve um erro, falha, bug ou comportamento inesperado no produto."
+    action: "Não tente diagnosticar nem resolver. Oriente o cliente a abrir um chamado técnico e forneça o caminho para isso."
+  - condition: "O cliente pergunta o preço exato de um plano ou solicita desconto."
+    action: "Forneça o preço tabelado consultando o especialista_planos. Não ofereça desconto nem negocie valores."
+  - condition: "O cliente demonstra insatisfação com o produto ou com um atendimento anterior."
+    action: "Reconheça o problema em uma frase, sem justificar, e ofereça registrar o caso com o time de sucesso do cliente."
+
+welcome_content:
+  welcome_message: "Suporte Nexus Pro."
+  description: "Posso ajudar com dúvidas sobre planos, funcionalidades e sua conta."
+
+starter_prompts:
+  prompts:
+    - id: "upgrade"
+      title: "Devo mudar de plano?"
+      subtitle: "Informe seu plano atual e uso mensal"
+      prompt: "Estou no plano Basic, uso 90% do limite todo mês há 4 meses. Devo fazer upgrade?"
+    - id: "comparar_planos"
+      title: "O que tem em cada plano?"
+      subtitle: "Funcionalidades e preços"
+      prompt: "Qual a diferença entre o plano Pro e o Enterprise?"
+    - id: "problema_tecnico"
+      title: "Encontrei um problema"
+      subtitle: "Erros e falhas precisam de chamado técnico"
+      prompt: "O produto está retornando um erro ao tentar exportar meus dados."</div>
+
+    <p>Repare no terceiro atalho: ele leva o cliente direto para o caminho em que a primeira guideline dispara. É uma forma de testar a regra e, ao mesmo tempo, dar ao usuário um caminho seguro para um assunto delicado.</p>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- ORDEM -->
+  <section id="ordem">
+    <h2>Ordem de importação e script de deploy</h2>
+
+    <p>Dependência precisa existir antes de quem depende dela. A ordem é sempre a mesma: <strong>tools, depois colaboradores, depois o agente principal</strong>.</p>
+
+    <ol class="step-list">
+      <li>
+        <div class="step-content">
+          <p><strong>Tools</strong>, porque o especialista as referencia pelo nome.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p><strong>Agentes colaboradores</strong>, porque o principal os referencia pelo nome.</p>
+        </div>
+      </li>
+      <li>
+        <div class="step-content">
+          <p><strong>Agente principal</strong>, que amarra tudo.</p>
+        </div>
+      </li>
+    </ol>
+
+    <p>Como essa sequência vai se repetir toda vez, escreva-a uma vez só. Crie <code>deploy.sh</code> na raiz do projeto:</p>
+
+    <div class="code-block">#!/usr/bin/env bash
+set -e
+
+echo "Ambiente ativo:"
+orchestrate env list
+
+echo "--- tools ---"
+orchestrate tools import -k python -f tools/verificar_elegibilidade_upgrade.py
+orchestrate tools import -k python -f tools/consultar_detalhes_plano.py
+
+echo "--- agentes colaboradores ---"
+orchestrate agents import -f agents/especialista_planos.yaml
+
+echo "--- agente principal ---"
+orchestrate agents import -f agents/suporte_cliente.yaml
+
+echo "Publicacao concluida."</div>
+
+    <p>Dê permissão de execução e rode:</p>
+
+    <div class="code-block">chmod +x deploy.sh
+./deploy.sh</div>
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">Esse script é a menor versão possível de um pipeline. Ele já resolve o problema real: qualquer pessoa do time, em qualquer máquina, recria a solução inteira com um comando. A partir daqui, colocá-lo em uma esteira de CI/CD é só uma questão de onde ele roda.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- TESTAR -->
+  <section id="testar">
+    <h2>Testando a delegação</h2>
+
+    <p>Comece pela pergunta que deve sair do agente principal e chegar ao especialista:</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente \
+  "Estou no plano Basic, uso 90% todo mês há 4 meses. Devo fazer upgrade e o que ganha no Pro?" \
+  --include-reasoning</div>
+
+    <p>No raciocínio você deve ver a delegação para o <code>especialista_planos</code> e, dentro dela, as chamadas das duas tools. Se o agente principal tentar responder sozinho, ajuste a <code>description</code> do especialista: ela está vaga ou não deixa claro que aquele assunto é dele.</p>
+
+    <p>Agora teste cada guideline.</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente \
+  "O produto está retornando um erro ao tentar exportar meus dados."</div>
+
+    <p>Resposta esperada: nenhuma tentativa de diagnóstico, orientação para abrir chamado técnico.</p>
+
+    <div class="code-block">orchestrate chat ask --agent-name suporte_cliente \
+  "Vocês têm desconto para o plano Pro?"</div>
+
+    <p>Resposta esperada: preço tabelado sem negociação, sem promessa de desconto.</p>
+
+    <p>Por fim, abra o agente no <strong>Agent Builder</strong> e confira a tela inicial do chat: a mensagem de boas-vindas e os três atalhos que você configurou devem estar lá. Clique no terceiro e veja a guideline de problema técnico disparar na interface.</p>
+
+    <!-- <img class="lab-img" src="Assets_for_BuildBooks/adk03/adk03_01.png" alt="Tela inicial do chat com mensagem de boas-vindas e atalhos configurados pelo YAML"> -->
+
+    <div class="callout callout--note">
+      <div>
+        <div class="callout__title">Quando a guideline não dispara</div>
+        <p style="margin:0;">Guidelines são avaliadas por um modelo, não por regex. Se uma não dispara, quase sempre a <code>condition</code> está abstrata demais. Descreva a situação com as palavras que o usuário realmente usaria — "barulho, vazamento, luz no painel" funciona melhor do que "problema técnico no veículo".</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- EXPORTAR -->
+  <section id="exportar">
+    <h2>Exportando o que você construiu</h2>
+
+    <p>O caminho inverso também existe. A ADK exporta um agente com todas as suas dependências, o que é útil para levar uma solução de um tenant para outro ou para trazer para o código algo que alguém montou pela interface.</p>
+
+    <div class="code-block">orchestrate agents export -n suporte_cliente -k native -o build/suporte_cliente.zip</div>
+
+    <p>O ZIP traz o agente, os colaboradores e as tools. Se você quiser apenas o YAML do agente, sem as dependências:</p>
+
+    <div class="code-block">orchestrate agents export -n suporte_cliente -k native \
+  -o build/suporte_cliente.yaml --agent-only</div>
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Dica</div>
+        <p style="margin:0;">Exportar é uma boa forma de aprender a sintaxe: monte algo pela interface, exporte e leia o YAML gerado. É o mesmo formato que você escreve à mão.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- O QUE VEM DEPOIS -->
+  <section id="fechando-ciclo">
+    <h2>O que vem depois</h2>
+
+    <p>O agente que você publicou por linha de comando é indistinguível de qualquer outro no tenant — aparece no Agent Builder, pode ser avaliado, monitorado e protegido com guardrails da mesma forma que qualquer agente criado pela interface.</p>
+
+    <p>A ADK muda como o agente é construído, não como ele é operado. O que você tem agora é uma solução versionável e repetível. A partir daqui, os próximos assuntos naturais para evoluir a solução são:</p>
+
+    <table>
+      <thead><tr><th>Assunto</th><th>Para que serve</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Guardrails e PII</strong></td><td>Aplicar controles de segurança e filtros de dados sensíveis ao agente publicado pela ADK</td></tr>
+        <tr><td><strong>Avaliação</strong></td><td>Criar casos de teste para as perguntas que o agente deve responder e medir se as tools certas são chamadas na ordem certa</td></tr>
+        <tr><td><strong>Agentic Control Plane</strong></td><td>Acompanhar adoção, qualidade e consumo de tokens, e observar o custo das guidelines em FinOps</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- RESUMO -->
+  <section id="resumo">
+    <h2>Resumo</h2>
+
+    <p>Você dividiu a solução em dois agentes, escreveu regras determinísticas com guidelines, configurou a experiência de entrada do chat e transformou a publicação em um script repetível.</p>
+
+    <h3>O que ficou no seu projeto</h3>
+
+    <div class="code-block">wxo-adk-lab/
+├── deploy.sh
+├── agents/
+│   ├── suporte_cliente.yaml
+│   └── especialista_planos.yaml
+└── tools/
+    ├── verificar_elegibilidade_upgrade.py
+    └── consultar_detalhes_plano.py</div>
+
+    <p>Cinco arquivos de texto que descrevem uma solução multiagente inteira. Eles cabem em um repositório Git, passam por revisão de código e recriam o mesmo resultado em qualquer tenant.</p>
+
+    <h3>Antes de encerrar, confirme</h3>
+
+    <ul>
+      <li><code>orchestrate agents list</code> mostra os dois agentes</li>
+      <li>A pergunta sobre planos é delegada ao especialista, e isso aparece no raciocínio</li>
+      <li>As três guidelines disparam nas situações previstas</li>
+      <li>A tela inicial do chat mostra a saudação e os três atalhos</li>
+      <li>O <code>deploy.sh</code> roda do início ao fim sem erro</li>
+      <li>O ZIP exportado existe em <code>build/</code></li>
+    </ul>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- PRÓXIMOS PASSOS -->
+  <section id="proximos-passos">
+    <h2>Próximos Passos</h2>
+
+    <p>Esta trilha cobriu o núcleo da ADK com o mínimo de dependências possível. A partir daqui, os próximos assuntos naturais envolvem sistemas externos e valem um ambiente preparado:</p>
+
+    <table>
+      <thead><tr><th>Assunto</th><th>Para que serve</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Connections</strong></td><td>Guardar credenciais na plataforma e injetá-las na tool em execução, para que ela chame APIs reais sem segredo no repositório</td></tr>
+        <tr><td><strong>Tools OpenAPI</strong></td><td>Transformar uma especificação de API existente em tools, sem escrever Python</td></tr>
+        <tr><td><strong>Agentic workflows</strong></td><td>Processos determinísticos com ramificação, paralelismo e aprovação humana, expostos ao agente como tool</td></tr>
+        <tr><td><strong>Knowledge bases</strong></td><td>Responder com base em documentos indexados, com citação da fonte</td></tr>
+        <tr><td><strong>Toolkits MCP</strong></td><td>Conectar servidores Model Context Protocol locais ou remotos</td></tr>
+        <tr><td><strong>Developer Edition</strong></td><td>Rodar a plataforma inteira localmente para iterar sem tocar em um tenant compartilhado</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout--tip">
+      <div>
+        <div class="callout__title">Documentação</div>
+        <p style="margin:0;">A referência oficial fica em <a href="https://developer.watson-orchestrate.ibm.com/" target="_blank">developer.watson-orchestrate.ibm.com</a>, versionada por release — consulte a página <strong>What's new</strong>, já que a ADK é atualizada com frequência.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="lab-nav">
+    <a href="lab-adk-2.html">← ADK 2: Tools em Python</a>
+    <a href="lab-adk-1.html" class="primary">Voltar ao início →</a>
+  </div>
+</main>
+
+
+<footer class="c-footer">
+  Nathalia Trazzi | Technical Solutions Architect & AI Engineer
+</footer>
+
+<script>
+(function(){
+  var MOON = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  var SUN  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  function applyTheme(dark) {
+    document.documentElement.classList.toggle('dark', dark);
+    var icon = document.getElementById('themeIcon');
+    if (icon) icon.innerHTML = dark ? SUN : MOON;
+  }
+  var saved = localStorage.getItem('wxo-theme');
+  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  var isDark = saved ? saved === 'dark' : prefersDark;
+  applyTheme(isDark);
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('themeToggle');
+    if (btn) btn.addEventListener('click', function() {
+      var nowDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('wxo-theme', nowDark ? 'dark' : 'light');
+      var icon = document.getElementById('themeIcon');
+      if (icon) icon.innerHTML = nowDark ? SUN : MOON;
+    });
+  });
+})();
+</script>
+</body>
+</html>
